@@ -181,6 +181,12 @@ int main(int argc,char **argv){
         if(!pdata.args.full_shots)
             pthread_join(poll_damage_t,NULL);
         fprintf(stderr,".");
+        if(!(pdata.args.noshared)){
+            XShmDetach (pdata.dpy, &shminfo);
+//             XDestroyImage (pdata.image);
+            shmdt (&shminfo.shmaddr);
+            shmctl (shminfo.shmid, IPC_RMID, 0);
+        }
         fprintf(stderr,"\n");
         XCloseDisplay(pdata.dpy);
         if(Aborted){
