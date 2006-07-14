@@ -79,6 +79,20 @@ int SetBRWindow(Display *dpy,BRWindow *brwin,DisplaySpecs *specs,ProgArgs *args)
             return 1;
         }
     }
+    //align in two
+    //an odd x can always go down and still be in recording area.
+    //Resolutions come in even numbers
+    //so if x is an odd numer, width max is an odd number, too
+    //thus since x will go down one then width can go up one too and still
+    //be inbounds
+    brwin->rgeom.width+=(brwin->rgeom.width%2)|(brwin->rgeom.x%2);
+    brwin->rgeom.height+=(brwin->rgeom.height%2)|(brwin->rgeom.y%2);
+    //but if x goes down 1 and width is already even,it becomes odd so:
+    brwin->rgeom.width+=(brwin->rgeom.width%2);
+    brwin->rgeom.height+=(brwin->rgeom.height%2);
+    brwin->rgeom.x-=brwin->rgeom.x%2;
+    brwin->rgeom.y-=brwin->rgeom.y%2;
+
     //this is needed for theora
     //+-8 pixels
     brwin->rgeom.width=((((brwin->rgeom.width+16-(brwin->rgeom.width)%16+brwin->rgeom.x)<=specs->width)&&((brwin->rgeom.width)%16>8))?brwin->rgeom.width+16-(brwin->rgeom.width)%16:brwin->rgeom.width-(brwin->rgeom.width)%16);

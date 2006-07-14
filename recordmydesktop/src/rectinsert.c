@@ -269,6 +269,16 @@ int RectInsert(RectArea **root,WGeometry *wgeom){
 
     int total_insertions=0;
     RectArea *temp,*newnode=(RectArea *)malloc(sizeof(RectArea));
+    //align
+    //we do need to know boundaries
+    wgeom->width+=(wgeom->width%2)|(wgeom->x%2);
+    wgeom->height+=(wgeom->height%2)|(wgeom->y%2);
+    wgeom->width+=(wgeom->width%2);
+    wgeom->height+=(wgeom->height%2);
+    wgeom->x-=wgeom->x%2;
+    wgeom->y-=wgeom->y%2;
+//     fprintf(stderr," %d %d %d %d\n",wgeom->x,
+
     newnode->geom.x=wgeom->x;
     newnode->geom.y=wgeom->y;
     newnode->geom.width=wgeom->width;
@@ -290,7 +300,15 @@ int RectInsert(RectArea **root,WGeometry *wgeom){
             if((!collres))
                 insert_ok=1;
             else{
-               insert_ok=0;
+                for(i=0;i<ngeoms;i++){
+                    wgeom_return[i]->width+=(wgeom_return[i]->width%2)|(wgeom_return[i]->x%2);
+                    wgeom_return[i]->height+=(wgeom_return[i]->height%2)|(wgeom_return[i]->y%2);
+                    wgeom_return[i]->width+=(wgeom_return[i]->width%2);
+                    wgeom_return[i]->height+=(wgeom_return[i]->height%2);
+                    wgeom_return[i]->x-=wgeom_return[i]->x%2;
+                    wgeom_return[i]->y-=wgeom_return[i]->y%2;
+                }
+                insert_ok=0;
                 switch(collres){
                     case 1://remove current node,reinsert new one
                         total_insertions--;
