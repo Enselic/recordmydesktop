@@ -33,7 +33,7 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
     char *usage="\nUsage:\n"
     "\trecordmydesktop [-h| --help| --version| -delay n[H|h|M|m]| -windowid id_of_window|\n"
     "\t-display DISPLAY| -x X| -y Y|-width N| -height N| -fps N(number>0)|\n"
-    "\t -v_quality n| -s_quality n| -v_bitrate n| -dummy-cursor color| --no-dummy-cursor|\n"
+    "\t -v_quality n| -s_quality n| -v_bitrate n| --no-framedrop| -dummy-cursor color| --no-dummy-cursor|\n"
     "\t -freq N(number>0)| -channels N(number>0)| -device SOUND_DEVICE| --nosound|\n"
     "\t --with-shared| --full-shots| --scshot| -scale-shot N| -o filename]^filename\n\n\n"
 
@@ -64,6 +64,7 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
     "Encoding Options\n"
     "\t-v_quality n\t\tA number from 0 to 63 for desired encoded video quality(default 63).\n"
     "\t-v_bitrate n\t\tA number from 45000 to 2000000 for desired encoded video bitrate(default 45000).\n"
+    "\t--no-framedrop\t\tDo not allow theora encoder to drop frames.\n"
     "\t-s_quality n\t\tDesired audio quality(-1 to 10).\n\n"
 
     "Misc Options:\n"
@@ -357,6 +358,8 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
         }
         else if(!strcmp(argv[i],"--nosound"))
             arg_return->nosound=1;
+        else if(!strcmp(argv[i],"--no-framedrop"))
+            arg_return->dropframes=0;
         else if(!strcmp(argv[i],"--with-shared"))
             arg_return->noshared=0;
         else if(!strcmp(argv[i],"--full-shots"))

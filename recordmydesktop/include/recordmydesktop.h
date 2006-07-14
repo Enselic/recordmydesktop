@@ -116,6 +116,7 @@ typedef struct _ProgArgs{
     int scshot;         //take screenshot and exit(default 0)
     int scale_shot;     //screenshot subscale factor(default 1)
     int v_bitrate,v_quality,s_quality;//video bitrate,video-sound quality
+    int dropframes;     //option for theora encoder
 }ProgArgs;
 
 
@@ -262,7 +263,7 @@ int avd;
     (args)->windowid=(args)->x=(args)->y\
     =(args)->width=(args)->height=(args)->quietmode\
     =(args)->nosound=(args)->scshot=(args)->full_shots=0;\
-    (args)->noshared=(args)->scale_shot=1;\
+    (args)->noshared=(args)->scale_shot=(args)->dropframes=1;\
     (args)->filename=(char *)malloc(8);\
     strcpy((args)->filename,"out.ogg");\
     (args)->encoding=OGG_THEORA_VORBIS;\

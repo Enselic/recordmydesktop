@@ -57,7 +57,7 @@ void InitEncoder(ProgData *pdata,EncData *enc_data_t){
     (enc_data_t)->m_th_inf.pixelformat=OC_PF_420;
     (enc_data_t)->m_th_inf.target_bitrate=(pdata)->args.v_bitrate;
     (enc_data_t)->m_th_inf.quality=(pdata)->args.v_quality;
-    (enc_data_t)->m_th_inf.dropframes_p=0;
+    (enc_data_t)->m_th_inf.dropframes_p=(pdata)->args.dropframes;
     (enc_data_t)->m_th_inf.quick_p=1;
     (enc_data_t)->m_th_inf.keyframe_auto_p=1;
     (enc_data_t)->m_th_inf.keyframe_frequency=64;
