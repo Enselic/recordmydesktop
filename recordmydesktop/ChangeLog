@@ -1,3 +1,13 @@
+/*VERSION 0.2.1*/
+*Unupdated lines bug fixed.
+*Fuzzy cursor at border bug fixed.
+*Incorrect display of windows that 
+extended beyond recording height fixed.
+*Size adjustement that resulted in extra 
+or missing pixles at borders has been corrected.
+*The option to drop frames has been added.
+
+
 
 
 
