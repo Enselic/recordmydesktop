@@ -247,7 +247,7 @@ int avd;
     (dummy_p_area).height-((brwin)->rgeom.y-(dummy_p_area).y):\
     ((dummy_p_area).y<=(brwin)->rgeom.y+(brwin)->rgeom.height)?\
     ((brwin)->rgeom.height-(dummy_p_area).y+(brwin)->rgeom.y<(dummy_p_area).height)?\
-    ((brwin)->rgeom.height-(dummy_p_area).y+(brwin)->rgeom.y<(dummy_p_area).height):(dummy_p_area).height:-1;\
+    (brwin)->rgeom.height-(dummy_p_area).y+(brwin)->rgeom.y:(dummy_p_area).height:-1;\
     if((wgeom)->width>(brwin)->rgeom.width)(wgeom)->width=(brwin)->rgeom.width;\
     if((wgeom)->height>(brwin)->rgeom.height)(wgeom)->height=(brwin)->rgeom.height;\
 }
@@ -332,6 +332,7 @@ int avd;
             }\
             j++;\
         }\
+        j+=16-width_tm;\
     }\
 }
 
