@@ -33,6 +33,7 @@ void UpdateImage(Display * dpy,
                 DisplaySpecs *specs,
                 RectArea **root,
                 BRWindow *brwin,
+                EncData *enc,
                 char *datatemp,
                 int noshmem){
     RectArea *temp;
@@ -53,14 +54,14 @@ void UpdateImage(Display * dpy,
                 pthread_mutex_lock(yuv_mutex);
 
                 UPDATE_YUV_BUFFER_IM(yuv,dtap,
-                                (temp->geom.x-brwin->rgeom.x),(temp->geom.y-brwin->rgeom.y),
+                                (temp->geom.x-brwin->rgeom.x+enc->x_offset),(temp->geom.y-brwin->rgeom.y+enc->y_offset),
                                 (temp->geom.width),(temp->geom.height));
 
                 pthread_mutex_unlock(yuv_mutex);
             }
             else{
                 UPDATE_YUV_BUFFER_SH(yuv,dtap,
-                                (temp->geom.x-brwin->rgeom.x),(temp->geom.y-brwin->rgeom.y),
+                                (temp->geom.x-brwin->rgeom.x+enc->x_offset),(temp->geom.y-brwin->rgeom.y+enc->y_offset),
                                 (temp->geom.width),(temp->geom.height));
             
             

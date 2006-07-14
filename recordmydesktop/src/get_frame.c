@@ -78,6 +78,7 @@ void *GetFrame(void *pdata){
                         &((ProgData *)pdata)->specs,
                         &((ProgData *)pdata)->rect_root[tlist_sel],
                         &((ProgData *)pdata)->brwin,
+                        ((ProgData *)pdata)->enc_data,
                         ((((ProgData *)pdata)->args.noshared)?(((ProgData *)pdata)->datatemp):((ProgData *)pdata)->image->data),
                         ((ProgData *)pdata)->args.noshared);
         else{
@@ -106,8 +107,8 @@ void *GetFrame(void *pdata){
             if((mouse_pos_temp.x>=0)&&(mouse_pos_temp.y>=0)&&(mouse_pos_temp.width>0)&&(mouse_pos_temp.height>0)){
                 DUMMY_POINTER_TO_YUV((&((ProgData *)pdata)->enc_data->yuv),
                                     ((ProgData *)pdata)->dummy_pointer,
-                                    (mouse_pos_temp.x-((ProgData *)pdata)->brwin.rgeom.x),
-                                    (mouse_pos_temp.y-((ProgData *)pdata)->brwin.rgeom.y),
+                                    (mouse_pos_temp.x-((ProgData *)pdata)->brwin.rgeom.x+((ProgData *)pdata)->enc_data->x_offset),
+                                    (mouse_pos_temp.y-((ProgData *)pdata)->brwin.rgeom.y+((ProgData *)pdata)->enc_data->y_offset),
                                     mouse_pos_temp.width,
                                     mouse_pos_temp.height,
                                     ((ProgData *)pdata)->npxl);

@@ -93,12 +93,7 @@ int SetBRWindow(Display *dpy,BRWindow *brwin,DisplaySpecs *specs,ProgArgs *args)
     brwin->rgeom.x-=brwin->rgeom.x%2;
     brwin->rgeom.y-=brwin->rgeom.y%2;
 
-    //this is needed for theora
-    //+-8 pixels
-    brwin->rgeom.width=((((brwin->rgeom.width+16-(brwin->rgeom.width)%16+brwin->rgeom.x)<=specs->width)&&((brwin->rgeom.width)%16>8))?brwin->rgeom.width+16-(brwin->rgeom.width)%16:brwin->rgeom.width-(brwin->rgeom.width)%16);
-    brwin->rgeom.height=((((brwin->rgeom.height+16-(brwin->rgeom.height)%16+brwin->rgeom.y)<=specs->height)&&((brwin->rgeom.height)%16>8))?brwin->rgeom.height+16-(brwin->rgeom.height)%16:brwin->rgeom.height-(brwin->rgeom.height)%16);
-
-    brwin->nbytes=(brwin->rgeom.width*brwin->rgeom.height*4);
+    brwin->nbytes=(((brwin->rgeom.width+15)>>4)<<4)*(((brwin->rgeom.height+15)>>4)<<4)*4;
 
     return 0;
 }

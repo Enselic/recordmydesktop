@@ -139,7 +139,8 @@ typedef struct _EncData{
     vorbis_dsp_state m_vo_dsp; 
     vorbis_block     m_vo_block;
 
-
+    int             x_offset,
+                    y_offset;
     FILE            *fp;
 }EncData;
 
@@ -224,7 +225,7 @@ int avd;
         (e)->area.height-((brwin)->rgeom.y-(e)->area.y):\
         ((e)->area.y<=(brwin)->rgeom.y+(brwin)->rgeom.height)?\
         (((brwin)->rgeom.height-(e)->area.y+(brwin)->rgeom.y<(e)->area.height)?\
-        ((brwin)->rgeom.height-(e)->area.y+(brwin)->rgeom.y<(e)->area.height):(e)->area.height):-1;\
+        (brwin)->rgeom.height-(e)->area.y+(brwin)->rgeom.y:(e)->area.height):-1;\
     \
         if((wgeom)->width>(brwin)->rgeom.width)(wgeom)->width=(brwin)->rgeom.width;\
         if((wgeom)->height>(brwin)->rgeom.height)(wgeom)->height=(brwin)->rgeom.height;\
@@ -349,7 +350,7 @@ int RectInsert(RectArea **root,WGeometry *wgeom);
 int CollideRects(WGeometry *wgeom1,WGeometry *wgeom2,WGeometry **wgeom_return,int *ngeoms);
 void SetExpired(int signum);
 void RegisterCallbacks(ProgArgs *args);
-void UpdateImage(Display * dpy,yuv_buffer *yuv,pthread_mutex_t *yuv_mutex,DisplaySpecs *specs,RectArea **root,BRWindow *brwin,char *datatemp,int noshmem);
+void UpdateImage(Display * dpy,yuv_buffer *yuv,pthread_mutex_t *yuv_mutex,DisplaySpecs *specs,RectArea **root,BRWindow *brwin,EncData *enc,char *datatemp,int noshmem);
 void XImageToYUV(XImage *imgz,yuv_buffer *yuv);
 int GetZPixmap(Display *dpy,Window root,char *data,int x,int y,int width,int height);
 int ParseArgs(int argc,char **argv,ProgArgs *arg_return);

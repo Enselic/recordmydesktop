@@ -10,8 +10,9 @@ void *EncodeImageBuffer(void *pdata){
         if(Paused)
             pthread_cond_wait(&((ProgData *)pdata)->pause_cond,&pmut);//this may not be needed
         pthread_mutex_lock(&((ProgData *)pdata)->yuv_mutex);
-        if(theora_encode_YUVin(&((ProgData *)pdata)->enc_data->m_th_st,&((ProgData *)pdata)->enc_data->yuv)){
-            fprintf(stderr,"Encoder not ready!\n");
+        int za=theora_encode_YUVin(&((ProgData *)pdata)->enc_data->m_th_st,&((ProgData *)pdata)->enc_data->yuv);
+        if(za){
+            fprintf(stderr,"Encoder not ready %d!\n",za);
         }
         pthread_mutex_unlock(&((ProgData *)pdata)->yuv_mutex);
         theora_encode_packetout(&((ProgData *)pdata)->enc_data->m_th_st,0,&((ProgData *)pdata)->enc_data->m_ogg_pckt1);
