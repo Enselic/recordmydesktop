@@ -64,7 +64,7 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
     "Encoding Options\n"
     "\t-v_quality n\t\tA number from 0 to 63 for desired encoded video quality(default 63).\n"
     "\t-v_bitrate n\t\tA number from 45000 to 2000000 for desired encoded video bitrate(default 45000).\n"
-    "\t--no-framedrop\t\tDo not allow theora encoder to drop frames.\n"
+    "\t--drop-frames\t\tAllow theora encoder to drop frames.\n"
     "\t-s_quality n\t\tDesired audio quality(-1 to 10).\n\n"
 
     "Misc Options:\n"
@@ -358,8 +358,8 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
         }
         else if(!strcmp(argv[i],"--nosound"))
             arg_return->nosound=1;
-        else if(!strcmp(argv[i],"--no-framedrop"))
-            arg_return->dropframes=0;
+        else if(!strcmp(argv[i],"--drop-frames"))
+            arg_return->dropframes=1;
         else if(!strcmp(argv[i],"--with-shared"))
             arg_return->noshared=0;
         else if(!strcmp(argv[i],"--full-shots"))

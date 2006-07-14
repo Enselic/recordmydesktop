@@ -263,7 +263,8 @@ int avd;
     (args)->windowid=(args)->x=(args)->y\
     =(args)->width=(args)->height=(args)->quietmode\
     =(args)->nosound=(args)->scshot=(args)->full_shots=0;\
-    (args)->noshared=(args)->scale_shot=(args)->dropframes=1;\
+    (args)->noshared=(args)->scale_shot=0;\
+    (args)->dropframes=0;\
     (args)->filename=(char *)malloc(8);\
     strcpy((args)->filename,"out.ogg");\
     (args)->encoding=OGG_THEORA_VORBIS;\
