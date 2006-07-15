@@ -329,6 +329,18 @@ option), the highest CPU-power that you will need.
 .br
 So it's always better to start with default values and manipulate the end\-result with another program.
 .br
+An excellent converter is
+.B
+ffmpeg2theora
+, which despite its name is also a theora to theora converter.
+.br
+Changing the quality of a recordng with it,can be as simple as :
+.br
+.B
+ffmpeg2theora infile.ogg -v 3 -a 4 -o outfile.ogg
+.br
+It can even perform resizing on the size of the recording, or change the overall duration.
+.br
 .br
 .SH BUGS
 Too resource intensive,outcome quality is not what it should be.
@@ -340,4 +352,6 @@ John Varouhakis(biocrasher@gmail.com)
 .br
 .SH SEE ALSO
 .BR xwininfo(1)
+.br
+.BR ffmpeg2theora(1)
 .br
