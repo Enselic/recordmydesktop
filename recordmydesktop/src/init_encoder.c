@@ -51,8 +51,8 @@ void InitEncoder(ProgData *pdata,EncData *enc_data_t){
     (enc_data_t)->m_th_inf.offset_y=(((enc_data_t)->m_th_inf.height-(enc_data_t)->m_th_inf.frame_height)/2)&~1;
     (enc_data_t)->m_th_inf.fps_numerator=((pdata)->args.fps*100.0);
     (enc_data_t)->m_th_inf.fps_denominator=100;
-    (enc_data_t)->m_th_inf.aspect_numerator=(pdata)->brwin.rgeom.width;
-    (enc_data_t)->m_th_inf.aspect_denominator=(pdata)->brwin.rgeom.height;
+    (enc_data_t)->m_th_inf.aspect_numerator=1;//(pdata)->brwin.rgeom.width;
+    (enc_data_t)->m_th_inf.aspect_denominator=1;//(pdata)->brwin.rgeom.height;
     (enc_data_t)->m_th_inf.colorspace=OC_CS_UNSPECIFIED;
     (enc_data_t)->m_th_inf.pixelformat=OC_PF_420;
     (enc_data_t)->m_th_inf.target_bitrate=(pdata)->args.v_bitrate;
@@ -66,7 +66,7 @@ void InitEncoder(ProgData *pdata,EncData *enc_data_t){
     (enc_data_t)->m_th_inf.keyframe_auto_threshold=80;
     (enc_data_t)->m_th_inf.keyframe_mindistance=8;
     (enc_data_t)->m_th_inf.noise_sensitivity=1;
-
+    (enc_data_t)->m_th_inf.sharpness=2;
 
     theora_encode_init(&(enc_data_t)->m_th_st,&(enc_data_t)->m_th_inf);
 
