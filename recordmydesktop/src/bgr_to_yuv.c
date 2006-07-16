@@ -32,45 +32,18 @@ void XImageToYUV(XImage *imgz,yuv_buffer *yuv){
     int i,k,j=0;
 
     for(k=0;k<(imgz->width*imgz->height);k++){
-            yuv->y[k]=min(abs(dtap[(k*4)+2] * 2104 + dtap[(k*4)+1] * 4130 + dtap[(k*4)] * 802 + 4096 + 131072) >> 13, 235);
+            yuv->y[k]=Yr[dtap[(k*4)+2]] + Yg[dtap[(k*4)+1]] + Yb[dtap[(k*4)]];
     }
     
     for(i=0;i<(imgz->height);i+=2){
         for(k=0;k<(imgz->width);k+=2){    
-            yuv->u[j]=min(abs(dtap[i*imgz->bytes_per_line+k*4+2] * -1214 + dtap[i*imgz->bytes_per_line+k*4+1] * -2384 + dtap[i*imgz->bytes_per_line+k*4] * 3598 + 4096 + 1048576) >> 13, 240);
-            yuv->v[j]=min(abs(dtap[i*imgz->bytes_per_line+k*4+2] * 3598 + dtap[i*imgz->bytes_per_line+k*4+1] * -3013 + dtap[i*imgz->bytes_per_line+k*4] * -585 + 4096 + 1048576) >> 13, 240);
+            yuv->u[j]=Ur[dtap[i*imgz->bytes_per_line+k*4+2]] + Ug[dtap[i*imgz->bytes_per_line+k*4+1]] + Ub[dtap[i*imgz->bytes_per_line+k*4]];
+            yuv->v[j]=Vr[dtap[i*imgz->bytes_per_line+k*4+2]] + Vg[dtap[i*imgz->bytes_per_line+k*4+1]] + Vb[dtap[i*imgz->bytes_per_line+k*4]] ;
             j++;
         }
     }
 }
 
-void UpdateYUVBufferSh(yuv_buffer *yuv,unsigned char *data,int x,int y,int width,int height){
-    int i,k;
-    for(k=y;k<y+height;k++){
-        for(i=x;i<x+width;i++){
-            yuv->y[i+k*yuv->y_width]=min(abs(data[(i+k*yuv->y_width)*4+2] * 2104 + data[(i+k*yuv->y_width)*4+1] * 4130 + data[(i+k*yuv->y_width)*4] * 802 + 4096 + 131072) >> 13, 235);
-            if((k%2)&&(i%2)){
-                yuv->u[i/2+k/2*yuv->uv_width]=min(abs(data[(i+k*yuv->y_width)*4+2] * -1214 + data[(i+k*yuv->y_width)*4+1] * -2384 + data[(i+k*yuv->y_width)*4] * 3598 + 4096 + 1048576) >> 13, 240);
-                yuv->v[i/2+k/2*yuv->uv_width]=min(abs(data[(i+k*yuv->y_width)*4+2] * 3598 + data[(i+k*yuv->y_width)*4+1] * -3013 + data[(i+k*yuv->y_width)*4] * -585 + 4096 + 1048576) >> 13, 240);
-            }
-        }
-    }
-}
-
-void UpdateYUVBufferIm(yuv_buffer *yuv,unsigned char *data,int x,int y,int width,int height){
-    int i,k,j=0;
-    int x_2=x/2,y_2=y/2,y_width_2=yuv->y_width/2;
-    for(k=0;k<height;k++){
-        for(i=0;i<width;i++){
-            yuv->y[x+i+(k+y)*yuv->y_width]=min(abs(data[(j*4)+2] * 2104 + data[(j*4)+1] * 4130 + data[(j*4)] * 802 + 4096 + 131072) >> 13, 235);
-            if((k%2)&&(i%2)){
-                yuv->u[x_2+i/2+(k/2+y_2)*y_width_2]=min(abs(data[(k*width+i)*4+2] * -1214 + data[(k*width+i)*4+1] * -2384 + data[(k*width+i)*4] * 3598 + 4096 + 1048576) >> 13, 240);
-                yuv->v[x_2+i/2+(k/2+y_2)*y_width_2]=min(abs(data[(k*width+i)*4+2] * 3598 + data[(k*width+i)*4+1] * -3013 + data[(k*width+i)*4] * -585 + 4096 + 1048576) >> 13, 240);
-            }
-            j++;
-        }
-    }
-}
 
 void MakeMatrices(){
     int i;

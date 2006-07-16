@@ -299,27 +299,11 @@ unsigned char   Yr[256],Yg[256],Yb[256],
     int i,k;\
     for(k=y_tm;k<y_tm+height_tm;k++){\
         for(i=x_tm;i<x_tm+width_tm;i++){\
-            yuv->y[i+k*yuv->y_width]=min(abs(data[(i+k*yuv->y_width)*4+2] * 2104 + data[(i+k*yuv->y_width)*4+1] * 4130 + data[(i+k*yuv->y_width)*4] * 802 + 4096 + 131072) >> 13, 235);\
+            yuv->y[i+k*yuv->y_width]=Yr[data[(i+k*yuv->y_width)*4+2]] + Yg[data[(i+k*yuv->y_width)*4+1]] + Yb[data[(i+k*yuv->y_width)*4]];\
             if((k%2)&&(i%2)){\
-                yuv->u[i/2+k/2*yuv->uv_width]=min(abs(data[(i+k*yuv->y_width)*4+2] * -1214 + data[(i+k*yuv->y_width)*4+1] * -2384 + data[(i+k*yuv->y_width)*4] * 3598 + 4096 + 1048576) >> 13, 240);\
-                yuv->v[i/2+k/2*yuv->uv_width]=min(abs(data[(i+k*yuv->y_width)*4+2] * 3598 + data[(i+k*yuv->y_width)*4+1] * -3013 + data[(i+k*yuv->y_width)*4] * -585 + 4096 + 1048576) >> 13, 240);\
+                yuv->u[i/2+k/2*yuv->uv_width]=Ur[data[(i+k*yuv->y_width)*4+2]] + Ug[data[(i+k*yuv->y_width)*4+1]] + Ub[data[(i+k*yuv->y_width)*4]] ;\
+                yuv->v[i/2+k/2*yuv->uv_width]=Vr[data[(i+k*yuv->y_width)*4+2]] + Vg[data[(i+k*yuv->y_width)*4+1]] + Vb[data[(i+k*yuv->y_width)*4]] ;\
             }\
-        }\
-    }\
-}
-
-#define UPDATE_YUV_BUFFER_IMO(yuv,data,x_tm,y_tm,width_tm,height_tm){\
-    int i,k,j=0;\
-    int x_2=x_tm/2,y_2=y_tm/2,y_width_2=yuv->y_width/2;\
-    for(k=0;k<height_tm;k++){\
-        for(i=0;i<width_tm;i++){\
-            yuv->y[x_tm+i+(k+y_tm)*yuv->y_width]=min(abs(data[(j*4)+2] * 2104 + data[(j*4)+1] * 4130 + data[(j*4)] * 802 + 4096 + 131072) >> 13, 235);\
-            if((k%2)&&(i%2)){\
-                yuv->u[x_2+i/2+(k/2+y_2)*y_width_2]=min(abs(data[(k*width_tm+i)*4+2] * -1214 + data[(k*width_tm+i)*4+1] * -2384 + data[(k*width_tm+i)*4] * 3598 + 4096 + 1048576) >> 13, 240);\
-                yuv->v[x_2+i/2+(k/2+y_2)*y_width_2]=min(abs(data[(k*width_tm+i)*4+2] * 3598 + data[(k*width_tm+i)*4+1] * -3013 + data[(k*width_tm+i)*4] * -585 + 4096 + 1048576) >> 13, 240);\
-            }\
-            \
-            j++;\
         }\
     }\
 }
@@ -348,10 +332,10 @@ unsigned char   Yr[256],Yg[256],Yb[256],
     for(k=0;k<height_tm;k++){\
         for(i=0;i<width_tm;i++){\
             if(data_tm[(j*4)]!=(no_pixel)){\
-                (yuv)->y[x_tm+i+(k+y_tm)*(yuv)->y_width]=min(abs(data_tm[(j*4)+2] * 2104 + data_tm[(j*4)+1] * 4130 + data_tm[(j*4)] * 802 + 4096 + 131072) >> 13, 235);\
+                (yuv)->y[x_tm+i+(k+y_tm)*(yuv)->y_width]=Yr[data_tm[(j*4)+2]] + Yg[data_tm[(j*4)+1]] + Yb[data_tm[(j*4)]];\
                 if((k%2)&&(i%2)){\
-                    yuv->u[x_2+i/2+(k/2+y_2)*y_width_2]=min(abs(data_tm[(k*width_tm+i)*4+2] * -1214 + data_tm[(k*width_tm+i)*4+1] * -2384 + data_tm[(k*width_tm+i)*4] * 3598 + 4096 + 1048576) >> 13, 240);\
-                    yuv->v[x_2+i/2+(k/2+y_2)*y_width_2]=min(abs(data_tm[(k*width_tm+i)*4+2] * 3598 + data_tm[(k*width_tm+i)*4+1] * -3013 + data_tm[(k*width_tm+i)*4] * -585 + 4096 + 1048576) >> 13, 240);\
+                    yuv->u[x_2+i/2+(k/2+y_2)*y_width_2]=Ur[data_tm[(k*width_tm+i)*4+2]] + Ug[data_tm[(k*width_tm+i)*4+1]] + Ub[data_tm[(k*width_tm+i)*4]];\
+                    yuv->v[x_2+i/2+(k/2+y_2)*y_width_2]=Vr[data_tm[(k*width_tm+i)*4+2]] + Vg[data_tm[(k*width_tm+i)*4+1]] + Vb[data_tm[(k*width_tm+i)*4]] ;\
                 }\
             }\
             j++;\
@@ -381,8 +365,6 @@ int QueryExtensions(Display *dpy,ProgArgs *args,int *damage_event,int *damage_er
 int SetBRWindow(Display *dpy,BRWindow *brwin,DisplaySpecs *specs,ProgArgs *args);
 int ZPixmapToBMP(XImage *imgz,BRWindow *brwin,char *fname,int nbytes,int scale);
 unsigned char *MakeDummyPointer(DisplaySpecs *specs,int size,int color,int type,unsigned char *npxl);
-void UpdateYUVBufferSh(yuv_buffer *yuv,unsigned char *data,int x,int y,int width,int height);
-void UpdateYUVBufferIm(yuv_buffer *yuv,unsigned char *data,int x,int y,int width,int height);
 void *CaptureSound(void *pdata);
 void *EncodeSoundBuffer(void *pdata);
 snd_pcm_t *OpenDev(const char *pcm_dev,unsigned int channels,unsigned int *frequency,snd_pcm_uframes_t *periodsize,unsigned int *periodtime,int *hardpause);
