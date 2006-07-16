@@ -91,7 +91,7 @@ int main(int argc,char **argv){
             pthread_cond_init(&pdata.image_buffer_ready,NULL);
             pthread_cond_init(&pdata.sound_buffer_ready,NULL);
             pthread_cond_init(&pdata.sound_data_read,NULL);
-            pdata.list_selector=Paused=Aborted=avd=0;
+            pdata.list_selector=Paused=Aborted=pdata.avd=0;
             pdata.running=1;       
             time_cond=&pdata.time_cond;
             pause_cond=&pdata.pause_cond;

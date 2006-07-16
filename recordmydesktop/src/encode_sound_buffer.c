@@ -25,7 +25,7 @@ void *EncodeSoundBuffer(void *pdata){
         ((ProgData *)pdata)->sound_buffer=((ProgData *)pdata)->sound_buffer->next;
         pthread_mutex_unlock(&((ProgData *)pdata)->sound_buffer_mutex);
                 
-        if (avd>0){
+        if (((ProgData *)pdata)->avd>0){
             vorbis_buffer=vorbis_analysis_buffer(&((ProgData *)pdata)->enc_data->m_vo_dsp,sampread);
 
             for(i=0;i<sampread;i++){
@@ -45,7 +45,7 @@ void *EncodeSoundBuffer(void *pdata){
                 while(vorbis_bitrate_flushpacket(&((ProgData *)pdata)->enc_data->m_vo_dsp,&((ProgData *)pdata)->enc_data->m_ogg_pckt2))
                     ogg_stream_packetin(&((ProgData *)pdata)->enc_data->m_ogg_vs,&((ProgData *)pdata)->enc_data->m_ogg_pckt2);
             }
-            avd-=((ProgData *)pdata)->periodtime;
+            ((ProgData *)pdata)->avd-=((ProgData *)pdata)->periodtime;
         }
         free(buff);
     }

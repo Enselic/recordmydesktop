@@ -176,6 +176,7 @@ typedef struct _ProgData{
     EncData *enc_data;
     int hard_pause;//if sound device doesn't support pause
                     //we have to close and reopen
+    int avd;//syncronization among audio and video
     unsigned int periodtime,
                 frametime;
     pthread_mutex_t list_mutex[2],//mutexes for concurrency protection of the lists
@@ -195,7 +196,7 @@ typedef struct _ProgData{
 
 int Paused,*Running,Aborted;
 pthread_cond_t  *time_cond,*pause_cond;
-int avd;
+
 
 /**Macros*/
 
