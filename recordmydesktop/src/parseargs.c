@@ -33,9 +33,10 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
     char *usage="\nUsage:\n"
     "\trecordmydesktop [-h| --help| --version| -delay n[H|h|M|m]| -windowid id_of_window|\n"
     "\t-display DISPLAY| -x X| -y Y|-width N| -height N| -fps N(number>0)|\n"
-    "\t -v_quality n| -s_quality n| -v_bitrate n| --no-framedrop| -dummy-cursor color| --no-dummy-cursor|\n"
-    "\t -freq N(number>0)| -channels N(number>0)| -device SOUND_DEVICE| --nosound|\n"
-    "\t --with-shared| --full-shots| --scshot| -scale-shot N| -o filename]^filename\n\n\n"
+    "\t -v_quality n| -s_quality n| -v_bitrate n| --no-framedrop| -dummy-cursor color|\n"
+    "\t --no-dummy-cursor| -freq N(number>0)| -channels N(number>0)| -device SOUND_DEVICE|\n"
+    "\t --nosound| --with-shared| --no-cond-shared| -shared-threshold n| --full-shots|\n"
+    "\t --scshot| -scale-shot N| -o filename]^filename\n\n\n"
 
     "General Options:\n"
     "\t-h or --help\t\tPrint this help and exit.\n"
@@ -51,7 +52,9 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
 
     "\t-dummy-cursor color\tColor of the dummy cursor [black|white](default black)\n"
     "\t--no-dummy-cursor\tDisable drawing of a dummy cursor.\n"
-    "\t--with-shared\t\tEnable usage of MIT-shared memory extension.\n"
+    "\t--with-shared\t\tEnable usage of MIT-shared memory extension at all times.\n"
+    "\t--no-cond-shared\tDo not use the MIT-shared memory extension when aquiring large areas.\n"
+    "\t-shared-threshold n\tThreshold over which shared memory is used(default 75).\n"
     "\t--full-shots\t\tTake full screenshot at every frame(Not recomended!).\n"
     "\t-fps N(number>0.0)\tA positive number denoting desired framerate.\n\n"
 
@@ -327,6 +330,22 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
             }
             i++;
         }
+        else if(!strcmp(argv[i],"-shared-threshold")){
+            if(i+1<argc){
+                int num=atoi(argv[i+1]);
+                if((num>0)&&(num<100))
+                    arg_return->shared_thres=num;
+                else{
+                    fprintf(stderr,"Argument Usage: --shared-threshold N(0<number<100)\n");
+                    return 1;
+                }
+            }
+            else{
+                fprintf(stderr,"Argument Usage: -channels N(number>0)\n");
+                return 1;
+            }
+            i++;
+        }
         else if(!strcmp(argv[i],"-scale-shot")){
             if(i+1<argc){
                 int num=atoi(argv[i+1]);
@@ -360,12 +379,20 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
             arg_return->nosound=1;
         else if(!strcmp(argv[i],"--drop-frames"))
             arg_return->dropframes=1;
-        else if(!strcmp(argv[i],"--with-shared"))
+        else if(!strcmp(argv[i],"--with-shared")){
             arg_return->noshared=0;
-        else if(!strcmp(argv[i],"--full-shots"))
+            arg_return->nocondshared=1;
+        }
+        else if(!strcmp(argv[i],"--no-cond-shared"))
+            arg_return->nocondshared=1;
+        else if(!strcmp(argv[i],"--full-shots")){
             arg_return->full_shots=1;
-        else if(!strcmp(argv[i],"--scshot"))
+            arg_return->nocondshared=1;
+        }
+        else if(!strcmp(argv[i],"--scshot")){
             arg_return->scshot=1;
+            arg_return->nocondshared=1;
+        }
         else if(!strcmp(argv[i],"--help")||!strcmp(argv[i],"-h")){
             fprintf(stderr,"%s",usage);
             return 1;

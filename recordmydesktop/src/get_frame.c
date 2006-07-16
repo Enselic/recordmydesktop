@@ -33,6 +33,8 @@ void *GetFrame(void *pdata){
     uint msk_ret;
     WGeometry mouse_pos_abs,mouse_pos_rel,mouse_pos_temp;
     Window root_ret,child_ret;
+    int pixel_total=((ProgData *)pdata)->brwin.rgeom.width*((ProgData *)pdata)->brwin.rgeom.height;
+
     mouse_pos_abs.x=0;
     mouse_pos_abs.y=0;
     mouse_pos_abs.width=((ProgData *)pdata)->dummy_p_size;
@@ -52,7 +54,24 @@ void *GetFrame(void *pdata){
             ((ProgData *)pdata)->list_selector=((((ProgData *)pdata)->list_selector+1)%2);
             pthread_mutex_lock(&((ProgData *)pdata)->list_mutex[tlist_sel]);
         }
-
+        //here we measure the list and decide which way we will go
+        if(!((ProgData *)pdata)->args.nocondshared){
+            int level=0;
+            RectArea *temp=((ProgData *)pdata)->rect_root[tlist_sel];
+            
+            if(temp!=NULL){
+                do{
+                    level+=temp->geom.width*temp->geom.height;
+                    temp=temp->next;
+                }while(temp!=NULL);
+                level*=100;
+                level/=pixel_total;
+                ((ProgData *)pdata)->args.noshared=(level<((ProgData *)pdata)->args.shared_thres);
+//                 if(!((ProgData *)pdata)->args.noshared){
+//                     fprintf(stderr,"shared screenshot with %d\n",level);
+//                 }
+            }
+        }
         if(((ProgData *)pdata)->args.have_dummy_cursor){
         //dummy pointer sequence
         //update previous_position
@@ -70,7 +89,7 @@ void *GetFrame(void *pdata){
                             &mouse_pos_rel.x,&mouse_pos_rel.y,&msk_ret);
         }
         if(!((ProgData *)pdata)->args.noshared)
-            XShmGetImage(((ProgData *)pdata)->dpy,((ProgData *)pdata)->specs.root,((ProgData *)pdata)->image,(((ProgData *)pdata)->brwin.rgeom.x),(((ProgData *)pdata)->brwin.rgeom.y),AllPlanes);
+            XShmGetImage(((ProgData *)pdata)->dpy,((ProgData *)pdata)->specs.root,((ProgData *)pdata)->shimage,(((ProgData *)pdata)->brwin.rgeom.x),(((ProgData *)pdata)->brwin.rgeom.y),AllPlanes);
         if(!((ProgData *)pdata)->args.full_shots)
             UpdateImage(((ProgData *)pdata)->dpy,
                         &((ProgData *)pdata)->enc_data->yuv,
@@ -79,7 +98,7 @@ void *GetFrame(void *pdata){
                         &((ProgData *)pdata)->rect_root[tlist_sel],
                         &((ProgData *)pdata)->brwin,
                         ((ProgData *)pdata)->enc_data,
-                        ((((ProgData *)pdata)->args.noshared)?(((ProgData *)pdata)->datatemp):((ProgData *)pdata)->image->data),
+                        ((((ProgData *)pdata)->args.noshared)?(((ProgData *)pdata)->datatemp):((ProgData *)pdata)->shimage->data),
                         ((ProgData *)pdata)->args.noshared);
         else{
             if(((ProgData *)pdata)->args.noshared){
@@ -96,7 +115,7 @@ void *GetFrame(void *pdata){
             }
             else{
                 pthread_mutex_lock(&((ProgData *)pdata)->yuv_mutex);
-                XImageToYUV(((ProgData *)pdata)->image,&((ProgData *)pdata)->enc_data->yuv);
+                XImageToYUV(((ProgData *)pdata)->shimage,&((ProgData *)pdata)->enc_data->yuv);
                 pthread_mutex_unlock(&((ProgData *)pdata)->yuv_mutex);
             }
         }

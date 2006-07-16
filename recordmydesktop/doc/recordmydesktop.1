@@ -34,9 +34,7 @@ but this will notably increase the workload. In this case, enabling the
 \-\-with\-shared
 option is recommended
 .br
-(by default this option is disabled since copying small areas of display is faster 
-.br
-than uploading the whole image from video memory).
+(by default this option is switched on or off at every frame, according to the size of the area to be aquired).
 .br
 .br
 recordMyDesktop doesn't have a commandline interface.
@@ -181,7 +179,17 @@ Image Options:
 .TP
 .B
     \-\-with\-shared
-    Enable usage of MIT\-shared memory extension.
+    Enable usage of MIT\-shared memory extension at all times.
+.br
+.TP
+.B
+    \-\-no\-cond\-shared
+    Do not use the MIT\-shared memory extension when aquiring large areas.
+.br
+.TP
+.B
+     \-shared\-threshold n
+     Threshold over which shared memory is used(default 75).
 .br
 .TP
 .B
@@ -283,11 +291,13 @@ If no other option is specified, filename can be given without the \-o switch.
 .br
 \-display DISPLAY| \-x X| \-y Y|\-width N| \-height N| \-fps N(number>0)|
 .br
-\-v_quality n| \-s_quality n| \-v_bitrate n| \-\-drop\-frames| \-dummy\-cursor color| \-\-no\-dummy\-cursor|
+\-v_quality n| \-s_quality n| \-v_bitrate n| \-\-no\-framedrop| \-dummy\-cursor color|
 .br
-\-freq N(number>0)| \-channels N(number>0)| \-device SOUND_DEVICE| \-\-nosound|
+\-\-no\-dummy\-cursor| \-freq N(number>0)| \-channels N(number>0)| \-device SOUND_DEVICE|
 .br
-\-\-with\-shared| \-\-full\-shots| \-\-scshot| \-scale\-shot N| \-o filename]^filename
+\-\-nosound| \-\-with\-shared| \-\-no\-cond\-shared| \-shared\-threshold n| \-\-full\-shots|
+.br
+\-\-scshot| \-scale\-shot N| \-o filename]^filename
 .br
 .br
 .br

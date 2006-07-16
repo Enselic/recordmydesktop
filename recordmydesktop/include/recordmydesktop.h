@@ -111,7 +111,9 @@ typedef struct _ProgArgs{
     unsigned int channels;       //no of channels(default 2)
     char *device;       //default sound device(default according to alsa or oss)
     int nosound;        //do not record sound(default 0)
-    int noshared;       //do not use shared memory extension(default disabled)
+    int noshared;       //do not use shared memory extension(default 1)
+    int nocondshared;   //de not use shared memory on large image aquititions
+    int shared_thres;   //threshold to use shared memory
     int full_shots;     //do not poll damage, take full screenshots
     int scshot;         //take screenshot and exit(default 0)
     int scale_shot;     //screenshot subscale factor(default 1)
@@ -160,11 +162,13 @@ typedef struct _ProgData{
     BRWindow brwin;//recording window
     Display *dpy;//curtrent display
     XImage *image;//the image that holds the current full screenshot
+    XImage *shimage;//the image that holds the current full screenshot(shared memory)
     unsigned char *dummy_pointer;//a dummy pointer to be drawn in every frame
                                 //data is casted to unsigned for later use in YUV buffer
     int dummy_p_size;//initially 16x16,always square
     unsigned char npxl;//this is the no pixel convention when drawing the dummy pointer
-    char    *datamain,//the data of the image above
+    char    *datamain,//the data of  image 
+            *datash,//the data of shimage
             *datatemp;//buffer for the temporary image,which will be 
                       //preallocated in case shared memory is not used.
     RectArea *rect_root[2];//the interchanging list roots for storing the changed regions
@@ -267,11 +271,12 @@ unsigned char   Yr[256],Yg[256],Yb[256],
     =(args)->width=(args)->height=(args)->quietmode\
     =(args)->nosound=(args)->scshot=(args)->full_shots=0;\
     (args)->noshared=(args)->scale_shot=1;\
-    (args)->dropframes=0;\
+    (args)->dropframes=(args)->nocondshared=0;\
     (args)->filename=(char *)malloc(8);\
     strcpy((args)->filename,"out.ogg");\
     (args)->encoding=OGG_THEORA_VORBIS;\
     (args)->cursor_color=1;\
+    (args)->shared_thres=75;\
     (args)->have_dummy_cursor=1;\
     (args)->device=(char *)malloc(8);\
     strcpy((args)->device,"hw:0,0");\

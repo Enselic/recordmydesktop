@@ -67,6 +67,7 @@ int main(int argc,char **argv){
 
         //init data
 
+
         if(!pdata.args.scshot){
             fprintf(stderr,"Initializing...\n");
             MakeMatrices();
@@ -104,19 +105,19 @@ int main(int argc,char **argv){
             GetZPixmap(pdata.dpy,pdata.specs.root,pdata.image->data,pdata.brwin.rgeom.x,pdata.brwin.rgeom.y,
                         pdata.brwin.rgeom.width,pdata.brwin.rgeom.height);
         }
-        else{
-            pdata.image=XShmCreateImage (pdata.dpy,pdata.specs.visual,pdata.specs.depth,ZPixmap,pdata.datamain, 
+        if((!pdata.args.noshared)||(!pdata.args.nocondshared)){
+            pdata.shimage=XShmCreateImage (pdata.dpy,pdata.specs.visual,pdata.specs.depth,ZPixmap,pdata.datash, 
                          &shminfo, pdata.brwin.rgeom.width,pdata.brwin.rgeom.height);
             shminfo.shmid = shmget (IPC_PRIVATE,
-                                    pdata.image->bytes_per_line * pdata.image->height,
+                                    pdata.shimage->bytes_per_line * pdata.shimage->height,
                                     IPC_CREAT|0777);
-            shminfo.shmaddr = pdata.image->data = shmat (shminfo.shmid, 0, 0);
+            shminfo.shmaddr = pdata.shimage->data = shmat (shminfo.shmid, 0, 0);
             shminfo.readOnly = False;
             if(!XShmAttach(pdata.dpy,&shminfo)){
                 fprintf(stderr,"Failed to attach shared memory to proccess.\n");
                 exit(1);
             }
-            XShmGetImage(pdata.dpy,pdata.specs.root,pdata.image,0,0,AllPlanes);
+            XShmGetImage(pdata.dpy,pdata.specs.root,pdata.shimage,0,0,AllPlanes);
 
         }
         if(pdata.args.scshot){
@@ -138,7 +139,10 @@ int main(int argc,char **argv){
             pdata.args.nosound=1;
         }
         InitEncoder(&pdata,&enc_data);
-        XImageToYUV(pdata.image,&pdata.enc_data->yuv);
+        if((pdata.args.nocondshared)&&(!pdata.args.noshared))
+            XImageToYUV(pdata.shimage,&pdata.enc_data->yuv);
+        else
+            XImageToYUV(pdata.shimage,&pdata.enc_data->yuv);
 
         pdata.frametime=(1000000)/pdata.args.fps;
 
@@ -181,7 +185,7 @@ int main(int argc,char **argv){
         if(!pdata.args.full_shots)
             pthread_join(poll_damage_t,NULL);
         fprintf(stderr,".");
-        if(!(pdata.args.noshared)){
+        if((!pdata.args.noshared)||(!pdata.args.nocondshared)){
             XShmDetach (pdata.dpy, &shminfo);
 //             XDestroyImage (pdata.image);
             shmdt (&shminfo.shmaddr);
