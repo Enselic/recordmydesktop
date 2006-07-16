@@ -72,3 +72,27 @@ void UpdateYUVBufferIm(yuv_buffer *yuv,unsigned char *data,int x,int y,int width
     }
 }
 
+void MakeMatrices(){
+    int i;
+    for(i=0;i<256;i++)
+        Yr[i]=0.299*i;
+    for(i=0;i<256;i++)
+        Yg[i]=0.587*i;
+    for(i=0;i<256;i++)
+        Yb[i]=0.114*i;
+
+    for(i=0;i<256;i++)
+        Ur[i]=43.1-0.169*i;
+    for(i=0;i<256;i++)
+        Ug[i]=84.41-0.331*i;
+    for(i=0;i<256;i++)
+        Ub[i]=0.5*i;
+
+    for(i=0;i<256;i++)
+        Vr[i]=0.5*i;
+    for(i=0;i<256;i++)
+        Vg[i]=107-0.419*i;
+    for(i=0;i<256;i++)
+        Vb[i]=21-0.081*i;
+}
+

@@ -196,7 +196,9 @@ typedef struct _ProgData{
 
 int Paused,*Running,Aborted;
 pthread_cond_t  *time_cond,*pause_cond;
-
+unsigned char   Yr[256],Yg[256],Yb[256],
+                Ur[256],Ug[256],Ub[256],
+                Vr[256],Vg[256],Vb[256];
 
 /**Macros*/
 
@@ -306,7 +308,7 @@ pthread_cond_t  *time_cond,*pause_cond;
     }\
 }
 
-#define UPDATE_YUV_BUFFER_IM(yuv,data,x_tm,y_tm,width_tm,height_tm){\
+#define UPDATE_YUV_BUFFER_IMO(yuv,data,x_tm,y_tm,width_tm,height_tm){\
     int i,k,j=0;\
     int x_2=x_tm/2,y_2=y_tm/2,y_width_2=yuv->y_width/2;\
     for(k=0;k<height_tm;k++){\
@@ -315,6 +317,24 @@ pthread_cond_t  *time_cond,*pause_cond;
             if((k%2)&&(i%2)){\
                 yuv->u[x_2+i/2+(k/2+y_2)*y_width_2]=min(abs(data[(k*width_tm+i)*4+2] * -1214 + data[(k*width_tm+i)*4+1] * -2384 + data[(k*width_tm+i)*4] * 3598 + 4096 + 1048576) >> 13, 240);\
                 yuv->v[x_2+i/2+(k/2+y_2)*y_width_2]=min(abs(data[(k*width_tm+i)*4+2] * 3598 + data[(k*width_tm+i)*4+1] * -3013 + data[(k*width_tm+i)*4] * -585 + 4096 + 1048576) >> 13, 240);\
+            }\
+            \
+            j++;\
+        }\
+    }\
+}
+
+#define UPDATE_YUV_BUFFER_IM(yuv,data,x_tm,y_tm,width_tm,height_tm){\
+    int i,k,j=0;\
+    int x_2=x_tm/2,y_2=y_tm/2;\
+    for(k=0;k<height_tm;k++){\
+        for(i=0;i<width_tm;i++){\
+            yuv->y[x_tm+i+(k+y_tm)*yuv->y_width]=Yr[data[(j*4)+2]] + Yg[data[(j*4)+1]] + Yb[data[(j*4)]] ;\
+            if((k%2)&&(i%2)){\
+                yuv->u[x_2+i/2+(k/2+y_2)*yuv->uv_width]=\
+                Ur[data[(k*width_tm+i)*4+2]] + Ug[data[(k*width_tm+i)*4+1]] + Ub[data[(k*width_tm+i)*4]];\
+                yuv->v[x_2+i/2+(k/2+y_2)*yuv->uv_width]=\
+                Vr[data[(k*width_tm+i)*4+2]] + Vg[data[(k*width_tm+i)*4+1]] + Vb[data[(k*width_tm+i)*4]];\
             }\
             \
             j++;\
@@ -367,6 +387,6 @@ void *CaptureSound(void *pdata);
 void *EncodeSoundBuffer(void *pdata);
 snd_pcm_t *OpenDev(const char *pcm_dev,unsigned int channels,unsigned int *frequency,snd_pcm_uframes_t *periodsize,unsigned int *periodtime,int *hardpause);
 void InitEncoder(ProgData *pdata,EncData *enc_data_t);
-
+void MakeMatrices();
 #endif
 

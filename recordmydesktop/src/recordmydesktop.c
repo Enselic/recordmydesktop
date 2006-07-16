@@ -69,7 +69,7 @@ int main(int argc,char **argv){
 
         if(!pdata.args.scshot){
             fprintf(stderr,"Initializing...\n");
-    
+            MakeMatrices();
             if(pdata.args.have_dummy_cursor){
                 pdata.dummy_pointer=MakeDummyPointer(&pdata.specs,16,pdata.args.cursor_color,0,&pdata.npxl);
                 pdata.dummy_p_size=16;
