@@ -115,6 +115,7 @@ typedef struct _ProgArgs{
     int nocondshared;   //de not use shared memory on large image aquititions
     int shared_thres;   //threshold to use shared memory
     int full_shots;     //do not poll damage, take full screenshots
+    int no_quick_subsample;//average pixels in chroma planes
     int scshot;         //take screenshot and exit(default 0)
     int scale_shot;     //screenshot subscale factor(default 1)
     int v_bitrate,v_quality,s_quality;//video bitrate,video-sound quality
@@ -271,7 +272,8 @@ unsigned char   Yr[256],Yg[256],Yb[256],
     =(args)->width=(args)->height=(args)->quietmode\
     =(args)->nosound=(args)->scshot=(args)->full_shots=0;\
     (args)->noshared=(args)->scale_shot=1;\
-    (args)->dropframes=(args)->nocondshared=0;\
+    (args)->dropframes=(args)->nocondshared==0;\
+    (args)->no_quick_subsample=0;\
     (args)->filename=(char *)malloc(8);\
     strcpy((args)->filename,"out.ogg");\
     (args)->encoding=OGG_THEORA_VORBIS;\
@@ -300,6 +302,10 @@ unsigned char   Yr[256],Yg[256],Yb[256],
     (specstruct)->wpixel=XWhitePixel(display,(specstruct)->screen);\
 }
 
+#define AVG_4_PIXELS(data_array,width_img,k_tm,i_tm,offset)\
+    ((data_array[(k_tm*width_img+i_tm)*4+offset]+data_array[((k_tm-1)*width_img+i_tm)*4+offset]\
+    +data_array[(k_tm*width_img+i_tm-1)*4+offset]+data_array[((k_tm-1)*width_img+i_tm-1)*4+offset])/4)
+
 #define UPDATE_YUV_BUFFER_SH(yuv,data,x_tm,y_tm,width_tm,height_tm){\
     int i,k;\
     for(k=y_tm;k<y_tm+height_tm;k++){\
@@ -308,6 +314,27 @@ unsigned char   Yr[256],Yg[256],Yb[256],
             if((k%2)&&(i%2)){\
                 yuv->u[i/2+k/2*yuv->uv_width]=Ur[data[(i+k*yuv->y_width)*4+2]] + Ug[data[(i+k*yuv->y_width)*4+1]] + Ub[data[(i+k*yuv->y_width)*4]] ;\
                 yuv->v[i/2+k/2*yuv->uv_width]=Vr[data[(i+k*yuv->y_width)*4+2]] + Vg[data[(i+k*yuv->y_width)*4+1]] + Vb[data[(i+k*yuv->y_width)*4]] ;\
+            }\
+        }\
+    }\
+}
+
+#define UPDATE_YUV_BUFFER_SH_AVG(yuv,data,x_tm,y_tm,width_tm,height_tm){\
+    int i,k;\
+    unsigned char avg0,avg1,avg2;\
+    for(k=y_tm;k<y_tm+height_tm;k++){\
+        for(i=x_tm;i<x_tm+width_tm;i++){\
+            yuv->y[i+k*yuv->y_width]=Yr[data[(i+k*yuv->y_width)*4+2]] + Yg[data[(i+k*yuv->y_width)*4+1]] + Yb[data[(i+k*yuv->y_width)*4]];\
+            if((k%2)&&(i%2)){\
+                avg2=AVG_4_PIXELS(data,(yuv->y_width),k,i,2);\
+                avg1=AVG_4_PIXELS(data,(yuv->y_width),k,i,1);\
+                avg0=AVG_4_PIXELS(data,(yuv->y_width),k,i,0);\
+                yuv->u[i/2+k/2*yuv->uv_width]=Ur[avg2] +\
+                Ug[avg1] +\
+                Ub[avg0] ;\
+                yuv->v[i/2+k/2*yuv->uv_width]=Vr[avg2] +\
+                Vg[avg1] +\
+                Vb[avg0] ;\
             }\
         }\
     }\
@@ -330,6 +357,34 @@ unsigned char   Yr[256],Yg[256],Yb[256],
         }\
     }\
 }
+
+
+
+#define UPDATE_YUV_BUFFER_IM_AVG(yuv,data,x_tm,y_tm,width_tm,height_tm){\
+    int i,k,j=0;\
+    unsigned char avg0,avg1,avg2;\
+    int x_2=x_tm/2,y_2=y_tm/2;\
+    for(k=0;k<height_tm;k++){\
+        for(i=0;i<width_tm;i++){\
+            yuv->y[x_tm+i+(k+y_tm)*yuv->y_width]=Yr[data[(j*4)+2]] + Yg[data[(j*4)+1]] + Yb[data[(j*4)]] ;\
+            if((k%2)&&(i%2)){\
+                avg2=AVG_4_PIXELS(data,width_tm,k,i,2);\
+                avg1=AVG_4_PIXELS(data,width_tm,k,i,1);\
+                avg0=AVG_4_PIXELS(data,width_tm,k,i,0);\
+                yuv->u[x_2+i/2+(k/2+y_2)*yuv->uv_width]=\
+                Ur[avg2] + Ug[avg1] +\
+                Ub[avg0];\
+                yuv->v[x_2+i/2+(k/2+y_2)*yuv->uv_width]=\
+                Vr[avg2] + Vg[avg1] +\
+                Vb[avg0];\
+            }\
+            \
+            j++;\
+        }\
+    }\
+}
+
+
 
 #define DUMMY_POINTER_TO_YUV(yuv,data_tm,x_tm,y_tm,width_tm,height_tm,no_pixel){\
     int i,k,j=0;\
@@ -362,8 +417,8 @@ int RectInsert(RectArea **root,WGeometry *wgeom);
 int CollideRects(WGeometry *wgeom1,WGeometry *wgeom2,WGeometry **wgeom_return,int *ngeoms);
 void SetExpired(int signum);
 void RegisterCallbacks(ProgArgs *args);
-void UpdateImage(Display * dpy,yuv_buffer *yuv,pthread_mutex_t *yuv_mutex,DisplaySpecs *specs,RectArea **root,BRWindow *brwin,EncData *enc,char *datatemp,int noshmem);
-void XImageToYUV(XImage *imgz,yuv_buffer *yuv);
+void UpdateImage(Display * dpy,yuv_buffer *yuv,pthread_mutex_t *yuv_mutex,DisplaySpecs *specs,RectArea **root,BRWindow *brwin,EncData *enc,char *datatemp,int noshmem,int no_quick_subsample);
+void XImageToYUV(XImage *imgz,yuv_buffer *yuv,int no_quick_subsample);
 int GetZPixmap(Display *dpy,Window root,char *data,int x,int y,int width,int height);
 int ParseArgs(int argc,char **argv,ProgArgs *arg_return);
 int QueryExtensions(Display *dpy,ProgArgs *args,int *damage_event,int *damage_error);

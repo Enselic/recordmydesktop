@@ -140,9 +140,9 @@ int main(int argc,char **argv){
         }
         InitEncoder(&pdata,&enc_data);
         if((pdata.args.nocondshared)&&(!pdata.args.noshared))
-            XImageToYUV(pdata.shimage,&pdata.enc_data->yuv);
+            XImageToYUV(pdata.shimage,&pdata.enc_data->yuv,pdata.args.no_quick_subsample);
         else
-            XImageToYUV(pdata.shimage,&pdata.enc_data->yuv);
+            XImageToYUV(pdata.shimage,&pdata.enc_data->yuv,pdata.args.no_quick_subsample);
 
         pdata.frametime=(1000000)/pdata.args.fps;
 

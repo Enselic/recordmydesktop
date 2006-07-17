@@ -99,7 +99,8 @@ void *GetFrame(void *pdata){
                         &((ProgData *)pdata)->brwin,
                         ((ProgData *)pdata)->enc_data,
                         ((((ProgData *)pdata)->args.noshared)?(((ProgData *)pdata)->datatemp):((ProgData *)pdata)->shimage->data),
-                        ((ProgData *)pdata)->args.noshared);
+                        ((ProgData *)pdata)->args.noshared,
+                        ((ProgData *)pdata)->args.no_quick_subsample);
         else{
             if(((ProgData *)pdata)->args.noshared){
                 GetZPixmap( ((ProgData *)pdata)->dpy,
@@ -110,12 +111,14 @@ void *GetFrame(void *pdata){
                             ((ProgData *)pdata)->brwin.rgeom.width,
                             ((ProgData *)pdata)->brwin.rgeom.height);
                 pthread_mutex_lock(&((ProgData *)pdata)->yuv_mutex);
-                XImageToYUV(((ProgData *)pdata)->image,&((ProgData *)pdata)->enc_data->yuv);
+                XImageToYUV(((ProgData *)pdata)->image,&((ProgData *)pdata)->enc_data->yuv,
+                ((ProgData *)pdata)->args.no_quick_subsample);
                 pthread_mutex_unlock(&((ProgData *)pdata)->yuv_mutex);
             }
             else{
                 pthread_mutex_lock(&((ProgData *)pdata)->yuv_mutex);
-                XImageToYUV(((ProgData *)pdata)->shimage,&((ProgData *)pdata)->enc_data->yuv);
+                XImageToYUV(((ProgData *)pdata)->shimage,&((ProgData *)pdata)->enc_data->yuv,
+                ((ProgData *)pdata)->args.no_quick_subsample);
                 pthread_mutex_unlock(&((ProgData *)pdata)->yuv_mutex);
             }
         }

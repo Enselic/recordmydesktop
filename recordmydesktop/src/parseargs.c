@@ -36,7 +36,7 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
     "\t -v_quality n| -s_quality n| -v_bitrate n| --no-framedrop| -dummy-cursor color|\n"
     "\t --no-dummy-cursor| -freq N(number>0)| -channels N(number>0)| -device SOUND_DEVICE|\n"
     "\t --nosound| --with-shared| --no-cond-shared| -shared-threshold n| --full-shots|\n"
-    "\t --scshot| -scale-shot N| -o filename]^filename\n\n\n"
+    "\t --no-quick-subsampling| --scshot| -scale-shot N| -o filename]^filename\n\n\n"
 
     "General Options:\n"
     "\t-h or --help\t\tPrint this help and exit.\n"
@@ -56,6 +56,7 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
     "\t--no-cond-shared\tDo not use the MIT-shared memory extension when aquiring large areas.\n"
     "\t-shared-threshold n\tThreshold over which shared memory is used(default 75).\n"
     "\t--full-shots\t\tTake full screenshot at every frame(Not recomended!).\n"
+    "\t--no-quick-subsampling\tDo subsampling of the chroma planes by averaging,not discarding.\n"
     "\t-fps N(number>0.0)\tA positive number denoting desired framerate.\n\n"
 
     "Sound Options:\n"
@@ -396,6 +397,9 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
         else if(!strcmp(argv[i],"--scshot")){
             arg_return->scshot=1;
             arg_return->nocondshared=1;
+        }
+        else if(!strcmp(argv[i],"--no-quick-subsampling")){
+            arg_return->no_quick_subsample=1;
         }
         else if(!strcmp(argv[i],"--help")||!strcmp(argv[i],"-h")){
             fprintf(stderr,"%s",usage);

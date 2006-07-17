@@ -8,6 +8,7 @@ or missing pixels at borders has been corrected.
 *The option to drop frames has been added.
 *Default behavior now is to use shared memory when 
 size of image gets over 75% of total (or a user set threshold).
+*Many other minor bugfixes.
 
 
 

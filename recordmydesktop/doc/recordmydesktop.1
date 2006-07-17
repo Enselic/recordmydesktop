@@ -198,6 +198,11 @@ Image Options:
 .br
 .TP
 .B
+    \-\-no\-quick\-subsampling
+    Do subsampling of the chroma planes by averaging,not discarding extra pixels.
+.br
+.TP
+.B
     \-fps N(number>0.0)
     A positive number denoting desired framerate.
 .br
@@ -297,7 +302,7 @@ If no other option is specified, filename can be given without the \-o switch.
 .br
 \-\-nosound| \-\-with\-shared| \-\-no\-cond\-shared| \-shared\-threshold n| \-\-full\-shots|
 .br
-\-\-scshot| \-scale\-shot N| \-o filename]^filename
+\-\-no\-quick\-subsampling| \-\-scshot| \-scale\-shot N| \-o filename]^filename
 .br
 .br
 .br
@@ -353,9 +358,7 @@ It can even perform resizing on the size of the recording, or change the overall
 .br
 .br
 .SH BUGS
-Too resource intensive, straightforward subsampling of chroma plane degrades quality
-.br
-(though fixing this with averaraging would make the program even more cpu-hungry).
+Too resource intensive.
 .br
 .SH AUTHORS
 John Varouhakis(biocrasher@gmail.com)
