@@ -79,7 +79,8 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
 
     if(argc==2){
         if(argv[1][0]!='-'){
-            realloc(arg_return->filename,strlen(argv[1])+1);
+            free(arg_return->filename);
+            arg_return->filename=malloc(strlen(argv[1])+1);
             strcpy(arg_return->filename,argv[1]);
             return 0;
         }
@@ -131,7 +132,8 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
         }
         else if(!strcmp(argv[i],"-display")){
             if(i+1<argc){
-                realloc(arg_return->display,strlen(argv[i+1])+1);
+                free(arg_return->display);
+                arg_return->display=malloc(strlen(argv[i+1])+1);
                 strcpy(arg_return->display,argv[i+1]);
             }
             else{
@@ -206,7 +208,8 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
         }
         else if(!strcmp(argv[i],"-o")){
             if(i+1<argc){
-                realloc(arg_return->filename,strlen(argv[i+1])+1);
+                free(arg_return->filename);
+                arg_return->filename=malloc(strlen(argv[i+1])+1);
                 strcpy(arg_return->filename,argv[i+1]);
             }
             else{
@@ -366,7 +369,8 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
         }
         else if(!strcmp(argv[i],"-device")){
             if(i+1<argc){
-                realloc(arg_return->device,strlen(argv[i+1])+1);
+                free(arg_return->device);
+                arg_return->device=malloc(strlen(argv[i+1])+1);
                 strcpy(arg_return->device,argv[i+1]);
             }
             else{
