@@ -5,6 +5,7 @@
 extended beyond recording height fixed.
 *Size adjustement that resulted in extra 
 or missing pixels at borders has been corrected.
+New adjustment is 8 pixels max,split evenly if possible.
 *The option to drop frames has been added.
 *The option to do better subsampling has been added.
 *Default behavior now is to use shared memory when 
