@@ -27,37 +27,37 @@
 
 #include <recordmydesktop.h>
 
-void XImageToYUV(XImage *imgz,yuv_buffer *yuv,int no_quick_subsample){
-    unsigned char *dtap=(unsigned char *)imgz->data;
-    unsigned char avg2,avg1,avg0;
-    int i,k,j=0;
-
-    for(k=0;k<(imgz->width*imgz->height);k++){
-            yuv->y[k]=Yr[dtap[(k*4)+2]] + Yg[dtap[(k*4)+1]] + Yb[dtap[(k*4)]];
-    }
-    if(!no_quick_subsample){
-        for(i=0;i<(imgz->height);i+=2){
-            for(k=0;k<(imgz->width);k+=2){    
-                yuv->u[j]=Ur[dtap[i*imgz->bytes_per_line+k*4+2]] + Ug[dtap[i*imgz->bytes_per_line+k*4+1]] + Ub[dtap[i*imgz->bytes_per_line+k*4]];
-                yuv->v[j]=Vr[dtap[i*imgz->bytes_per_line+k*4+2]] + Vg[dtap[i*imgz->bytes_per_line+k*4+1]] + Vb[dtap[i*imgz->bytes_per_line+k*4]] ;
-                j++;
-            }
-        }
-    }
-    else{
-        for(i=0;i<(imgz->height);i+=2){
-            for(k=0;k<(imgz->width);k+=2){
-                avg2=AVG_4_PIXELS(dtap,(imgz->width),i,k,2);
-                avg1=AVG_4_PIXELS(dtap,(imgz->width),i,k,1);
-                avg0=AVG_4_PIXELS(dtap,(imgz->width),i,k,0);
-                
-                yuv->u[j]=Ur[avg2] + Ug[avg1] + Ub[avg0];
-                yuv->v[j]=Vr[avg2] + Vg[avg1] + Vb[avg0] ;
-                j++;
-            }
-        }
-    }
-}
+// void XImageToYUV(XImage *imgz,yuv_buffer *yuv,int no_quick_subsample){
+//     unsigned char *dtap=(unsigned char *)imgz->data;
+//     unsigned char avg2,avg1,avg0;
+//     int i,k,j=0;
+// 
+//     for(k=0;k<(imgz->width*imgz->height);k++){
+//             yuv->y[k]=Yr[dtap[(k*4)+2]] + Yg[dtap[(k*4)+1]] + Yb[dtap[(k*4)]];
+//     }
+//     if(!no_quick_subsample){
+//         for(i=0;i<(imgz->height);i+=2){
+//             for(k=0;k<(imgz->width);k+=2){    
+//                 yuv->u[j]=Ur[dtap[i*imgz->bytes_per_line+k*4+2]] + Ug[dtap[i*imgz->bytes_per_line+k*4+1]] + Ub[dtap[i*imgz->bytes_per_line+k*4]];
+//                 yuv->v[j]=Vr[dtap[i*imgz->bytes_per_line+k*4+2]] + Vg[dtap[i*imgz->bytes_per_line+k*4+1]] + Vb[dtap[i*imgz->bytes_per_line+k*4]] ;
+//                 j++;
+//             }
+//         }
+//     }
+//     else{
+//         for(i=0;i<(imgz->height);i+=2){
+//             for(k=0;k<(imgz->width);k+=2){
+//                 avg2=AVG_4_PIXELS(dtap,(imgz->width),i,k,2);
+//                 avg1=AVG_4_PIXELS(dtap,(imgz->width),i,k,1);
+//                 avg0=AVG_4_PIXELS(dtap,(imgz->width),i,k,0);
+//                 
+//                 yuv->u[j]=Ur[avg2] + Ug[avg1] + Ub[avg0];
+//                 yuv->v[j]=Vr[avg2] + Vg[avg1] + Vb[avg0] ;
+//                 j++;
+//             }
+//         }
+//     }
+// }
 
 
 void MakeMatrices(){

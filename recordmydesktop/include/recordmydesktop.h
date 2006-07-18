@@ -418,7 +418,7 @@ int CollideRects(WGeometry *wgeom1,WGeometry *wgeom2,WGeometry **wgeom_return,in
 void SetExpired(int signum);
 void RegisterCallbacks(ProgArgs *args);
 void UpdateImage(Display * dpy,yuv_buffer *yuv,pthread_mutex_t *yuv_mutex,DisplaySpecs *specs,RectArea **root,BRWindow *brwin,EncData *enc,char *datatemp,int noshmem,int no_quick_subsample);
-void XImageToYUV(XImage *imgz,yuv_buffer *yuv,int no_quick_subsample);
+// void XImageToYUV(XImage *imgz,yuv_buffer *yuv,int no_quick_subsample);
 int GetZPixmap(Display *dpy,Window root,char *data,int x,int y,int width,int height);
 int ParseArgs(int argc,char **argv,ProgArgs *arg_return);
 int QueryExtensions(Display *dpy,ProgArgs *args,int *damage_event,int *damage_error);
