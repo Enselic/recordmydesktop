@@ -111,14 +111,31 @@ void *GetFrame(void *pdata){
                             ((ProgData *)pdata)->brwin.rgeom.width,
                             ((ProgData *)pdata)->brwin.rgeom.height);
                 pthread_mutex_lock(&((ProgData *)pdata)->yuv_mutex);
-                XImageToYUV(((ProgData *)pdata)->image,&((ProgData *)pdata)->enc_data->yuv,
-                ((ProgData *)pdata)->args.no_quick_subsample);
+                if(((ProgData *)pdata)->args.no_quick_subsample){
+                    UPDATE_YUV_BUFFER_IM_AVG((&((ProgData *)pdata)->enc_data->yuv),((unsigned char*)((ProgData *)pdata)->image->data),
+                    (((ProgData *)pdata)->enc_data->x_offset),(((ProgData *)pdata)->enc_data->y_offset),
+                    (((ProgData *)pdata)->brwin.rgeom.width),(((ProgData *)pdata)->brwin.rgeom.height));
+                }
+                else{
+                    UPDATE_YUV_BUFFER_IM((&((ProgData *)pdata)->enc_data->yuv),((unsigned char*)((ProgData *)pdata)->image->data),
+                    (((ProgData *)pdata)->enc_data->x_offset),(((ProgData *)pdata)->enc_data->y_offset),
+                    (((ProgData *)pdata)->brwin.rgeom.width),(((ProgData *)pdata)->brwin.rgeom.height));
+                }
                 pthread_mutex_unlock(&((ProgData *)pdata)->yuv_mutex);
             }
             else{
                 pthread_mutex_lock(&((ProgData *)pdata)->yuv_mutex);
-                XImageToYUV(((ProgData *)pdata)->shimage,&((ProgData *)pdata)->enc_data->yuv,
-                ((ProgData *)pdata)->args.no_quick_subsample);
+                if(((ProgData *)pdata)->args.no_quick_subsample){
+                    UPDATE_YUV_BUFFER_IM_AVG((&((ProgData *)pdata)->enc_data->yuv),((unsigned char*)((ProgData *)pdata)->shimage->data),
+                    (((ProgData *)pdata)->enc_data->x_offset),(((ProgData *)pdata)->enc_data->y_offset),
+                    (((ProgData *)pdata)->brwin.rgeom.width),(((ProgData *)pdata)->brwin.rgeom.height));
+                }
+                else{
+                    UPDATE_YUV_BUFFER_IM((&((ProgData *)pdata)->enc_data->yuv),((unsigned char*)((ProgData *)pdata)->shimage->data),
+                    (((ProgData *)pdata)->enc_data->x_offset),(((ProgData *)pdata)->enc_data->y_offset),
+                    (((ProgData *)pdata)->brwin.rgeom.width),(((ProgData *)pdata)->brwin.rgeom.height));
+                }
+
                 pthread_mutex_unlock(&((ProgData *)pdata)->yuv_mutex);
             }
         }

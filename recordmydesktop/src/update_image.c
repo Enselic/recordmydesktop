@@ -68,12 +68,12 @@ void UpdateImage(Display * dpy,
             }
             else{
                 if(no_quick_subsample){
-                UPDATE_YUV_BUFFER_SH_AVG(yuv,dtap,
+                    UPDATE_YUV_BUFFER_SH_AVG(yuv,dtap,
                                 (temp->geom.x-brwin->rgeom.x+enc->x_offset),(temp->geom.y-brwin->rgeom.y+enc->y_offset),
                                 (temp->geom.width),(temp->geom.height));
                 }
                 else{
-                UPDATE_YUV_BUFFER_SH(yuv,dtap,
+                    UPDATE_YUV_BUFFER_SH(yuv,dtap,
                                 (temp->geom.x-brwin->rgeom.x+enc->x_offset),(temp->geom.y-brwin->rgeom.y+enc->y_offset),
                                 (temp->geom.width),(temp->geom.height));
                 }

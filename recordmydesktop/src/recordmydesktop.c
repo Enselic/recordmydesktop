@@ -54,6 +54,7 @@ int main(int argc,char **argv){
                     sound_encode_t,
                     flush_to_ogg_t;
         XShmSegmentInfo shminfo;
+        int i;
 
         QUERY_DISPLAY_SPECS(pdata.dpy,&pdata.specs);
         if(pdata.specs.depth!=24){
@@ -117,8 +118,7 @@ int main(int argc,char **argv){
                 fprintf(stderr,"Failed to attach shared memory to proccess.\n");
                 exit(1);
             }
-            XShmGetImage(pdata.dpy,pdata.specs.root,pdata.shimage,0,0,AllPlanes);
-
+            XShmGetImage(pdata.dpy,pdata.specs.root,pdata.shimage,pdata.brwin.rgeom.x,pdata.brwin.rgeom.y,AllPlanes);
         }
         if(pdata.args.scshot){
             if(pdata.args.delay>0){
@@ -139,10 +139,35 @@ int main(int argc,char **argv){
             pdata.args.nosound=1;
         }
         InitEncoder(&pdata,&enc_data);
-        if((pdata.args.nocondshared)&&(!pdata.args.noshared))
-            XImageToYUV(pdata.shimage,&pdata.enc_data->yuv,pdata.args.no_quick_subsample);
-        else
-            XImageToYUV(pdata.shimage,&pdata.enc_data->yuv,pdata.args.no_quick_subsample);
+        for(i=0;i<(pdata.enc_data->yuv.y_width*pdata.enc_data->yuv.y_height);i++)
+            pdata.enc_data->yuv.y[i]=0;
+        for(i=0;i<(pdata.enc_data->yuv.uv_width*pdata.enc_data->yuv.uv_height);i++){
+            pdata.enc_data->yuv.v[i]=pdata.enc_data->yuv.u[i]=127;
+        }
+        if((pdata.args.nocondshared)&&(!pdata.args.noshared)){
+            if(pdata.args.no_quick_subsample){
+                UPDATE_YUV_BUFFER_IM_AVG((&pdata.enc_data->yuv),((unsigned char*)pdata.shimage->data),
+                (pdata.enc_data->x_offset),(pdata.enc_data->y_offset),
+                (pdata.brwin.rgeom.width),(pdata.brwin.rgeom.height));
+            }
+            else{
+                UPDATE_YUV_BUFFER_IM((&pdata.enc_data->yuv),((unsigned char*)pdata.shimage->data),
+                (pdata.enc_data->x_offset),(pdata.enc_data->y_offset),
+                (pdata.brwin.rgeom.width),(pdata.brwin.rgeom.height));
+            }
+        }
+        else{
+            if(pdata.args.no_quick_subsample){
+                UPDATE_YUV_BUFFER_IM_AVG((&pdata.enc_data->yuv),((unsigned char*)pdata.image->data),
+                (pdata.enc_data->x_offset),(pdata.enc_data->y_offset),
+                (pdata.brwin.rgeom.width),(pdata.brwin.rgeom.height));
+            }
+            else{
+                UPDATE_YUV_BUFFER_IM((&pdata.enc_data->yuv),((unsigned char*)pdata.image->data),
+                (pdata.enc_data->x_offset),(pdata.enc_data->y_offset),
+                (pdata.brwin.rgeom.width),(pdata.brwin.rgeom.height));
+            }
+        }
 
         pdata.frametime=(1000000)/pdata.args.fps;
 

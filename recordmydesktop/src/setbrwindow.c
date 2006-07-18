@@ -29,6 +29,7 @@
 
 int SetBRWindow(Display *dpy,BRWindow *brwin,DisplaySpecs *specs,ProgArgs *args){
     //before we start recording we have to make sure the ranges are valid
+    int octoffset=0;
     if(args->windowid==0){//root window
         //first set it up
         brwin->windowid=specs->root;
@@ -79,6 +80,9 @@ int SetBRWindow(Display *dpy,BRWindow *brwin,DisplaySpecs *specs,ProgArgs *args)
             return 1;
         }
     }
+    fprintf(stderr, "Initial recording window is set to:\n"
+                    "X:%d   Y:%d    Width:%d    Height:%d\n"
+                    ,brwin->rgeom.x,brwin->rgeom.y,brwin->rgeom.width,brwin->rgeom.height);
     //align in two
     //an odd x can always go down and still be in recording area.
     //Resolutions come in even numbers
@@ -93,7 +97,52 @@ int SetBRWindow(Display *dpy,BRWindow *brwin,DisplaySpecs *specs,ProgArgs *args)
     brwin->rgeom.x-=brwin->rgeom.x%2;
     brwin->rgeom.y-=brwin->rgeom.y%2;
 
-    brwin->nbytes=(((brwin->rgeom.width+15)>>4)<<4)*(((brwin->rgeom.height+15)>>4)<<4)*4;
+    //32 bit pack align
+    //we already have disible by two width,so 
+    //it's 2, 4 or 6
+    octoffset=(brwin->rgeom.width%8);
+    if(octoffset==2){
+        brwin->rgeom.width-=2;
 
+    }
+    else if(octoffset==6){
+        if(brwin->rgeom.width+brwin->rgeom.x+2<=specs->width)
+            brwin->rgeom.width+=2;
+        else if(brwin->rgeom.x>=2){
+            brwin->rgeom.x-=2;
+            brwin->rgeom.width+=2;
+        }
+        else{
+            brwin->rgeom.x+=2;
+            brwin->rgeom.width-=4;
+        }
+    }
+    
+    else if(octoffset==4){
+        if((brwin->rgeom.width+brwin->rgeom.x+2<=specs->width)&&(brwin->rgeom.x>=2)){
+            brwin->rgeom.x-=2;
+            brwin->rgeom.width+=4;
+        }
+        else if(brwin->rgeom.width+brwin->rgeom.x+4<=specs->width){
+            brwin->rgeom.width+=4;
+        }
+        else if(brwin->rgeom.x>=4){
+            brwin->rgeom.x-=4;
+            brwin->rgeom.width+=4;
+        }
+        else{
+            brwin->rgeom.x+=2;
+            brwin->rgeom.width-=4;
+        }
+    }
+    fprintf(stderr, "Adjusted recording window is set to:\n"
+                    "X:%d   Y:%d    Width:%d    Height:%d\n"
+                    ,brwin->rgeom.x,brwin->rgeom.y,brwin->rgeom.width,brwin->rgeom.height);
+
+
+
+    brwin->nbytes=(((brwin->rgeom.width+15)>>4)<<4)*(((brwin->rgeom.height+15)>>4)<<4)*4;
+    
+    
     return 0;
 }
