@@ -13,7 +13,9 @@ size of image gets over 75% of total (or a user set threshold).
 *Many other minor bugfixes.
 
 
-
+/*VERSION 0.2.2*/
+*Changes to the configure script.
+*BGR to YUV convertion corrected.
 
 
 
