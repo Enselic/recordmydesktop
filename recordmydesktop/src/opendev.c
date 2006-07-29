@@ -94,6 +94,7 @@ snd_pcm_t *OpenDev(const char *pcm_dev,unsigned int *channels,unsigned int *freq
         snd_pcm_hw_params_get_period_size(hwparams,periodsize,0);
     if(periodtime!=NULL)
         snd_pcm_hw_params_get_period_time(hwparams,periodtime,0);
+    fprintf(stderr,"Recording on device %s is set to:\n%d channels at %dHz\n",pcm_dev,*channels,*frequency);
     snd_pcm_prepare(mhandle);
 
     return mhandle;
