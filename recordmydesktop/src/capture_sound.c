@@ -70,16 +70,17 @@ void *CaptureSound(void *pdata){
        
         //read data into new buffer 
         while(sret<frames){
-            int tsret=snd_pcm_readi(((ProgData *)pdata)->sound_handle,
+            int temp_sret=snd_pcm_readi(((ProgData *)pdata)->sound_handle,
                                 newbuf->data+2*((ProgData *)pdata)->args.channels*sret,
                                 frames-sret);
-            if(tsret==-EPIPE)
+            if(temp_sret==-EPIPE)
                 snd_pcm_prepare(((ProgData *)pdata)->sound_handle);
-            else if (tsret<0){
-                fprintf(stderr,"An error occured while reading sound data:\n %s\n",snd_strerror(sret));
+            else if (temp_sret<0){
+                fprintf(stderr,"An error occured while reading sound data:\n %s\n",snd_strerror(temp_sret));
+                snd_pcm_prepare(((ProgData *)pdata)->sound_handle);
             }
             else
-                sret+=tsret;
+                sret+=temp_sret;
         }
 
         //queue the new buffer
