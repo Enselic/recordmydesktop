@@ -20,19 +20,24 @@ AC_HEADER_DIRENT
 AC_HEADER_STDC
 
 AC_PATH_X
+AC_PATH_XTRA
+
 AC_CHECK_HEADER([png.h])
 AC_CHECK_HEADER([alsa/asoundlib.h])
 AC_CHECK_HEADERS([sys/time.h unistd.h vorbis/vorbisfile.h ])
 
-LDFLAGS="$LD_FLAGS -L$x_libraries "
+LDFLAGS="$LD_FLAGS -L$x_libraries $X_LIBS $X_EXTRA_LIBS $X_PRE_LIBS"
 
 CFLAGS="${CFLAGS} -O3 -Wall -D_THREAD_SAFE -pthread"
+
+
 
 # Checks for libraries.
 
 AC_CHECK_LIB([m],[isnan],,)
 AC_CHECK_LIB([z],[deflate],,)
-AC_CHECK_LIB([X11],[XOpenDisplay],,AC_MSG_ERROR([Can't find libX11]))
+AC_CHECK_LIB([X11],[XOpenDisplay],,AC_MSG_ERROR([Can't find libX11]),
+            -L$x_libraries $X_PRE_LIBS)
 AC_CHECK_LIB([Xext],[XShmQueryVersion],,AC_MSG_ERROR([Can't find libXext]))
 AC_CHECK_LIB([Xdamage], [XDamageQueryExtension],,AC_MSG_ERROR([Can't find libXdamage]))
 AC_CHECK_LIB([vorbis],[vorbis_info_clear],,AC_MSG_ERROR([Can't find libvorbis]))

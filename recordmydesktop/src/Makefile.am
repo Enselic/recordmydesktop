@@ -22,7 +22,7 @@ recordmydesktop_SOURCES=	recordmydesktop.c\
 							encode_sound_buffer.c\
 							init_encoder.c
 
-INCLUDES= $(all_includes) -I../include
+INCLUDES= $(all_includes) -I../include -I$x_includes
 
 recordmydesktop_LDFLAGS = -D_THREAD_SAFE -pthread -Wall -O3
 
