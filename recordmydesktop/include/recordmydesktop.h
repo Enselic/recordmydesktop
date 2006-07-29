@@ -427,7 +427,7 @@ int ZPixmapToBMP(XImage *imgz,BRWindow *brwin,char *fname,int nbytes,int scale);
 unsigned char *MakeDummyPointer(DisplaySpecs *specs,int size,int color,int type,unsigned char *npxl);
 void *CaptureSound(void *pdata);
 void *EncodeSoundBuffer(void *pdata);
-snd_pcm_t *OpenDev(const char *pcm_dev,unsigned int channels,unsigned int *frequency,snd_pcm_uframes_t *periodsize,unsigned int *periodtime,int *hardpause);
+snd_pcm_t *OpenDev(const char *pcm_dev,unsigned int *channels,unsigned int *frequency,snd_pcm_uframes_t *periodsize,unsigned int *periodtime,int *hardpause);
 void InitEncoder(ProgData *pdata,EncData *enc_data_t);
 void MakeMatrices();
 #endif

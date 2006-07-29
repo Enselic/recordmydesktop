@@ -50,7 +50,7 @@ void *CaptureSound(void *pdata){
 
                 ((ProgData *)pdata)->sound_handle=
                     OpenDev(((ProgData *)pdata)->args.device,
-                            ((ProgData *)pdata)->args.channels,
+                            &((ProgData *)pdata)->args.channels,
                             &((ProgData *)pdata)->args.frequency,
                             NULL,
                             NULL,

@@ -30,7 +30,7 @@
 #include <recordmydesktop.h>
 
 
-snd_pcm_t *OpenDev(const char *pcm_dev,unsigned int channels,unsigned int *frequency,snd_pcm_uframes_t *periodsize,unsigned int *periodtime,int *hard_pause){
+snd_pcm_t *OpenDev(const char *pcm_dev,unsigned int *channels,unsigned int *frequency,snd_pcm_uframes_t *periodsize,unsigned int *periodtime,int *hard_pause){
     
     snd_pcm_t *mhandle;
     snd_pcm_hw_params_t *hwparams;
@@ -64,15 +64,19 @@ snd_pcm_t *OpenDev(const char *pcm_dev,unsigned int channels,unsigned int *frequ
         fprintf(stderr, "Playback frequency %dHz is not available...\nUsing %dHz instead.\n",*frequency,exactrate);
         *frequency=exactrate;
     }
-    if (snd_pcm_hw_params_set_channels_near(mhandle, hwparams, &channels)<0){
+    if (snd_pcm_hw_params_set_channels_near(mhandle, hwparams, channels)<0){
         fprintf(stderr, "Couldn't set channels number.\n");
+        return NULL;
+    }
+    if(*channels>2){
+        fprintf(stderr,"Channels number should be 1(mono) or 2(stereo).\n");
         return NULL;
     }
     if (snd_pcm_hw_params_set_periods_near(mhandle, hwparams, &periods,0)<0)    {
         fprintf(stderr, "Couldn't set periods.\n");
         return NULL;
     }
-    buffsize=(((exactrate*channels)))>>channels;
+    buffsize=(exactrate*(*channels))/2;
     if (snd_pcm_hw_params_set_buffer_size_near(mhandle, hwparams,&buffsize)<0){
         fprintf(stderr, "Couldn't set buffer size.\n");
         return NULL;

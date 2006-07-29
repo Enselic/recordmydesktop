@@ -133,7 +133,7 @@ int main(int argc,char **argv){
             exit(0);
         }
         if(!pdata.args.nosound)
-            pdata.sound_handle=OpenDev(pdata.args.device,pdata.args.channels,&pdata.args.frequency,&pdata.periodsize,            &pdata.periodtime,&pdata.hard_pause);
+            pdata.sound_handle=OpenDev(pdata.args.device,&pdata.args.channels,&pdata.args.frequency,&pdata.periodsize,            &pdata.periodtime,&pdata.hard_pause);
         if(pdata.sound_handle==NULL){
             fprintf(stderr,"Error while opening/configuring soundcard %s\nProcceeding with no sound\n",pdata.args.device);
             pdata.args.nosound=1;
