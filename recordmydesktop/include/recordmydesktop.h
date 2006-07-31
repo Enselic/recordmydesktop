@@ -43,6 +43,7 @@
 #include <signal.h>
 #include <sys/time.h>
 #include <sys/types.h>
+#include <endian.h>
 #include <sys/stat.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
@@ -56,6 +57,20 @@
 #include <vorbis/vorbisenc.h>
 #include <ogg/ogg.h>
 #include <alsa/asoundlib.h>
+
+
+//define whcih way we are reading a pixmap
+#if __BYTE_ORDER == __LITTLE_ENDIAN
+#define __RBYTE 2
+#define __GBYTE 1
+#define __BBYTE 0
+#elif __BYTE_ORDER == __BIG_ENDIAN
+#define __RBYTE 1
+#define __GBYTE 2
+#define __BBYTE 3
+#else
+#error Only little-endian and big-endian systems are supported
+#endif
 
 
 enum {UNSPECIFIED,OGG_THEORA_VORBIS};
@@ -310,10 +325,10 @@ unsigned char   Yr[256],Yg[256],Yb[256],
     int i,k;\
     for(k=y_tm;k<y_tm+height_tm;k++){\
         for(i=x_tm;i<x_tm+width_tm;i++){\
-            yuv->y[i+k*yuv->y_width]=Yr[data[(i+k*yuv->y_width)*4+2]] + Yg[data[(i+k*yuv->y_width)*4+1]] + Yb[data[(i+k*yuv->y_width)*4]];\
+            yuv->y[i+k*yuv->y_width]=Yr[data[(i+k*yuv->y_width)*4+__RBYTE]] + Yg[data[(i+k*yuv->y_width)*4+__GBYTE]] + Yb[data[(i+k*yuv->y_width)*4+__BBYTE]];\
             if((k%2)&&(i%2)){\
-                yuv->u[i/2+k/2*yuv->uv_width]=Ur[data[(i+k*yuv->y_width)*4+2]] + Ug[data[(i+k*yuv->y_width)*4+1]] + Ub[data[(i+k*yuv->y_width)*4]] ;\
-                yuv->v[i/2+k/2*yuv->uv_width]=Vr[data[(i+k*yuv->y_width)*4+2]] + Vg[data[(i+k*yuv->y_width)*4+1]] + Vb[data[(i+k*yuv->y_width)*4]] ;\
+                yuv->u[i/2+k/2*yuv->uv_width]=Ur[data[(i+k*yuv->y_width)*4+__RBYTE]] + Ug[data[(i+k*yuv->y_width)*4+__GBYTE]] + Ub[data[(i+k*yuv->y_width)*4+__BBYTE]] ;\
+                yuv->v[i/2+k/2*yuv->uv_width]=Vr[data[(i+k*yuv->y_width)*4+__RBYTE]] + Vg[data[(i+k*yuv->y_width)*4+__GBYTE]] + Vb[data[(i+k*yuv->y_width)*4+__BBYTE]] ;\
             }\
         }\
     }\
@@ -324,11 +339,11 @@ unsigned char   Yr[256],Yg[256],Yb[256],
     unsigned char avg0,avg1,avg2;\
     for(k=y_tm;k<y_tm+height_tm;k++){\
         for(i=x_tm;i<x_tm+width_tm;i++){\
-            yuv->y[i+k*yuv->y_width]=Yr[data[(i+k*yuv->y_width)*4+2]] + Yg[data[(i+k*yuv->y_width)*4+1]] + Yb[data[(i+k*yuv->y_width)*4]];\
+            yuv->y[i+k*yuv->y_width]=Yr[data[(i+k*yuv->y_width)*4+__RBYTE]] + Yg[data[(i+k*yuv->y_width)*4+__GBYTE]] + Yb[data[(i+k*yuv->y_width)*4+__BBYTE]];\
             if((k%2)&&(i%2)){\
-                avg2=AVG_4_PIXELS(data,(yuv->y_width),k,i,2);\
-                avg1=AVG_4_PIXELS(data,(yuv->y_width),k,i,1);\
-                avg0=AVG_4_PIXELS(data,(yuv->y_width),k,i,0);\
+                avg2=AVG_4_PIXELS(data,(yuv->y_width),k,i,__RBYTE);\
+                avg1=AVG_4_PIXELS(data,(yuv->y_width),k,i,__GBYTE);\
+                avg0=AVG_4_PIXELS(data,(yuv->y_width),k,i,__BBYTE);\
                 yuv->u[i/2+k/2*yuv->uv_width]=Ur[avg2] +\
                 Ug[avg1] +\
                 Ub[avg0] ;\
@@ -345,12 +360,12 @@ unsigned char   Yr[256],Yg[256],Yb[256],
     int x_2=x_tm/2,y_2=y_tm/2;\
     for(k=0;k<height_tm;k++){\
         for(i=0;i<width_tm;i++){\
-            yuv->y[x_tm+i+(k+y_tm)*yuv->y_width]=Yr[data[(j*4)+2]] + Yg[data[(j*4)+1]] + Yb[data[(j*4)]] ;\
+            yuv->y[x_tm+i+(k+y_tm)*yuv->y_width]=Yr[data[(j*4)+__RBYTE]] + Yg[data[(j*4)+__GBYTE]] + Yb[data[(j*4)+__BBYTE]] ;\
             if((k%2)&&(i%2)){\
                 yuv->u[x_2+i/2+(k/2+y_2)*yuv->uv_width]=\
-                Ur[data[(k*width_tm+i)*4+2]] + Ug[data[(k*width_tm+i)*4+1]] + Ub[data[(k*width_tm+i)*4]];\
+                Ur[data[(k*width_tm+i)*4+__RBYTE]] + Ug[data[(k*width_tm+i)*4+__GBYTE]] + Ub[data[(k*width_tm+i)*4+__BBYTE]];\
                 yuv->v[x_2+i/2+(k/2+y_2)*yuv->uv_width]=\
-                Vr[data[(k*width_tm+i)*4+2]] + Vg[data[(k*width_tm+i)*4+1]] + Vb[data[(k*width_tm+i)*4]];\
+                Vr[data[(k*width_tm+i)*4+__RBYTE]] + Vg[data[(k*width_tm+i)*4+__GBYTE]] + Vb[data[(k*width_tm+i)*4+__BBYTE]];\
             }\
             \
             j++;\
@@ -366,11 +381,11 @@ unsigned char   Yr[256],Yg[256],Yb[256],
     int x_2=x_tm/2,y_2=y_tm/2;\
     for(k=0;k<height_tm;k++){\
         for(i=0;i<width_tm;i++){\
-            yuv->y[x_tm+i+(k+y_tm)*yuv->y_width]=Yr[data[(j*4)+2]] + Yg[data[(j*4)+1]] + Yb[data[(j*4)]] ;\
+            yuv->y[x_tm+i+(k+y_tm)*yuv->y_width]=Yr[data[(j*4)+__RBYTE]] + Yg[data[(j*4)+__GBYTE]] + Yb[data[(j*4)+__BBYTE]] ;\
             if((k%2)&&(i%2)){\
-                avg2=AVG_4_PIXELS(data,width_tm,k,i,2);\
-                avg1=AVG_4_PIXELS(data,width_tm,k,i,1);\
-                avg0=AVG_4_PIXELS(data,width_tm,k,i,0);\
+                avg2=AVG_4_PIXELS(data,width_tm,k,i,__RBYTE);\
+                avg1=AVG_4_PIXELS(data,width_tm,k,i,__GBYTE);\
+                avg0=AVG_4_PIXELS(data,width_tm,k,i,__BBYTE);\
                 yuv->u[x_2+i/2+(k/2+y_2)*yuv->uv_width]=\
                 Ur[avg2] + Ug[avg1] +\
                 Ub[avg0];\
@@ -392,10 +407,10 @@ unsigned char   Yr[256],Yg[256],Yb[256],
     for(k=0;k<height_tm;k++){\
         for(i=0;i<width_tm;i++){\
             if(data_tm[(j*4)]!=(no_pixel)){\
-                (yuv)->y[x_tm+i+(k+y_tm)*(yuv)->y_width]=Yr[data_tm[(j*4)+2]] + Yg[data_tm[(j*4)+1]] + Yb[data_tm[(j*4)]];\
+                (yuv)->y[x_tm+i+(k+y_tm)*(yuv)->y_width]=Yr[data_tm[(j*4)+__RBYTE]] + Yg[data_tm[(j*4)+__GBYTE]] + Yb[data_tm[(j*4)+__BBYTE]];\
                 if((k%2)&&(i%2)){\
-                    yuv->u[x_2+i/2+(k/2+y_2)*y_width_2]=Ur[data_tm[(k*width_tm+i)*4+2]] + Ug[data_tm[(k*width_tm+i)*4+1]] + Ub[data_tm[(k*width_tm+i)*4]];\
-                    yuv->v[x_2+i/2+(k/2+y_2)*y_width_2]=Vr[data_tm[(k*width_tm+i)*4+2]] + Vg[data_tm[(k*width_tm+i)*4+1]] + Vb[data_tm[(k*width_tm+i)*4]] ;\
+                    yuv->u[x_2+i/2+(k/2+y_2)*y_width_2]=Ur[data_tm[(k*width_tm+i)*4+__RBYTE]] + Ug[data_tm[(k*width_tm+i)*4+__GBYTE]] + Ub[data_tm[(k*width_tm+i)*4+__BBYTE]];\
+                    yuv->v[x_2+i/2+(k/2+y_2)*y_width_2]=Vr[data_tm[(k*width_tm+i)*4+__RBYTE]] + Vg[data_tm[(k*width_tm+i)*4+__GBYTE]] + Vb[data_tm[(k*width_tm+i)*4+__BBYTE]] ;\
                 }\
             }\
             j++;\
@@ -418,7 +433,6 @@ int CollideRects(WGeometry *wgeom1,WGeometry *wgeom2,WGeometry **wgeom_return,in
 void SetExpired(int signum);
 void RegisterCallbacks(ProgArgs *args);
 void UpdateImage(Display * dpy,yuv_buffer *yuv,pthread_mutex_t *yuv_mutex,DisplaySpecs *specs,RectArea **root,BRWindow *brwin,EncData *enc,char *datatemp,int noshmem,int no_quick_subsample);
-// void XImageToYUV(XImage *imgz,yuv_buffer *yuv,int no_quick_subsample);
 int GetZPixmap(Display *dpy,Window root,char *data,int x,int y,int width,int height);
 int ParseArgs(int argc,char **argv,ProgArgs *arg_return);
 int QueryExtensions(Display *dpy,ProgArgs *args,int *damage_event,int *damage_error);
