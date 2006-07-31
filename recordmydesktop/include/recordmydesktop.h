@@ -61,10 +61,12 @@
 
 //define whcih way we are reading a pixmap
 #if __BYTE_ORDER == __LITTLE_ENDIAN
+#define __ABYTE 3
 #define __RBYTE 2
 #define __GBYTE 1
 #define __BBYTE 0
 #elif __BYTE_ORDER == __BIG_ENDIAN
+#define __ABYTE 0
 #define __RBYTE 1
 #define __GBYTE 2
 #define __BBYTE 3

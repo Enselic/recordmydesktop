@@ -29,8 +29,8 @@
 
 unsigned char *MakeDummyPointer(DisplaySpecs *specs,int size,int color,int type,unsigned char *npxl){
     int i,k,o='.';
-    unsigned long   w=(color)?1:-1,
-                    b=(color)?-1:1;
+    unsigned long   b=(color)?'w':'b',
+                    w=(color)?'b':'w';
     char pmask[1][16][16]={{
         {w,w,w,w,w,w,o,o,o,o,o,o,o,o,o,o},
         {w,b,b,w,w,w,w,o,o,o,o,o,o,o,o,o},
@@ -49,18 +49,26 @@ unsigned char *MakeDummyPointer(DisplaySpecs *specs,int size,int color,int type,
         {o,o,o,o,o,w,w,b,b,b,w,w,w,o,o,o},
         {o,o,o,o,o,o,w,w,w,w,w,w,w,o,o,o}}
     };
-
-
     unsigned char *ret=malloc(size*sizeof(char[size*4]));
-    unsigned char wp[4]={255,255,255,255};
-    unsigned char bp[4]={0,0,0,0};
+    unsigned char wp[4]={
+        ((specs->wpixel^0xff000000)>>24),
+        ((specs->wpixel^0x00ff0000)>>16),
+        ((specs->wpixel^0x0000ff00)>>8),
+        ((specs->wpixel^0x000000ff))
+    };
+    unsigned char bp[4]={
+        ((specs->bpixel^0xff000000)>>24),
+        ((specs->bpixel^0x00ff0000)>>16),
+        ((specs->bpixel^0x0000ff00)>>8),
+        ((specs->bpixel^0x000000ff))
+    };
     *npxl=((wp[0]-1)!=bp[0])?wp[0]-100:wp[0]-102;
     for(i=0;i<size;i++){
         for(k=0;k<size;k++){
-            ret[(i*size+k)*4]=(pmask[type][i][k]==1)?wp[0]:(pmask[type][i][k]==-1)?bp[0]:*npxl;
-            ret[(i*size+k)*4+1]=(pmask[type][i][k]==1)?wp[1]:(pmask[type][i][k]==-1)?bp[1]:*npxl;
-            ret[(i*size+k)*4+2]=(pmask[type][i][k]==1)?wp[2]:(pmask[type][i][k]==-1)?bp[2]:*npxl;
-            ret[(i*size+k)*4+3]=(pmask[type][i][k]==1)?wp[3]:(pmask[type][i][k]==-1)?bp[3]:*npxl;
+            ret[(i*size+k)*4+__ABYTE]=(pmask[type][i][k]=='w')?wp[0]:(pmask[type][i][k]=='b')?bp[0]:*npxl;
+            ret[(i*size+k)*4+__RBYTE]=(pmask[type][i][k]=='w')?wp[1]:(pmask[type][i][k]=='b')?bp[1]:*npxl;
+            ret[(i*size+k)*4+__GBYTE]=(pmask[type][i][k]=='w')?wp[2]:(pmask[type][i][k]=='b')?bp[2]:*npxl;
+            ret[(i*size+k)*4+__BBYTE]=(pmask[type][i][k]=='w')?wp[3]:(pmask[type][i][k]=='b')?bp[3]:*npxl;
         }
     }
     
