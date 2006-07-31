@@ -17,5 +17,12 @@ size of image gets over 75% of total (or a user set threshold).
 *Changes to the configure script.
 *BGR to YUV convertion corrected.
 
-
+/*VERSION 0.2.3*/
+*Problems on big-endian architectures, corrected 
+(thanks to Marcel Unbehaun for bringing up the problem
+and providing the neccessary feedback to resolve it).
+*Failure to respect change in channels number, while 
+opening soundcard, which resulted in crashes, segfaults
+and repeated error-messages has been fixed.
+*other minor bugfixes
 
