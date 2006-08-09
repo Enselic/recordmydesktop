@@ -39,8 +39,12 @@ int main(int argc,char **argv){
     if(ParseArgs(argc,argv,&pdata.args)){
         exit(1);
     }
-    pdata.dpy = XOpenDisplay(pdata.args.display);
-
+    if(pdata.args.display!=NULL)
+        pdata.dpy = XOpenDisplay(pdata.args.display);
+    else{
+        fprintf(stderr,"No display specified for connection!\n");
+        exit(1);
+    }
     if (pdata.dpy == NULL) {
         fprintf(stderr, "Cannot connect to X server %s\n",pdata.args.display);
         exit(1);

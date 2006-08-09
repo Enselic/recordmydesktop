@@ -133,7 +133,8 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
         }
         else if(!strcmp(argv[i],"-display")){
             if(i+1<argc){
-                free(arg_return->display);
+                if(arg_return->display!=NULL)
+                    free(arg_return->display);
                 arg_return->display=malloc(strlen(argv[i+1])+1);
                 strcpy(arg_return->display,argv[i+1]);
             }

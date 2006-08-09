@@ -26,10 +26,88 @@
 
 
 #include <recordmydesktop.h>
+void SizePack2_8_16(int *start,int *size,int limit){
+    int octoffset,hexoffset;
+
+    //align in two
+    //an odd x can always go down and still be in recording area.
+    //Resolutions come in even numbers
+    //so if x is an odd numer, width max is an odd number, too
+    //thus since x will go down one then width can go up one too and still
+    //be inbounds
+    (*size)+=((*size)%2)|((*start)%2);
+    //but if x goes down 1 and width is already even,it becomes odd so:
+    (*size)+=((*size)%2);
+    (*start)-=(*start)%2;
+
+
+    //32 bit pack align
+    //we already have disible by two width,so 
+    //it's 2, 4 or 6
+    octoffset=((*size)%8);
+    if(octoffset==2){
+        (*size)-=2;
+
+    }
+    else if(octoffset==6){
+        if((*size)+(*start)+2<=limit)
+            (*size)+=2;
+        else if((*start)>=2){
+            (*start)-=2;
+            (*size)+=2;
+        }
+        else{
+            (*start)+=2;
+            (*size)-=4;
+        }
+    }
+    
+    else if(octoffset==4){
+        if(((*size)+(*start)+2<=limit)&&((*start)>=2)){
+            (*start)-=2;
+            (*size)+=4;
+        }
+        else if((*size)+(*start)+4<=limit){
+            (*size)+=4;
+        }
+        else if((*start)>=4){
+            (*start)-=4;
+            (*size)+=4;
+        }
+        else{
+            (*start)+=2;
+            (*size)-=4;
+        }
+    }
+
+    //16 divisble width(needed for shared memory only,but applied anyway since theora wants it, too)
+    //we already have divisibility by 8 so module
+    //by 16 is euther 8 or 0
+    hexoffset=((*size)%16);
+    if(hexoffset){
+        if(((*size)+(*start)+4<=limit)&&((*start)>=4)){
+            (*start)-=4;
+            (*size)+=8;
+        }
+        else if((*size)+(*start)+8<=limit){
+            (*size)+=8;
+        }
+        else if((*start)>=8){
+            (*start)-=8;
+            (*size)+=8;
+        }
+        else{
+            (*start)+=4;
+            (*size)-=8;
+        }
+    }
+
+}
+
+
 
 int SetBRWindow(Display *dpy,BRWindow *brwin,DisplaySpecs *specs,ProgArgs *args){
     //before we start recording we have to make sure the ranges are valid
-    int octoffset=0;
     if(args->windowid==0){//root window
         //first set it up
         brwin->windowid=specs->root;
@@ -40,7 +118,6 @@ int SetBRWindow(Display *dpy,BRWindow *brwin,DisplaySpecs *specs,ProgArgs *args)
         brwin->rgeom.y=args->y;
         brwin->rgeom.width=((args->width)?args->width:specs->width-brwin->rgeom.x);
         brwin->rgeom.height=((args->height)?args->height:specs->height-brwin->rgeom.y);
-//         brwin->nbytes=(brwin->rgeom.width*brwin->rgeom.height*4);
         //and then check validity
         if((brwin->rgeom.x+brwin->rgeom.width>specs->width)||
             (brwin->rgeom.y+brwin->rgeom.height>specs->height)){
@@ -83,58 +160,9 @@ int SetBRWindow(Display *dpy,BRWindow *brwin,DisplaySpecs *specs,ProgArgs *args)
     fprintf(stderr, "Initial recording window is set to:\n"
                     "X:%d   Y:%d    Width:%d    Height:%d\n"
                     ,brwin->rgeom.x,brwin->rgeom.y,brwin->rgeom.width,brwin->rgeom.height);
-    //align in two
-    //an odd x can always go down and still be in recording area.
-    //Resolutions come in even numbers
-    //so if x is an odd numer, width max is an odd number, too
-    //thus since x will go down one then width can go up one too and still
-    //be inbounds
-    brwin->rgeom.width+=(brwin->rgeom.width%2)|(brwin->rgeom.x%2);
-    brwin->rgeom.height+=(brwin->rgeom.height%2)|(brwin->rgeom.y%2);
-    //but if x goes down 1 and width is already even,it becomes odd so:
-    brwin->rgeom.width+=(brwin->rgeom.width%2);
-    brwin->rgeom.height+=(brwin->rgeom.height%2);
-    brwin->rgeom.x-=brwin->rgeom.x%2;
-    brwin->rgeom.y-=brwin->rgeom.y%2;
+    SizePack2_8_16(&brwin->rgeom.x,&brwin->rgeom.width,specs->width);
+    SizePack2_8_16(&brwin->rgeom.y,&brwin->rgeom.height,specs->height);
 
-    //32 bit pack align
-    //we already have disible by two width,so 
-    //it's 2, 4 or 6
-    octoffset=(brwin->rgeom.width%8);
-    if(octoffset==2){
-        brwin->rgeom.width-=2;
-
-    }
-    else if(octoffset==6){
-        if(brwin->rgeom.width+brwin->rgeom.x+2<=specs->width)
-            brwin->rgeom.width+=2;
-        else if(brwin->rgeom.x>=2){
-            brwin->rgeom.x-=2;
-            brwin->rgeom.width+=2;
-        }
-        else{
-            brwin->rgeom.x+=2;
-            brwin->rgeom.width-=4;
-        }
-    }
-    
-    else if(octoffset==4){
-        if((brwin->rgeom.width+brwin->rgeom.x+2<=specs->width)&&(brwin->rgeom.x>=2)){
-            brwin->rgeom.x-=2;
-            brwin->rgeom.width+=4;
-        }
-        else if(brwin->rgeom.width+brwin->rgeom.x+4<=specs->width){
-            brwin->rgeom.width+=4;
-        }
-        else if(brwin->rgeom.x>=4){
-            brwin->rgeom.x-=4;
-            brwin->rgeom.width+=4;
-        }
-        else{
-            brwin->rgeom.x+=2;
-            brwin->rgeom.width-=4;
-        }
-    }
     fprintf(stderr, "Adjusted recording window is set to:\n"
                     "X:%d   Y:%d    Width:%d    Height:%d\n"
                     ,brwin->rgeom.x,brwin->rgeom.y,brwin->rgeom.width,brwin->rgeom.height);
