@@ -293,7 +293,7 @@ unsigned char   Yr[256],Yg[256],Yb[256],
     =(args)->width=(args)->height=(args)->quietmode\
     =(args)->nosound=(args)->scshot=(args)->full_shots=0;\
     (args)->noshared=(args)->scale_shot=1;\
-    (args)->dropframes=(args)->nocondshared==0;\
+    (args)->dropframes=(args)->nocondshared=0;\
     (args)->no_quick_subsample=0;\
     (args)->filename=(char *)malloc(8);\
     strcpy((args)->filename,"out.ogg");\
