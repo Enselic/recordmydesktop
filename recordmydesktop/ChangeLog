@@ -26,3 +26,14 @@ opening soundcard, which resulted in crashes, segfaults
 and repeated error-messages has been fixed.
 *other minor bugfixes
 
+/*VERSION 0.2.4*/
+*Behavior on lack of $DISPLAY evironment 
+variable has been corrected.
+*Size adjustment is now quantized at 16 pixels, 
+in order to avoid complete image distortion,
+present at certain resolutions, when using shared memory
+(conditional or not).
+*Some other minor bugfixes, related mostly to default
+values of options.
+
+
