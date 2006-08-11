@@ -341,12 +341,12 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
                 if((num>0)&&(num<100))
                     arg_return->shared_thres=num;
                 else{
-                    fprintf(stderr,"Argument Usage: --shared-threshold N(0<number<100)\n");
+                    fprintf(stderr,"Argument Usage: -shared-threshold N(0<number<100)\n");
                     return 1;
                 }
             }
             else{
-                fprintf(stderr,"Argument Usage: -channels N(number>0)\n");
+                fprintf(stderr,"Argument Usage: -shared-threshold N(0<number<100)\n");
                 return 1;
             }
             i++;
