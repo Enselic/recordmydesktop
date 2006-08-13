@@ -21,7 +21,7 @@
 *                                                                                *
 *                                                                                *
 *                                                                                *
-*    For further information contact me at biocrasher@gmail.com                  *
+*    For further information contact me at johnvarouhakis@gmail.com              *
 **********************************************************************************/
 
 
