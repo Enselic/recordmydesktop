@@ -1,0 +1,9 @@
+include README
+include AUTHORS
+include COPYING
+include ChangeLog
+include INSTALL
+include gtk-recordmydesktop.desktop
+include gtk-recordmydesktop.png
+
+

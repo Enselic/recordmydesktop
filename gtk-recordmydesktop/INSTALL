@@ -1,0 +1,60 @@
+NOTICE:
+gtk-recordMyDesktop is ONLY A FRONTEND to recordMyDesktop. You have to obtain and 
+install that first.
+
+
+INSTALLING recordMyDesktop(the backend):
+
+First step is of course to obtain it. If you haven't done so already
+you can get the source code here:
+
+http://recordmydesktop.sourceforge.net
+
+
+To compile the program you have to go through the regular drill:
+
+~$ gzip -d recordmydesktop-x.y.z.tar.gz
+~$ tar -x recordmydesktop-x.y.z.tar
+~$ cd recordmydesktop-x.y.z
+~$ ./configure
+~$ make
+~$ sudo make install
+
+
+You will need the development headers for the following:
+alsa (libasound)
+X
+libXext
+libXdamage
+libogg
+libvorbis
+libtheora
+
+As well the regular headers, plus the ones for pthreads
+(both of which you should have if you have compiled anything else before).
+
+Of the above, the most likely to be missing are probably those of libXdamage and libtheora
+but any recent linux distribution should offer an easy way to get them.
+
+
+
+
+Compiling on *BSD or other *nix flavors is not going to work(because of the alsa dependency)
+but it shouldn't be too much of a hassle to change that(at least by disabling sound capture).
+Future versions might include support for OSS-based sound capture.
+
+
+INSTALLING gtk-recordMyDesktop(the frontend):
+
+~$ gzip -d gtk-recordMyDesktop-x.y.z.tar.gz
+~$ tar -x gtk-recordMyDesktop-x.y.z.tar
+~$ cd gtk-recordMyDesktop-x.y.z
+~$ sudo python setup.py install
+
+
+After this you should get a menu entry under multimedia.
+If you don't get one even after a logout/login from your WM
+you can launch the program from a terminal like this:
+
+~$ gtk-recordMyDesktop
+
