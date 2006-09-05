@@ -5,6 +5,6 @@ _Comment=Frontend for recordMyDesktop
 Exec=gtk-recordMyDesktop
 Terminal=false
 Type=Application
-Icon=recordmydesktop.png
+Icon=gtk-recordmydesktop.png
 Categories=GNOME;Application;AudioVideo;
 StartupNotify=false
