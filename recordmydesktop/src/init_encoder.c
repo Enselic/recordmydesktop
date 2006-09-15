@@ -78,7 +78,7 @@ void InitEncoder(ProgData *pdata,EncData *enc_data_t){
         ret = vorbis_encode_init_vbr(&(enc_data_t)->m_vo_inf,pdata->args.channels,pdata->args.frequency,(float)pdata->args.s_quality*0.1);
         if(ret){
             fprintf(stderr,"Error while setting up vorbis stream quality!\n");
-            exit(1);
+            exit(2);
         }
         vorbis_comment_init(&(enc_data_t)->m_vo_cmmnt);
         vorbis_analysis_init(&(enc_data_t)->m_vo_dsp,&(enc_data_t)->m_vo_inf);
@@ -90,7 +90,7 @@ void InitEncoder(ProgData *pdata,EncData *enc_data_t){
     ogg_stream_packetin(&(enc_data_t)->m_ogg_ts,&(enc_data_t)->m_ogg_pckt1);
     if(ogg_stream_pageout(&(enc_data_t)->m_ogg_ts,&(enc_data_t)->m_ogg_pg)!=1){
         fprintf(stderr,"Internal Ogg library error.\n");
-        exit(1);
+        exit(2);
     }
     fwrite((enc_data_t)->m_ogg_pg.header,1,(enc_data_t)->m_ogg_pg.header_len,(enc_data_t)->fp);
     fwrite((enc_data_t)->m_ogg_pg.body,1,(enc_data_t)->m_ogg_pg.body_len,(enc_data_t)->fp);
@@ -112,7 +112,7 @@ void InitEncoder(ProgData *pdata,EncData *enc_data_t){
         ogg_stream_packetin(&(enc_data_t)->m_ogg_vs,&header); 
         if(ogg_stream_pageout(&(enc_data_t)->m_ogg_vs,&(enc_data_t)->m_ogg_pg)!=1){
             fprintf(stderr,"Internal Ogg library error.\n");
-            exit(1);
+            exit(2);
         }
         fwrite((enc_data_t)->m_ogg_pg.header,1,(enc_data_t)->m_ogg_pg.header_len,(enc_data_t)->fp);
         fwrite((enc_data_t)->m_ogg_pg.body,1,(enc_data_t)->m_ogg_pg.body_len,(enc_data_t)->fp);
@@ -127,7 +127,7 @@ void InitEncoder(ProgData *pdata,EncData *enc_data_t){
         int result = ogg_stream_flush(&(enc_data_t)->m_ogg_ts,&(enc_data_t)->m_ogg_pg);
         if(result<0){
             fprintf(stderr,"Internal Ogg library error.\n");
-            exit(1);
+            exit(2);
         }
         if(result==0)break;
         fwrite((enc_data_t)->m_ogg_pg.header,1,(enc_data_t)->m_ogg_pg.header_len,(enc_data_t)->fp);
@@ -139,7 +139,7 @@ void InitEncoder(ProgData *pdata,EncData *enc_data_t){
             int result=ogg_stream_flush(&(enc_data_t)->m_ogg_vs,&(enc_data_t)->m_ogg_pg);
             if(result<0){
                 fprintf(stderr,"Internal Ogg library error.\n");
-                exit(1);
+                exit(2);
             }
             if(result==0)break;
             fwrite((enc_data_t)->m_ogg_pg.header,1,(enc_data_t)->m_ogg_pg.header_len,(enc_data_t)->fp);

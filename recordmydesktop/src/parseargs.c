@@ -34,7 +34,7 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
     "\trecordmydesktop [-h| --help| --version| -delay n[H|h|M|m]| -windowid id_of_window|\n"
     "\t-display DISPLAY| -x X| -y Y|-width N| -height N| -fps N(number>0)|\n"
     "\t -v_quality n| -s_quality n| -v_bitrate n| --no-framedrop| -dummy-cursor color|\n"
-    "\t --no-dummy-cursor| -freq N(number>0)| -channels N(number>0)| -device SOUND_DEVICE|\n"
+    "\t --no-cursor| -freq N(number>0)| -channels N(number>0)| -device SOUND_DEVICE|\n"
     "\t --nosound| --with-shared| --no-cond-shared| -shared-threshold n| --full-shots|\n"
     "\t --quick-subsampling| --scshot| -scale-shot N| -o filename]^filename\n\n\n"
 
@@ -50,8 +50,8 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
     "\t-width N\t\tWidth of recorded window.\n"
     "\t-height N\t\tHeight of recorded window.\n\n"
 
-    "\t-dummy-cursor color\tColor of the dummy cursor [black|white](default black)\n"
-    "\t--no-dummy-cursor\tDisable drawing of a dummy cursor.\n"
+    "\t-dummy-cursor color\tColor of the dummy cursor [black|white]\n"
+    "\t--no-cursor\tDisable drawing of the cursor.\n"
     "\t--with-shared\t\tEnable usage of MIT-shared memory extension at all times.\n"
     "\t--no-cond-shared\tDo not use the MIT-shared memory extension when aquiring large areas.\n"
     "\t-shared-threshold n\tThreshold over which shared memory is used(default 75).\n"
@@ -275,18 +275,20 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
                 else if(!strcmp(argv[i+1],"black"))
                     arg_return->cursor_color=1;
                 else{
-                    fprintf(stderr,"Argument Usage: -dummy-cursor [black|white](default black)\n");
+                    fprintf(stderr,"Argument Usage: -dummy-cursor [black|white]\n");
                     return 1;
                 }
+                arg_return->have_dummy_cursor=1;
+                arg_return->xfixes_cursor=0;    
             }
             else{
-                fprintf(stderr,"Argument Usage: -dummy-cursor [black|white](default black)\n");
+                fprintf(stderr,"Argument Usage: -dummy-cursor [black|white]\n");
                 return 1;
             }
             i++;
         }
-        else if(!strcmp(argv[i],"--no-dummy-cursor"))
-            arg_return->have_dummy_cursor=0;
+        else if(!strcmp(argv[i],"--no-cursor"))
+            arg_return->xfixes_cursor=0;
         else if(!strcmp(argv[i],"-freq")){
             if(i+1<argc){
                 int num=atoi(argv[i+1]);

@@ -112,6 +112,34 @@ sections.
 .br
 Non-zero means an error occurred, which is printed in stderr.
 .br
+.br
+The following error codes indicate the nature of the error:
+.br
+1 Error while parsing the arguments.
+.br
+2 Initializing the encoder failed(either vorbis or theora).
+.br
+3 Could not open/configure sound card.
+.br
+4 Xdamage extension not present.
+.br
+5 Shared memory extension not present.
+.br
+6 Xfixes extension not present.
+.br
+7 XInitThreads failed.
+.br
+8 No $DISPLAY environment variable and none specified as argument. 
+.br
+9 Cannot connect to Xserver.
+.br
+10 Color depth is not 24bpp.
+.br
+11 Improper window specification.
+.br
+12 Cannot attach shared memory to proccess.
+.br
+.br 
 .SH OPTIONS
 .PP
 .B
@@ -169,12 +197,12 @@ Image Options:
 .TP
 .B
     \-dummy\-cursor color
-    Color of the dummy cursor [black|white](default black)
+    Draw a dummy cursor, instead of the normal one.Value of color can be "black" or "white".
 .br
 .TP
 .B
-    \-\-no\-dummy\-cursor
-    Disable drawing of a dummy cursor.
+    \-\-no\-cursor
+    Disable drawing of the cursor.
 .br
 .TP
 .B
@@ -198,8 +226,8 @@ Image Options:
 .br
 .TP
 .B
-    \-\-no\-quick\-subsampling
-    Do subsampling of the chroma planes by averaging,not discarding extra pixels.
+    \-\-quick\-subsampling
+    Do subsampling of the chroma planes by discarding extra pixels.
 .br
 .TP
 .B
@@ -298,11 +326,11 @@ If no other option is specified, filename can be given without the \-o switch.
 .br
 \-v_quality n| \-s_quality n| \-v_bitrate n| \-\-no\-framedrop| \-dummy\-cursor color|
 .br
-\-\-no\-dummy\-cursor| \-freq N(number>0)| \-channels N(number>0)| \-device SOUND_DEVICE|
+\-\-no\-cursor| \-freq N(number>0)| \-channels N(number>0)| \-device SOUND_DEVICE|
 .br
 \-\-nosound| \-\-with\-shared| \-\-no\-cond\-shared| \-shared\-threshold n| \-\-full\-shots|
 .br
-\-\-no\-quick\-subsampling| \-\-scshot| \-scale\-shot N| \-o filename]^filename
+\-\-quick\-subsampling| \-\-scshot| \-scale\-shot N| \-o filename]^filename
 .br
 .br
 .br

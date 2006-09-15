@@ -471,7 +471,7 @@ void RegisterCallbacks(ProgArgs *args);
 void UpdateImage(Display * dpy,yuv_buffer *yuv,pthread_mutex_t *yuv_mutex,DisplaySpecs *specs,RectArea **root,BRWindow *brwin,EncData *enc,char *datatemp,int noshmem,int no_quick_subsample);
 int GetZPixmap(Display *dpy,Window root,char *data,int x,int y,int width,int height);
 int ParseArgs(int argc,char **argv,ProgArgs *arg_return);
-int QueryExtensions(Display *dpy,ProgArgs *args,int *damage_event,int *damage_error);
+void QueryExtensions(Display *dpy,ProgArgs *args,int *damage_event,int *damage_error);
 int SetBRWindow(Display *dpy,BRWindow *brwin,DisplaySpecs *specs,ProgArgs *args);
 int ZPixmapToBMP(XImage *imgz,BRWindow *brwin,char *fname,int nbytes,int scale);
 unsigned char *MakeDummyPointer(DisplaySpecs *specs,int size,int color,int type,unsigned char *npxl);

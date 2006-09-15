@@ -33,7 +33,7 @@ int main(int argc,char **argv){
 
     if(XInitThreads ()==0){
         fprintf(stderr,"Couldn't initialize thread support!\n");
-        exit(1);
+        exit(7);
     }
     DEFAULT_ARGS(&pdata.args);
     if(ParseArgs(argc,argv,&pdata.args)){
@@ -43,11 +43,11 @@ int main(int argc,char **argv){
         pdata.dpy = XOpenDisplay(pdata.args.display);
     else{
         fprintf(stderr,"No display specified for connection!\n");
-        exit(1);
+        exit(8);
     }
     if (pdata.dpy == NULL) {
         fprintf(stderr, "Cannot connect to X server %s\n",pdata.args.display);
-        exit(1);
+        exit(9);
     }
     else{
         EncData enc_data;
@@ -63,12 +63,12 @@ int main(int argc,char **argv){
         QUERY_DISPLAY_SPECS(pdata.dpy,&pdata.specs);
         if(pdata.specs.depth!=24){
             fprintf(stderr,"Only 24bpp color depth mode is currently supported.\n");
-            exit(1);
+            exit(10);
         }
         if(SetBRWindow(pdata.dpy,&pdata.brwin,&pdata.specs,&pdata.args))
-            exit(1);
-        if(QueryExtensions(pdata.dpy,&pdata.args,&pdata.damage_event, &pdata.damage_error))
-            exit(1);
+            exit(11);
+        
+        QueryExtensions(pdata.dpy,&pdata.args,&pdata.damage_event, &pdata.damage_error);
 
         //init data
 
@@ -120,7 +120,7 @@ int main(int argc,char **argv){
             shminfo.readOnly = False;
             if(!XShmAttach(pdata.dpy,&shminfo)){
                 fprintf(stderr,"Failed to attach shared memory to proccess.\n");
-                exit(1);
+                exit(12);
             }
             XShmGetImage(pdata.dpy,pdata.specs.root,pdata.shimage,pdata.brwin.rgeom.x,pdata.brwin.rgeom.y,AllPlanes);
         }
@@ -139,8 +139,8 @@ int main(int argc,char **argv){
         if(!pdata.args.nosound)
             pdata.sound_handle=OpenDev(pdata.args.device,&pdata.args.channels,&pdata.args.frequency,&pdata.periodsize,            &pdata.periodtime,&pdata.hard_pause);
         if(pdata.sound_handle==NULL){
-            fprintf(stderr,"Error while opening/configuring soundcard %s\nProcceeding with no sound\n",pdata.args.device);
-            pdata.args.nosound=1;
+            fprintf(stderr,"Error while opening/configuring soundcard %s\nTry running with the --no-sound or specify a correct device.\n",pdata.args.device);
+            exit(3);
         }
         InitEncoder(&pdata,&enc_data);
         for(i=0;i<(pdata.enc_data->yuv.y_width*pdata.enc_data->yuv.y_height);i++)
