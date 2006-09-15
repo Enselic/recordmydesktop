@@ -36,4 +36,16 @@ present at certain resolutions, when using shared memory
 *Some other minor bugfixes, related mostly to default
 values of options.
 
+/*VERSION 0.2.5*/
+*Drawing of the correct cursor is now supported through
+the Xfixes extension.
+*Change of behavior on lack of any Xserver extension and 
+failure to open sound device. The program now exits and informs
+instead of continuing with a different configuration.
+*Exit status also indicates the nature of any error that occured.
+*Documentation has been updated with exit status explanations.
+*Subsampling of the chroma planes is made by averaging, while 
+pixel discarding is an option(used to be otherwise).
+
+
 
