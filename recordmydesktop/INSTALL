@@ -13,6 +13,7 @@ alsa (libasound)
 X
 libXext
 libXdamage
+libXfixes
 libogg
 libvorbis
 libtheora

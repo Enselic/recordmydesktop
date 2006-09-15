@@ -28,6 +28,9 @@
 #include <recordmydesktop.h>
 
 int QueryExtensions(Display *dpy,ProgArgs *args,int *damage_event,int *damage_error){
+    int xf_event_basep,
+        xf_error_basep;
+
     if(!XDamageQueryExtension( dpy, damage_event, damage_error)){
         fprintf(stderr,"XDamage extension not found!!!\n");
         return 1;
@@ -36,5 +39,21 @@ int QueryExtensions(Display *dpy,ProgArgs *args,int *damage_event,int *damage_er
         args->noshared=1;
         fprintf(stderr,"Shared Memory extension not present!\nContinuing without it.\n");
     }
+    if((args->xfixes_cursor)&&(XFixesQueryExtension(dpy,&xf_event_basep,&xf_error_basep)==False)){
+        args->xfixes_cursor=0;
+        fprintf(stderr,"Xfixes extension not present!\nContinuing without it.\n");
+    }
+//     XFixesCursorImage *xcim;
+//     xcim=XFixesGetCursorImage (dpy);
+//     fprintf(stderr,"XFIXES:\n\n%d %d\n\n\n%d %d\n\n",xcim->width,xcim->height,xcim->xhot,xcim->yhot);
+//     int i=0,k=0;
+//     unsigned char *cp=((unsigned char *)xcim->pixels);
+//     for(i=0;i<xcim->height;i++){
+//         for(k=0;k<xcim->width*4;k+=4){
+//             fprintf(stderr,"%d",cp[i*xcim->width*4+k]);
+//         }
+//         fprintf(stderr,"\n");
+//     }
+
     return 0;
 }

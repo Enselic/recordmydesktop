@@ -44,12 +44,14 @@
 #include <sys/time.h>
 #include <sys/types.h>
 #include <endian.h>
+#include <limits.h>
 #include <sys/stat.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <pthread.h>
 #include <X11/Xlib.h>
 #include <X11/Xlibint.h>
+#include <X11/extensions/Xfixes.h>
 #include <X11/extensions/Xdamage.h>
 #include <X11/extensions/XShm.h>
 #include <theora/theora.h>
@@ -122,7 +124,9 @@ typedef struct _ProgArgs{
     char *filename;     //output file(default out.[ogg|*])
     int encoding;       //encoding(default OGG_THEORA_VORBIS)
     int cursor_color;   //black or white=>1 or 0
-    int have_dummy_cursor;//disable/enable drawing the dummy cursor
+    int have_dummy_cursor;//disable/enable drawing of the dummy cursor
+    int xfixes_cursor;   //disable/enable drawing of a cursor obtained 
+                        //through the xfixes extension
     float fps;            //desired framerate(default 15)
     unsigned int frequency;      //desired frequency (default 22050)
     unsigned int channels;       //no of channels(default 2)
@@ -294,13 +298,14 @@ unsigned char   Yr[256],Yg[256],Yb[256],
     =(args)->nosound=(args)->scshot=(args)->full_shots=0;\
     (args)->noshared=(args)->scale_shot=1;\
     (args)->dropframes=(args)->nocondshared=0;\
-    (args)->no_quick_subsample=0;\
+    (args)->no_quick_subsample=1;\
     (args)->filename=(char *)malloc(8);\
     strcpy((args)->filename,"out.ogg");\
     (args)->encoding=OGG_THEORA_VORBIS;\
     (args)->cursor_color=1;\
     (args)->shared_thres=75;\
-    (args)->have_dummy_cursor=1;\
+    (args)->have_dummy_cursor=0;\
+    (args)->xfixes_cursor=1;\
     (args)->device=(char *)malloc(8);\
     strcpy((args)->device,"hw:0,0");\
     (args)->fps=15;\
@@ -405,7 +410,32 @@ unsigned char   Yr[256],Yg[256],Yb[256],
     }\
 }
 
-
+#define XFIXES_POINTER_TO_YUV(yuv,data,x_tm,y_tm,width_tm,height_tm,column_discard_stride){\
+    int i,k,j=0;\
+    unsigned char avg0,avg1,avg2,avg3;\
+    int x_2=x_tm/2,y_2=y_tm/2;\
+    for(k=0;k<height_tm;k++){\
+        for(i=0;i<width_tm;i++){\
+                yuv->y[x_tm+i+(k+y_tm)*yuv->y_width]=\
+                (yuv->y[x_tm+i+(k+y_tm)*yuv->y_width]*(UCHAR_MAX-data[(j*4)+__ABYTE])+\
+                (Yr[data[(j*4)+__RBYTE]] + Yg[data[(j*4)+__GBYTE]] + Yb[data[(j*4)+__BBYTE]])*data[(j*4)+__ABYTE])/UCHAR_MAX ;\
+                if((k%2)&&(i%2)){\
+                    avg3=AVG_4_PIXELS(data,(width_tm+column_discard_stride),k,i,__ABYTE);\
+                    avg2=AVG_4_PIXELS(data,(width_tm+column_discard_stride),k,i,__RBYTE);\
+                    avg1=AVG_4_PIXELS(data,(width_tm+column_discard_stride),k,i,__GBYTE);\
+                    avg0=AVG_4_PIXELS(data,(width_tm+column_discard_stride),k,i,__BBYTE);\
+                    yuv->u[x_2+i/2+(k/2+y_2)*yuv->uv_width]=\
+                    (yuv->u[x_2+i/2+(k/2+y_2)*yuv->uv_width]*(UCHAR_MAX-avg3)+\
+                    (Ur[avg2] + Ug[avg1] +Ub[avg0])*avg3)/UCHAR_MAX;\
+                    yuv->v[x_2+i/2+(k/2+y_2)*yuv->uv_width]=\
+                    (yuv->v[x_2+i/2+(k/2+y_2)*yuv->uv_width]*(UCHAR_MAX-avg3)+\
+                    (Vr[avg2] + Vg[avg1] +Vb[avg0])*avg3)/UCHAR_MAX;\
+                }\
+            j++;\
+        }\
+        j+=column_discard_stride;\
+    }\
+}
 
 #define DUMMY_POINTER_TO_YUV(yuv,data_tm,x_tm,y_tm,width_tm,height_tm,no_pixel){\
     int i,k,j=0;\

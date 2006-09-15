@@ -24,5 +24,5 @@ recordmydesktop_SOURCES=	recordmydesktop.c\
 
 INCLUDES= $(all_includes) -I../include -I$x_includes
 
-recordmydesktop_LDFLAGS = -D_THREAD_SAFE -pthread -Wall -O3
+recordmydesktop_LDFLAGS = -D_THREAD_SAFE -pthread -Wall
 

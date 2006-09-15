@@ -3,7 +3,7 @@
 
 AC_PREREQ(2.59)
 AC_INIT(src/recordmydesktop.c)
-AM_INIT_AUTOMAKE(recordmydesktop,0.2.4,)
+AM_INIT_AUTOMAKE(recordmydesktop,0.2.5,)
 
 AC_CONFIG_SRCDIR([src/recordmydesktop.c])
 AM_CONFIG_HEADER(config.h)
@@ -28,7 +28,9 @@ AC_CHECK_HEADERS([sys/time.h unistd.h vorbis/vorbisfile.h ])
 
 LDFLAGS="$LD_FLAGS -L$x_libraries $X_LIBS $X_EXTRA_LIBS $X_PRE_LIBS"
 
-CFLAGS="${CFLAGS} -O3 -Wall -D_THREAD_SAFE -pthread"
+#no-O3s-thx.patch ;)
+CFLAGS="${CFLAGS} -Wall -D_THREAD_SAFE -pthread"
+
 
 
 
@@ -39,6 +41,7 @@ AC_CHECK_LIB([z],[deflate],,)
 AC_CHECK_LIB([X11],[XOpenDisplay],,AC_MSG_ERROR([Can't find libX11]),
             -L$x_libraries $X_PRE_LIBS)
 AC_CHECK_LIB([Xext],[XShmQueryVersion],,AC_MSG_ERROR([Can't find libXext]))
+AC_CHECK_LIB([Xfixes], [XFixesQueryExtension],,AC_MSG_ERROR([Can't find libXfixes]))
 AC_CHECK_LIB([Xdamage], [XDamageQueryExtension],,AC_MSG_ERROR([Can't find libXdamage]))
 AC_CHECK_LIB([vorbis],[vorbis_info_clear],,AC_MSG_ERROR([Can't find libvorbis]))
 AC_CHECK_LIB([vorbisfile],[ov_open],,AC_MSG_ERROR([Can't find libvorbisfile]),-lvorbis)

@@ -34,6 +34,7 @@ void *GetFrame(void *pdata){
     WGeometry mouse_pos_abs,mouse_pos_rel,mouse_pos_temp;
     Window root_ret,child_ret;
     int pixel_total=((ProgData *)pdata)->brwin.rgeom.width*((ProgData *)pdata)->brwin.rgeom.height;
+    XFixesCursorImage *xcim=NULL;
 
     mouse_pos_abs.x=0;
     mouse_pos_abs.y=0;
@@ -71,6 +72,21 @@ void *GetFrame(void *pdata){
 //                     fprintf(stderr,"shared screenshot with %d\n",level);
 //                 }
             }
+        }
+        if(((ProgData *)pdata)->args.xfixes_cursor){
+        //xfixes pointer sequence
+        //update previous_position
+            //(if full_shots is enabled this is skipped since it's pointless)
+            if(!((ProgData *)pdata)->args.full_shots){
+                CLIP_DUMMY_POINTER_AREA(mouse_pos_abs,&((ProgData *)pdata)->brwin,&mouse_pos_temp);
+                if((mouse_pos_temp.x>=0)&&(mouse_pos_temp.y>=0)&&(mouse_pos_temp.width>0)&&(mouse_pos_temp.height>0))
+                    RectInsert(&((ProgData *)pdata)->rect_root[tlist_sel],&mouse_pos_temp);        
+            }
+            xcim=XFixesGetCursorImage(((ProgData *)pdata)->dpy);
+            mouse_pos_abs.x=xcim->x;
+            mouse_pos_abs.y=xcim->y;
+            mouse_pos_abs.width=xcim->width;
+            mouse_pos_abs.height=xcim->height;
         }
         if(((ProgData *)pdata)->args.have_dummy_cursor){
         //dummy pointer sequence
@@ -139,6 +155,20 @@ void *GetFrame(void *pdata){
                 pthread_mutex_unlock(&((ProgData *)pdata)->yuv_mutex);
             }
         }
+        if(((ProgData *)pdata)->args.xfixes_cursor){
+        //avoid segfaults
+            CLIP_DUMMY_POINTER_AREA(mouse_pos_abs,&((ProgData *)pdata)->brwin,&mouse_pos_temp);
+        //draw the cursor
+            if((mouse_pos_temp.x>=0)&&(mouse_pos_temp.y>=0)&&(mouse_pos_temp.width>0)&&(mouse_pos_temp.height>0)){
+                XFIXES_POINTER_TO_YUV((&((ProgData *)pdata)->enc_data->yuv),((unsigned char*)xcim->pixels),
+                        (mouse_pos_temp.x-((ProgData *)pdata)->brwin.rgeom.x+((ProgData *)pdata)->enc_data->x_offset),
+                        (mouse_pos_temp.y-((ProgData *)pdata)->brwin.rgeom.y+((ProgData *)pdata)->enc_data->y_offset),
+                        mouse_pos_temp.width,
+                        mouse_pos_temp.height,
+                        (xcim->width-mouse_pos_temp.width));
+            }
+        }
+
         if(((ProgData *)pdata)->args.have_dummy_cursor){
         //avoid segfaults
             CLIP_DUMMY_POINTER_AREA(mouse_pos_abs,&((ProgData *)pdata)->brwin,&mouse_pos_temp);
