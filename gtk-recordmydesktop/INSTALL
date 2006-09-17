@@ -2,6 +2,12 @@ NOTICE:
 gtk-recordMyDesktop is ONLY A FRONTEND to recordMyDesktop. You have to obtain and 
 install that first.
 
+DEPENDENCIES:
+
+PyGTK >= 2.4 
+Gnome Python Extras >= 2.11.3
+recordMyDesktop 2.5
+
 
 INSTALLING recordMyDesktop(the backend):
 
@@ -26,6 +32,7 @@ alsa (libasound)
 X
 libXext
 libXdamage
+libXfixes
 libogg
 libvorbis
 libtheora

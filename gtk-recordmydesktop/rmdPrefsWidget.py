@@ -26,21 +26,22 @@
 
 
 import pygtk
-pygtk.require('2.0')
+pygtk.require('2.4')
 import gtk
+import locale, gettext
+_ = gettext.gettext
 import os
 
 
 
 
 class prefsWidget(object):
-    labelStrings=['Frames Per Second','Mouse Cursor','Sound Recording','Full Shots At Every Frame']
-    mouseStrings=['White','Black','None']
-    stateStrings=['On','Off']
-
+    labelStrings=[_('Frames Per Second'),_('Sound Recording'),_('Startup Delay(secs)')]
+    mouseStrings=[_('Normal'),_('White'),_('Black'),_('None')]
+    stateStrings=[_('Enabled'),_('Disabled')]
+    tabStrings=[_('Basic'),_('Sound'),_('Encoding'),_('Misc')]
     
     def destroy(self,Event=None):
-        #gtk.main_quit()
         self.values[0]=self.fpsSpinButton.get_value_as_int()
         self.values[1]=self.mouseComboBox.get_active()
         self.values[2]=self.soundComboBox.get_active()
@@ -72,85 +73,86 @@ class prefsWidget(object):
     def __subWidgets__(self):
         self.labels={}
         self.boxes={}
-        self.labelbox=gtk.VBox(homogeneous=True, spacing=10)
-        
+        self.labelbox={}
+        for i in range(4):
+            self.labelbox[i]=gtk.VBox(homogeneous=True, spacing=10)
+        self.notebook = gtk.Notebook()
 
+#basic page
         self.fpsAdjustment=gtk.Adjustment(value=self.values[0], lower=1, upper=50, step_incr=1, page_incr=5, page_size=0)
         self.fpsSpinButton= gtk.SpinButton(self.fpsAdjustment, climb_rate=0.5, digits=0)
-        self.mouseComboBox = gtk.combo_box_new_text()
-        for i in range(3):
-            self.mouseComboBox.append_text(self.mouseStrings[i])
-        self.mouseComboBox.set_active(self.values[1])
+
 
         self.soundComboBox = gtk.combo_box_new_text()
         for i in range(2):
             self.soundComboBox.append_text(self.stateStrings[i])
         self.soundComboBox.set_active(self.values[2])
         
-        self.fullComboBox = gtk.combo_box_new_text()
-        for i in range(2):
-            self.fullComboBox.append_text(self.stateStrings[i])
-        self.fullComboBox.set_active(self.values[3])
-
+        self.delayAdjustment=gtk.Adjustment(value=self.values[6], lower=0,upper=10000, step_incr=1, page_incr=5, page_size=0)
+        self.delaySpinButton= gtk.SpinButton(self.delayAdjustment, climb_rate=0.5, digits=0)
 
         self.pathEntry= gtk.Entry(max=0)
         self.pathEntry.set_text(self.values[4])
         self.pathButton = gtk.Button(None,gtk.STOCK_SAVE_AS)
         
         self.okButton=gtk.Button(None,gtk.STOCK_OK)
-        self.quitButton=gtk.Button(None,gtk.STOCK_QUIT)
-
         
-        for i in range(4):
+        for i in range(3):
             self.labels[i]=gtk.Label(self.labelStrings[i])
             self.labels[i].set_justify(gtk.JUSTIFY_LEFT)
             self.boxes[i]=gtk.HBox(homogeneous=False, spacing=0)
             self.boxes[i].pack_start(self.labels[i],expand=False,fill=False)
             self.labels[i].show()
-            self.labelbox.pack_start(self.boxes[i])
+            self.labelbox[0].pack_start(self.boxes[i])
 
-        placeholder1=gtk.Label("")
-        placeholder1.show()
-        self.labelbox.pack_start(placeholder1)
-        self.boxes[4]=gtk.HBox(homogeneous=False, spacing=20)
-        self.labelbox.pack_start(self.boxes[4])                       
+        self.boxes[3]=gtk.HBox(homogeneous=False, spacing=20)
+        self.labelbox[0].pack_start(self.boxes[3])                       
         placeholder2=gtk.Label("")
         placeholder2.show()
-        self.labelbox.pack_start(placeholder2)
-        self.boxes[5]=gtk.HBox(homogeneous=False, spacing=0)
-        self.labelbox.pack_end(self.boxes[5])
-    
-
+        self.labelbox[0].pack_start(placeholder2)
+        self.boxes[4]=gtk.HBox(homogeneous=False, spacing=0)
+        self.labelbox[0].pack_end(self.boxes[4])
     
         self.fpsSpinButton.show()
         self.boxes[0].pack_end(self.fpsSpinButton,expand=False,fill=False)
-        self.mouseComboBox.show()
-        self.boxes[1].pack_end(self.mouseComboBox,expand=False,fill=False)
         self.soundComboBox.show()
-        self.boxes[2].pack_end(self.soundComboBox,expand=False,fill=False)
-        self.fullComboBox.show()
-        self.boxes[3].pack_end(self.fullComboBox,expand=False,fill=False)
+        self.boxes[1].pack_end(self.soundComboBox,expand=False,fill=False)
+        self.delaySpinButton.show()
+        self.boxes[2].pack_end(self.delaySpinButton,expand=False,fill=False)
         self.pathEntry.show()
-        self.boxes[4].pack_start(self.pathEntry,expand=False,fill=False)
+        self.boxes[3].pack_start(self.pathEntry,expand=False,fill=False)
         self.pathButton.show()
-        self.boxes[4].pack_end(self.pathButton,expand=False,fill=False)
-       
+        self.boxes[3].pack_end(self.pathButton,expand=False,fill=False)
         self.okButton.show()
-        self.quitButton.show()
-        self.boxes[5].pack_start(self.okButton,expand=False,fill=False)
-        self.boxes[5].pack_end(self.quitButton,expand=False,fill=False)
-
-        for i in range(6):
+        self.boxes[4].pack_start(self.okButton,expand=True,fill=True)
+        for i in range(5):
             self.boxes[i].show()
-            
-        self.window.add(self.labelbox)
-        self.labelbox.show()
+#sound page
+#encoding page        
+#misc page
 
+        self.mouseComboBox = gtk.combo_box_new_text()
+        for i in range(4):
+            self.mouseComboBox.append_text(self.mouseStrings[i])
+        self.mouseComboBox.set_active(self.values[0])
+        
+        self.fullComboBox = gtk.combo_box_new_text()
+        for i in range(2):
+            self.fullComboBox.append_text(self.stateStrings[i])
+        self.fullComboBox.set_active(self.values[3])
+        
+        
+#append and show        
+        for i in range(4):
+            self.notebook.append_page(self.labelbox[i],gtk.Label(self.tabStrings[i]))
+        self.window.add(self.notebook)
+        for i in range(4):
+            self.labelbox[i].show()
+        self.notebook.show()
 
     def __makeCons__(self):
         self.pathButton.connect("clicked",self.__fileSelect__)
         self.okButton.connect("clicked",self.destroy)
-        self.quitButton.connect("clicked",self.__exit__)
 
     def __init__(self,values,optionsOpen):
         self.values=values
@@ -165,18 +167,12 @@ class prefsWidget(object):
         
         self.window.set_size_request(288,384)
         self.window.show()
-        #self.values=values 
         
     def main(self):
         gtk.main()
 
 
 
-#values=[15,0,0,1,os.path.join(os.getenv('HOME'),'out.ogg')]
-#ps=prefsWidget(values)
-#ps.main()
-        
-#print values
 
 
 

@@ -26,20 +26,41 @@
 
 
 import pygtk
-pygtk.require('2.0')
+pygtk.require('2.4')
 import gtk
 
-import rmdPrefsWidget as pW
 import egg.trayicon
+import istanbulSelect as isel
+import istanbulTrayPopup as iTP
 import os
+
+#values struct:
+
+#0   fps
+#1   mouse
+#2   sound on/off
+#3   full
+#4   path
+#5   area
+#6   delay
+#7   channels
+#8   frequency
+#9   device
+#10  v_quality
+#11  s_quality
+#12  display
+#13  shared memory
+#14  drop-frames
+#15  shared threshold
+#16  quick subsampling
 
 
 class trayIcon(object):
-    values=[15,0,0,1,os.path.join(os.getenv('HOME'),'out.ogg')]
+    values=[15,0,0,1,os.path.join(os.getenv('HOME'),'out.ogg'),[-1,-1,-1,-1],0]
     event_box = gtk.EventBox() 
     state=0#0 stopped,1 recording,2 paused
-    optionsOpen=[0]
     rmdPid=None
+    optionsOpen=[0]
     
     def __buttonPress__(self,widget,event=None):
         if event.button==1 and self.optionsOpen[0]==0:
@@ -59,15 +80,7 @@ class trayIcon(object):
 
         elif event.button == 3:
             if self.state == 0:
-                
-                if self.optionsOpen[0] ==0:
-                    self.optionsOpen[0]=1
-                    self.options=pW.prefsWidget(self.values,self.optionsOpen)
-                else:
-                    if self.options != None:
-                        self.options.window.destroy()
-                        self.optionsOpen[0]=0
-                        
+                self.tray_popup.show()
             elif self.state == 1:
                 self.trayIcon.set_from_stock(gtk.STOCK_MEDIA_PAUSE,gtk.ICON_SIZE_SMALL_TOOLBAR)
                 self.state=2
@@ -98,7 +111,6 @@ class trayIcon(object):
             execargs.append("--full-shots")
             execargs.append("--with-shared")
 
-        
         self.rmdPid=os.fork()
 
         if self.rmdPid==0:
@@ -121,6 +133,7 @@ class trayIcon(object):
         self.event_box.add(self.trayIcon)
         self.tray_container = egg.trayicon.TrayIcon("recordMyDesktop")
         self.tray_container.add(self.event_box)
+        self.tray_popup=iTP.TrayPopupMenu(self.values,self.optionsOpen)
         self.event_box.connect("button-press-event", self.__buttonPress__)
         self.tray_container.show_all()
         gtk.main()
