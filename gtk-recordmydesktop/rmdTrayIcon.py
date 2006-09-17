@@ -26,7 +26,7 @@
 
 
 import pygtk
-pygtk.require('2.4')
+pygtk.require('2.0')
 import gtk
 
 import egg.trayicon
