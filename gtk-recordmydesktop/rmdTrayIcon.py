@@ -204,7 +204,7 @@ class trayIcon(object):
         else:
             self.__exit_status_dialog(exit_ret[1])
         self.rmdPid=None
-        print exit_ret
+        #print exit_ret
 
     def __init__(self):
         

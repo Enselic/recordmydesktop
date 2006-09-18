@@ -102,10 +102,10 @@ class GtkAreaSelector(gtk.Window):
             self.x2 = event.x + 1
             self.y2 = event.y + 1
             # stop
-            self.area_return[0]=int(self.x1)
-            self.area_return[1]=int(self.y1)
-            self.area_return[2]=int(self.x2)
-            self.area_return[3]=int(self.y2)
+            self.area_return[0]=min(int(self.x1),int(self.x2))
+            self.area_return[1]=min(int(self.y1),int(self.y2))
+            self.area_return[2]=max(int(self.x1),int(self.x2))
+            self.area_return[3]=max(int(self.y1),int(self.y2))
             dialog = gtk.Dialog(title=None, parent=None, flags=0, buttons=None)
             label1 = gtk.Label("Recording area for the next session\n\t\t\tis set to:")
             dialog.vbox.pack_start(label1, True, True, 0)
