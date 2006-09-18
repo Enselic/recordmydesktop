@@ -27,7 +27,7 @@
 
 import pygtk
 pygtk.require('2.0')
-import gtk
+import gtk,gobject
 
 import egg.trayicon
 import rmdSelect as isel
@@ -76,10 +76,10 @@ class trayIcon(object):
         }
  
  
-    event_box = gtk.EventBox() 
     state=0#0 stopped,1 recording,2 paused
     rmdPid=None
     optionsOpen=[0]
+    timed_id=None
     
     def __buttonPress__(self,widget,event=None):
         if event.button==1 and self.optionsOpen[0]==0:
@@ -174,7 +174,10 @@ class trayIcon(object):
 
         if self.rmdPid==0:
             res=os.execvp("recordmydesktop",execargs)
-            print "hello",res
+        else:
+            self.timed_id=gobject.timeout_add(1000,self.__check_status__)
+            
+        
     def __exit_status_dialog(self,status):
         dialog = gtk.Dialog(title=None, parent=None, flags=0, buttons=None)
         label1=None
@@ -197,6 +200,9 @@ class trayIcon(object):
         os.kill(self.rmdPid,signal.SIGUSR1)
         
     def __stopRMD__(self):
+        if self.timed_id!=None:
+            gobject.source_remove(self.timed_id)
+            self.timed_id=None
         exit_ret=os.waitpid(self.rmdPid,os.WNOHANG)
         if exit_ret[0] == 0:
             os.kill(self.rmdPid,signal.SIGTERM)
@@ -207,9 +213,23 @@ class trayIcon(object):
             self.__exit_status_dialog(exit_ret[1])
         self.rmdPid=None
         #print exit_ret
+    def __check_status__(self):
+        if self.rmdPid!=None:
+            exit_ret=os.waitpid(self.rmdPid,os.WNOHANG)
+            if exit_ret[0] != 0:
+                self.state=0
+                self.trayIcon.set_from_stock(gtk.STOCK_MEDIA_RECORD,gtk.ICON_SIZE_SMALL_TOOLBAR)
+                self.__exit_status_dialog(exit_ret[1])
+                self.rmdPid=None
+                return False
+            else:
+                return True
+        else:
+            return False
+
 
     def __init__(self):
-        
+        self.event_box = gtk.EventBox()         
         self.trayIcon=gtk.Image()
         self.trayIcon.set_from_stock(gtk.STOCK_MEDIA_RECORD, gtk.ICON_SIZE_SMALL_TOOLBAR)
         self.event_box.add(self.trayIcon)
