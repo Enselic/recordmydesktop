@@ -23,7 +23,7 @@
 import gtk
 import locale, gettext
 _ = gettext.gettext
-import istanbulSelect as iSel
+import rmdSelect as iSel
 import rmdPrefsWidget as pW
 
 class TrayPopupMenu:
