@@ -60,19 +60,19 @@ class trayIcon(object):
             1,22050,'hw:0,0',63,10,"$DISPLAY",0,1,75,1]
     exit_status={
         0:'Success',
-        1:'Error while parsing the arguments.',
-        2:'Initializing the encoder failed(either vorbis or theora)',
-        3:'Could not open/configure sound card.',
-        4:'Xdamage extension not present.',
-        5:'Shared memory extension not present.',
-        6:'Xfixes extension not present.',
-        7:'XInitThreads failed.',
-        8:'No $DISPLAY environment variable and none specified as argument.',
-        9:'Cannot connect to Xserver.',
-        10:'Color depth is not 24bpp.',
-        11:'Improper window specification.',
-        12:'Cannot attach shared memory to proccess.',
-        139:'Segmentation Fault'
+        1*256:'Error while parsing the arguments.',
+        2*256:'Initializing the encoder failed(either vorbis or theora)',
+        3*256:'Could not open/configure sound card.',
+        4*256:'Xdamage extension not present.',
+        5*256:'Shared memory extension not present.',
+        6*256:'Xfixes extension not present.',
+        7*256:'XInitThreads failed.',
+        8*256:'No $DISPLAY environment variable and none specified as argument.',
+        9*256:'Cannot connect to Xserver.',
+        10*256:'Color depth is not 24bpp.',
+        11*256:'Improper window specification.',
+        12*256:'Cannot attach shared memory to proccess.',
+        11:'Segmentation Fault'
         }
  
  
@@ -177,9 +177,9 @@ class trayIcon(object):
         dialog = gtk.Dialog(title=None, parent=None, flags=0, buttons=None)
         label1=None
         try:
-            label1 = gtk.Label("Recording is finished.\nrecordMyDesktop has exited with status %d\nDescription:\n%s\n"%(status,self.exit_status[int(status)]))
+            label1 = gtk.Label("\t\tRecording is finished.\nrecordMyDesktop has exited with status %d\nDescription:%s\n"%(status,self.exit_status[int(status)]))
         except:
-            label1 = gtk.Label("Recording is finished.\nrecordMyDesktop has exited with uknown\nerror code: %d \n"%(status))
+            label1 = gtk.Label("\t\tRecording is finished.\nrecordMyDesktop has exited with uknown\nerror code: %d \n"%(status))
         dialog.vbox.pack_start(label1, True, True, 0)
         label1.show()
         button = gtk.Button(label=None, stock=gtk.STOCK_OK)
