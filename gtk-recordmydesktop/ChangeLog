@@ -1,6 +1,23 @@
 /*VERSION 0.1*/
 First Version
 
-
+/*VERSION 0.2*/
+*Separated functionality in tabs.
+*synced options to recordMyDesktop-0.2.5.
+*Right click oin tray icon now has a menu.
+*Added 'About' dialog.
+*New option to select the area over which the
+next recording will take place.
+*Exit status notification.
+*Abnormal termination notification.
+*New Options:
+i)      Startup delay.
+ii)     sound device,channels and frequency.
+iii)    video and audio encoding quality.
+iv)     Display to connect to.
+v)      Disable/Enable Shared memory extension.
+vi)     Drop frames(theora encoder option).
+vii)    Threshold for conditional use of MIT-Shm.
+viii)   Quick-subsampling.
 
 
