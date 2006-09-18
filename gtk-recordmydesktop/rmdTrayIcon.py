@@ -93,24 +93,62 @@ class trayIcon(object):
         
     def __execRMD__(self):
 
-        execargs=["recordmydesktop","-o","%s"%self.values[4],
-                  "--no-quick-subsampling",
+        execargs=["recordmydesktop","-o",'%s'%self.values[4],
                   "-fps","%d"%self.values[0]]
         if self.values[2]==1 :
             execargs.append("--nosound")
-        if self.values[1] == 0:
+        if self.values[1] == 1:
             execargs.append("-dummy-cursor")
             execargs.append("white")
-
-        elif self.values[1] == 1:
+        elif self.values[1] == 2:
             execargs.append("-dummy-cursor")
             execargs.append("black")
-        else:
-            execargs.append("--no-dummy-cursor")
+        elif self.values[1] == 3:
+            execargs.append("--no-cursor")
         
         if self.values[3] == 0:
             execargs.append("--full-shots")
-            execargs.append("--with-shared")
+            if self.values[13] == 0:
+                execargs.append("--with-shared")
+        if self.values[3] == 1 and self.values[13] == 1 :
+            execargs.append("--no-cond-shared")
+
+        if self.values[5][0]>=0 and self.values[5][1]>=0 and self.values[5][2]>0 and self.values[5][3]>0:
+            execargs.append('-x')
+            execargs.append('%d'%self.values[5][0])
+            execargs.append('-y')
+            execargs.append('%d'%self.values[5][1])
+            execargs.append('-width')
+            execargs.append('%d'%(self.values[5][2]-self.values[5][0]))
+            execargs.append('-height')
+            execargs.append('%d'%(self.values[5][3]-self.values[5][1]))
+            for i in range(4):
+                self.values[5][i]=-1
+        if self.values[6]>0:
+            execargs.append('-delay')
+            execargs.append('%d'%self.values[6])
+        execargs.append('-channels')
+        execargs.append('%d'%self.values[7])
+        execargs.append('-freq')
+        execargs.append('%d'%self.values[8])
+        execargs.append('-device')
+        execargs.append('%s'%self.values[9])
+        execargs.append('-v_quality')
+        execargs.append('%d'%self.values[10])
+        execargs.append('-s_quality')
+        execargs.append('%d'%self.values[11])
+        if self.values[12] != "$DISPLAY":
+            execargs.append('-display')
+            execargs.append('%s'%self.values[12])
+        if self.values[14] == 0:
+            execargs.append('--drop-frames')
+        execargs.append('-shared-threshold')
+        execargs.append('%d'%self.values[15])
+        if self.values[16] == 0:
+            execargs.append('--quick-subsampling')
+        
+        
+        print execargs
 
         self.rmdPid=os.fork()
 
