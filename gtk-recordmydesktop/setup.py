@@ -11,5 +11,5 @@ py_modules=['rmdPrefsWidget','rmdTrayIcon','rmdSelect','rmdTrayPopup'],
 scripts=['gtk-recordMyDesktop'],
 data_files=[('/usr/share/applications/',['gtk-recordmydesktop.desktop']),
             ('/usr/share/pixmaps/',['gtk-recordmydesktop.png'])],
-platforms='linux')
+platforms='linux' )
 
