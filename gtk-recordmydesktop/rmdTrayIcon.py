@@ -131,11 +131,13 @@ class trayIcon(object):
         if self.values[3] == 1 and self.values[13] == 1 :
             execargs.append("--no-cond-shared")
 
-        if self.values[5][0]>=0 and self.values[5][1]>=0 and self.values[5][2]>0 and self.values[5][3]>0:
+        if self.values[5][0]>0  :
             execargs.append('-x')
             execargs.append('%d'%self.values[5][0])
+        if self.values[5][1]>0:
             execargs.append('-y')
             execargs.append('%d'%self.values[5][1])
+        if self.values[5][2]>0 and self.values[5][3]>0:
             execargs.append('-width')
             execargs.append('%d'%(self.values[5][2]-self.values[5][0]))
             execargs.append('-height')
