@@ -32,7 +32,7 @@ import gtk
 import egg.trayicon
 import rmdSelect as isel
 import rmdTrayPopup as iTP
-import os
+import os,signal
 
 #values struct:
 
@@ -58,6 +58,24 @@ import os
 class trayIcon(object):
     values=[15,0,0,1,os.path.join(os.getenv('HOME'),'out.ogg'),[-1,-1,-1,-1],0,
             1,22050,'hw:0,0',63,10,"$DISPLAY",0,1,75,1]
+    exit_status={
+        0:'Success',
+        1:'Error while parsing the arguments.',
+        2:'Initializing the encoder failed(either vorbis or theora)',
+        3:'Could not open/configure sound card.',
+        4:'Xdamage extension not present.',
+        5:'Shared memory extension not present.',
+        6:'Xfixes extension not present.',
+        7:'XInitThreads failed.',
+        8:'No $DISPLAY environment variable and none specified as argument.',
+        9:'Cannot connect to Xserver.',
+        10:'Color depth is not 24bpp.',
+        11:'Improper window specification.',
+        12:'Cannot attach shared memory to proccess.',
+        139:'Segmentation Fault'
+        }
+ 
+ 
     event_box = gtk.EventBox() 
     state=0#0 stopped,1 recording,2 paused
     rmdPid=None
@@ -148,22 +166,45 @@ class trayIcon(object):
             execargs.append('--quick-subsampling')
         
         
-        print execargs
+        #print execargs
 
         self.rmdPid=os.fork()
 
         if self.rmdPid==0:
             res=os.execvp("recordmydesktop",execargs)
-            print res
-
+            print "hello",res
+    def __exit_status_dialog(self,status):
+        dialog = gtk.Dialog(title=None, parent=None, flags=0, buttons=None)
+        label1=None
+        try:
+            label1 = gtk.Label("Recording is finished.\nrecordMyDesktop has exited with status %d\nDescription:\n%s\n"%(status,self.exit_status[int(status)]))
+        except:
+            label1 = gtk.Label("Recording is finished.\nrecordMyDesktop has exited with uknown\nerror code: %d \n"%(status))
+        dialog.vbox.pack_start(label1, True, True, 0)
+        label1.show()
+        button = gtk.Button(label=None, stock=gtk.STOCK_OK)
+        dialog.vbox.pack_start(button, True, True, 0)
+        def __destroy(button):
+            dialog.destroy()
+        button.connect("clicked", __destroy)
+        button.show()
+        dialog.set_size_request(300,128)
+        dialog.show()
         
     def __pauseRMD__(self):
-        os.system("kill -s USR1 %d"%self.rmdPid)
+        os.kill(self.rmdPid,signal.SIGUSR1)
         
     def __stopRMD__(self):
-        os.system("kill -s TERM %d"%self.rmdPid)
+        exit_ret=os.waitpid(self.rmdPid,os.WNOHANG)
+        if exit_ret[0] == 0:
+            os.kill(self.rmdPid,signal.SIGTERM)
+            exit_ret=os.waitpid(self.rmdPid,0)
+            #if exit_ret[0]==self.rmdPid:
+            self.__exit_status_dialog(exit_ret[1])
+        else:
+            self.__exit_status_dialog(exit_ret[1])
         self.rmdPid=None
-
+        print exit_ret
 
     def __init__(self):
         
