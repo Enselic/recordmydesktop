@@ -1,3 +1,35 @@
+# -*- Mode: Python -*-
+# vi:si:et:sw=4:sts=4:ts=4
+#
+# Istanbul - a desktop session recorder
+# Copyright (C) 2005 Zaheer Abbas Merali (zaheerabbas at merali dot org)
+# All rights reserved.
+
+# This file may be distributed and/or modified under the terms of
+# the GNU General Public License version 2 as published by
+# the Free Software Foundation.
+# This file is distributed without any warranty; without even the implied
+# warranty of merchantability or fitness for a particular purpose.
+# See "LICENSE.GPL" in the source distribution for more information.
+
+# Headers in this file shall remain intact.
+
+#This file has been modified to be used in gtk-recordMyDesktop
+#by John Varouhakis
+
+#Base class is DrawingArea instead of Window to allow insertion.
+#new methods:
+#   update_image to keep the screenshot current.
+#   __subsample__ to scale the screenshot
+#   __draw_lines__ to highlight the selected area.
+#Calls to destroy have been removed, since this widget is meant to
+#live for an indefinite amount of time.
+#Click behavior has been changed. Selection now happens by left-click and dragging,
+#while right click resets the selection.
+
+
+#original file name is select.py in Istanbul-0.2.1
+
 
 import gtk
 import gtk.gdk
