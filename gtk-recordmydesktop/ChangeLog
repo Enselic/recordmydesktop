@@ -21,3 +21,11 @@ vii)    Threshold for conditional use of MIT-Shm.
 viii)   Quick-subsampling.
 
 
+/*VERSION 0.2.1*/
+*Changed the UI.
+*A basic window now appears on launch,
+while non-visible options are can be
+accessed through an 'advanced' button.
+*The window contains a preview of the recording area,
+and the selected region is outlined.
+*Selection of the area can happen directly on the preview image.
