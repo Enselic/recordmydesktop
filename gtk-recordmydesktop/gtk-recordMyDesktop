@@ -27,10 +27,10 @@
 #*    For further information contact me at johnvarouhakis@gmail.com              *
 #**********************************************************************************/
 
-import rmdTrayIcon
+import rmdSimple
 
 def main():
-    tr=rmdTrayIcon.trayIcon()
+    tr=rmdSimple.simpleWidget()
 
 
 main()

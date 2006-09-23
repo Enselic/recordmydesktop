@@ -28,7 +28,8 @@ import rmdPrefsWidget as pW
 
 class TrayPopupMenu:
     options=None
-    def __init__(self,values,optionsOpen):
+    def __init__(self,parent,values,optionsOpen):
+        self.parent=parent
         self.optionsOpen=optionsOpen
         self.values=values
         self._setup_popup_menu()
@@ -44,11 +45,12 @@ class TrayPopupMenu:
     def _prefs_widget(self,button):
         if self.optionsOpen[0] ==0:
             self.optionsOpen[0]=1
-            self.options=pW.prefsWidget(self.values,self.optionsOpen)
+            #self.options=pW.prefsWidget(self.values,self.optionsOpen)
+            self.parent.show()
         else:
-            if self.options != None:
-                self.options.window.destroy()
-                self.optionsOpen[0]=0
+            #if self.options != None:
+            self.parent.hide()
+            self.optionsOpen[0]=0
     def _setup_prefs_widget(self):
         self.popupmenu_prefs_widget = gtk.ImageMenuItem(
                gtk.STOCK_PREFERENCES)
@@ -74,7 +76,7 @@ class TrayPopupMenu:
 
     def _setup_select_area(self):
         self.popupmenu_selectarea = gtk.ImageMenuItem(
-            _("_Select Area to Record"))
+            _("_Select Area On Screen"))
         self.popupmenu.add(self.popupmenu_selectarea)
         self.popupmenu_selectarea.connect("activate", self._select_area_cb)
 

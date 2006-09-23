@@ -56,8 +56,8 @@ import os,signal
 
 
 class trayIcon(object):
-    values=[15,0,0,1,os.path.join(os.getenv('HOME'),'out.ogg'),[-1,-1,-1,-1],0,
-            1,22050,'hw:0,0',63,10,"$DISPLAY",0,1,75,1]
+    #values=[15,0,0,1,os.path.join(os.getenv('HOME'),'out.ogg'),[-1,-1,-1,-1],0,
+            #1,22050,'hw:0,0',63,10,"$DISPLAY",0,1,75,1]
     exit_status={
         0:'Success',
         1*256:'Error while parsing the arguments.',
@@ -78,12 +78,17 @@ class trayIcon(object):
  
     state=0#0 stopped,1 recording,2 paused
     rmdPid=None
-    optionsOpen=[0]
+    optionsOpen=[1]
+    reopen=0
     timed_id=None
     
     def __buttonPress__(self,widget,event=None):
-        if event.button==1 and self.optionsOpen[0]==0:
+        if event.button==1 :
             if self.state == 0:
+                if self.optionsOpen[0]==1:
+                    self.parent.hide()
+                    self.optionsOpen[0]=0
+                    self.reopen=1
                 self.trayIcon.set_from_stock(gtk.STOCK_MEDIA_STOP,gtk.ICON_SIZE_SMALL_TOOLBAR)
                 self.state=1
                 self.__execRMD__()
@@ -108,63 +113,72 @@ class trayIcon(object):
                 self.trayIcon.set_from_stock(gtk.STOCK_MEDIA_STOP,gtk.ICON_SIZE_SMALL_TOOLBAR)
                 self.state=1
                 self.__pauseRMD__()
-        
+    def record_ext(self,button=None):
+        if self.state == 0:
+            if self.optionsOpen[0]==1:
+                self.parent.hide()
+                self.optionsOpen[0]=0
+                self.reopen=1
+            self.trayIcon.set_from_stock(gtk.STOCK_MEDIA_STOP,gtk.ICON_SIZE_SMALL_TOOLBAR)
+            self.state=1
+            self.__execRMD__()
+         
     def __execRMD__(self):
-
-        execargs=["recordmydesktop","-o",'%s'%self.values[4],
-                  "-fps","%d"%self.values[0]]
-        if self.values[2]==1 :
+        self.parent.update()
+        execargs=["recordmydesktop","-o",'%s'%self.parent.values[4],
+                  "-fps","%d"%self.parent.values[0]]
+        if self.parent.values[2]==False :
             execargs.append("--nosound")
-        if self.values[1] == 1:
+        if self.parent.values[1] == 1:
             execargs.append("-dummy-cursor")
             execargs.append("white")
-        elif self.values[1] == 2:
+        elif self.parent.values[1] == 2:
             execargs.append("-dummy-cursor")
             execargs.append("black")
-        elif self.values[1] == 3:
+        elif self.parent.values[1] == 3:
             execargs.append("--no-cursor")
         
-        if self.values[3] == 0:
+        if self.parent.values[3] == 0:
             execargs.append("--full-shots")
-            if self.values[13] == 0:
+            if self.parent.values[13] == 0:
                 execargs.append("--with-shared")
-        if self.values[3] == 1 and self.values[13] == 1 :
+        if self.parent.values[3] == 1 and self.parent.values[13] == 1 :
             execargs.append("--no-cond-shared")
 
-        if self.values[5][0]>0  :
+        if self.parent.values[5][0]>0  :
             execargs.append('-x')
-            execargs.append('%d'%self.values[5][0])
-        if self.values[5][1]>0:
+            execargs.append('%d'%self.parent.values[5][0])
+        if self.parent.values[5][1]>0:
             execargs.append('-y')
-            execargs.append('%d'%self.values[5][1])
-        if self.values[5][2]>0 and self.values[5][3]>0:
+            execargs.append('%d'%self.parent.values[5][1])
+        if self.parent.values[5][2]>0 and self.parent.values[5][3]>0:
             execargs.append('-width')
-            execargs.append('%d'%(self.values[5][2]-self.values[5][0]))
+            execargs.append('%d'%(self.parent.values[5][2]-self.parent.values[5][0]))
             execargs.append('-height')
-            execargs.append('%d'%(self.values[5][3]-self.values[5][1]))
+            execargs.append('%d'%(self.parent.values[5][3]-self.parent.values[5][1]))
             for i in range(4):
-                self.values[5][i]=-1
-        if self.values[6]>0:
+                self.parent.values[5][i]=-1
+        if self.parent.values[6]>0:
             execargs.append('-delay')
-            execargs.append('%d'%self.values[6])
+            execargs.append('%d'%self.parent.values[6])
         execargs.append('-channels')
-        execargs.append('%d'%self.values[7])
+        execargs.append('%d'%self.parent.values[7])
         execargs.append('-freq')
-        execargs.append('%d'%self.values[8])
+        execargs.append('%d'%self.parent.values[8])
         execargs.append('-device')
-        execargs.append('%s'%self.values[9])
+        execargs.append('%s'%self.parent.values[9])
         execargs.append('-v_quality')
-        execargs.append('%d'%self.values[10])
+        execargs.append('%d'%self.parent.values[10])
         execargs.append('-s_quality')
-        execargs.append('%d'%self.values[11])
-        if self.values[12] != "$DISPLAY":
+        execargs.append('%d'%self.parent.values[11])
+        if self.parent.values[12] != "$DISPLAY":
             execargs.append('-display')
-            execargs.append('%s'%self.values[12])
-        if self.values[14] == 0:
+            execargs.append('%s'%self.parent.values[12])
+        if self.parent.values[14] == 0:
             execargs.append('--drop-frames')
         execargs.append('-shared-threshold')
-        execargs.append('%d'%self.values[15])
-        if self.values[16] == 0:
+        execargs.append('%d'%self.parent.values[15])
+        if self.parent.values[16] == 0:
             execargs.append('--quick-subsampling')
         
         
@@ -195,7 +209,7 @@ class trayIcon(object):
         button.show()
         dialog.set_size_request(300,128)
         dialog.show()
-        
+
     def __pauseRMD__(self):
         os.kill(self.rmdPid,signal.SIGUSR1)
         
@@ -208,10 +222,15 @@ class trayIcon(object):
             os.kill(self.rmdPid,signal.SIGTERM)
             exit_ret=os.waitpid(self.rmdPid,0)
             #if exit_ret[0]==self.rmdPid:
-            self.__exit_status_dialog(exit_ret[1])
+            #self.__exit_status_dialog(exit_ret[1])
         else:
             self.__exit_status_dialog(exit_ret[1])
         self.rmdPid=None
+        if self.reopen==1:
+            self.parent.show()
+            self.optionsOpen[0]=1
+            self.reopen=0
+
         #print exit_ret
     def __check_status__(self):
         if self.rmdPid!=None:
@@ -221,6 +240,10 @@ class trayIcon(object):
                 self.trayIcon.set_from_stock(gtk.STOCK_MEDIA_RECORD,gtk.ICON_SIZE_SMALL_TOOLBAR)
                 self.__exit_status_dialog(exit_ret[1])
                 self.rmdPid=None
+                if self.reopen==1:
+                    self.parent.show()
+                    self.optionsOpen[0]=1
+                    self.reopen=0
                 return False
             else:
                 return True
@@ -228,17 +251,19 @@ class trayIcon(object):
             return False
 
 
-    def __init__(self):
+    def __init__(self,parent):
+        self.parent=parent
+        #self.parent.values=values
         self.event_box = gtk.EventBox()         
         self.trayIcon=gtk.Image()
         self.trayIcon.set_from_stock(gtk.STOCK_MEDIA_RECORD, gtk.ICON_SIZE_SMALL_TOOLBAR)
         self.event_box.add(self.trayIcon)
         self.tray_container = egg.trayicon.TrayIcon("recordMyDesktop")
         self.tray_container.add(self.event_box)
-        self.tray_popup=iTP.TrayPopupMenu(self.values,self.optionsOpen)
+        self.tray_popup=iTP.TrayPopupMenu(self.parent,self.parent.values,self.optionsOpen)
         self.event_box.connect("button-press-event", self.__buttonPress__)
         self.tray_container.show_all()
-        gtk.main()
+        #gtk.main()
 
 
 

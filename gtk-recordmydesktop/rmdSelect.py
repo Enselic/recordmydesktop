@@ -106,21 +106,7 @@ class GtkAreaSelector(gtk.Window):
             self.area_return[1]=min(int(self.y1),int(self.y2))
             self.area_return[2]=max(int(self.x1),int(self.x2))
             self.area_return[3]=max(int(self.y1),int(self.y2))
-            dialog = gtk.Dialog(title=None, parent=None, flags=0, buttons=None)
-            label1 = gtk.Label("Recording area for the next session\n\t\t\tis set to:")
-            dialog.vbox.pack_start(label1, True, True, 0)
-            label1.show()
-            label2 = gtk.Label("(%d,%d) - (%d,%d)\n"%(self.area_return[0],self.area_return[1],self.area_return[2],self.area_return[3]))
-            dialog.vbox.pack_start(label2, True, True, 0)
-            label2.show()
-            button = gtk.Button(label=None, stock=gtk.STOCK_OK)
-            dialog.vbox.pack_start(button, True, True, 0)
-            def __destroy(button):
-                dialog.destroy()
-            button.connect("clicked", __destroy)
-            button.show()
-            dialog.set_size_request(300,128)
-            dialog.show()
+            self.hide()
             self.destroy()
         
         return True
@@ -142,7 +128,7 @@ class GtkAreaSelector(gtk.Window):
         self.queue_draw()
         return True
 
-    def delete_cb(self, widget):
+    def delete_cb(self, widget,Event=None):
         pass
 
 if __name__ == "__main__":
