@@ -43,6 +43,15 @@ class simpleWidget(object):
     hidden=[0]
     labelStrings=[_('Video Quality'),_('Sound Quality')]
     buttonStrings=[_('Advanced'),_('Select Window')]
+    tooltipLabels=[_('\nLeft click and drag, on the preview image,\nto select an area for recording.\nRight click on it, to reset the area.'),
+                   _('Click to start the recording.\nThis window will hide itself.'),
+                   _('Click to choose a filename and location.\nDefault is out.ogg in your home folder.\nEXISTING FILES WILL BE OVER-WRITTEN WITHOUT WARNING!'),
+                   _('Click to exit the program.'),
+                   _('Select the video quality of your recording.\n(Lower quality will require more proccessing power.)'),
+                   _('Enable/Disable sound recording.'),
+                   _('Select the audio quality of your recording.'),
+                   _('Click here to access more options.')]
+                    
     options=None
     optionsOpen=[0]
     def __subWidgets__(self):
@@ -75,24 +84,11 @@ class simpleWidget(object):
         self.wroot = gtk.gdk.get_default_root_window()
         (self.wwidth, self.wheight) = self.wroot.get_size()
         
-        ###############################################################
-        #self.image = gtk.Image()
         self.factor=1;
         twidth=self.wwidth
         while twidth>320 or self.factor<4:
           twidth/=2
           self.factor*=2
-        #self.thumb=gtk.gdk.Image(gtk.gdk.IMAGE_NORMAL,self.wroot.get_visual(),self.wwidth/self.factor,self.wheight/self.factor)
-        
-        
-        #sroot = self.wroot.get_image(0, 0, self.wwidth, self.wheight)
-        #self.__subsample__(sroot,self.wwidth,self.wheight,self.thumb,self.factor)
-        #self.image.set_from_image(self.thumb,None)
-        
-        #self.image.set_size_request(self.wwidth/self.factor,self.wheight/self.factor)
-        ##self.NWBox.pack_start(self.image,False,False)
-        #self.image.show()
-        ###############################################################
         self.image=sT.GtkThumbSelector(self.values[5],self.hidden,2000)
         self.image.show()
 
@@ -112,7 +108,7 @@ class simpleWidget(object):
         self.s_label=gtk.Label(self.labelStrings[1])
         
         self.advanced_button=gtk.Button(self.buttonStrings[0])
-        self.tipLabel=gtk.Label("")
+        self.tipLabel=gtk.Label(self.tooltipLabels[0])
         self.NEVQBox.pack_start(self.v_label,expand=False,fill=False)
         self.NEVQBox.pack_start(self.v_quality,expand=True,fill=True)
         self.NESQBox.pack_start(self.s_button,expand=False,fill=False)
@@ -121,16 +117,16 @@ class simpleWidget(object):
         self.NETABox.pack_start(self.advanced_button,expand=False,fill=False)
         self.NETABox.pack_start(self.tipLabel,expand=False,fill=False)
         
-        self.win_button=gtk.Button(self.buttonStrings[1])
+        #self.win_button=gtk.Button(self.buttonStrings[1])
         self.start_button=gtk.Button(None,gtk.STOCK_MEDIA_RECORD)
         self.file_button=gtk.Button(None,gtk.STOCK_SAVE_AS)
         self.quit_button=gtk.Button(None,gtk.STOCK_QUIT)
-        self.SWBox.pack_start(self.win_button,False,False)
+        #self.SWBox.pack_start(self.win_button,False,False)
         self.SWBox.pack_start(self.start_button,False,False)
         self.SEBox.pack_end(self.quit_button,False,False)
         self.SEBox.pack_end(self.file_button,False,False)
         
-        self.win_button.show()
+        #self.win_button.show()
         self.start_button.show()
         self.file_button.show()
         self.quit_button.show()
@@ -154,42 +150,18 @@ class simpleWidget(object):
         
         self.labelbox.show()
         self.window.add(self.labelbox)
+    def __tooltips__(self):
+        self.tooltips=gtk.Tooltips()
+        self.tooltips.set_tip(self.start_button,self.tooltipLabels[1])
+        self.tooltips.set_tip(self.file_button,self.tooltipLabels[2])        
+        self.tooltips.set_tip(self.quit_button,self.tooltipLabels[3])
+        self.tooltips.set_tip(self.v_quality,self.tooltipLabels[4])
+        self.tooltips.set_tip(self.v_label,self.tooltipLabels[4])
+        self.tooltips.set_tip(self.s_button,self.tooltipLabels[5])
+        self.tooltips.set_tip(self.s_quality,self.tooltipLabels[6])
+        self.tooltips.set_tip(self.s_label,self.tooltipLabels[6])
+        self.tooltips.set_tip(self.advanced_button,self.tooltipLabels[7])
         
-    def __subsample__(self,im1,w,h,im2,stride,x=0,y=0):
-        for i in xrange(y,h,stride):
-            for k in xrange(x,w,stride):
-                im2.put_pixel(k/stride,i/stride,im1.get_pixel(k,i))
-    #def __draw_lines__(self,img,vals,factor):
-        #for i in xrange(vals[0]/factor,vals[0]/factor+vals[2]/factor):
-            #for k in range(2):
-                #img.put_pixel(i,vals[1]/factor+k,0xff0000)
-                #img.put_pixel(i,(vals[1]+vals[3]/2-k)/factor,0xff0000)
-                #img.put_pixel(i,(vals[1]+vals[3]-1-k)/factor,0xff0000)
-        #for i in xrange(vals[1]/factor,vals[1]/factor+vals[3]/factor):
-            #for k in range(2):
-                #img.put_pixel(vals[0]/factor+k,i,0xff0000)
-                #img.put_pixel((vals[0]+vals[2]/2-k)/factor,i,0xff0000)
-                #img.put_pixel((vals[0]+vals[2]-1-k)/factor,i,0xff0000)
-      
-    #def __update_image__(self):
-        ##self.root.destroy()
-        #if self.hidden[0]==0:
-            #gc.collect()
-            #sroot = self.wroot.get_image(0,0,self.wwidth,self.wheight)
-            #self.__subsample__(sroot,self.wwidth,self.wheight,self.thumb,self.factor)
-            #vals=[0,0, self.wwidth, self.wheight]
-            #if self.values[5][0]>=0:
-                #vals[0]=self.values[5][0]
-            #if self.values[5][1]>=0:
-                #vals[1]=self.values[5][1]
-            #if self.values[5][2]>=0:
-                #vals[2]=self.values[5][2]-self.values[5][0]
-            #if self.values[5][3]>=0:
-                #vals[3]=self.values[5][3]-self.values[5][1]
-            #if vals[0] >0 or vals[1] >0 or vals[2] <self.wwidth or vals[3] <self.wheight:
-                #self.__draw_lines__(self.thumb,vals,self.factor)
-            #self.image.set_from_image(self.thumb,None)     
-        #return True
     def __exit__(self,Event=None):
         gtk.main_quit()
         self.values[0]=-1
@@ -258,6 +230,7 @@ class simpleWidget(object):
         
         self.trayIcon=trayIcon(self)
         self.__makeCons__()
+        self.__tooltips__()
         self.s_quality.set_sensitive(self.values[2])
         self.s_button.set_active(self.values[2])
         self.window.show()
