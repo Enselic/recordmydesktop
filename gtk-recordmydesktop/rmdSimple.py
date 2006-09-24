@@ -36,6 +36,7 @@ from rmdTrayIcon import *
 import gtk.gdk
 import gobject
 import gc
+import re
 import rmdPrefsWidget as pW
 import rmdSelectThumb as sT
 
@@ -43,7 +44,7 @@ class simpleWidget(object):
     hidden=[0]
     labelStrings=[_('Video Quality'),_('Sound Quality')]
     buttonStrings=[_('Advanced'),_('Select Window')]
-    tooltipLabels=[_('\nLeft click and drag, on the preview image,\nto select an area for recording.\nRight click on it, to reset the area.'),
+    tooltipLabels=[_('Click here to select a window to record'),
                    _('Click to start the recording.\nThis window will hide itself.'),
                    _('Click to choose a filename and location.\nDefault is out.ogg in your home folder.\nEXISTING FILES WILL BE OVER-WRITTEN WITHOUT WARNING!'),
                    _('Click to exit the program.'),
@@ -51,7 +52,8 @@ class simpleWidget(object):
                    _('Enable/Disable sound recording.'),
                    _('Select the audio quality of your recording.'),
                    _('Click here to access more options.')]
-                    
+    tipLabelStrings=[_('\nLeft click and drag, on the preview image,\nto select an area for recording.\nRight click on it, to reset the area.')]
+    
     options=None
     optionsOpen=[0]
     def __subWidgets__(self):
@@ -108,7 +110,7 @@ class simpleWidget(object):
         self.s_label=gtk.Label(self.labelStrings[1])
         
         self.advanced_button=gtk.Button(self.buttonStrings[0])
-        self.tipLabel=gtk.Label(self.tooltipLabels[0])
+        self.tipLabel=gtk.Label(self.tipLabelStrings[0])
         self.NEVQBox.pack_start(self.v_label,expand=False,fill=False)
         self.NEVQBox.pack_start(self.v_quality,expand=True,fill=True)
         self.NESQBox.pack_start(self.s_button,expand=False,fill=False)
@@ -117,16 +119,16 @@ class simpleWidget(object):
         self.NETABox.pack_start(self.advanced_button,expand=False,fill=False)
         self.NETABox.pack_start(self.tipLabel,expand=False,fill=False)
         
-        #self.win_button=gtk.Button(self.buttonStrings[1])
+        self.win_button=gtk.Button(self.buttonStrings[1])
         self.start_button=gtk.Button(None,gtk.STOCK_MEDIA_RECORD)
         self.file_button=gtk.Button(None,gtk.STOCK_SAVE_AS)
         self.quit_button=gtk.Button(None,gtk.STOCK_QUIT)
-        #self.SWBox.pack_start(self.win_button,False,False)
+        self.SWBox.pack_start(self.win_button,False,False)
         self.SWBox.pack_start(self.start_button,False,False)
         self.SEBox.pack_end(self.quit_button,False,False)
         self.SEBox.pack_end(self.file_button,False,False)
         
-        #self.win_button.show()
+        self.win_button.show()
         self.start_button.show()
         self.file_button.show()
         self.quit_button.show()
@@ -152,6 +154,7 @@ class simpleWidget(object):
         self.window.add(self.labelbox)
     def __tooltips__(self):
         self.tooltips=gtk.Tooltips()
+        self.tooltips.set_tip(self.win_button,self.tooltipLabels[0])
         self.tooltips.set_tip(self.start_button,self.tooltipLabels[1])
         self.tooltips.set_tip(self.file_button,self.tooltipLabels[2])        
         self.tooltips.set_tip(self.quit_button,self.tooltipLabels[3])
@@ -197,13 +200,43 @@ class simpleWidget(object):
         self.fileSel.cancel_button.connect("clicked", self.__fileSelQuit__)
         self.fileSel.set_filename(self.values[4])
         self.fileSel.show() 
-        
+    def __select_window__(self,button):
+        (stdin,stdout,stderr)=os.popen3('xwininfo','t')
+        wid=stdout.readlines()
+        stdin.close()
+        stdout.close()
+        stderr.close()
+        x=y=width=height=None
+        for i in wid:
+            if i.lstrip().startswith('Absolute upper-left X:'):
+                x=int(i.split(' ')[len(i.split(' '))-1])
+            elif i.lstrip().startswith('Absolute upper-left Y'):
+                y=int(i.split(' ')[len(i.split(' '))-1])
+            elif i.lstrip().startswith('Width:'):
+                width=int(i.split(' ')[len(i.split(' '))-1])
+            elif i.lstrip().startswith('Height:'):
+                height=int(i.split(' ')[len(i.split(' '))-1])            
+        if x<0:
+            width+=x
+            x=0
+        if y<0:
+            height+=y
+            y=0
+        if width+x>self.wwidth: width=self.wwidth-x
+        if height+y>self.wheight: height=self.wheight-y    
+        self.values[5][0]=x
+        self.values[5][1]=y
+        self.values[5][2]=width+x
+        self.values[5][3]=height+y
+        self.image.update_image()
+              
     def __makeCons__(self):
         self.advanced_button.connect("clicked",self.advanced)
         self.file_button.connect("clicked",self.__fileSelect__)
         self.quit_button.connect("clicked",self.__exit__)
         self.start_button.connect("clicked",self.trayIcon.record_ext)
         self.s_button.connect("clicked",self.__sound_check__)
+        self.win_button.connect("clicked",self.__select_window__)
     def __sound_check__(self,widget):
         self.s_quality.set_sensitive(widget.get_active())
         self.values[2]=widget.get_active()
