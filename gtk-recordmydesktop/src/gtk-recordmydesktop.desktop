@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=gtk-recordMyDesktop
+Comment=Frontend for recordMyDesktop
+Exec=gtk-recordMyDesktop
+Terminal=false
+Type=Application
+Icon=gtk-recordmydesktop.png
+Categories=GNOME;KDE;Application;AudioVideo;
+StartupNotify=false

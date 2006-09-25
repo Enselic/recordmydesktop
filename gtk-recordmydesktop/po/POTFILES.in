@@ -1,0 +1,6 @@
+# List of source files which contain translatable strings.
+
+
+src/rmdSimple.py
+src/rmdPrefsWidget.py
+src/rmdTrayPopup.py

@@ -1,0 +1,4 @@
+import os
+
+locale_install_dir=os.path.join('@DATADIR@', 'locale')
+
