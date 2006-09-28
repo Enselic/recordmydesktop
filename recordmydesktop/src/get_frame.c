@@ -48,6 +48,8 @@ void *GetFrame(void *pdata){
         if(Paused){
             pthread_cond_wait(&((ProgData *)pdata)->pause_cond,&pmut);
         }
+        capture_busy=1;
+        
         /*pthread_cond_wait(&((ProgData *)pdata)->pause_cond,&((ProgData *)pdata)->pause_cond_mutex);*/
         //mutexes and lists with changes are useless when full_shots is enabled
         if(!((ProgData *)pdata)->args.full_shots){
@@ -187,7 +189,12 @@ void *GetFrame(void *pdata){
             ClearList(&((ProgData *)pdata)->rect_root[tlist_sel]);
             pthread_mutex_unlock(&((ProgData *)pdata)->list_mutex[tlist_sel]);
         }
+        if(encoder_busy){
+            frames_lost++;
+            frames_to_add++;
+        }
         pthread_cond_broadcast(&((ProgData *)pdata)->image_buffer_ready);
+        capture_busy=0;
     }
     pthread_cond_broadcast(&((ProgData *)pdata)->image_buffer_ready);
     pthread_exit(&errno);

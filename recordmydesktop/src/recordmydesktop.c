@@ -73,6 +73,9 @@ int main(int argc,char **argv){
         //init data
 
 
+        //these are globals, look for them at the header
+        frames_total=frames_lost=frames_to_add=encoder_busy=capture_busy=0;
+
         if(!pdata.args.scshot){
             fprintf(stderr,"Initializing...\n");
             MakeMatrices();

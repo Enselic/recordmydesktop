@@ -48,4 +48,5 @@ instead of continuing with a different configuration.
 pixel discarding is an option(used to be otherwise).
 
 
-
+/*VERSION 0.2.6*/
+*internal framedrop counter

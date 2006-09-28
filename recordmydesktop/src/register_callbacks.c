@@ -27,6 +27,11 @@
 
 #include <recordmydesktop.h> 
 void SetExpired(int signum){
+    frames_total++;
+    if(capture_busy){
+        frames_to_add++;
+        frames_lost++;
+    }
     pthread_cond_broadcast(time_cond);
 }
 

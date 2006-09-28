@@ -32,6 +32,7 @@ void *EncodeImageBuffer(void *pdata){
     pthread_mutex_init(&imut,NULL);
 
     while(((ProgData *)pdata)->running){
+        encoder_busy=1;
         pthread_cond_wait(&((ProgData *)pdata)->image_buffer_ready,&imut);
         if(Paused)
             pthread_cond_wait(&((ProgData *)pdata)->pause_cond,&pmut);//this may not be needed
@@ -44,6 +45,7 @@ void *EncodeImageBuffer(void *pdata){
         theora_encode_packetout(&((ProgData *)pdata)->enc_data->m_th_st,0,&((ProgData *)pdata)->enc_data->m_ogg_pckt1);
         ogg_stream_packetin(&((ProgData *)pdata)->enc_data->m_ogg_ts,&((ProgData *)pdata)->enc_data->m_ogg_pckt1);
         ((ProgData *)pdata)->avd+=((ProgData *)pdata)->frametime*2*((ProgData *)pdata)->args.channels;
+        encoder_busy=0;
     }
     //last packet
     if(theora_encode_YUVin(&((ProgData *)pdata)->enc_data->m_th_st,&((ProgData *)pdata)->enc_data->yuv)){

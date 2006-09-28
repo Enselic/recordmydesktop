@@ -77,6 +77,9 @@
 #endif
 
 
+//do not be confused
+//this is useless and obsolete. 
+//There are no plans for other fotmats
 enum {UNSPECIFIED,OGG_THEORA_VORBIS};
 
 
@@ -106,14 +109,15 @@ typedef struct _RectArea{   //an area that has been damaged gets stored
     struct _RectArea *prev,*next;
 }RectArea;
 
-typedef struct _BRWindow{   //a window to be recorded specs
+typedef struct _BRWindow{   //'basic recorded window' specs
     WGeometry geom;         //window attributes
     WGeometry rgeom;        //part of window that is recorded
     int nbytes;             //size of zpixmap when screenshoting
     Window windowid;           //id
 }BRWindow;
 
-
+//defaults in the following comment lines may be out of sync with reality
+//check DEFAULT_ARGS macro further bellow
 typedef struct _ProgArgs{
     int delay;          //start up delay
     Window windowid;    //window to record(default root)
@@ -144,31 +148,36 @@ typedef struct _ProgArgs{
 }ProgArgs;
 
 
-//this struct will hold anything related to encoding AND 
+//this struct holds anything related to encoding AND 
 //writting out to file. 
-//**TODO add vorbis specifics*/
 typedef struct _EncData{
     ogg_stream_state m_ogg_ts;//theora
     ogg_stream_state m_ogg_vs;//vorbis
-    ogg_page         m_ogg_pg;
-    ogg_packet       m_ogg_pckt1;
-    ogg_packet       m_ogg_pckt2;
-
+    ogg_page         m_ogg_pg;//this could be avoided since 
+                              // it is used only while initializing
+    ogg_packet       m_ogg_pckt1;//theora stream
+    ogg_packet       m_ogg_pckt2;//vorbis stream
+//theora data
     theora_state     m_th_st;
     theora_info      m_th_inf;
     theora_comment   m_th_cmmnt;
     yuv_buffer       yuv;
-
+//vorbis data
     vorbis_info      m_vo_inf;
     vorbis_comment   m_vo_cmmnt;
     vorbis_dsp_state m_vo_dsp; 
     vorbis_block     m_vo_block;
-
+//these should be 0, since area is quantized
+//before input
     int             x_offset,
                     y_offset;
+//our file
     FILE            *fp;
 }EncData;
 
+//sound buffer
+//sound keeps coming so we que it in this list 
+//which we then traverse
 typedef struct _SndBuffer{
     signed char *data;
     struct _SndBuffer *next;
@@ -207,7 +216,11 @@ typedef struct _ProgData{
                 frametime;
     pthread_mutex_t list_mutex[2],//mutexes for concurrency protection of the lists
                     sound_buffer_mutex,
-                    yuv_mutex;
+                    yuv_mutex;//this might not be needed since we only have 
+                              //one read-only and  one write-only thread
+                              //also on previous versions, y component was looped separately
+                              //and then u and v so this was needed to avoid wrong coloring to render
+                              //Currently this mutex only prevents the cursor from flickering
     pthread_cond_t  time_cond,//this gets a broadcast by the handler whenever it's time to get a screenshot
                     pause_cond,//this is blocks execution, when program is paused
                     sound_buffer_ready,//sound encoding finished
@@ -225,7 +238,13 @@ pthread_cond_t  *time_cond,*pause_cond;
 unsigned char   Yr[256],Yg[256],Yb[256],
                 Ur[256],Ug[256],Ub[256],
                 Vr[256],Vg[256],Vb[256];
-
+unsigned int frames_total,//frames calculated by total time expirations
+             frames_lost,//the value of shame
+             frames_to_add;//number of fake packets to be fed into the ogg stream
+//used to determine frame drop which can 
+//happen on failure to receive a signal over a condition variable
+int capture_busy,
+    encoder_busy;
 /**Macros*/
 
 #define CLIP_EVENT_AREA(e,brwin,wgeom){\
