@@ -43,6 +43,8 @@ void *EncodeImageBuffer(void *pdata){
                     ogg_stream_packetin(&((ProgData *)pdata)->enc_data->m_ogg_ts,&((ProgData *)pdata)->enc_data->m_ogg_pckt1);
                     ((ProgData *)pdata)->avd+=((ProgData *)pdata)->frametime*2*((ProgData *)pdata)->args.channels;
             }
+            if(!((ProgData *)pdata)->running)
+                break;
         }
         if(theora_encode_YUVin(&((ProgData *)pdata)->enc_data->m_th_st,&((ProgData *)pdata)->enc_data->yuv)){
             fprintf(stderr,"Encoder not ready!\n");
