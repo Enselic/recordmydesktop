@@ -74,7 +74,7 @@ int main(int argc,char **argv){
 
 
         //these are globals, look for them at the header
-        frames_total=frames_lost=frames_to_add=encoder_busy=capture_busy=0;
+        frames_total=frames_lost=encoder_busy=capture_busy=0;
 
         if(!pdata.args.scshot){
             fprintf(stderr,"Initializing...\n");

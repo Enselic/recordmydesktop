@@ -191,7 +191,6 @@ void *GetFrame(void *pdata){
         }
         if(encoder_busy){
             frames_lost++;
-            frames_to_add++;
         }
         pthread_cond_broadcast(&((ProgData *)pdata)->image_buffer_ready);
         capture_busy=0;

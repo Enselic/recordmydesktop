@@ -29,10 +29,11 @@
 void SetExpired(int signum){
     frames_total++;
     if(capture_busy){
-        frames_to_add++;
         frames_lost++;
     }
-    pthread_cond_broadcast(time_cond);
+    pthread_cond_broadcast(time_cond);//sig handlers should not call this func
+                                    //could be a set_expired and main thread
+                                    //doing a while(running) if set_expired broadcast else usleep(n)
 }
 
 void SetPaused(int signum){

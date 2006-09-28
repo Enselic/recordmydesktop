@@ -52,28 +52,26 @@ void *EncodeSoundBuffer(void *pdata){
         ((ProgData *)pdata)->sound_buffer=((ProgData *)pdata)->sound_buffer->next;
         pthread_mutex_unlock(&((ProgData *)pdata)->sound_buffer_mutex);
                 
-        if (((ProgData *)pdata)->avd>0){
-            vorbis_buffer=vorbis_analysis_buffer(&((ProgData *)pdata)->enc_data->m_vo_dsp,sampread);
-
-            for(i=0;i<sampread;i++){
-                for(j=0;j<((ProgData *)pdata)->args.channels;j++){
-                    vorbis_buffer[j][i]=((buff->data[count+1]<<8)|
-                                            (0x00ff&(int)buff->data[count]))/32768.f;
-                    count+=2;
-                }
+        vorbis_buffer=vorbis_analysis_buffer(&((ProgData *)pdata)->enc_data->m_vo_dsp,sampread);
+        for(i=0;i<sampread;i++){
+            for(j=0;j<((ProgData *)pdata)->args.channels;j++){
+                vorbis_buffer[j][i]=((buff->data[count+1]<<8)|
+                                        (0x00ff&(int)buff->data[count]))/32768.f;
+                count+=2;
             }
-            vorbis_analysis_wrote(&((ProgData *)pdata)->enc_data->m_vo_dsp,sampread);
-    
-            while(vorbis_analysis_blockout(&((ProgData *)pdata)->enc_data->m_vo_dsp,&((ProgData *)pdata)->enc_data->m_vo_block)==1){
-                
-                vorbis_analysis(&((ProgData *)pdata)->enc_data->m_vo_block,NULL);
-                vorbis_bitrate_addblock(&((ProgData *)pdata)->enc_data->m_vo_block);
-                
-                while(vorbis_bitrate_flushpacket(&((ProgData *)pdata)->enc_data->m_vo_dsp,&((ProgData *)pdata)->enc_data->m_ogg_pckt2))
-                    ogg_stream_packetin(&((ProgData *)pdata)->enc_data->m_ogg_vs,&((ProgData *)pdata)->enc_data->m_ogg_pckt2);
-            }
-            ((ProgData *)pdata)->avd-=((ProgData *)pdata)->periodtime;
         }
+        vorbis_analysis_wrote(&((ProgData *)pdata)->enc_data->m_vo_dsp,sampread);
+
+        while(vorbis_analysis_blockout(&((ProgData *)pdata)->enc_data->m_vo_dsp,&((ProgData *)pdata)->enc_data->m_vo_block)==1){
+            
+            vorbis_analysis(&((ProgData *)pdata)->enc_data->m_vo_block,NULL);
+            vorbis_bitrate_addblock(&((ProgData *)pdata)->enc_data->m_vo_block);
+            
+            while(vorbis_bitrate_flushpacket(&((ProgData *)pdata)->enc_data->m_vo_dsp,&((ProgData *)pdata)->enc_data->m_ogg_pckt2))
+                ogg_stream_packetin(&((ProgData *)pdata)->enc_data->m_ogg_vs,&((ProgData *)pdata)->enc_data->m_ogg_pckt2);
+        }
+        ((ProgData *)pdata)->avd-=((ProgData *)pdata)->periodtime;
+
         free(buff);
     }
 
