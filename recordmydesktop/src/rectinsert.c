@@ -152,7 +152,11 @@ int CollideRects(WGeometry *wgeom1,WGeometry *wgeom2,WGeometry **wgeom_return,in
             //if the first one breaks(which is already inserted)
             //then we reenter the part that was left and the one 
             //that was to be inserted
-            wgeom_return[1]=wgeom2;
+//             wgeom_return[1]=wgeom2;
+            wgeom_return[1]->x=wgeom2->x;
+            wgeom_return[1]->y=wgeom2->y;
+            wgeom_return[1]->width=wgeom2->width;
+            wgeom_return[1]->height=wgeom2->height;
 //             wgeom_return[0]=(WGeometry *)malloc(sizeof(WGeometry));
             wgeom_return[0]->x=wgeom1->x;
             wgeom_return[0]->y=wgeom1->y;
@@ -268,7 +272,7 @@ int CollideRects(WGeometry *wgeom1,WGeometry *wgeom2,WGeometry **wgeom_return,in
 int RectInsert(RectArea **root,WGeometry *wgeom){
 
     int total_insertions=0;
-    RectArea *temp,*newnode=(RectArea *)malloc(sizeof(RectArea));
+    RectArea *temp=NULL,*newnode=(RectArea *)malloc(sizeof(RectArea));
     //align
     //we do need to know boundaries
     wgeom->width+=(wgeom->width%2)|(wgeom->x%2);
@@ -466,6 +470,9 @@ int RectInsert(RectArea **root,WGeometry *wgeom){
                 break;
             }
         };
+
+        free(wgeom_return[0]);
+        free(wgeom_return[1]);
     }
     return total_insertions;
 } 

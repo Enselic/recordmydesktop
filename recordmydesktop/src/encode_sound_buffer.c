@@ -72,6 +72,7 @@ void *EncodeSoundBuffer(void *pdata){
         }
         ((ProgData *)pdata)->avd-=((ProgData *)pdata)->periodtime;
 
+        free(buff->data);
         free(buff);
     }
 

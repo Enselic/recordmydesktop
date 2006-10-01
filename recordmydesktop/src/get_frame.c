@@ -36,17 +36,23 @@ void *GetFrame(void *pdata){
     int pixel_total=((ProgData *)pdata)->brwin.rgeom.width*((ProgData *)pdata)->brwin.rgeom.height;
     XFixesCursorImage *xcim=NULL;
 
-    mouse_pos_abs.x=0;
-    mouse_pos_abs.y=0;
-    mouse_pos_abs.width=((ProgData *)pdata)->dummy_p_size;
-    mouse_pos_abs.height=((ProgData *)pdata)->dummy_p_size;
+    mouse_pos_abs.x=mouse_pos_temp.x=0;
+    mouse_pos_abs.y=mouse_pos_temp.y=0;
+    mouse_pos_abs.width=mouse_pos_temp.width=((ProgData *)pdata)->dummy_p_size;
+    mouse_pos_abs.height=mouse_pos_temp.height=((ProgData *)pdata)->dummy_p_size;
     pthread_mutex_init(&pmut,NULL);
     pthread_mutex_init(&tmut,NULL);
 
     while(((ProgData *)pdata)->running){
-        pthread_cond_wait(&((ProgData *)pdata)->time_cond,&tmut);
-        if(Paused){
-            pthread_cond_wait(&((ProgData *)pdata)->pause_cond,&pmut);
+        
+        //if we are left behind we must not wait.
+        //also before actually pausing we must make sure the streams 
+        //are synced. sound stops so this should only happen quickly.
+        if(((ProgData *)pdata)->avd>0){
+            pthread_cond_wait(&((ProgData *)pdata)->time_cond,&tmut);
+            if(Paused){
+                pthread_cond_wait(&((ProgData *)pdata)->pause_cond,&pmut);
+            }
         }
         capture_busy=1;
         
@@ -169,6 +175,8 @@ void *GetFrame(void *pdata){
                         mouse_pos_temp.height,
                         (xcim->width-mouse_pos_temp.width));
             }
+            XFree(xcim);
+            xcim=NULL;
         }
 
         if(((ProgData *)pdata)->args.have_dummy_cursor){

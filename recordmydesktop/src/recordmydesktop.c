@@ -139,11 +139,12 @@ int main(int argc,char **argv){
             fprintf(stderr,"done!\n");
             exit(0);
         }
-        if(!pdata.args.nosound)
+        if(!pdata.args.nosound){
             pdata.sound_handle=OpenDev(pdata.args.device,&pdata.args.channels,&pdata.args.frequency,&pdata.periodsize,            &pdata.periodtime,&pdata.hard_pause);
-        if(pdata.sound_handle==NULL){
-            fprintf(stderr,"Error while opening/configuring soundcard %s\nTry running with the --no-sound or specify a correct device.\n",pdata.args.device);
-            exit(3);
+            if(pdata.sound_handle==NULL){
+                fprintf(stderr,"Error while opening/configuring soundcard %s\nTry running with the --no-sound or specify a correct device.\n",pdata.args.device);
+                exit(3);
+            }
         }
         InitEncoder(&pdata,&enc_data);
         for(i=0;i<(pdata.enc_data->yuv.y_width*pdata.enc_data->yuv.y_height);i++)
