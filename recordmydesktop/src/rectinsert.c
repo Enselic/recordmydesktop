@@ -318,11 +318,12 @@ int RectInsert(RectArea **root,WGeometry *wgeom){
                         total_insertions--;
                         if(temp->prev!=NULL){//no root
                             if(temp->next!=NULL){//
+                                RectArea *temp1=temp->next;
                                 temp->prev->next=temp->next;
                                 temp->next->prev=temp->prev;
-                                temp=temp->next;
+                                free(temp);
                                 if((wgeom->width>0)&&(wgeom->height>0))
-                                    total_insertions+=RectInsert(&temp,wgeom);
+                                    total_insertions+=RectInsert(&temp1,wgeom);
                             }
                             else{
                                 temp->prev->next=newnode;
@@ -350,6 +351,7 @@ int RectInsert(RectArea **root,WGeometry *wgeom){
                          }
                         break;
                     case 2://done,area is already covered
+                        free(newnode);
                         break;
                     case -1://current node is broken and reinserted(in same pos)
                             //newnode is also reinserted
@@ -388,6 +390,7 @@ int RectInsert(RectArea **root,WGeometry *wgeom){
                                 temp->prev->next=temp->next;
                                 total_insertions+=RectInsert(&temp->next,wgeom);
                             }
+                            free(temp);
                         }
                         break;
                     case -2://new is broken and reinserted
@@ -425,6 +428,7 @@ int RectInsert(RectArea **root,WGeometry *wgeom){
                                     newnode->geom.width=wgeom_return[0]->width;
                                     newnode->geom.height=wgeom_return[0]->height;
                                     *root=newnode;
+                                    free(temp);
                             }
                             else{
                                 total_insertions--;
@@ -446,11 +450,12 @@ int RectInsert(RectArea **root,WGeometry *wgeom){
                         }
                         else{//remove node and reinsert, starting where we were
                             total_insertions--;
+                            RectArea *temp1=temp->next;
                             temp->prev->next=temp->next;
                             temp->next->prev=temp->prev;
-                            temp=temp->next;
+                            free(temp);
                             if((wgeom_return[0]->width>0)&&(wgeom_return[0]->height>0))
-                                total_insertions+=RectInsert(&temp,wgeom_return[0]);
+                                total_insertions+=RectInsert(&temp1,wgeom_return[0]);
                         }
                         break;
                 }
