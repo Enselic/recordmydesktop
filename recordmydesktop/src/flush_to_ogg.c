@@ -31,13 +31,17 @@ void *FlushToOgg(void *pdata){
     double video_bytesout=0,audio_bytesout=0;
     ogg_page videopage,audiopage;
     while(((ProgData *)pdata)->running){
+        pthread_mutex_lock(&((ProgData *)pdata)->libogg_mutex);
         videoflag=ogg_stream_pageout(&((ProgData *)pdata)->enc_data->m_ogg_ts,&videopage);
+        pthread_mutex_unlock(&((ProgData *)pdata)->libogg_mutex);
         if(videoflag){
             video_bytesout+=fwrite(videopage.header,1,videopage.header_len,((ProgData *)pdata)->enc_data->fp);
             video_bytesout+=fwrite(videopage.body,1,videopage.body_len,((ProgData *)pdata)->enc_data->fp);
             videoflag=0;
             if(!((ProgData *)pdata)->args.nosound){
+                pthread_mutex_lock(&((ProgData *)pdata)->libogg_mutex);
                 audioflag=ogg_stream_pageout(&((ProgData *)pdata)->enc_data->m_ogg_vs,&audiopage);
+                pthread_mutex_unlock(&((ProgData *)pdata)->libogg_mutex);
                 if(audioflag){
                     audio_bytesout+=fwrite(audiopage.header,1,audiopage.header_len,((ProgData *)pdata)->enc_data->fp);
                     audio_bytesout+=fwrite(audiopage.body,1,audiopage.body_len,((ProgData *)pdata)->enc_data->fp);

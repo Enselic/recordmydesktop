@@ -93,6 +93,7 @@ int main(int argc,char **argv){
             pthread_mutex_init(&pdata.list_mutex[0],NULL);
             pthread_mutex_init(&pdata.list_mutex[1],NULL);
             pthread_mutex_init(&pdata.sound_buffer_mutex,NULL);
+            pthread_mutex_init(&pdata.libogg_mutex,NULL);
             pthread_mutex_init(&pdata.yuv_mutex,NULL);
 
             pthread_cond_init(&pdata.time_cond,NULL);

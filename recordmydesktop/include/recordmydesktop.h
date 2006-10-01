@@ -216,6 +216,7 @@ typedef struct _ProgData{
                 frametime;
     pthread_mutex_t list_mutex[2],//mutexes for concurrency protection of the lists
                     sound_buffer_mutex,
+                    libogg_mutex,//libogg is not thread safe
                     yuv_mutex;//this might not be needed since we only have 
                               //one read-only and  one write-only thread
                               //also on previous versions, y component was looped separately

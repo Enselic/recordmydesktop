@@ -67,8 +67,11 @@ void *EncodeSoundBuffer(void *pdata){
             vorbis_analysis(&((ProgData *)pdata)->enc_data->m_vo_block,NULL);
             vorbis_bitrate_addblock(&((ProgData *)pdata)->enc_data->m_vo_block);
             
-            while(vorbis_bitrate_flushpacket(&((ProgData *)pdata)->enc_data->m_vo_dsp,&((ProgData *)pdata)->enc_data->m_ogg_pckt2))
+            while(vorbis_bitrate_flushpacket(&((ProgData *)pdata)->enc_data->m_vo_dsp,&((ProgData *)pdata)->enc_data->m_ogg_pckt2)){
+                pthread_mutex_lock(&((ProgData *)pdata)->libogg_mutex);
                 ogg_stream_packetin(&((ProgData *)pdata)->enc_data->m_ogg_vs,&((ProgData *)pdata)->enc_data->m_ogg_pckt2);
+                pthread_mutex_unlock(&((ProgData *)pdata)->libogg_mutex);
+            }
         }
         ((ProgData *)pdata)->avd-=((ProgData *)pdata)->periodtime;
 
