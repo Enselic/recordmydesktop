@@ -40,8 +40,10 @@ void InitEncoder(ProgData *pdata,EncData *enc_data_t){
         ogg_stream_init(&(enc_data_t)->m_ogg_vs,y2);
     
     (enc_data_t)->fp=fopen((pdata)->args.filename,"w");
-    
-    
+    if((enc_data_t)->fp==NULL){
+        fprintf(stderr,"Cannot open file %s for writting!\n",(pdata)->args.filename);
+        exit(13);
+    }    
     theora_info_init(&(enc_data_t)->m_th_inf);
     (enc_data_t)->m_th_inf.frame_width=(pdata)->brwin.rgeom.width;
     (enc_data_t)->m_th_inf.frame_height=(pdata)->brwin.rgeom.height;
