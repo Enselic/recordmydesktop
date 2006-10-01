@@ -85,7 +85,7 @@ void *GetFrame(void *pdata){
         //xfixes pointer sequence
         //update previous_position
             //(if full_shots is enabled this is skipped since it's pointless)
-            if(!((ProgData *)pdata)->args.full_shots){
+            if(!((ProgData *)pdata)->args.full_shots){                                          
                 CLIP_DUMMY_POINTER_AREA(mouse_pos_abs,&((ProgData *)pdata)->brwin,&mouse_pos_temp);
                 if((mouse_pos_temp.x>=0)&&(mouse_pos_temp.y>=0)&&(mouse_pos_temp.width>0)&&(mouse_pos_temp.height>0))
                     RectInsert(&((ProgData *)pdata)->rect_root[tlist_sel],&mouse_pos_temp);        
