@@ -50,10 +50,19 @@ pixel discarding is an option(used to be otherwise).
 
 /*VERSION 0.2.6*/
 *Behavior on stream desync has been changed.
-Now, instead of dropping sound buffers, the 
-last image is duplicated. When not recording
-sound this does not apply.
+Now, instead of dropping sound buffers, image
+capturing speeds up. That is, waiting for timer to
+expire is disabled until sync is achieved.
+When not recording sound, this does not apply.
 *Theora return values are now properly checked, 
 to avoid inserting corrupt packages into the stream.
+*Major memory leaks have been fixed. These were related
+to the rectangle insertion algorithm and discarding of
+used sound buffers,
+*Segmentation fault on seemingly random occasions has been 
+found and is now fixed. Reason was lack of thread safety over
+libogg calls.
+
+
 
 
