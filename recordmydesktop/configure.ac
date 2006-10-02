@@ -39,7 +39,7 @@ CFLAGS="${CFLAGS} -Wall -D_THREAD_SAFE -pthread"
 AC_CHECK_LIB([m],[isnan],,)
 AC_CHECK_LIB([z],[deflate],,)
 AC_CHECK_LIB([X11],[XOpenDisplay],,AC_MSG_ERROR([Can't find libX11]),
-            -L$x_libraries $X_PRE_LIBS)
+            -L$x_libraries -L/usr/lib $X_PRE_LIBS)
 AC_CHECK_LIB([Xext],[XShmQueryVersion],,AC_MSG_ERROR([Can't find libXext]))
 AC_CHECK_LIB([Xfixes], [XFixesQueryExtension],,AC_MSG_ERROR([Can't find libXfixes]))
 AC_CHECK_LIB([Xdamage], [XDamageQueryExtension],,AC_MSG_ERROR([Can't find libXdamage]))
