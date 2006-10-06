@@ -1,0 +1,400 @@
+.TH "RECORDMYDESKTOP" 1 "13/7/2006" "Linux"
+
+
+.SH NAME
+recordMyDesktop \- record desktop sessions to an Ogg\-Theora\-Vorbis file.
+
+
+.SH SYNOPSIS
+
+.B        recordmydesktop 
+[
+.B
+Options
+]^
+.B
+filename
+.br
+.br
+.SH DESCRIPTION
+.PP
+        recordMyDesktop produces a file(default out.ogg) that contains a video and audio recording
+.br
+of a linux desktop session. The default behavior of recording is to mark areas that have changed(through libxdamage)
+.br
+and update the frame. This behavior can be changed (option 
+.B
+\-\-full\-shots
+) to produce a more accurate result
+.br
+or capture windows that do not generate events on change(windows with 3d context or video display) 
+.br
+but this will notably increase the workload. In this case, enabling the 
+.B
+\-\-with\-shared
+option is recommended
+.br
+(by default this option is switched on or off at every frame, according to the size of the area to be aquired).
+.br
+.br
+recordMyDesktop doesn't have a commandline interface.
+.br
+After startup, it can be controled only through the following signals:
+.br
+.br
+.B
+SIGUSR1
+causes the program to pause if it's currently recording, and vice-versa.
+.br
+.B
+SIGTERM
+causes normal termination of the recording.
+.br
+.B
+SIGINT
+also causes normal termination.
+.br
+.B
+SIGABRT
+terminates the program and removes the specified output file.
+.br
+.br
+.br
+A typical scenario of recording can be a command as simple as:
+.br
+.B
+~$ recordmydesktop
+.br
+which will produce a fullscreen recording named out.ogg
+.br
+while a command like:
+.br
+.B
+~$ recordmydesktop foo.ogg
+.br 
+will write output to foo.ogg
+.br
+To specify a region for recording you can type this:
+.br
+.B
+~$ recordmydesktop -x X_pos -y Y_pos -width WIDTH -height HEIGHT -o foo.ogg
+.br
+where X_pos and Y_pos specify the offset in pixels from the upper left
+.br
+corner of your screen and WIDTH and HEIGHT the size of the window to be recorded(again in pixels).
+.br
+If the area extends beyond your current resolution, you will be notified appropriately and nothing will happen.
+.br
+Notice also, that if any option is entered you have to specify the output file with the \-o switch.
+.br
+.br
+.B
+To normally end a recording you can press ctl-c.
+.br
+(which will send a
+.B
+SIGINT
+to the program).
+.br
+.br
+For further manipulation of the end result look at the 
+.B
+OPTIONS
+and 
+.B
+NOTES
+sections.
+.br
+.br 
+.br
+.SH EXIT STATUS
+0 is success
+.br
+Non-zero means an error occurred, which is printed in stderr.
+.br
+.br
+The following error codes indicate the nature of the error:
+.br
+1 Error while parsing the arguments.
+.br
+2 Initializing the encoder failed(either vorbis or theora).
+.br
+3 Could not open/configure sound card.
+.br
+4 Xdamage extension not present.
+.br
+5 Shared memory extension not present.
+.br
+6 Xfixes extension not present.
+.br
+7 XInitThreads failed.
+.br
+8 No $DISPLAY environment variable and none specified as argument. 
+.br
+9 Cannot connect to Xserver.
+.br
+10 Color depth is not 24bpp.
+.br
+11 Improper window specification.
+.br
+12 Cannot attach shared memory to proccess.
+.br
+13 Cannot open file for writting.
+.br 
+.br 
+.SH OPTIONS
+.PP
+.B
+Generic Options:
+.br
+.TP
+.B
+    \-h or \-\-help    
+    Print help summary and exit.
+.br
+.TP
+.B
+    \-\-version
+    Print program version and exit.
+.br
+.PP
+.br
+.B
+Image Options:
+.br
+.TP
+.B
+    \-windowid id_of_window
+    id of window to be recorded.
+.br
+.TP
+.B
+    \-display DISPLAY
+    Display to connect to.
+.br
+.TP
+.B
+    \-x X
+    Offset in x direction.
+.br
+.TP
+.B
+    \-y Y
+    Offset in y direction.
+.br
+.TP
+.B
+    \-width N
+    Width of recorded window.
+.br
+.TP
+.B
+    \-height N
+    Height of recorded window.
+.br
+.TP
+.B
+.br
+.br
+.TP
+.B
+    \-dummy\-cursor color
+    Draw a dummy cursor, instead of the normal one.Value of color can be "black" or "white".
+.br
+.TP
+.B
+    \-\-no\-cursor
+    Disable drawing of the cursor.
+.br
+.TP
+.B
+    \-\-with\-shared
+    Enable usage of MIT\-shared memory extension at all times.
+.br
+.TP
+.B
+    \-\-no\-cond\-shared
+    Do not use the MIT\-shared memory extension when aquiring large areas.
+.br
+.TP
+.B
+     \-shared\-threshold n
+     Threshold over which shared memory is used(default 75).
+.br
+.TP
+.B
+    \-\-full\-shots
+    Take full screenshot at every frame(Not recomended!).
+.br
+.TP
+.B
+    \-\-quick\-subsampling
+    Do subsampling of the chroma planes by discarding extra pixels.
+.br
+.TP
+.B
+    \-fps N(number>0.0)
+    A positive number denoting desired framerate.
+.br
+.br
+.PP
+.B
+Sound Options:
+.br
+.TP
+.B
+    \-channels N(number>0)
+    A positive number denoting desired sound channels in recording.
+.br
+.TP
+.B
+    \-freq N(number>0)
+    A positive number denoting desired sound frequency.
+.br
+.TP
+.B
+    \-device SOUND_DEVICE
+    Sound device(default hw0:0).
+.br
+.TP
+.B
+    \-\-nosound
+    Do not record sound.
+.br
+.PP
+.br
+.B
+Encoding Options:
+.br
+.TP
+.B
+    \-v_quality n
+    A number from 0 to 63 for desired encoded video quality(default 63).
+.br
+.TP
+.B
+    \-v_bitrate n
+    A number from 45000 to 2000000 for desired encoded video bitrate(default 45000).
+.br
+.TP
+.B
+    \-\-drop\-frames
+    Allow theora encoder to drop frames(this can significantly lower proccessing times).
+.br
+.TP
+.B
+    \-s_quality n
+    Desired audio quality(\-1 to 10).
+.br
+.PP
+.br
+.B
+Misc Options:
+.br
+.TP
+.B
+    \-delay n[H|h|M|m]
+    Number of secs(default),minutes or hours before capture starts(number can be float).
+.br
+.TP
+.B
+    \-\-scshot
+    Take a bitmap screenshot(default rmdout.bmp) and exit.
+.br
+.TP
+.B
+    \-scale\-shot N
+    Factor by which screenshot is scaled down(1<=number<=64,power of 2).
+.br
+.TP
+.B
+    \-o filename
+    Name of recorded video(default out.ogg).
+
+
+
+.PP
+.br
+If no other option is specified, filename can be given without the \-o switch.
+.br
+.br
+.SH USAGE
+.TP
+.B        recordmydesktop 
+.br
+[\-h| \-\-help| \-\-version| \-delay n[H|h|M|m]| \-windowid id_of_window|
+.br
+\-display DISPLAY| \-x X| \-y Y|\-width N| \-height N| \-fps N(number>0)|
+.br
+\-v_quality n| \-s_quality n| \-v_bitrate n| \-\-no\-framedrop| \-dummy\-cursor color|
+.br
+\-\-no\-cursor| \-freq N(number>0)| \-channels N(number>0)| \-device SOUND_DEVICE|
+.br
+\-\-nosound| \-\-with\-shared| \-\-no\-cond\-shared| \-shared\-threshold n| \-\-full\-shots|
+.br
+\-\-quick\-subsampling| \-\-scshot| \-scale\-shot N| \-o filename]^filename
+.br
+.br
+.br
+.SH ENVIRONMENT
+.TP
+.B
+DISPLAY
+.br
+Display environment variable, specifying X server to connect to.
+.br
+.SH NOTES
+.br
+    Recording a window using the \-windowid option, doesn't track the window itself, but the region that it covers.
+.br
+Also when using that option the \-x,\-y,\-width and \-height options are relative to the specified window area.
+.br
+An easy way to find out the id of a window, is by using the 
+.B
+xwininfo
+program.
+.br
+Running a command like :
+.br
+.B
+xwininfo |grep "Window id:"|sed \-e "s/xwininfo\\:\\ Window id:\\ // ;s/\\ \.*//" 
+.br
+will give you only the id of the window(which should look like this: 0x4800005)
+.br
+More conviniently you can put all that in the command that launches recordMyDesktop like this:
+.br
+.B
+~$recordmydesktop -windowid $(xwininfo |grep "Window id:"|sed \-e "s/xwininfo\\:\\ Window id:\\ // ;s/\\ \.*//" ) 
+.br
+.br
+    Also, the lower quality you select on a video recording (
+.B
+-v_quality
+option), the highest CPU-power that you will need.
+.br
+So it's always better to start with default values and manipulate the end\-result with another program.
+.br
+An excellent converter is
+.B
+ffmpeg2theora
+, which despite its name is also a theora to theora converter.
+.br
+Changing the quality of a recordng with it,can be as simple as :
+.br
+.B
+ffmpeg2theora infile.ogg -v 3 -a 4 -o outfile.ogg
+.br
+It can even perform resizing on the size of the recording, or change the overall duration.
+.br
+.br
+.SH BUGS
+Too resource intensive.
+.br
+.SH AUTHORS
+John Varouhakis(johnvarouhakis@gmail.com)
+.br
+.SH SEE ALSO
+.BR xwininfo(1)
+.br
+.BR ffmpeg2theora(1)
+.br
