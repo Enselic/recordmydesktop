@@ -1,3 +1,6 @@
-To see examples of usage and explanation of the options check the manpage in the doc directory.
+This is the experimental branch of recordMyDesktop.  Changes that will 
+take place here might render the program unusuable and/or unstable.
+Any stable changes that influence the program positively and bugfixes
+will be merged back into the main tree.
 
 
