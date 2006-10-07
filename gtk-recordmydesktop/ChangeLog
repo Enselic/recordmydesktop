@@ -38,5 +38,5 @@ and the selected region is outlined.
 *Italian translation by Giovanni Scafora
 *Spanish translation by José "L. Redrejo" Rodríguez
 *Applied patch from Giovanni Scafora to po/Makefile.in.in 
-
+*Fix on $prefix env variable not expanding within $datadir.
 
