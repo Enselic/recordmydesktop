@@ -4,7 +4,7 @@ First Version
 /*VERSION 0.2*/
 *Separated functionality in tabs.
 *synced options to recordMyDesktop-0.2.5.
-*Right click oin tray icon now has a menu.
+*Right click on tray icon now has a menu.
 *Added 'About' dialog.
 *New option to select the area over which the
 next recording will take place.
@@ -34,5 +34,9 @@ and the selected region is outlined.
 *Localization support
     Added: Greek language
 
+/*VERSION 0.2.1-r1*/
+*Italian translation by Giovanni Scafora
+*Spanish translation by José "L. Redrejo" Rodríguez
+*Applied patch from Giovanni Scafora to po/Makefile.in.in 
 
 
