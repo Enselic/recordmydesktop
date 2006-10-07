@@ -6,8 +6,8 @@ AM_INIT_AUTOMAKE(gtk-recordMyDesktop, 0.2.1-r1)
 AS_AC_EXPAND(LIBDIR, $libdir)
 AC_MSG_NOTICE(Storing library files in $LIBDIR)
 AC_SUBST(PYGTK_REQ, 2.4)
-
-AS_AC_EXPAND(DATADIR, $datadir)
+AS_AC_EXPAND(PREFIX,$prefix) 
+AS_AC_EXPAND(DATADIR, "$datadir")
 AC_MSG_NOTICE(Storing data files in $DATADIR)
 
 AS_AC_EXPAND(SYSCONFDIR, $sysconfdir)

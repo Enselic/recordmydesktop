@@ -1,4 +1,5 @@
 import os
 VERSION='@VERSION@'
-locale_install_dir=os.path.join('@DATADIR@', 'locale')
+PREFIX='@PREFIX@'
+locale_install_dir=os.path.join('@DATADIR@'.replace("${prefix}",PREFIX), 'locale')
 
