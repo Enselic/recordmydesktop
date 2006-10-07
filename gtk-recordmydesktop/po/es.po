@@ -1,0 +1,204 @@
+# translation of es.po to
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: es\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-09-24 12:29+0300\n"
+"PO-Revision-Date: 2006-10-07 16:18+0200\n"
+"Last-Translator: JosÃ© L. Redrejo RodrÃ­guez\n"
+"Language-Team:  <es@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.1\n"
+
+#: src/rmdSimple.py:45 src/rmdPrefsWidget.py:40
+msgid "Video Quality"
+msgstr "Calidad de vídeo"
+
+#: src/rmdSimple.py:45 src/rmdPrefsWidget.py:40
+msgid "Sound Quality"
+msgstr "Calidad de sonido"
+
+#: src/rmdSimple.py:46 src/rmdPrefsWidget.py:45
+msgid "Advanced"
+msgstr "Avanzado"
+
+#: src/rmdSimple.py:46
+msgid "Select Window"
+msgstr "Seleccionar Ventana"
+
+#: src/rmdSimple.py:47
+msgid "Click here to select a window to record"
+msgstr "Haz clic para selecionar la ventana a grabar"
+
+#: src/rmdSimple.py:48
+msgid ""
+"Click to start the recording.\n"
+"This window will hide itself."
+msgstr ""
+"Haz clic para empezar a grabar.\n"
+"Esta ventana se ocultará."
+
+#: src/rmdSimple.py:49
+msgid ""
+"Click to choose a filename and location.\n"
+"Default is out.ogg in your home folder.\n"
+"EXISTING FILES WILL BE OVER-WRITTEN WITHOUT WARNING!"
+msgstr ""
+"Clic para elegir el nombre del archivo.\n"
+"Por defecto se llama out.ogg y está en tu home.\n"
+"¡LOS ARCHIVOS EXISTENTES CON EL MISMO NOMBRE SE SOBREESCRIBIRÁN SIN AVISO!"
+
+#: src/rmdSimple.py:50
+msgid "Click to exit the program."
+msgstr "Haz clic para salir del programa."
+
+#: src/rmdSimple.py:51
+msgid ""
+"Select the video quality of your recording.\n"
+"(Lower quality will require more proccessing power.)"
+msgstr ""
+"Elige la calidad de vídeo de tu grabación.\n"
+"(A mayor calidad se necesita más capacidad de proceso.)"
+
+#: src/rmdSimple.py:52
+msgid "Enable/Disable sound recording."
+msgstr "Habilita/Deshabilita la grabación de sonido."
+
+#: src/rmdSimple.py:53
+msgid "Select the audio quality of your recording."
+msgstr "Elige la calidad de audio de tu grabación."
+
+#: src/rmdSimple.py:54
+msgid "Click here to access more options."
+msgstr "Haz clic aquí para acceder a más opciones."
+
+#: src/rmdSimple.py:55
+msgid ""
+"\n"
+"Left click and drag, on the preview image,\n"
+"to select an area for recording.\n"
+"Right click on it, to reset the area."
+msgstr ""
+"\n"
+"Para seleccionar el área de grabación:\n"
+"en la previsualización haz clic y arrastra\n"
+"con el botón izquierdo del ratón.\n"
+"\n"
+"Para reiniciar el área, clic con el botón\nderecho del ratón. "
+
+#: src/rmdPrefsWidget.py:39
+msgid "Frames Per Second"
+msgstr "Cuadros por Segundo"
+
+#: src/rmdPrefsWidget.py:39 src/rmdTrayPopup.py:74
+msgid " "
+msgstr "."
+
+#: src/rmdPrefsWidget.py:39
+msgid "Startup Delay(secs)"
+msgstr "Retardo antes de empezar (segs)"
+
+#: src/rmdPrefsWidget.py:40
+msgid "Channels"
+msgstr "Canales"
+
+#: src/rmdPrefsWidget.py:40
+msgid "Frequency"
+msgstr "Frecuencia"
+
+#: src/rmdPrefsWidget.py:40
+msgid "Device"
+msgstr "Dispositivo"
+
+#: src/rmdPrefsWidget.py:41
+msgid "Display"
+msgstr "Display"
+
+#: src/rmdPrefsWidget.py:41
+msgid "Mouse Cursor"
+msgstr "Cursor del ratón"
+
+#: src/rmdPrefsWidget.py:41
+msgid "Full shots at every frame"
+msgstr "Fotos fijas en cada cuadro"
+
+#: src/rmdPrefsWidget.py:41
+msgid "MIT-Shm extension"
+msgstr "extensión MIT-Shm"
+
+#: src/rmdPrefsWidget.py:42
+msgid "Drop Frames(encoder)"
+msgstr "Descarta Cuadros(codificando)"
+
+#: src/rmdPrefsWidget.py:42
+msgid "Shared Threshold"
+msgstr "Umbral compartido"
+
+#: src/rmdPrefsWidget.py:42
+msgid "Quick Subsampling"
+msgstr "Submuestreo rápido"
+
+#: src/rmdPrefsWidget.py:43
+msgid "Normal"
+msgstr "Normal"
+
+#: src/rmdPrefsWidget.py:43
+msgid "White"
+msgstr "Blanco"
+
+#: src/rmdPrefsWidget.py:43
+msgid "Black"
+msgstr "Negro"
+
+#: src/rmdPrefsWidget.py:43
+msgid "None"
+msgstr "Ninguno"
+
+#: src/rmdPrefsWidget.py:44
+msgid "Enabled"
+msgstr "Habilitado"
+
+#: src/rmdPrefsWidget.py:44
+msgid "Disabled"
+msgstr "Deshabilitado"
+
+#: src/rmdPrefsWidget.py:45
+msgid "Basic"
+msgstr "Básico"
+
+#: src/rmdPrefsWidget.py:45
+msgid "Sound"
+msgstr "Sonido"
+
+#: src/rmdTrayPopup.py:67
+msgid "gtk-recordMyDesktop"
+msgstr "gtk-recordMyDesktop"
+
+#: src/rmdTrayPopup.py:69
+msgid "a graphical frontend for recordMyDesktop"
+msgstr "un interfaz gráfico para recordMyDesktop"
+
+#: src/rmdTrayPopup.py:70
+msgid ""
+"Copyright (C) John Varouhakis\n"
+"Portions Copyright (C) 2005-6 Zaheer Abbas Merali, John N. Laliberte\n"
+"Portions Copyright (C) Fluendo S.L."
+msgstr ""
+"Copyright (C) John Varouhakis\n"
+"Porciones Copyright (C) 2005-6 Zaheer Abbas Merali, John N. Laliberte\n"
+"Porciones Copyright (C) Fluendo S.L."
+
+#: src/rmdTrayPopup.py:75
+msgid "Translator Credits And Information(Replace with your info)"
+msgstr "Traducción español: José L. Redrejo Rodríguez"
+
+#: src/rmdTrayPopup.py:79
+msgid "_Select Area On Screen"
+msgstr "_Elige un área en la pantalla"
+
