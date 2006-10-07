@@ -68,7 +68,7 @@ class TrayPopupMenu:
     def _about(self, button):
         aboutdialog = gtk.AboutDialog()
         aboutdialog.set_name(_('gtk-recordMyDesktop'))
-        aboutdialog.set_version("0.2.1")
+        aboutdialog.set_version(rmdConfig.VERSION)
         aboutdialog.set_comments(_('a graphical frontend for recordMyDesktop'))
         aboutdialog.set_copyright(_('Copyright (C) John Varouhakis\nPortions Copyright (C) 2005-6 Zaheer Abbas Merali, John N. Laliberte\nPortions Copyright (C) Fluendo S.L.'))
         aboutdialog.set_authors(['recordMyDesktop and gtk-recordMyDesktop\nis written by John Varouhakis','Portions of gtk-recordMyDesktop\nare taken from Istanbul\n(http://live.gnome.org/Istanbul)\nwritten by\nZaheer Abbas Merali and John N. Laliberte'])
