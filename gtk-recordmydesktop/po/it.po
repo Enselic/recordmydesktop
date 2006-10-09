@@ -1,4 +1,4 @@
-# translation of it.po to Italian
+# translation of messages.po to Italian
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-09-24 12:29+0300\n"
-"PO-Revision-Date: 2006-10-03 13:48+0200\n"
+"PO-Revision-Date: 2006-10-09 18:36+0200\n"
 "Last-Translator: Giovanni Scafora <linuxmania@gmail.com>\n"
-"Language-Team: Italian <linuxmania@gmail.com>\n"
+"Language-Team:  <linuxmania@gmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -87,8 +87,9 @@ msgid ""
 "Right click on it, to reset the area."
 msgstr ""
 "\n"
-"Per selezionare un'area da registrare,\n"
-"premere il tasto sinistro del mouse e trascinare sull'anteprima dell'immagine.\n"
+"Per selezionare un'area da registrare, premere\n"
+"il tasto sinistro del mouse e trascinare\n"
+"sull'anteprima dell'immagine.\n"
 "Per resettare, premere il tasto destro sull'anteprima."
 
 #: src/rmdPrefsWidget.py:39
