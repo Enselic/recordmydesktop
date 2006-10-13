@@ -43,4 +43,5 @@ and the selected region is outlined.
 /*VERSION 0.2.2*/
 *Support for gtk-StatusIcon and gtk.2.10, which if present
 make the egg(gnome-python-extras) dependency obsolete
+*"cannot write to file" error has been added to unexpected exit status dialog.
 *Updated Italian translation by Giovanni Scafora
