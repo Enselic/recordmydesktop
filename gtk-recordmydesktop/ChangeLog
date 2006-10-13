@@ -40,3 +40,7 @@ and the selected region is outlined.
 *Applied patch from Giovanni Scafora to po/Makefile.in.in 
 *Fix on $prefix env variable not expanding within $datadir.
 
+/*VERSION 0.2.2*/
+*Support for gtk-StatusIcon and gtk.2.10, which if present
+make the egg(gnome-python-extras) dependency obsolete
+*Updated Italian translation by Giovanni Scafora

@@ -8,7 +8,7 @@ DEPENDENCIES:
 
 GNU automake >=1.5
 PyGTK >= 2.4 (You will need the dev package, too)
-Gnome Python Extras >= 2.11.3
+Gnome Python Extras >= 2.11.3 or PyGTK>=2.10 (Be carefull since this is checked on runtime. )
 recordMyDesktop 2.5
 
 To compile the program you have to go through the regular drill:
