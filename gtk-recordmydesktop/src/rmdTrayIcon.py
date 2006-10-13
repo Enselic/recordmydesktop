@@ -28,8 +28,11 @@
 import pygtk
 pygtk.require('2.0')
 import gtk,gobject
-
-import egg.trayicon
+USE_EGG=1
+if gtk.gtk_version[0]==2 and gtk.gtk_version>=10:
+    USE_EGG=0
+if USE_EGG==1:
+    import egg.trayicon
 import rmdSelect as isel
 import rmdTrayPopup as iTP
 import os,signal
@@ -72,6 +75,7 @@ class trayIcon(object):
         10*256:'Color depth is not 24bpp.',
         11*256:'Improper window specification.',
         12*256:'Cannot attach shared memory to proccess.',
+        13*256:'Cannot open file for writting.',
         11:'Segmentation Fault'
         }
  
@@ -81,36 +85,53 @@ class trayIcon(object):
     optionsOpen=[1]
     reopen=0
     timed_id=None
-    
-    def __buttonPress__(self,widget,event=None):
-        if event.button==1 :
+    def __buttonPressNoEGG_Activate__(self,widget):
+        self.__buttonPress__(1)
+    def __buttonPressNoEGG_Popup__(self,widget,button,activate_time):
+        self.__buttonPress__(3)
+    def __buttonPressEGG__(self,widget,event=None):
+        self.__buttonPress__(event.button)
+    def __set_icon__(self,widget,icon):
+        if USE_EGG==1:
+            widget.set_from_stock(icon,gtk.ICON_SIZE_SMALL_TOOLBAR)
+        else:
+            widget.set_from_stock(icon)
+
+            
+    def __buttonPress__(self,button):
+        if button==1 :
             if self.state == 0:
                 if self.optionsOpen[0]==1:
                     self.parent.hide()
                     self.optionsOpen[0]=0
                     self.reopen=1
-                self.trayIcon.set_from_stock(gtk.STOCK_MEDIA_STOP,gtk.ICON_SIZE_SMALL_TOOLBAR)
+                #self.trayIcon.set_from_stock(gtk.STOCK_MEDIA_STOP,gtk.ICON_SIZE_SMALL_TOOLBAR)
+                self.__set_icon__(self.trayIcon,gtk.STOCK_MEDIA_STOP)
                 self.state=1
                 self.__execRMD__()
             elif self.state== 1:
-                self.trayIcon.set_from_stock(gtk.STOCK_MEDIA_RECORD,gtk.ICON_SIZE_SMALL_TOOLBAR)
+                #self.trayIcon.set_from_stock(gtk.STOCK_MEDIA_RECORD,gtk.ICON_SIZE_SMALL_TOOLBAR)
+                self.__set_icon__(self.trayIcon,gtk.STOCK_MEDIA_RECORD)
                 self.state=0
                 self.__stopRMD__()
             elif self.state == 2 :
-                self.trayIcon.set_from_stock(gtk.STOCK_MEDIA_STOP,gtk.ICON_SIZE_SMALL_TOOLBAR)
+                #self.trayIcon.set_from_stock(gtk.STOCK_MEDIA_STOP,gtk.ICON_SIZE_SMALL_TOOLBAR)
+                self.__set_icon__(self.trayIcon,gtk.STOCK_MEDIA_STOP)
                 self.state=1
                 self.__pauseRMD__()
               
 
-        elif event.button == 3:
+        elif button == 3:
             if self.state == 0:
                 self.tray_popup.show()
             elif self.state == 1:
-                self.trayIcon.set_from_stock(gtk.STOCK_MEDIA_PAUSE,gtk.ICON_SIZE_SMALL_TOOLBAR)
+                #self.trayIcon.set_from_stock(gtk.STOCK_MEDIA_PAUSE,gtk.ICON_SIZE_SMALL_TOOLBAR)
+                self.__set_icon__(self.trayIcon,gtk.STOCK_MEDIA_PAUSE)
                 self.state=2
                 self.__pauseRMD__()
             elif self.state ==2:
-                self.trayIcon.set_from_stock(gtk.STOCK_MEDIA_STOP,gtk.ICON_SIZE_SMALL_TOOLBAR)
+                #self.trayIcon.set_from_stock(gtk.STOCK_MEDIA_STOP,gtk.ICON_SIZE_SMALL_TOOLBAR)
+                self.__set_icon__(self.trayIcon,gtk.STOCK_MEDIA_STOP)
                 self.state=1
                 self.__pauseRMD__()
     def record_ext(self,button=None):
@@ -119,7 +140,8 @@ class trayIcon(object):
                 self.parent.hide()
                 self.optionsOpen[0]=0
                 self.reopen=1
-            self.trayIcon.set_from_stock(gtk.STOCK_MEDIA_STOP,gtk.ICON_SIZE_SMALL_TOOLBAR)
+            #self.trayIcon.set_from_stock(gtk.STOCK_MEDIA_STOP,gtk.ICON_SIZE_SMALL_TOOLBAR)
+            self.__set_icon__(self.trayIcon,gtk.STOCK_MEDIA_STOP)
             self.state=1
             self.__execRMD__()
          
@@ -237,7 +259,8 @@ class trayIcon(object):
             exit_ret=os.waitpid(self.rmdPid,os.WNOHANG)
             if exit_ret[0] != 0:
                 self.state=0
-                self.trayIcon.set_from_stock(gtk.STOCK_MEDIA_RECORD,gtk.ICON_SIZE_SMALL_TOOLBAR)
+                #self.trayIcon.set_from_stock(gtk.STOCK_MEDIA_RECORD,gtk.ICON_SIZE_SMALL_TOOLBAR)
+                self.__set_icon__(self.trayIcon,gtk.STOCK_MEDIA_RECORD)
                 self.__exit_status_dialog(exit_ret[1])
                 self.rmdPid=None
                 if self.reopen==1:
@@ -254,15 +277,22 @@ class trayIcon(object):
     def __init__(self,parent):
         self.parent=parent
         #self.parent.values=values
-        self.event_box = gtk.EventBox()         
-        self.trayIcon=gtk.Image()
-        self.trayIcon.set_from_stock(gtk.STOCK_MEDIA_RECORD, gtk.ICON_SIZE_SMALL_TOOLBAR)
-        self.event_box.add(self.trayIcon)
-        self.tray_container = egg.trayicon.TrayIcon("recordMyDesktop")
-        self.tray_container.add(self.event_box)
-        self.tray_popup=iTP.TrayPopupMenu(self.parent,self.parent.values,self.optionsOpen)
-        self.event_box.connect("button-press-event", self.__buttonPress__)
-        self.tray_container.show_all()
+        if USE_EGG==1:
+            self.event_box = gtk.EventBox()
+            self.trayIcon=gtk.Image()
+            self.trayIcon.set_from_stock(gtk.STOCK_MEDIA_RECORD, gtk.ICON_SIZE_SMALL_TOOLBAR)
+            self.event_box.add(self.trayIcon)
+            self.tray_container = egg.trayicon.TrayIcon("recordMyDesktop")
+            self.tray_container.add(self.event_box)
+            self.tray_popup=iTP.TrayPopupMenu(self.parent,self.parent.values,self.optionsOpen)
+            self.event_box.connect("button-press-event", self.__buttonPressEGG__)
+            self.tray_container.show_all()
+        else:
+            self.trayIcon=gtk.StatusIcon()
+            self.trayIcon.set_from_stock(gtk.STOCK_MEDIA_RECORD)
+            self.tray_popup=iTP.TrayPopupMenu(self.parent,self.parent.values,self.optionsOpen)
+            self.trayIcon.connect("activate",self.__buttonPressNoEGG_Activate__)
+            self.trayIcon.connect("popup-menu",self.__buttonPressNoEGG_Popup__)
         #gtk.main()
 
 
