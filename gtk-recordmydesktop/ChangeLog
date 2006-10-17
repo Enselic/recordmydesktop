@@ -45,3 +45,9 @@ and the selected region is outlined.
 make the egg(gnome-python-extras) dependency obsolete
 *"cannot write to file" error has been added to unexpected exit status dialog.
 *Updated Italian translation by Giovanni Scafora
+
+
+/*VERSION 0.2.1-r3*/
+*bug in gtk version check,
+thanks to Giovanni Scafora for quickly reporting it.
+
