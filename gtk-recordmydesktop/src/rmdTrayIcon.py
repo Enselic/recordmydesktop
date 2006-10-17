@@ -29,7 +29,7 @@ import pygtk
 pygtk.require('2.0')
 import gtk,gobject
 USE_EGG=1
-if gtk.gtk_version[0]==2 and gtk.gtk_version[1]>=10:
+if gtk.pygtk_version[0]==2 and gtk.pygtk_version[1]>=10:
     USE_EGG=0
 if USE_EGG==1:
     import egg.trayicon
