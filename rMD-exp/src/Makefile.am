@@ -3,7 +3,6 @@ bin_PROGRAMS = recordmydesktop
 
 
 recordmydesktop_SOURCES=	recordmydesktop.c\
-							zpixmaptobmp.c\
 							getzpixmap.c\
 							parseargs.c\
 							rectinsert.c\
@@ -20,7 +19,8 @@ recordmydesktop_SOURCES=	recordmydesktop.c\
 							opendev.c\
 							capture_sound.c\
 							encode_sound_buffer.c\
-							init_encoder.c
+							init_encoder.c\
+							cache_frame.c
 
 INCLUDES= $(all_includes) -I../include -I$x_includes
 

@@ -141,8 +141,6 @@ typedef struct _ProgArgs{
     int shared_thres;   //threshold to use shared memory
     int full_shots;     //do not poll damage, take full screenshots
     int no_quick_subsample;//average pixels in chroma planes
-    int scshot;         //take screenshot and exit(default 0)
-    int scale_shot;     //screenshot subscale factor(default 1)
     int v_bitrate,v_quality,s_quality;//video bitrate,video-sound quality
     int dropframes;     //option for theora encoder
 }ProgArgs;
@@ -231,6 +229,39 @@ typedef struct _ProgData{
     snd_pcm_uframes_t periodsize;
 }ProgData;
 
+
+//This is the header of every frame.
+//Reconstruction will be correct only if made on
+//the same platform.
+
+//We need the total number of blocks
+//and the position number of each of them
+//(separately for y,u,v planes).
+//The number of the frame compared to the
+//number of time expirations at the time of
+//caching, will enable us to make up for lost frames.
+
+
+typedef struct _FrameHeader{
+
+    unsigned int frameno;//number of frame(cached frames)
+    unsigned int current_total;//number of frames that should have been
+                                  //taken at time of caching this one
+    unsigned short Ynum;//number of changed blocks in the Y plane
+    unsigned short Unum;//number of changed blocks in the U plane
+    unsigned short Vnum;//number of changed blocks in the V plane
+    unsigned char *YBlocks;//identifying number on the grid, starting at top left
+    unsigned char *UBlocks;//       >>      >>      
+    unsigned char *VBlocks;//       >>      >>      
+    unsigned char *YData;//data for the blocks that have changed,
+    unsigned char *UData;//which have to be remapped on the buffer when reading
+    unsigned char *VData;
+
+}FrameHeader;
+
+
+
+
 /**Globals*/
 //I've read somewhere that I'll go to hell for using globals...
 
@@ -318,8 +349,8 @@ int capture_busy,
         (args)->display=NULL;\
     (args)->windowid=(args)->x=(args)->y\
     =(args)->width=(args)->height=(args)->quietmode\
-    =(args)->nosound=(args)->scshot=(args)->full_shots=0;\
-    (args)->noshared=(args)->scale_shot=1;\
+    =(args)->nosound=(args)->full_shots=0;\
+    (args)->noshared=1;\
     (args)->dropframes=(args)->nocondshared=0;\
     (args)->no_quick_subsample=1;\
     (args)->filename=(char *)malloc(8);\
@@ -496,7 +527,6 @@ int GetZPixmap(Display *dpy,Window root,char *data,int x,int y,int width,int hei
 int ParseArgs(int argc,char **argv,ProgArgs *arg_return);
 void QueryExtensions(Display *dpy,ProgArgs *args,int *damage_event,int *damage_error);
 int SetBRWindow(Display *dpy,BRWindow *brwin,DisplaySpecs *specs,ProgArgs *args);
-int ZPixmapToBMP(XImage *imgz,BRWindow *brwin,char *fname,int nbytes,int scale);
 unsigned char *MakeDummyPointer(DisplaySpecs *specs,int size,int color,int type,unsigned char *npxl);
 void *CaptureSound(void *pdata);
 void *EncodeSoundBuffer(void *pdata);
@@ -504,5 +534,6 @@ snd_pcm_t *OpenDev(const char *pcm_dev,unsigned int *channels,unsigned int *freq
 void InitEncoder(ProgData *pdata,EncData *enc_data_t);
 void MakeMatrices();
 void SizePack2_8_16(int *start,int *size,int limit);
+void *CacheImageBuffer(void *pdata);
 #endif
 

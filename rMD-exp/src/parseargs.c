@@ -36,7 +36,7 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
     "\t -v_quality n| -s_quality n| -v_bitrate n| --no-framedrop| -dummy-cursor color|\n"
     "\t --no-cursor| -freq N(number>0)| -channels N(number>0)| -device SOUND_DEVICE|\n"
     "\t --nosound| --with-shared| --no-cond-shared| -shared-threshold n| --full-shots|\n"
-    "\t --quick-subsampling| --scshot| -scale-shot N| -o filename]^filename\n\n\n"
+    "\t --quick-subsampling| -o filename]^filename\n\n\n"
 
     "General Options:\n"
     "\t-h or --help\t\tPrint this help and exit.\n"
@@ -73,8 +73,6 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
 
     "Misc Options:\n"
     "\t-delay n[H|h|M|m]\tNumber of secs(default),minutes or hours before capture starts(number can be float)\n"
-    "\t--scshot\t\tTake a bitmap screenshot(default rmdout.bmp) and exit.\n"
-    "\t-scale-shot N\t\tFactor by which screenshot is scaled down(1<=number<=64,power of 2).\n"
     "\t-o filename\t\tName of recorded video(default out.ogg).\n"
     "\n\tIf no other options are specified, filename can be given without the -o switch.\n\n\n";
 
@@ -353,24 +351,6 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
             }
             i++;
         }
-        else if(!strcmp(argv[i],"-scale-shot")){
-            if(i+1<argc){
-                int num=atoi(argv[i+1]);
-                if((num==1)||(num==2)||(num==4)||(num==8)
-                ||(num==16)||(num==32)||(num==64)){
-                    arg_return->scale_shot=num;
-                }
-                else{
-                    fprintf(stderr,"Argument Usage: -scale-shot N(0<number<64,power of 2)\n");
-                    return 1;
-                }
-            }
-            else{
-                fprintf(stderr,"Argument Usage: -scale-shot N(0<number<64,power of 2)\n");
-                return 1;
-            }
-            i++;
-        }
         else if(!strcmp(argv[i],"-device")){
             if(i+1<argc){
                 free(arg_return->device);
@@ -395,10 +375,6 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
             arg_return->nocondshared=1;
         else if(!strcmp(argv[i],"--full-shots")){
             arg_return->full_shots=1;
-            arg_return->nocondshared=1;
-        }
-        else if(!strcmp(argv[i],"--scshot")){
-            arg_return->scshot=1;
             arg_return->nocondshared=1;
         }
         else if(!strcmp(argv[i],"--quick-subsampling")){
