@@ -27,53 +27,31 @@
 #include <recordmydesktop.h>
 
 void *FlushToOgg(void *pdata){
-    int videoflag=0,audioflag=0,a_v=0;
+    int videoflag=0,audioflag=0;
     double video_bytesout=0,audio_bytesout=0;
-    ogg_int64_t v_pos=0,a_pos=0;
     ogg_page videopage,audiopage;
     while(((ProgData *)pdata)->running){
-        a_v=0;
-//         v_pos=theora_granule_time(&(((ProgData *)pdata)->enc_data->m_th_st),((ProgData *)pdata)->enc_data->m_ogg_ts.granulepos);
-//         a_pos=
-
-        if(v_pos<=a_pos){
-            pthread_mutex_lock(&((ProgData *)pdata)->libogg_mutex);
-            videoflag=ogg_stream_pageout(&((ProgData *)pdata)->enc_data->m_ogg_ts,&videopage);
-            
-            if(videoflag){
-                v_pos=theora_granule_time(&(((ProgData *)pdata)->enc_data->m_th_st),
-                                        ((ProgData *)pdata)->enc_data->m_ogg_ts.granulepos);
-                pthread_mutex_unlock(&((ProgData *)pdata)->libogg_mutex);
-                video_bytesout+=fwrite(videopage.header,1,videopage.header_len,((ProgData *)pdata)->enc_data->fp);
-                video_bytesout+=fwrite(videopage.body,1,videopage.body_len,((ProgData *)pdata)->enc_data->fp);
-                videoflag=0;
-                a_v=1;
-            }
-            else
-                pthread_mutex_unlock(&((ProgData *)pdata)->libogg_mutex);
-        }
-        if(a_pos<v_pos){
+        pthread_mutex_lock(&((ProgData *)pdata)->libogg_mutex);
+        videoflag=ogg_stream_pageout(&((ProgData *)pdata)->enc_data->m_ogg_ts,&videopage);
+        pthread_mutex_unlock(&((ProgData *)pdata)->libogg_mutex);
+        if(videoflag){
+            video_bytesout+=fwrite(videopage.header,1,videopage.header_len,((ProgData *)pdata)->enc_data->fp);
+            video_bytesout+=fwrite(videopage.body,1,videopage.body_len,((ProgData *)pdata)->enc_data->fp);
+            videoflag=0;
             if(!((ProgData *)pdata)->args.nosound){
                 pthread_mutex_lock(&((ProgData *)pdata)->libogg_mutex);
                 audioflag=ogg_stream_pageout(&((ProgData *)pdata)->enc_data->m_ogg_vs,&audiopage);
+                pthread_mutex_unlock(&((ProgData *)pdata)->libogg_mutex);
                 if(audioflag){
-                    a_pos=vorbis_granule_time(&(((ProgData *)pdata)->enc_data->m_vo_dsp),
-                                    ((ProgData *)pdata)->enc_data->m_vo_dsp.granulepos);
-                    pthread_mutex_unlock(&((ProgData *)pdata)->libogg_mutex);
                     audio_bytesout+=fwrite(audiopage.header,1,audiopage.header_len,((ProgData *)pdata)->enc_data->fp);
                     audio_bytesout+=fwrite(audiopage.body,1,audiopage.body_len,((ProgData *)pdata)->enc_data->fp);
                     audioflag=0;
-                    a_v=1;
                 }
-                else
-                    pthread_mutex_unlock(&((ProgData *)pdata)->libogg_mutex);
-
-
             }
         }
-        if(!a_v)
+        else
             usleep(10000);
-//       fprintf(stderr,"v %d a %d %d\n",(int)v_pos,(int)a_pos,(int)v_pos-(int)a_pos);
+      
     }
     //last packages
     videoflag=ogg_stream_flush(&((ProgData *)pdata)->enc_data->m_ogg_ts,&videopage);
