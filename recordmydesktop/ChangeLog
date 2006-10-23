@@ -63,6 +63,12 @@ used sound buffers,
 found and is now fixed. Reason was lack of thread safety over
 libogg calls.
 
+/*VERSION 0.2.7*/
+*Opening of the sound device no longer hangs, if it isn't available.
+Instead the program exits with the appropriate error code.
+The same applies when reopening after a pause.
+*Improved AV sync on low framerates
+
 
 
 
