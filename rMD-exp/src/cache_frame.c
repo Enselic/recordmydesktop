@@ -34,14 +34,13 @@ void MakeChecksums(unsigned char *buf,int width,int height,int divisor,unsigned 
             int A=1,B=0;    
             for(j=0;j<height/divisor;j++){
                 for(m=0;m<width/divisor;m++){
-                    unsigned char cur=buf[i*(width*height/divisor)+j*width+k*width/divisor+m];
-                    A+=cur;
-                    B+=A+cur;
+                    A+=buf[i*(width*height/divisor)+j*width+k*width/divisor+m];
+                    B+=A;
                 }
             }
             A=A%65521;
             B=B%65521;
-            checksums[i*divisor+k]=A+B;
+            checksums[i*divisor+k]=B*65536+A;
         }
     }
 }
