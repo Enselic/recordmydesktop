@@ -57,7 +57,9 @@ void *CaptureSound(void *pdata){
                             NULL//let's hope that the device capabilities didn't magically change
                             );
                 if(((ProgData *)pdata)->sound_handle==NULL){
-                    fprintf(stderr,"Couldn't reopen sound device.\nThere will be no sound data from this point on.\n");
+                    fprintf(stderr,"Couldn't reopen sound device.Exiting\n");
+                    ((ProgData *)pdata)->running=0;
+                    errno=3;
                     pthread_exit(&errno);
                 }                
             }

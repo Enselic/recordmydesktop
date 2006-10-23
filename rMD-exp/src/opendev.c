@@ -40,7 +40,7 @@ snd_pcm_t *OpenDev(const char *pcm_dev,unsigned int *channels,unsigned int *freq
     snd_pcm_hw_params_alloca(&hwparams);
     snd_pcm_uframes_t buffsize=4096;
 
-    if (snd_pcm_open(&mhandle, pcm_dev, SND_PCM_STREAM_CAPTURE, 0x0002)<0){
+    if (snd_pcm_open(&mhandle, pcm_dev, SND_PCM_STREAM_CAPTURE, SND_PCM_ASYNC)<0){
         fprintf(stderr, "Couldn't open PCM device %s\n", pcm_dev);
         return NULL;
     }
