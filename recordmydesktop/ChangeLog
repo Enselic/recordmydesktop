@@ -67,7 +67,7 @@ libogg calls.
 *Opening of the sound device no longer hangs, if it isn't available.
 Instead the program exits with the appropriate error code.
 The same applies when reopening after a pause.
-*Improved AV sync on low framerates
+
 
 
 
