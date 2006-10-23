@@ -30,7 +30,7 @@
 
 int main(int argc,char **argv){
     ProgData pdata;
-
+    int exit_status=0;
     if(XInitThreads ()==0){
         fprintf(stderr,"Couldn't initialize thread support!\n");
         exit(7);
@@ -207,9 +207,15 @@ int main(int argc,char **argv){
         pthread_join(image_encode_t,NULL);
         fprintf(stderr,".");
         if(!pdata.args.nosound){
-            pthread_join(sound_capture_t,NULL);
+            int *snd_exit;
+            pthread_join(sound_capture_t,(&snd_exit));
             fprintf(stderr,".");
-            pthread_join(sound_encode_t,NULL);
+            if(!(*snd_exit))
+                pthread_join(sound_encode_t,NULL);
+            else{
+                pthread_cancel(sound_encode_t);
+                exit_status=*snd_exit;
+            }
             fprintf(stderr,".");
         }
         else
@@ -240,7 +246,7 @@ int main(int argc,char **argv){
         else
             fprintf(stderr,"Goodbye!\n");
     }
-    return 0;
+    return exit_status;
 }
 
 
