@@ -25,7 +25,7 @@
 **********************************************************************************/
 
 #include <recordmydesktop.h>
-
+#include <zlib.h>
 void MakeChecksums(unsigned char *buf,int width,int height,int divisor,unsigned short int *checksums){
     int i,k,j,m;
 
@@ -45,17 +45,29 @@ void MakeChecksums(unsigned char *buf,int width,int height,int divisor,unsigned 
     }
 }
 
+void FlushBlock(unsigned char *buf,int blockno,int width, int height,int divisor,gzFile *fp){
+    int j,
+        block_i=blockno/divisor,//place on the grid
+        block_k=blockno%divisor;
+    
+    for(j=0;j<height/divisor;j++)//we flush in rows
+        gzwrite(fp,(void *)&buf[block_i*(width*height/divisor)+j*width+block_k*width/divisor],width/divisor);
+
+}
+
 void *CacheImageBuffer(void *pdata){
     pthread_mutex_t pmut,imut;
     pthread_mutex_init(&pmut,NULL);
     pthread_mutex_init(&imut,NULL);
     yuv_buffer yuv[2];
-
+    gzFile *fp;
+    fp=gzopen("temp.out","wb1f");
+    if(fp==NULL)exit(13);
 
     unsigned short int  checksums_y[2][256],
                         checksums_u[2][64],
                         checksums_v[2][64];
-    int i,current=0,divisor=16,firstrun=1;
+    int i,current=0,divisor=16,firstrun=1,frameno=0;
 
     //we want to make sure that each block has a sufficient
     //number of bytes, so that the checksum will wrap
@@ -111,7 +123,9 @@ void *CacheImageBuffer(void *pdata){
             int j;
             unsigned short ynum,unum,vnum;
             unsigned char yblocks[256],ublocks[64],vblocks[64];
+            FrameHeader fheader;
             ynum=unum=vnum=0;
+            
             for(j=0;j<pow(divisor,2);j++){
                 if(checksums_y[current][j]!=checksums_y[prev][j]){
                     ynum++;
@@ -130,8 +144,41 @@ void *CacheImageBuffer(void *pdata){
                     vblocks[vnum-1]=j;
                 }
             }
+            /**WRITE FRAME TO DISK*/
+            if(ynum+unum+vnum>(pow(divisor,2)+pow(divisor/2,2)*2)/10)
+                gzsetparams (fp,1,Z_FILTERED);
+            else
+                gzsetparams (fp,0,Z_FILTERED);
+            fheader.frameno=++frameno;
+            fheader.current_total=frames_total;
+            fheader.Ynum=ynum;
+            fheader.Unum=unum;
+            fheader.Vnum=vnum;
+            fheader.pad=0;
+            gzwrite(fp,(void*)&fheader,16);
+            //flush indexes
+            if(ynum)gzwrite(fp,yblocks,ynum);
+            if(unum)gzwrite(fp,ublocks,unum);
+            if(vnum)gzwrite(fp,vblocks,vnum);
+
+
+            //flush the blocks for each buffer
+            if(ynum)
+                for(j=0;j<ynum;j++)
+                    FlushBlock(yuv[current].y,yblocks[j],yuv[current].y_width,yuv[current].y_height,divisor,fp);
+            if(unum)
+                for(j=0;j<unum;j++)
+                    FlushBlock(yuv[current].u,ublocks[j],yuv[current].uv_width,yuv[current].uv_height,divisor/2,fp);
+            if(vnum)
+                for(j=0;j<vnum;j++)
+                    FlushBlock(yuv[current].v,vblocks[j],yuv[current].uv_width,yuv[current].uv_height,divisor/2,fp);
+
+
+            /**@________________@**/
             ((ProgData *)pdata)->avd+=((ProgData *)pdata)->frametime*2*((ProgData *)pdata)->args.channels;
-//             fprintf(stderr,"k %d uk %d vk %d\n ",k,uk,vk);
+
+
+
         }
     }
 
@@ -141,6 +188,7 @@ void *CacheImageBuffer(void *pdata){
         free(yuv[i].u);
         free(yuv[i].v);
     }
-
+    fprintf(stderr,"Saved %d frames in a total of %d requests",frameno,frames_total);
+    gzclose(fp);
     pthread_exit(&errno);
 }

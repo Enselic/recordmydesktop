@@ -235,31 +235,39 @@ typedef struct _ProgData{
 //the same platform.
 
 //We need the total number of blocks
-//and the position number of each of them
-//(separately for y,u,v planes).
+//for each plane.
+
 //The number of the frame compared to the
 //number of time expirations at the time of
 //caching, will enable us to make up for lost frames.
 
-
+//default 4+4+2+2+2=14!bad!
+//me add pad, make god of 2 happy!
 typedef struct _FrameHeader{
-
-    unsigned int frameno;//number of frame(cached frames)
-    unsigned int current_total;//number of frames that should have been
+    u_int32_t   frameno,//number of frame(cached frames)
+                current_total;//number of frames that should have been
                                   //taken at time of caching this one
-    unsigned short Ynum;//number of changed blocks in the Y plane
-    unsigned short Unum;//number of changed blocks in the U plane
-    unsigned short Vnum;//number of changed blocks in the V plane
-    unsigned char *YBlocks;//identifying number on the grid, starting at top left
-    unsigned char *UBlocks;//       >>      >>      
-    unsigned char *VBlocks;//       >>      >>      
-    unsigned char *YData;//data for the blocks that have changed,
-    unsigned char *UData;//which have to be remapped on the buffer when reading
-    unsigned char *VData;
+    u_int16_t   Ynum,//number of changed blocks in the Y plane
+                Unum,//number of changed blocks in the U plane
+                Vnum;//number of changed blocks in the V plane
+    u_int16_t   pad;//always zero
 
 }FrameHeader;
 
+//The frame after retrieval.
+//Based on the Header information
+//we can read the correct amount of bytes.
 
+
+typedef struct _CachedFrame{
+    FrameHeader *header;
+    unsigned char *YBlocks;//identifying number on the grid, starting at top left
+    unsigned char *UBlocks;//       >>      >>      
+    unsigned char *VBlocks;//       >>      >>   
+    unsigned char *YData;//pointer to data for the blocks that have changed,
+    unsigned char *UData;//which have to be remapped on the buffer when reading
+    unsigned char *VData;
+}CachedFrame;
 
 
 /**Globals*/
