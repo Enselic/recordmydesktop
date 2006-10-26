@@ -208,6 +208,8 @@ int main(int argc,char **argv){
         
         pthread_join(image_capture_t,NULL);
         fprintf(stderr,"Shutting down.");
+        //if no damage events have been received the thread will get stuck
+        pthread_cond_broadcast(&pdata.image_buffer_ready);
         if(pdata.args.encOnTheFly)
             pthread_join(image_encode_t,NULL);
         else
@@ -257,7 +259,10 @@ int main(int argc,char **argv){
             shmctl (shminfo.shmid, IPC_RMID, 0);
         }
         fprintf(stderr,"\n");
-        XCloseDisplay(pdata.dpy);
+
+        if(pdata.args.full_shots ||  inserts!=1)//otherwise it will hang
+            XCloseDisplay(pdata.dpy);
+
 
 /**               Encoding                          */
 

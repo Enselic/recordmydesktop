@@ -189,7 +189,7 @@ void *CacheImageBuffer(void *pdata){
         free(yuv[i].u);
         free(yuv[i].v);
     }
-    fprintf(stderr,"Saved %d frames in a total of %d requests",frameno,frames_total);
+//     fprintf(stderr,"Saved %d frames in a total of %d requests",frameno,frames_total);
     gzclose(fp);
     pthread_exit(&errno);
 }

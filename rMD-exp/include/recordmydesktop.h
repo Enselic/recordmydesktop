@@ -304,8 +304,9 @@ unsigned char   Yr[256],Yg[256],Yb[256],
                 Vr[256],Vg[256],Vb[256];
 //the following values are of no effect
 //but they might be usefull later for profiling
-unsigned int frames_total,//frames calculated by total time expirations
-             frames_lost;//the value of shame
+unsigned int    inserts,//total insertions in the lists
+                frames_total,//frames calculated by total time expirations
+                frames_lost;//the value of shame
 //used to determine frame drop which can 
 //happen on failure to receive a signal over a condition variable
 int capture_busy,

@@ -31,7 +31,7 @@ void *PollDamage(void *pdata){
 
     Damage damage;
     XEvent event;
-    int inserts=0;
+    inserts=0;
     
     
     damage= XDamageCreate( ((ProgData *)pdata)->dpy, ((ProgData *)pdata)->brwin.windowid, XDamageReportRawRectangles);
