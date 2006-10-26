@@ -49,6 +49,7 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <pthread.h>
+#include <zlib.h>
 #include <X11/Xlib.h>
 #include <X11/Xlibint.h>
 #include <X11/extensions/Xfixes.h>
@@ -143,6 +144,9 @@ typedef struct _ProgArgs{
     int no_quick_subsample;//average pixels in chroma planes
     int v_bitrate,v_quality,s_quality;//video bitrate,video-sound quality
     int dropframes;     //option for theora encoder
+    int encOnTheFly;    //encode while recording, no caching(default 0)
+    char *workdir;      //directory to be used for cache files(default $HOME)
+
 }ProgArgs;
 
 
@@ -172,6 +176,25 @@ typedef struct _EncData{
 //our file
     FILE            *fp;
 }EncData;
+
+//this struct will hold a few basic
+//information, needed for caching the frames.
+typedef struct _CacheData{
+    char    *workdir,  //The directory were the project will be stored, while recording.
+                        //Since this will take a lot of space, the user must be
+                        //able to change the location.
+            *projname,  //This is the name of the folder that will hold the project.
+                        //It is rMD-session-%d where %d is the pid of the current proccess.
+                        //This way, running two instances will not create problems
+                        //and also, a frontend can identify leftovers from a possible crash
+                        //and delete them
+            *imgdata,   //workdir+projname+img.out.gz
+            *audiodata; //workdir+projname+audio.pcm
+
+    gzFile  *ifp;       //image data file pointer
+    FILE    *afp;       //audio data file pointer
+
+}CacheData;
 
 //sound buffer
 //sound keeps coming so we que it in this list 
@@ -207,6 +230,7 @@ typedef struct _ProgData{
         running;
     SndBuffer *sound_buffer;
     EncData *enc_data;
+    CacheData *cache_data;
     int hard_pause;//if sound device doesn't support pause
                     //we have to close and reopen
     int avd;//syncronization among audio and video
@@ -357,7 +381,7 @@ int capture_busy,
         (args)->display=NULL;\
     (args)->windowid=(args)->x=(args)->y\
     =(args)->width=(args)->height=(args)->quietmode\
-    =(args)->nosound=(args)->full_shots=0;\
+    =(args)->nosound=(args)->full_shots=(args)->encOnTheFly=0;\
     (args)->noshared=1;\
     (args)->dropframes=(args)->nocondshared=0;\
     (args)->no_quick_subsample=1;\
@@ -376,6 +400,8 @@ int capture_busy,
     (args)->v_bitrate=45000;\
     (args)->v_quality=63;\
     (args)->s_quality=10;\
+    (args)->workdir=(char *)malloc(strlen(getenv("HOME"))+1);\
+    strcpy((args)->workdir,getenv("HOME"));\
 }
 
 #define QUERY_DISPLAY_SPECS(display,specstruct){\
@@ -518,6 +544,24 @@ int capture_busy,
 }
 
 
+#define I16TOA(number,buffer){\
+    int t_num=(number),k=0,i=0;\
+    char *t_buf=malloc(8);\
+    t_num=t_num&((2<<15)-1);\
+    while(t_num>0){\
+        int digit=t_num%10;\
+        t_buf[k]=digit+48;\
+        t_num-=digit;\
+        t_num/=10;\
+        k++;\
+    }\
+    while(k>0)\
+        (buffer)[i++]=t_buf[--k];\
+    (buffer)[i]='\0';\
+    free(t_buf);\
+};\
+
+
 /**Function prototypes*/
 
 void *PollDamage(void *pdata);
@@ -539,9 +583,11 @@ unsigned char *MakeDummyPointer(DisplaySpecs *specs,int size,int color,int type,
 void *CaptureSound(void *pdata);
 void *EncodeSoundBuffer(void *pdata);
 snd_pcm_t *OpenDev(const char *pcm_dev,unsigned int *channels,unsigned int *frequency,snd_pcm_uframes_t *periodsize,unsigned int *periodtime,int *hardpause);
-void InitEncoder(ProgData *pdata,EncData *enc_data_t);
+void InitEncoder(ProgData *pdata,EncData *enc_data_t,int buffer_ready);
 void MakeMatrices();
 void SizePack2_8_16(int *start,int *size,int limit);
 void *CacheImageBuffer(void *pdata);
+void InitCacheData(ProgData *pdata,EncData *enc_data_t,CacheData *cache_data_t);
+void InitCacheData(ProgData *pdata,EncData *enc_data_t,CacheData *cache_data_t);
 #endif
 

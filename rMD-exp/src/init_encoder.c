@@ -27,7 +27,7 @@
 
 #include <recordmydesktop.h>
 
-void InitEncoder(ProgData *pdata,EncData *enc_data_t){
+void InitEncoder(ProgData *pdata,EncData *enc_data_t,int buffer_ready){
     int y1,y2;
     (pdata)->enc_data=enc_data_t;
     srand(time(NULL));
@@ -150,19 +150,20 @@ void InitEncoder(ProgData *pdata,EncData *enc_data_t){
     }
 
 
+    if(!buffer_ready){
+        (enc_data_t)->yuv.y=(unsigned char *)malloc((enc_data_t)->m_th_inf.height*(enc_data_t)->m_th_inf.width);
+        (enc_data_t)->yuv.u=(unsigned char *)malloc((enc_data_t)->m_th_inf.height*(enc_data_t)->m_th_inf.width/4);
+        (enc_data_t)->yuv.v=(unsigned char *)malloc((enc_data_t)->m_th_inf.height*(enc_data_t)->m_th_inf.width/4);
+        (enc_data_t)->yuv.y_width=(enc_data_t)->m_th_inf.width;
+        (enc_data_t)->yuv.y_height=(enc_data_t)->m_th_inf.height;
+        (enc_data_t)->yuv.y_stride=(enc_data_t)->m_th_inf.width;
 
-    (enc_data_t)->yuv.y=(unsigned char *)malloc((enc_data_t)->m_th_inf.height*(enc_data_t)->m_th_inf.width);
-    (enc_data_t)->yuv.u=(unsigned char *)malloc((enc_data_t)->m_th_inf.height*(enc_data_t)->m_th_inf.width/4);
-    (enc_data_t)->yuv.v=(unsigned char *)malloc((enc_data_t)->m_th_inf.height*(enc_data_t)->m_th_inf.width/4);
-    (enc_data_t)->yuv.y_width=(enc_data_t)->m_th_inf.width;
-    (enc_data_t)->yuv.y_height=(enc_data_t)->m_th_inf.height;
-    (enc_data_t)->yuv.y_stride=(enc_data_t)->m_th_inf.width;
-
-    (enc_data_t)->yuv.uv_width=(enc_data_t)->m_th_inf.width/2;
-    (enc_data_t)->yuv.uv_height=(enc_data_t)->m_th_inf.height/2;
-    (enc_data_t)->yuv.uv_stride=(enc_data_t)->m_th_inf.width/2;
-    (enc_data_t)->x_offset=(enc_data_t)->m_th_inf.offset_x;
-    (enc_data_t)->y_offset=(enc_data_t)->m_th_inf.offset_y;
+        (enc_data_t)->yuv.uv_width=(enc_data_t)->m_th_inf.width/2;
+        (enc_data_t)->yuv.uv_height=(enc_data_t)->m_th_inf.height/2;
+        (enc_data_t)->yuv.uv_stride=(enc_data_t)->m_th_inf.width/2;
+        (enc_data_t)->x_offset=(enc_data_t)->m_th_inf.offset_x;
+        (enc_data_t)->y_offset=(enc_data_t)->m_th_inf.offset_y;
+    }
     theora_info_clear(&(enc_data_t)->m_th_inf);
 
 }

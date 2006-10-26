@@ -25,7 +25,8 @@
 **********************************************************************************/
 
 #include <recordmydesktop.h>
-#include <zlib.h>
+
+
 void MakeChecksums(unsigned char *buf,int width,int height,int divisor,unsigned short int *checksums){
     int i,k,j,m;
 
@@ -60,8 +61,8 @@ void *CacheImageBuffer(void *pdata){
     pthread_mutex_init(&pmut,NULL);
     pthread_mutex_init(&imut,NULL);
     yuv_buffer yuv[2];
-    gzFile *fp;
-    fp=gzopen("temp.out","wb1f");
+    gzFile *fp=((ProgData *)pdata)->cache_data->ifp;
+    
     if(fp==NULL)exit(13);
 
     unsigned short int  checksums_y[2][256],

@@ -32,11 +32,11 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
     int i;
     char *usage="\nUsage:\n"
     "\trecordmydesktop [-h| --help| --version| -delay n[H|h|M|m]| -windowid id_of_window|\n"
-    "\t-display DISPLAY| -x X| -y Y|-width N| -height N| -fps N(number>0)|\n"
+    "\t-display DISPLAY| -x X| -y Y|-width N| -height N| -fps N(number>0)| --on-the-fly-encoding|\n"
     "\t -v_quality n| -s_quality n| -v_bitrate n| --no-framedrop| -dummy-cursor color|\n"
     "\t --no-cursor| -freq N(number>0)| -channels N(number>0)| -device SOUND_DEVICE|\n"
     "\t --nosound| --with-shared| --no-cond-shared| -shared-threshold n| --full-shots|\n"
-    "\t --quick-subsampling| -o filename]^filename\n\n\n"
+    "\t --quick-subsampling| -workdir DIR| -o filename]^filename\n\n\n"
 
     "General Options:\n"
     "\t-h or --help\t\tPrint this help and exit.\n"
@@ -66,12 +66,14 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
     "\t--nosound\t\tDo not record sound.\n\n"
 
     "Encoding Options\n"
+    "\t--on-the-fly-encoding\tEncode the audio-video data, while recording.\n"
     "\t-v_quality n\t\tA number from 0 to 63 for desired encoded video quality(default 63).\n"
     "\t-v_bitrate n\t\tA number from 45000 to 2000000 for desired encoded video bitrate(default 45000).\n"
     "\t--drop-frames\t\tAllow theora encoder to drop frames.\n"
     "\t-s_quality n\t\tDesired audio quality(-1 to 10).\n\n"
 
     "Misc Options:\n"
+    "\t-workdir DIR\t\tLocation where a temporary directory will be created to hold project files(default $HOME).\n"
     "\t-delay n[H|h|M|m]\tNumber of secs(default),minutes or hours before capture starts(number can be float)\n"
     "\t-o filename\t\tName of recorded video(default out.ogg).\n"
     "\n\tIf no other options are specified, filename can be given without the -o switch.\n\n\n";
@@ -363,6 +365,18 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
             }
             i++;
         }
+        else if(!strcmp(argv[i],"-workdir")){
+            if(i+1<argc){
+                free(arg_return->workdir);
+                arg_return->workdir=malloc(strlen(argv[i+1])+1);
+                strcpy(arg_return->workdir,argv[i+1]);
+            }
+            else{
+                fprintf(stderr,"Argument Usage: -workdir DIR\n");
+                return 1;
+            }
+            i++;
+        }
         else if(!strcmp(argv[i],"--nosound"))
             arg_return->nosound=1;
         else if(!strcmp(argv[i],"--drop-frames"))
@@ -379,6 +393,9 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
         }
         else if(!strcmp(argv[i],"--quick-subsampling")){
             arg_return->no_quick_subsample=0;
+        }
+        else if(!strcmp(argv[i],"--on-the-fly-encoding")){
+            arg_return->encOnTheFly=1;
         }
         else if(!strcmp(argv[i],"--help")||!strcmp(argv[i],"-h")){
             fprintf(stderr,"%s",usage);

@@ -51,6 +51,7 @@ int main(int argc,char **argv){
     }
     else{
         EncData enc_data;
+        CacheData cache_data;
         pthread_t   poll_damage_t,
                     image_capture_t,
                     image_encode_t,
@@ -131,17 +132,22 @@ int main(int argc,char **argv){
         if(!pdata.args.nosound){
             pdata.sound_handle=OpenDev(pdata.args.device,&pdata.args.channels,&pdata.args.frequency,&pdata.periodsize,            &pdata.periodtime,&pdata.hard_pause);
             if(pdata.sound_handle==NULL){
-                fprintf(stderr,"Error while opening/configuring soundcard %s\nTry running with the --no-sound or specify a correct device.\n",pdata.args.device);
+                fprintf(stderr,"Error while opening/configuring soundcard %s\nTry running with the --nosound or specify a correct device.\n",pdata.args.device);
                 exit(3);
             }
         }
+        
+        if(pdata.args.encOnTheFly)
+            InitEncoder(&pdata,&enc_data,0);
+        else
+            InitCacheData(&pdata,&enc_data,&cache_data);
 
-        InitEncoder(&pdata,&enc_data);
         for(i=0;i<(pdata.enc_data->yuv.y_width*pdata.enc_data->yuv.y_height);i++)
             pdata.enc_data->yuv.y[i]=0;
         for(i=0;i<(pdata.enc_data->yuv.uv_width*pdata.enc_data->yuv.uv_height);i++){
             pdata.enc_data->yuv.v[i]=pdata.enc_data->yuv.u[i]=127;
         }
+
         if((pdata.args.nocondshared)&&(!pdata.args.noshared)){
             if(pdata.args.no_quick_subsample){
                 UPDATE_YUV_BUFFER_IM_AVG((&pdata.enc_data->yuv),((unsigned char*)pdata.shimage->data),
@@ -199,7 +205,7 @@ int main(int argc,char **argv){
         fprintf(stderr,".");
         if(!pdata.args.nosound){
             int *snd_exit;
-            pthread_join(sound_capture_t,(&snd_exit));
+            pthread_join(sound_capture_t,(void *)(&snd_exit));
             fprintf(stderr,".");
 //             if(!(*snd_exit))
 //                 pthread_join(sound_encode_t,NULL);
