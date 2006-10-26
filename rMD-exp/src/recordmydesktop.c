@@ -59,7 +59,8 @@ int main(int argc,char **argv){
                     sound_capture_t,
                     sound_encode_t,
                     sound_cache_t,
-                    flush_to_ogg_t;
+                    flush_to_ogg_t,
+                    load_cache_t;
         XShmSegmentInfo shminfo;
         int i;
 
@@ -265,13 +266,41 @@ int main(int argc,char **argv){
 
 
 /**               Encoding                          */
+        if(!pdata.args.encOnTheFly){
+            if(!Aborted){
+    
+                pdata.running=1;
+                InitEncoder(&pdata,&enc_data,1);
+                
+                //load encoding and flushing threads
+                pthread_create(&image_encode_t,NULL,EncodeImageBuffer,(void *)&pdata);
+                if(!pdata.args.nosound)
+                    pthread_create(&sound_encode_t,NULL,EncodeSoundBuffer,(void *)&pdata);
+                pthread_create(&flush_to_ogg_t,NULL,FlushToOgg,(void *)&pdata);
 
 
+                //start loading image and audio
+                pthread_create(&load_cache_t,NULL,LoadCache,(void *)&pdata);
 
 
+                //call loading func{
+                    //if avd>=0
+                    //load image from cache
+                    //signal buffer
+                    ////if avd<0
+                    //load sound from cache
+                    //signal buffer
+                //}
+                
+                //join and finish
+                pthread_join(load_cache_t,NULL);
+                pthread_join(image_encode_t,NULL);
+                if(!pdata.args.nosound)
+                    pthread_join(sound_encode_t,NULL);
 
-
-
+            }
+            //clean-up data
+        }
 /**@_______________________________________________@*/
 
 

@@ -22,7 +22,8 @@ recordmydesktop_SOURCES=	recordmydesktop.c\
 							init_encoder.c\
 							cache_frame.c\
 							cache_audio.c\
-							rmd_cache.c
+							rmd_cache.c\
+							load_cache.c
 
 INCLUDES= $(all_includes) -I../include -I$x_includes
 
