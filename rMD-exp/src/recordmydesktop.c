@@ -58,6 +58,7 @@ int main(int argc,char **argv){
                     image_cache_t,
                     sound_capture_t,
                     sound_encode_t,
+                    sound_cache_t,
                     flush_to_ogg_t;
         XShmSegmentInfo shminfo;
         int i;
@@ -189,6 +190,7 @@ int main(int argc,char **argv){
 
         if(!pdata.args.nosound){
             pthread_create(&sound_capture_t,NULL,CaptureSound,(void *)&pdata);
+            pthread_create(&sound_cache_t,NULL,CacheSoundBuffer,(void *)&pdata);
 //             pthread_create(&sound_encode_t,NULL,EncodeSoundBuffer,(void *)&pdata);
         }
 //         pthread_create(&flush_to_ogg_t,NULL,FlushToOgg,(void *)&pdata);

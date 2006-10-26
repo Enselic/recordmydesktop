@@ -25,5 +25,43 @@
 **********************************************************************************/
 
 #include <recordmydesktop.h>
+void *CacheSoundBuffer(void *pdata){
+//We are simply going to throw sound on the disk.
+//It's sound is tiny compared to that of image, so
+//compressing would reducethe overall size by only an
+//insignificant fraction.
+    pthread_mutex_t smut;
+    pthread_mutex_init(&smut,NULL);
+    while((((ProgData *)pdata)->running)){
+        SndBuffer *buff;
+
+        if(Paused){
+            pthread_mutex_t tmut;
+            pthread_mutex_init(&tmut,NULL);
+            pthread_cond_wait(&((ProgData *)pdata)->pause_cond,&tmut);
+        }
+
+        if(((ProgData *)pdata)->sound_buffer==NULL)
+            pthread_cond_wait(&((ProgData *)pdata)->sound_data_read,&smut);
+
+        pthread_mutex_lock(&((ProgData *)pdata)->sound_buffer_mutex);
+        buff=((ProgData *)pdata)->sound_buffer;
+        //advance the list
+        ((ProgData *)pdata)->sound_buffer=((ProgData *)pdata)->sound_buffer->next;
+        pthread_mutex_unlock(&((ProgData *)pdata)->sound_buffer_mutex);
+
+        fwrite(buff->data,((ProgData *)pdata)->periodsize,1,((ProgData *)pdata)->cache_data->afp);
+
+
+
+        ((ProgData *)pdata)->avd-=((ProgData *)pdata)->periodtime;
+
+        free(buff->data);
+        free(buff);
+    }
+
+    fclose(((ProgData *)pdata)->cache_data->afp);
+    pthread_exit(&errno);
+}
 
  

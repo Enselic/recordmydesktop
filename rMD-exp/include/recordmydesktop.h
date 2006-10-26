@@ -589,5 +589,6 @@ void SizePack2_8_16(int *start,int *size,int limit);
 void *CacheImageBuffer(void *pdata);
 void InitCacheData(ProgData *pdata,EncData *enc_data_t,CacheData *cache_data_t);
 void InitCacheData(ProgData *pdata,EncData *enc_data_t,CacheData *cache_data_t);
+void *CacheSoundBuffer(void *pdata);
 #endif
 
