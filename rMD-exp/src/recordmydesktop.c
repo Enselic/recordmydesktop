@@ -185,15 +185,20 @@ int main(int argc,char **argv){
         if(!pdata.args.full_shots)
             pthread_create(&poll_damage_t,NULL,PollDamage,(void *)&pdata);
         pthread_create(&image_capture_t,NULL,GetFrame,(void *)&pdata);
-//         pthread_create(&image_encode_t,NULL,EncodeImageBuffer,(void *)&pdata);
-        pthread_create(&image_cache_t,NULL,CacheImageBuffer,(void *)&pdata);
+        if(pdata.args.encOnTheFly)
+            pthread_create(&image_encode_t,NULL,EncodeImageBuffer,(void *)&pdata);
+        else
+            pthread_create(&image_cache_t,NULL,CacheImageBuffer,(void *)&pdata);
 
         if(!pdata.args.nosound){
             pthread_create(&sound_capture_t,NULL,CaptureSound,(void *)&pdata);
-            pthread_create(&sound_cache_t,NULL,CacheSoundBuffer,(void *)&pdata);
-//             pthread_create(&sound_encode_t,NULL,EncodeSoundBuffer,(void *)&pdata);
+            if(pdata.args.encOnTheFly)
+                pthread_create(&sound_encode_t,NULL,EncodeSoundBuffer,(void *)&pdata);
+            else
+                pthread_create(&sound_cache_t,NULL,CacheSoundBuffer,(void *)&pdata);
         }
-//         pthread_create(&flush_to_ogg_t,NULL,FlushToOgg,(void *)&pdata);
+        if(pdata.args.encOnTheFly)
+            pthread_create(&flush_to_ogg_t,NULL,FlushToOgg,(void *)&pdata);
         
 
         RegisterCallbacks(&pdata.args);
@@ -203,23 +208,43 @@ int main(int argc,char **argv){
         
         pthread_join(image_capture_t,NULL);
         fprintf(stderr,"Shutting down.");
-//         pthread_join(image_encode_t,NULL);
+        if(pdata.args.encOnTheFly)
+            pthread_join(image_encode_t,NULL);
+        else
+            pthread_join(image_cache_t,NULL);
+
+
         fprintf(stderr,".");
         if(!pdata.args.nosound){
             int *snd_exit;
             pthread_join(sound_capture_t,(void *)(&snd_exit));
             fprintf(stderr,".");
-//             if(!(*snd_exit))
-//                 pthread_join(sound_encode_t,NULL);
-//             else{
-//                 pthread_cancel(sound_encode_t);
-//                 exit_status=*snd_exit;
-//             }
-            fprintf(stderr,".");
+
+            if(pdata.args.encOnTheFly){
+                if(!(*snd_exit))
+                    pthread_join(sound_encode_t,NULL);
+                else{
+                    pthread_cancel(sound_encode_t);
+                    exit_status=*snd_exit;
+                }
+            }
+            else{
+                if(!(*snd_exit))
+                    pthread_join(sound_cache_t,NULL);
+                else{
+                    pthread_cancel(sound_cache_t);
+                    exit_status=*snd_exit;
+                }
+            }
         }
         else
             fprintf(stderr,"..");
-//         pthread_join(flush_to_ogg_t,NULL);
+
+
+        if(pdata.args.encOnTheFly)
+            pthread_join(flush_to_ogg_t,NULL);
+
+
         fprintf(stderr,".");
         if(!pdata.args.full_shots)
             pthread_join(poll_damage_t,NULL);
@@ -231,6 +256,10 @@ int main(int argc,char **argv){
         }
         fprintf(stderr,"\n");
         XCloseDisplay(pdata.dpy);
+
+
+
+
         if(Aborted){
             if(remove(pdata.args.filename)){
                 perror("Error while removing file:\n");
