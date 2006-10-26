@@ -80,11 +80,23 @@ void InitCacheData(ProgData *pdata,EncData *enc_data_t,CacheData *cache_data_t){
     //now that've got out buffers and our filenames we start
     //creating the needed files
 
-    mkdir(cache_data_t->projname,0777);
+    if(mkdir(cache_data_t->projname,0777)){
+        fprintf(stderr,"Could not create temporary directory %s !!!\n",cache_data_t->projname);
+        exit(13);
+    }
     cache_data_t->ifp=gzopen(cache_data_t->imgdata,"wb1f");
-    if(!pdata->args.nosound)
+    if(cache_data_t->ifp==NULL){
+        fprintf(stderr,"Could not create temporary file %s !!!\n",cache_data_t->imgdata);
+        exit(13);
+    }
+    if(!pdata->args.nosound){
         cache_data_t->afp=fopen(cache_data_t->audiodata,"wb");
-
+        if(cache_data_t->afp==NULL){
+           fprintf(stderr,"Could not create temporary file %s !!!\n",cache_data_t->audiodata);
+           exit(13);
+        }
+    }
+    
 }
  
 

@@ -240,14 +240,16 @@ int main(int argc,char **argv){
         else
             fprintf(stderr,"..");
 
-
         if(pdata.args.encOnTheFly)
             pthread_join(flush_to_ogg_t,NULL);
-
-
         fprintf(stderr,".");
+        
+        //this thread will get cancelled instead of joined
+        //this is neccessary to terminate the application, if for some reason
+        //damage events are not delivered(i.e comp windopw managers)
         if(!pdata.args.full_shots)
-            pthread_join(poll_damage_t,NULL);
+            pthread_cancel(poll_damage_t);
+
         fprintf(stderr,".");
         if((!pdata.args.noshared)||(!pdata.args.nocondshared)){
             XShmDetach (pdata.dpy, &shminfo);
@@ -257,7 +259,15 @@ int main(int argc,char **argv){
         fprintf(stderr,"\n");
         XCloseDisplay(pdata.dpy);
 
+/**               Encoding                          */
 
+
+
+
+
+
+
+/**@_______________________________________________@*/
 
 
         if(Aborted){
