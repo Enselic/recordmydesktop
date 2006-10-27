@@ -268,6 +268,7 @@ typedef struct _ProgData{
 //default 4+4+2+2+2=14!bad!
 //me add pad, make god of 2 happy!
 typedef struct _FrameHeader{
+    char        frame_prefix[4];//always FRAM
     u_int32_t   frameno,//number of frame(cached frames)
                 current_total;//number of frames that should have been
                                   //taken at time of caching this one
@@ -562,6 +563,24 @@ int capture_busy,
     free(t_buf);\
 };\
 
+#define INIT_FRAME(frame_t,fheader_t,yuv_t){\
+    (frame_t)->header=(fheader_t);\
+    (frame_t)->YBlocks=malloc(256);\
+    (frame_t)->UBlocks=malloc(64);\
+    (frame_t)->VBlocks=malloc(64);\
+    (frame_t)->YData=malloc((yuv_t)->y_width*(yuv_t)->y_height);\
+    (frame_t)->UData=malloc((yuv_t)->uv_width*(yuv_t)->uv_height);\
+    (frame_t)->VData=malloc((yuv_t)->uv_width*(yuv_t)->uv_height);\
+};
+
+#define CLEAR_FRAME(frame_t){\
+    free((frame_t)->YBlocks);\
+    free((frame_t)->UBlocks);\
+    free((frame_t)->VBlocks);\
+    free((frame_t)->YData);\
+    free((frame_t)->UData);\
+    free((frame_t)->VData);\
+};
 
 /**Function prototypes*/
 

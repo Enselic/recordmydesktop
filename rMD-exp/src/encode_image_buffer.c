@@ -30,8 +30,8 @@ void *EncodeImageBuffer(void *pdata){
     pthread_mutex_init(&pmut,NULL);
     pthread_mutex_init(&imut,NULL);
     while(((ProgData *)pdata)->running){
-        encoder_busy=1;
         pthread_cond_wait(&((ProgData *)pdata)->image_buffer_ready,&imut);
+        encoder_busy=1;
         if(Paused)
             pthread_cond_wait(&((ProgData *)pdata)->pause_cond,&pmut);//this may not be needed
         pthread_mutex_lock(&((ProgData *)pdata)->yuv_mutex);

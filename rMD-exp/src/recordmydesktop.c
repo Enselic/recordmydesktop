@@ -260,9 +260,8 @@ int main(int argc,char **argv){
             shmctl (shminfo.shmid, IPC_RMID, 0);
         }
         fprintf(stderr,"\n");
+        
 
-        if(pdata.args.full_shots ||  inserts!=1)//otherwise it will hang
-            XCloseDisplay(pdata.dpy);
 
 
 /**               Encoding                          */
@@ -271,11 +270,18 @@ int main(int argc,char **argv){
     
                 pdata.running=1;
                 InitEncoder(&pdata,&enc_data,1);
-                
                 //load encoding and flushing threads
                 pthread_create(&image_encode_t,NULL,EncodeImageBuffer,(void *)&pdata);
-                if(!pdata.args.nosound)
+                if(!pdata.args.nosound){
+                    //before we start loading again
+                    //we need to free any left-overs
+                    while(pdata.sound_buffer!=NULL){
+                        free(pdata.sound_buffer->data);
+                        pdata.sound_buffer=pdata.sound_buffer->next;
+                    }
                     pthread_create(&sound_encode_t,NULL,EncodeSoundBuffer,(void *)&pdata);
+
+                }
                 pthread_create(&flush_to_ogg_t,NULL,FlushToOgg,(void *)&pdata);
 
 
@@ -293,7 +299,9 @@ int main(int argc,char **argv){
                 //}
                 
                 //join and finish
+
                 pthread_join(load_cache_t,NULL);
+                pthread_cond_broadcast(&pdata.image_buffer_ready);
                 pthread_join(image_encode_t,NULL);
                 if(!pdata.args.nosound)
                     pthread_join(sound_encode_t,NULL);
@@ -303,6 +311,10 @@ int main(int argc,char **argv){
         }
 /**@_______________________________________________@*/
 
+        //This can happen earlier, but in some cases it might get stuck.
+        //So we must make sure the recording is not wasted.
+        XFlush(pdata.dpy);
+        XCloseDisplay(pdata.dpy);
 
         if(Aborted){
             if(remove(pdata.args.filename)){

@@ -52,6 +52,7 @@ void *PollDamage(void *pdata){
             }
         }
     }
+    XDamageDestroy(((ProgData *)pdata)->dpy,damage);
     pthread_exit(&errno);
 }
 

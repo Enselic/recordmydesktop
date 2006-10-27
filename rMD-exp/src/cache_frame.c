@@ -150,13 +150,14 @@ void *CacheImageBuffer(void *pdata){
                 gzsetparams (fp,1,Z_FILTERED);
             else
                 gzsetparams (fp,0,Z_FILTERED);
+            strncpy(fheader.frame_prefix,"FRAM",4);
             fheader.frameno=++frameno;
             fheader.current_total=frames_total;
             fheader.Ynum=ynum;
             fheader.Unum=unum;
             fheader.Vnum=vnum;
             fheader.pad=0;
-            gzwrite(fp,(void*)&fheader,16);
+            gzwrite(fp,(void*)&fheader,sizeof(FrameHeader));
             //flush indexes
             if(ynum)gzwrite(fp,yblocks,ynum);
             if(unum)gzwrite(fp,ublocks,unum);
@@ -189,7 +190,7 @@ void *CacheImageBuffer(void *pdata){
         free(yuv[i].u);
         free(yuv[i].v);
     }
-//     fprintf(stderr,"Saved %d frames in a total of %d requests",frameno,frames_total);
+    fprintf(stderr,"Saved %d frames in a total of %d requests",frameno,frames_total);
     gzclose(fp);
     pthread_exit(&errno);
 }
