@@ -56,6 +56,16 @@ void SetRunning(int signum){
         Aborted=1;
 }
 
+void CancelTimer(void){
+    struct itimerval value;
+    value.it_interval.tv_sec=
+    value.it_value.tv_sec=
+    value.it_interval.tv_usec=
+    value.it_value.tv_usec=0;
+
+    setitimer(ITIMER_REAL,&value,NULL);
+}
+
 void RegisterCallbacks(ProgArgs *args){
 
     struct itimerval value;

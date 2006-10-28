@@ -36,9 +36,8 @@ void LoadBlock(unsigned char *dest,unsigned char *source,int blockno,int width, 
         memcpy( &dest[block_i*(width*height/divisor)+j*width+block_k*width/divisor],
                 &source[j*width/divisor],
                 width/divisor);
-//         gzread(fp,(void *)&dest[block_i*(width*height/divisor)+j*width+block_k*width/divisor],width/divisor);
-// ;
 }
+
 
 
 void *LoadCache(void *pdata){
@@ -48,7 +47,13 @@ void *LoadCache(void *pdata){
     FILE *afp=((ProgData *)pdata)->cache_data->afp;
     FrameHeader fheader;
     CachedFrame frame;
+    signed char *sound_data=(signed char *)malloc(((ProgData *)pdata)->periodsize);
+
     int j=0,
+        audio_end=0,
+        extra_frames=0,//total number of duplicated frames
+        missing_frames=0,//if this is found >0 current run will not load
+                        //a frame but it will proccess the previous
         thread_exit=0,//0 success, -1 couldn't find files,1 couldn't remove
         divisor=16,
         blockszy=0,//size of y plane block in bytes
@@ -69,8 +74,6 @@ void *LoadCache(void *pdata){
             pthread_exit(&thread_exit);
         }
     }
-//     int first=10;
-
     //recalculate the divisor since it is not saved
     while(((((ProgData *)pdata)->brwin.rgeom.width*
             ((ProgData *)pdata)->brwin.rgeom.width )
@@ -85,16 +88,26 @@ void *LoadCache(void *pdata){
     blockszy=(yuv->y_width*yuv->y_height )/pow(divisor,2);
     blockszuv=(yuv->uv_width*yuv->uv_height)/pow(divisor/2,2);
 
-
+    //this will be used now to define if we proccess audio or video
+    //on any given loop. 
+    ((ProgData *)pdata)->avd=0;
+    //If sound finishes first,we go on with the video.
+    //If video ends we will do one more run to flush audio in the ogg file
+    
     while(((ProgData *)pdata)->running){
-            int framesize=0;
-//         if(first){
-            if(gzread(ifp,frame.header,sizeof(FrameHeader))==sizeof(FrameHeader)){
-//                 fprintf(stderr,"1:%c%c%c%c \n1: %d \n1: %d \n1: %d \n1: %d \n1: %d \n1: %d\n",
-//                             frame.header->frame_prefix[0],frame.header->frame_prefix[1],frame.header->frame_prefix[2],frame.header->frame_prefix[3],
-//                             frame.header->frameno,frame.header->current_total
-//                             ,frame.header->Ynum,frame.header->Unum,frame.header->Vnum,frame.header->pad);fflush(stderr);
-                fprintf(stderr,"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b %d of %d",frame.header->frameno,frame.header->current_total);
+        //video load and encoding
+        if(((ProgData *)pdata)->avd<=0 || ((ProgData *)pdata)->args.nosound || audio_end){
+            if(missing_frames>0){
+                extra_frames++;
+                missing_frames--;
+                SyncEncodeImageBuffer((ProgData *)pdata);
+            }
+            else if(gzread(ifp,frame.header,sizeof(FrameHeader))==sizeof(FrameHeader)){
+                //sync 
+                missing_frames+=frame.header->current_total-(extra_frames+frame.header->frameno);
+
+                fprintf(stdout,"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b"
+                                "%d of %d",frame.header->frameno+extra_frames,frames_total);fflush(stdout);
                 if( (frame.header->Ynum<=pow(divisor,2)) &&
                     (frame.header->Unum<=pow(divisor/2,2)) &&
                     (frame.header->Vnum<=pow(divisor/2,2)) &&
@@ -104,14 +117,6 @@ void *LoadCache(void *pdata){
                     (gzread(ifp,frame.YData,blockszy*frame.header->Ynum)==blockszy*frame.header->Ynum) &&
                     (gzread(ifp,frame.UData,(blockszuv*frame.header->Unum))==(blockszuv*frame.header->Unum)) &&
                     (gzread(ifp,frame.VData,(blockszuv*frame.header->Vnum))==(blockszuv*frame.header->Vnum))){
-                        framesize+=sizeof(FrameHeader)
-                                        +frame.header->Ynum+frame.header->Unum+frame.header->Vnum
-                                        +blockszy*frame.header->Ynum+(blockszuv*frame.header->Unum)
-                                        +(blockszuv*frame.header->Vnum);
-//                         fprintf(stderr,"OK! %d \n%d %d %d\n",framesize,blockszy,blockszuv,sizeof(FrameHeader));fflush(stderr);
-
-                        pthread_mutex_lock(&((ProgData *)pdata)->yuv_mutex);
-
                         //load the blocks for each buffer
                         if(frame.header->Ynum)
                             for(j=0;j<frame.header->Ynum;j++)
@@ -137,44 +142,34 @@ void *LoadCache(void *pdata){
                                             yuv->uv_width,
                                             yuv->uv_height,
                                             divisor/2);
-                        pthread_mutex_unlock(&((ProgData *)pdata)->yuv_mutex);
-
-                        while(encoder_busy){
-                            usleep(100);
-                        }
-                        pthread_cond_broadcast(&((ProgData *)pdata)->image_buffer_ready);
-                        while(encoder_busy){
-                            usleep(100);
-                        }
-                    }
+                        //encode. This is not made in a thread since now blocking is not a problem
+                        //and this way sync problems can be avoided more easily.
+                        SyncEncodeImageBuffer((ProgData *)pdata);
+                }
                 else{
-//                     first=0;
                     raise(SIGINT);
                     continue;
                 }
             }
             else{
-//                 first=0;
                 raise(SIGINT);
                 continue;
             }
-
-//         }
-
-
-                //call loading func{
-                    //if avd>=0
-                    //load image from cache
-                    //signal buffer
-                    ////if avd<0
-                    //load sound from cache
-                    //signal buffer
-                //}
-
-//         sleep(1);
+        }
+        //audio load and encoding
+        else{
+            if(!audio_end){
+                int nbytes=fread(sound_data,((ProgData *)pdata)->periodsize,1,afp);
+                if(nbytes<=0)
+                    audio_end=1;
+                else
+                    SyncEncodeSoundBuffer((ProgData *)pdata,sound_data);
+            }
+        }
     }
 
     CLEAR_FRAME(&frame)
+    free(sound_data);
     gzclose(ifp);
 
     if(remove(((ProgData *)pdata)->cache_data->imgdata)){

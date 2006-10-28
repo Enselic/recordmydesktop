@@ -96,12 +96,20 @@ void *CacheImageBuffer(void *pdata){
     
 
     while(((ProgData *)pdata)->running){
+        int prev;
+        int j;
+        unsigned short ynum,unum,vnum;
+        unsigned char yblocks[256],ublocks[64],vblocks[64];
+        FrameHeader fheader;
+        ynum=unum=vnum=0;
+
         pthread_cond_wait(&((ProgData *)pdata)->image_buffer_ready,&imut);
         if(Paused)
             pthread_cond_wait(&((ProgData *)pdata)->pause_cond,&pmut);
         pthread_mutex_lock(&((ProgData *)pdata)->yuv_mutex);
 
         //rotate buffers
+        prev=current;
         current=(current)?0:1;
         //copy incoming
         memcpy(yuv[current].y,((ProgData *)pdata)->enc_data->yuv.y,yuv[current].y_width*yuv[current].y_height);
@@ -117,16 +125,21 @@ void *CacheImageBuffer(void *pdata){
         //find and flush different blocks
         if(firstrun){
             firstrun=0;
-            continue;
+            for(j=0;j<pow(divisor,2);j++){
+                    ynum++;
+                    yblocks[ynum-1]=j;
+            }
+            for(j=0;j<pow(divisor/2,2);j++){
+                    unum++;
+                    ublocks[unum-1]=j;
+            }
+            for(j=0;j<pow(divisor/2,2);j++){
+                    vnum++;
+                    vblocks[vnum-1]=j;
+            }
+
         }
         else{
-            int prev=(current)?0:1;
-            int j;
-            unsigned short ynum,unum,vnum;
-            unsigned char yblocks[256],ublocks[64],vblocks[64];
-            FrameHeader fheader;
-            ynum=unum=vnum=0;
-            
             for(j=0;j<pow(divisor,2);j++){
                 if(checksums_y[current][j]!=checksums_y[prev][j]){
                     ynum++;
@@ -145,43 +158,41 @@ void *CacheImageBuffer(void *pdata){
                     vblocks[vnum-1]=j;
                 }
             }
-            /**WRITE FRAME TO DISK*/
-            if(ynum+unum+vnum>(pow(divisor,2)+pow(divisor/2,2)*2)/10)
-                gzsetparams (fp,1,Z_FILTERED);
-            else
-                gzsetparams (fp,0,Z_FILTERED);
-            strncpy(fheader.frame_prefix,"FRAM",4);
-            fheader.frameno=++frameno;
-            fheader.current_total=frames_total;
-            fheader.Ynum=ynum;
-            fheader.Unum=unum;
-            fheader.Vnum=vnum;
-            fheader.pad=0;
-            gzwrite(fp,(void*)&fheader,sizeof(FrameHeader));
-            //flush indexes
-            if(ynum)gzwrite(fp,yblocks,ynum);
-            if(unum)gzwrite(fp,ublocks,unum);
-            if(vnum)gzwrite(fp,vblocks,vnum);
-
-
-            //flush the blocks for each buffer
-            if(ynum)
-                for(j=0;j<ynum;j++)
-                    FlushBlock(yuv[current].y,yblocks[j],yuv[current].y_width,yuv[current].y_height,divisor,fp);
-            if(unum)
-                for(j=0;j<unum;j++)
-                    FlushBlock(yuv[current].u,ublocks[j],yuv[current].uv_width,yuv[current].uv_height,divisor/2,fp);
-            if(vnum)
-                for(j=0;j<vnum;j++)
-                    FlushBlock(yuv[current].v,vblocks[j],yuv[current].uv_width,yuv[current].uv_height,divisor/2,fp);
-
-
-            /**@________________@**/
-            ((ProgData *)pdata)->avd+=((ProgData *)pdata)->frametime*2*((ProgData *)pdata)->args.channels;
-
-
-
         }
+        /**WRITE FRAME TO DISK*/
+        if(ynum+unum+vnum>(pow(divisor,2)+pow(divisor/2,2)*2)/10)
+            gzsetparams (fp,1,Z_FILTERED);
+        else
+            gzsetparams (fp,0,Z_FILTERED);
+        strncpy(fheader.frame_prefix,"FRAM",4);
+        fheader.frameno=++frameno;
+        fheader.current_total=frames_total;
+        fheader.Ynum=ynum;
+        fheader.Unum=unum;
+        fheader.Vnum=vnum;
+        fheader.pad=0;
+        gzwrite(fp,(void*)&fheader,sizeof(FrameHeader));
+        //flush indexes
+        if(ynum)gzwrite(fp,yblocks,ynum);
+        if(unum)gzwrite(fp,ublocks,unum);
+        if(vnum)gzwrite(fp,vblocks,vnum);
+
+
+        //flush the blocks for each buffer
+        if(ynum)
+            for(j=0;j<ynum;j++)
+                FlushBlock(yuv[current].y,yblocks[j],yuv[current].y_width,yuv[current].y_height,divisor,fp);
+        if(unum)
+            for(j=0;j<unum;j++)
+                FlushBlock(yuv[current].u,ublocks[j],yuv[current].uv_width,yuv[current].uv_height,divisor/2,fp);
+        if(vnum)
+            for(j=0;j<vnum;j++)
+                FlushBlock(yuv[current].v,vblocks[j],yuv[current].uv_width,yuv[current].uv_height,divisor/2,fp);
+
+
+        /**@________________@**/
+        ((ProgData *)pdata)->avd+=((ProgData *)pdata)->frametime*2*((ProgData *)pdata)->args.channels;
+
     }
 
     //clean up since we're not finished
@@ -190,7 +201,7 @@ void *CacheImageBuffer(void *pdata){
         free(yuv[i].u);
         free(yuv[i].v);
     }
-    fprintf(stderr,"Saved %d frames in a total of %d requests",frameno,frames_total);
+    fprintf(stderr,"Saved %d frames in a total of %d requests\n",frameno,frames_total);
     gzclose(fp);
     pthread_exit(&errno);
 }

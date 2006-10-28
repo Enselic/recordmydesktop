@@ -610,5 +610,8 @@ void *CacheImageBuffer(void *pdata);
 void InitCacheData(ProgData *pdata,EncData *enc_data_t,CacheData *cache_data_t);
 void *CacheSoundBuffer(void *pdata);
 void *LoadCache(void *pdata);
+void SyncEncodeImageBuffer(ProgData *pdata);
+void CancelTimer(void);
+void SyncEncodeSoundBuffer(ProgData *pdata,signed char *buff);
 #endif
 

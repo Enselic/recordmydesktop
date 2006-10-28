@@ -36,7 +36,6 @@ void *PollDamage(void *pdata){
     
     damage= XDamageCreate( ((ProgData *)pdata)->dpy, ((ProgData *)pdata)->brwin.windowid, XDamageReportRawRectangles);
     while(((ProgData *)pdata)->running){
-//         if(Paused)pthread_cond_wait(&((ProgData *)pdata)->pause_cond,&((ProgData *)pdata)->pause_cond_mutex);
         //damage polling doesn't stop,eventually full image may be needed
         XNextEvent(((ProgData *)pdata)->dpy,&event);
         if(event.type == ((ProgData *)pdata)->damage_event + XDamageNotify ){

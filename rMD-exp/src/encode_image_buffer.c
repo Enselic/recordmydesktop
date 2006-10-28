@@ -62,4 +62,21 @@ void *EncodeImageBuffer(void *pdata){
     pthread_exit(&errno);
 }
 
-
+//this function is meant to be called normally
+//not through a thread of it's own
+void SyncEncodeImageBuffer(ProgData *pdata){
+    if(theora_encode_YUVin(&pdata->enc_data->m_th_st,
+                            &pdata->enc_data->yuv)){
+        fprintf(stderr,"Encoder not ready!\n");
+    }
+    else{
+        if(theora_encode_packetout(&pdata->enc_data->m_th_st,0,
+                                    &pdata->enc_data->m_ogg_pckt1)==1){
+            pthread_mutex_lock(&pdata->libogg_mutex);
+            ogg_stream_packetin(&pdata->enc_data->m_ogg_ts,
+                                &pdata->enc_data->m_ogg_pckt1);
+            pthread_mutex_unlock(&pdata->libogg_mutex);
+            pdata->avd+=pdata->frametime*2*pdata->args.channels;
+        }
+    }
+}

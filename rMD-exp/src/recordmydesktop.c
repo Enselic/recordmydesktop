@@ -247,11 +247,9 @@ int main(int argc,char **argv){
             pthread_join(flush_to_ogg_t,NULL);
         fprintf(stderr,".");
         
-        //this thread will get cancelled instead of joined
-        //this is neccessary to terminate the application, if for some reason
-        //damage events are not delivered(i.e comp windopw managers)
         if(!pdata.args.full_shots)
-            pthread_cancel(poll_damage_t);
+            pthread_join(poll_damage_t,NULL);
+
 
         fprintf(stderr,".");
         if((!pdata.args.noshared)||(!pdata.args.nocondshared)){
@@ -262,16 +260,16 @@ int main(int argc,char **argv){
         fprintf(stderr,"\n");
         
 
-
+        //Now that we are done with recording we cancel the timer
+        CancelTimer();
 
 /**               Encoding                          */
         if(!pdata.args.encOnTheFly){
             if(!Aborted){
-    
+                fprintf(stderr,"Encoding started!\nPlease wait...\n");
                 pdata.running=1;
                 InitEncoder(&pdata,&enc_data,1);
                 //load encoding and flushing threads
-                pthread_create(&image_encode_t,NULL,EncodeImageBuffer,(void *)&pdata);
                 if(!pdata.args.nosound){
                     //before we start loading again
                     //we need to free any left-overs
@@ -279,8 +277,6 @@ int main(int argc,char **argv){
                         free(pdata.sound_buffer->data);
                         pdata.sound_buffer=pdata.sound_buffer->next;
                     }
-                    pthread_create(&sound_encode_t,NULL,EncodeSoundBuffer,(void *)&pdata);
-
                 }
                 pthread_create(&flush_to_ogg_t,NULL,FlushToOgg,(void *)&pdata);
 
@@ -288,32 +284,17 @@ int main(int argc,char **argv){
                 //start loading image and audio
                 pthread_create(&load_cache_t,NULL,LoadCache,(void *)&pdata);
 
-
-                //call loading func{
-                    //if avd>=0
-                    //load image from cache
-                    //signal buffer
-                    ////if avd<0
-                    //load sound from cache
-                    //signal buffer
-                //}
-                
                 //join and finish
-
                 pthread_join(load_cache_t,NULL);
-                pthread_cond_broadcast(&pdata.image_buffer_ready);
-                pthread_join(image_encode_t,NULL);
-                if(!pdata.args.nosound)
-                    pthread_join(sound_encode_t,NULL);
-
+                fprintf(stderr,"Encoding finished!\nWait a moment please...\n");
+                pthread_join(flush_to_ogg_t,NULL);
+                fprintf(stderr,"Done!!!\n");
             }
-            //clean-up data
         }
 /**@_______________________________________________@*/
 
         //This can happen earlier, but in some cases it might get stuck.
         //So we must make sure the recording is not wasted.
-        XFlush(pdata.dpy);
         XCloseDisplay(pdata.dpy);
 
         if(Aborted){
