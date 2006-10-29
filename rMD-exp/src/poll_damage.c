@@ -28,17 +28,48 @@
 #include <recordmydesktop.h>
 
 void *PollDamage(void *pdata){
-
-    Damage damage;
+    Window root_return,
+           parent_return,
+           *children;
+    unsigned int i,
+                 nchildren,
+                 inserts=0;
     XEvent event;
-    inserts=0;
+
+    XSelectInput (((ProgData *)pdata)->dpy,((ProgData *)pdata)->specs.root, SubstructureNotifyMask);
+
+    XQueryTree (((ProgData *)pdata)->dpy,
+                ((ProgData *)pdata)->specs.root,
+                &root_return,
+                &parent_return,
+                &children,
+                &nchildren);
+
+    for (i = 0; i < nchildren; i++){
+        XWindowAttributes attribs;
+        if (XGetWindowAttributes (((ProgData *)pdata)->dpy,children[i],&attribs)){
+            if (!attribs.override_redirect && attribs.depth==((ProgData *)pdata)->specs.depth)
+                XDamageCreate (((ProgData *)pdata)->dpy, children[i],XDamageReportRawRectangles);
+        }
+    }
+
+    XDamageCreate( ((ProgData *)pdata)->dpy, ((ProgData *)pdata)->brwin.windowid, XDamageReportRawRectangles);
 
 
-    damage= XDamageCreate( ((ProgData *)pdata)->dpy, ((ProgData *)pdata)->brwin.windowid, XDamageReportRawRectangles);
     while(((ProgData *)pdata)->running){
         //damage polling doesn't stop,eventually full image may be needed
+        //30/10/2006 : when and why did I write the above line? what did I mean?
         XNextEvent(((ProgData *)pdata)->dpy,&event);
-        if(event.type == ((ProgData *)pdata)->damage_event + XDamageNotify ){
+        if (event.type == MapNotify ){
+            XWindowAttributes attribs;
+            if (XGetWindowAttributes (((ProgData *)pdata)->dpy,
+                                        event.xcreatewindow.window,
+                                        &attribs)){
+                if (!attribs.override_redirect && attribs.depth==((ProgData *)pdata)->specs.depth)
+                    XDamageCreate (((ProgData *)pdata)->dpy,event.xcreatewindow.window,XDamageReportRawRectangles);
+            }
+        }
+        else if(event.type == ((ProgData *)pdata)->damage_event + XDamageNotify ){
             XDamageNotifyEvent *e =(XDamageNotifyEvent *)( &event );
             WGeometry wgeom;
             CLIP_EVENT_AREA(e,&(((ProgData *)pdata)->brwin),&wgeom);
@@ -50,8 +81,8 @@ void *PollDamage(void *pdata){
                 pthread_mutex_unlock(&((ProgData *)pdata)->list_mutex[tlist_sel]);
             }
         }
+
     }
-    XDamageDestroy(((ProgData *)pdata)->dpy,damage);
     pthread_exit(&errno);
 }
 
