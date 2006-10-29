@@ -25,7 +25,7 @@ recordmydesktop_SOURCES=	recordmydesktop.c\
 							rmd_cache.c\
 							load_cache.c
 
-INCLUDES= $(all_includes) -I../include -I$x_includes
+INCLUDES= $(all_includes) -I../include
 
-recordmydesktop_LDFLAGS = -D_THREAD_SAFE -pthread -Wall
-
+recordmydesktop_LDFLAGS = @X_LIBS@ @X_EXTRA_LIBS@ @X_PRE_LIBS@
+recordmydesktop_CFLAGS = -D_THREAD_SAFE -pthread -Wall
