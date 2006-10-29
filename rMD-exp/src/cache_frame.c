@@ -32,7 +32,7 @@ void MakeChecksums(unsigned char *buf,int width,int height,int divisor,unsigned 
 
     for(i=0;i<divisor;i++){
         for(k=0;k<divisor;k++){
-            int A=1,B=0;    
+            int A=1,B=0;
             for(j=0;j<height/divisor;j++){
                 for(m=0;m<width/divisor;m++){
                     A+=buf[i*(width*height/divisor)+j*width+k*width/divisor+m];
@@ -42,15 +42,40 @@ void MakeChecksums(unsigned char *buf,int width,int height,int divisor,unsigned 
             A=A%65521;
             B=B%65521;
             checksums[i*divisor+k]=B*65536+A;
+//             A = (A & 0xffff) + (A >> 16) * (15);
+//             B = (B & 0xffff) + (B >> 16) * (15);
+//
+//             if (A >= 65521)
+//                A -= 65521;
+//
+//             B = (B & 0xffff) + (B >> 16) * (15);
+//             if (B >= 65521)
+//                     B -= 65521;
+//             checksums[i*divisor+k]= ((B << 16) | A) ;
+
+
         }
     }
+}
+
+int CompareBlocks(unsigned char *incoming,unsigned char *old,int blockno,int width, int height,int divisor){
+    int j,i,
+        block_i=blockno/divisor,//place on the grid
+        block_k=blockno%divisor;
+
+    for(j=0;j<height/divisor;j++)//we copy rows
+            for(i=0;i<width/divisor;i++)
+                if(incoming[block_i*(width*height/divisor)+j*width+block_k*width/divisor+i]!=
+                    old[block_i*(width*height/divisor)+j*width+block_k*width/divisor+i])
+                    return 1;
+    return 0;
 }
 
 void FlushBlock(unsigned char *buf,int blockno,int width, int height,int divisor,gzFile *fp){
     int j,
         block_i=blockno/divisor,//place on the grid
         block_k=blockno%divisor;
-    
+
     for(j=0;j<height/divisor;j++)//we flush in rows
         gzwrite(fp,(void *)&buf[block_i*(width*height/divisor)+j*width+block_k*width/divisor],width/divisor);
 
@@ -62,38 +87,22 @@ void *CacheImageBuffer(void *pdata){
     pthread_mutex_init(&imut,NULL);
     yuv_buffer yuv[2];
     gzFile *fp=((ProgData *)pdata)->cache_data->ifp;
-    
+
     if(fp==NULL)exit(13);
 
-    unsigned short int  checksums_y[2][256],
-                        checksums_u[2][64],
-                        checksums_v[2][64];
     int i,current=0,divisor=16,firstrun=1,frameno=0;
-
-    //we want to make sure that each block has a sufficient
-    //number of bytes, so that the checksum will wrap
-    //around 65521. 
-    while(((((ProgData *)pdata)->brwin.rgeom.width*
-            ((ProgData *)pdata)->brwin.rgeom.width )
-            /pow(divisor,2))
-            <=1024){
-        divisor/=2;
-        if(divisor==2)
-            break;
-    }
-
 
     for(i=0;i<2;i++){
         yuv[i].y_width=((ProgData *)pdata)->enc_data->yuv.y_width;
         yuv[i].y_height=((ProgData *)pdata)->enc_data->yuv.y_height;
         yuv[i].uv_width=((ProgData *)pdata)->enc_data->yuv.uv_width;
         yuv[i].uv_height=((ProgData *)pdata)->enc_data->yuv.uv_height;
-        
+
         yuv[i].y=(unsigned char *)malloc(yuv[i].y_width*yuv[i].y_height);
         yuv[i].u=(unsigned char *)malloc(yuv[i].uv_width*yuv[i].uv_height);
         yuv[i].v=(unsigned char *)malloc(yuv[i].uv_width*yuv[i].uv_height);
     }
-    
+
 
     while(((ProgData *)pdata)->running){
         int prev;
@@ -118,9 +127,6 @@ void *CacheImageBuffer(void *pdata){
         //release main buffer
         pthread_mutex_unlock(&((ProgData *)pdata)->yuv_mutex);
         //get checksums for new
-        MakeChecksums(yuv[current].y,yuv[current].y_width,yuv[current].y_height,divisor,checksums_y[current]);
-        MakeChecksums(yuv[current].u,yuv[current].uv_width,yuv[current].uv_height,divisor/2,checksums_u[current]);
-        MakeChecksums(yuv[current].v,yuv[current].uv_width,yuv[current].uv_height,divisor/2,checksums_v[current]);
 
         //find and flush different blocks
         if(firstrun){
@@ -141,29 +147,33 @@ void *CacheImageBuffer(void *pdata){
         }
         else{
             for(j=0;j<pow(divisor,2);j++){
-                if(checksums_y[current][j]!=checksums_y[prev][j]){
+                if(CompareBlocks(yuv[current].y,yuv[prev].y,j,yuv[current].y_width,yuv[current].y_height,divisor)){
                     ynum++;
                     yblocks[ynum-1]=j;
                 }
             }
             for(j=0;j<pow(divisor/2,2);j++){
-                if(checksums_u[current][j]!=checksums_u[prev][j]){
+                if(CompareBlocks(yuv[current].u,yuv[prev].u,j,yuv[current].uv_width,yuv[current].uv_height,divisor/2)){
                     unum++;
                     ublocks[unum-1]=j;
                 }
-            }    
+            }
             for(j=0;j<pow(divisor/2,2);j++){
-                if(checksums_v[current][j]!=checksums_v[prev][j]){
+                if(CompareBlocks(yuv[current].v,yuv[prev].v,j,yuv[current].uv_width,yuv[current].uv_height,divisor/2)){
                     vnum++;
                     vblocks[vnum-1]=j;
                 }
             }
+
         }
         /**WRITE FRAME TO DISK*/
-        if(ynum+unum+vnum>(pow(divisor,2)+pow(divisor/2,2)*2)/10)
-            gzsetparams (fp,1,Z_FILTERED);
-        else
-            gzsetparams (fp,0,Z_FILTERED);
+        if(!((ProgData *)pdata)->args.zerocompression){
+            if(ynum+unum+vnum>(pow(divisor,2)+pow(divisor/2,2)*2)/10)
+                gzsetparams (fp,1,Z_FILTERED);
+            else
+                gzsetparams (fp,0,Z_FILTERED);
+        }
+
         strncpy(fheader.frame_prefix,"FRAM",4);
         fheader.frameno=++frameno;
         fheader.current_total=frames_total;

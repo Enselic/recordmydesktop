@@ -36,7 +36,7 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
     "\t -v_quality n| -s_quality n| -v_bitrate n| --no-framedrop| -dummy-cursor color|\n"
     "\t --no-cursor| -freq N(number>0)| -channels N(number>0)| -device SOUND_DEVICE|\n"
     "\t --nosound| --with-shared| --no-cond-shared| -shared-threshold n| --full-shots|\n"
-    "\t --quick-subsampling| -workdir DIR| -o filename]^filename\n\n\n"
+    "\t --quick-subsampling| -workdir DIR| --zero-compression| -o filename]^filename\n\n\n"
 
     "General Options:\n"
     "\t-h or --help\t\tPrint this help and exit.\n"
@@ -73,6 +73,7 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
     "\t-s_quality n\t\tDesired audio quality(-1 to 10).\n\n"
 
     "Misc Options:\n"
+    "\t--zero-compression\tImage data are always cached uncompressed.\n"
     "\t-workdir DIR\t\tLocation where a temporary directory will be created to hold project files(default $HOME).\n"
     "\t-delay n[H|h|M|m]\tNumber of secs(default),minutes or hours before capture starts(number can be float)\n"
     "\t-o filename\t\tName of recorded video(default out.ogg).\n"
@@ -279,7 +280,7 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
                     return 1;
                 }
                 arg_return->have_dummy_cursor=1;
-                arg_return->xfixes_cursor=0;    
+                arg_return->xfixes_cursor=0;
             }
             else{
                 fprintf(stderr,"Argument Usage: -dummy-cursor [black|white]\n");
@@ -397,6 +398,9 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
         else if(!strcmp(argv[i],"--on-the-fly-encoding")){
             arg_return->encOnTheFly=1;
         }
+        else if(!strcmp(argv[i],"--zero-compression")){
+            arg_return->zerocompression=1;
+        }
         else if(!strcmp(argv[i],"--help")||!strcmp(argv[i],"-h")){
             fprintf(stderr,"%s",usage);
             return 1;
@@ -408,7 +412,7 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
         else{
             fprintf(stderr,"\n\tError parsing arguments.\n\tType --help or -h for usage.\n\n");
             return 1;
-        }    
+        }
     }
     return 0;
 }

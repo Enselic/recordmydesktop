@@ -84,7 +84,7 @@ void InitCacheData(ProgData *pdata,EncData *enc_data_t,CacheData *cache_data_t){
         fprintf(stderr,"Could not create temporary directory %s !!!\n",cache_data_t->projname);
         exit(13);
     }
-    cache_data_t->ifp=gzopen(cache_data_t->imgdata,"wb1f");
+    cache_data_t->ifp=gzopen(cache_data_t->imgdata,"wb0f");
     if(cache_data_t->ifp==NULL){
         fprintf(stderr,"Could not create temporary file %s !!!\n",cache_data_t->imgdata);
         exit(13);
@@ -96,7 +96,7 @@ void InitCacheData(ProgData *pdata,EncData *enc_data_t,CacheData *cache_data_t){
            exit(13);
         }
     }
-    
+
 }
- 
+
 

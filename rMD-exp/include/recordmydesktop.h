@@ -37,7 +37,7 @@
 #include <string.h>
 #include <errno.h>
 #include <math.h>
-#include <unistd.h>  
+#include <unistd.h>
 #include <fcntl.h>
 #include <time.h>
 #include <signal.h>
@@ -79,7 +79,7 @@
 
 
 //do not be confused
-//this is useless and obsolete. 
+//this is useless and obsolete.
 //There are no plans for other fotmats
 enum {UNSPECIFIED,OGG_THEORA_VORBIS};
 
@@ -87,7 +87,7 @@ enum {UNSPECIFIED,OGG_THEORA_VORBIS};
 /**Structs*/
 
 typedef struct _DisplaySpecs{   //this struct holds some basic information
-    int screen;                 //about the display,needed mostly for 
+    int screen;                 //about the display,needed mostly for
     uint width;                 //validity checks at startup
     uint height;
     Window root;
@@ -103,7 +103,7 @@ typedef struct _WGeometry{  //basic geometry of a window or area
     int y;
     int width;
     int height;
-}WGeometry;    
+}WGeometry;
 
 typedef struct _RectArea{   //an area that has been damaged gets stored
     WGeometry geom;         //in a list comprised of structs of this type
@@ -130,7 +130,7 @@ typedef struct _ProgArgs{
     int encoding;       //encoding(default OGG_THEORA_VORBIS)
     int cursor_color;   //black or white=>1 or 0
     int have_dummy_cursor;//disable/enable drawing of the dummy cursor
-    int xfixes_cursor;   //disable/enable drawing of a cursor obtained 
+    int xfixes_cursor;   //disable/enable drawing of a cursor obtained
                         //through the xfixes extension
     float fps;            //desired framerate(default 15)
     unsigned int frequency;      //desired frequency (default 22050)
@@ -146,16 +146,16 @@ typedef struct _ProgArgs{
     int dropframes;     //option for theora encoder
     int encOnTheFly;    //encode while recording, no caching(default 0)
     char *workdir;      //directory to be used for cache files(default $HOME)
-
+    int zerocompression;//image data are always flushed uncompressed
 }ProgArgs;
 
 
-//this struct holds anything related to encoding AND 
-//writting out to file. 
+//this struct holds anything related to encoding AND
+//writting out to file.
 typedef struct _EncData{
     ogg_stream_state m_ogg_ts;//theora
     ogg_stream_state m_ogg_vs;//vorbis
-    ogg_page         m_ogg_pg;//this could be avoided since 
+    ogg_page         m_ogg_pg;//this could be avoided since
                               // it is used only while initializing
     ogg_packet       m_ogg_pckt1;//theora stream
     ogg_packet       m_ogg_pckt2;//vorbis stream
@@ -167,7 +167,7 @@ typedef struct _EncData{
 //vorbis data
     vorbis_info      m_vo_inf;
     vorbis_comment   m_vo_cmmnt;
-    vorbis_dsp_state m_vo_dsp; 
+    vorbis_dsp_state m_vo_dsp;
     vorbis_block     m_vo_block;
 //these should be 0, since area is quantized
 //before input
@@ -197,7 +197,7 @@ typedef struct _CacheData{
 }CacheData;
 
 //sound buffer
-//sound keeps coming so we que it in this list 
+//sound keeps coming so we que it in this list
 //which we then traverse
 typedef struct _SndBuffer{
     signed char *data;
@@ -205,9 +205,9 @@ typedef struct _SndBuffer{
 }SndBuffer;
 
 //this structure holds any data related to the program
-//It's usage is mostly to be given as an argument to the 
-//threads,so they will have access to the program data, avoiding 
-//at the same time usage of any globals. 
+//It's usage is mostly to be given as an argument to the
+//threads,so they will have access to the program data, avoiding
+//at the same time usage of any globals.
 typedef struct _ProgData{
     ProgArgs args;//the program arguments
     DisplaySpecs specs;//Display specific information
@@ -219,9 +219,9 @@ typedef struct _ProgData{
                                 //data is casted to unsigned for later use in YUV buffer
     int dummy_p_size;//initially 16x16,always square
     unsigned char npxl;//this is the no pixel convention when drawing the dummy pointer
-    char    *datamain,//the data of  image 
+    char    *datamain,//the data of  image
             *datash,//the data of shimage
-            *datatemp;//buffer for the temporary image,which will be 
+            *datatemp;//buffer for the temporary image,which will be
                       //preallocated in case shared memory is not used.
     RectArea *rect_root[2];//the interchanging list roots for storing the changed regions
     int list_selector,//selector for the above
@@ -239,7 +239,7 @@ typedef struct _ProgData{
     pthread_mutex_t list_mutex[2],//mutexes for concurrency protection of the lists
                     sound_buffer_mutex,
                     libogg_mutex,//libogg is not thread safe
-                    yuv_mutex;//this might not be needed since we only have 
+                    yuv_mutex;//this might not be needed since we only have
                               //one read-only and  one write-only thread
                               //also on previous versions, y component was looped separately
                               //and then u and v so this was needed to avoid wrong coloring to render
@@ -287,8 +287,8 @@ typedef struct _FrameHeader{
 typedef struct _CachedFrame{
     FrameHeader *header;
     unsigned char *YBlocks;//identifying number on the grid, starting at top left
-    unsigned char *UBlocks;//       >>      >>      
-    unsigned char *VBlocks;//       >>      >>   
+    unsigned char *UBlocks;//       >>      >>
+    unsigned char *VBlocks;//       >>      >>
     unsigned char *YData;//pointer to data for the blocks that have changed,
     unsigned char *UData;//which have to be remapped on the buffer when reading
     unsigned char *VData;
@@ -308,7 +308,7 @@ unsigned char   Yr[256],Yg[256],Yb[256],
 unsigned int    inserts,//total insertions in the lists
                 frames_total,//frames calculated by total time expirations
                 frames_lost;//the value of shame
-//used to determine frame drop which can 
+//used to determine frame drop which can
 //happen on failure to receive a signal over a condition variable
 int capture_busy,
     encoder_busy;
@@ -383,7 +383,8 @@ int capture_busy,
         (args)->display=NULL;\
     (args)->windowid=(args)->x=(args)->y\
     =(args)->width=(args)->height=(args)->quietmode\
-    =(args)->nosound=(args)->full_shots=(args)->encOnTheFly=0;\
+    =(args)->nosound=(args)->full_shots=(args)->encOnTheFly\
+    =(args)->zerocompression=0;\
     (args)->noshared=1;\
     (args)->dropframes=(args)->nocondshared=0;\
     (args)->no_quick_subsample=1;\

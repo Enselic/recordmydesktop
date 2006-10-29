@@ -31,7 +31,7 @@ void LoadBlock(unsigned char *dest,unsigned char *source,int blockno,int width, 
     int j,
         block_i=blockno/divisor,//place on the grid
         block_k=blockno%divisor;
-    
+
     for(j=0;j<height/divisor;j++)//we copy rows
         memcpy( &dest[block_i*(width*height/divisor)+j*width+block_k*width/divisor],
                 &source[j*width/divisor],
@@ -66,7 +66,7 @@ void *LoadCache(void *pdata){
         thread_exit=-1;
         pthread_exit(&thread_exit);
     }
-       
+
     if(!((ProgData *)pdata)->args.nosound){
         afp=fopen(((ProgData *)pdata)->cache_data->audiodata,"rb");
         if(afp==NULL){
@@ -74,26 +74,17 @@ void *LoadCache(void *pdata){
             pthread_exit(&thread_exit);
         }
     }
-    //recalculate the divisor since it is not saved
-    while(((((ProgData *)pdata)->brwin.rgeom.width*
-            ((ProgData *)pdata)->brwin.rgeom.width )
-            /pow(divisor,2))
-            <=1024){
-        divisor/=2;
-        if(divisor==2)
-            break;
-    }
     //these two are likely to be the same, but not guaranteed, especially on
     //low resolutions
     blockszy=(yuv->y_width*yuv->y_height )/pow(divisor,2);
     blockszuv=(yuv->uv_width*yuv->uv_height)/pow(divisor/2,2);
 
     //this will be used now to define if we proccess audio or video
-    //on any given loop. 
+    //on any given loop.
     ((ProgData *)pdata)->avd=0;
     //If sound finishes first,we go on with the video.
     //If video ends we will do one more run to flush audio in the ogg file
-    
+
     while(((ProgData *)pdata)->running){
         //video load and encoding
         if(((ProgData *)pdata)->avd<=0 || ((ProgData *)pdata)->args.nosound || audio_end){
@@ -103,7 +94,7 @@ void *LoadCache(void *pdata){
                 SyncEncodeImageBuffer((ProgData *)pdata);
             }
             else if(gzread(ifp,frame.header,sizeof(FrameHeader))==sizeof(FrameHeader)){
-                //sync 
+                //sync
                 missing_frames+=frame.header->current_total-(extra_frames+frame.header->frameno);
 
                 fprintf(stdout,"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b"
@@ -192,4 +183,4 @@ void *LoadCache(void *pdata){
 
 
 }
- 
+
