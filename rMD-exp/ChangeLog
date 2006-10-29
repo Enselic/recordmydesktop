@@ -1,14 +1,14 @@
 /*VERSION 0.2.1*/
 *Unupdated lines bug fixed.
 *Fuzzy cursor at border bug fixed.
-*Incorrect display of windows that 
+*Incorrect display of windows that
 extended beyond recording height fixed.
-*Size adjustement that resulted in extra 
+*Size adjustement that resulted in extra
 or missing pixels at borders has been corrected.
 New adjustment is 8 pixels max,split evenly if possible.
 *The option to drop frames has been added.
 *The option to do better subsampling has been added.
-*Default behavior now is to use shared memory when 
+*Default behavior now is to use shared memory when
 size of image gets over 75% of total (or a user set threshold).
 *Many other minor bugfixes.
 
@@ -18,18 +18,18 @@ size of image gets over 75% of total (or a user set threshold).
 *BGR to YUV convertion corrected.
 
 /*VERSION 0.2.3*/
-*Problems on big-endian architectures, corrected 
+*Problems on big-endian architectures, corrected
 (thanks to Marcel Unbehaun for bringing up the problem
 and providing the neccessary feedback to resolve it).
-*Failure to respect change in channels number, while 
+*Failure to respect change in channels number, while
 opening soundcard, which resulted in crashes, segfaults
 and repeated error-messages has been fixed.
 *other minor bugfixes
 
 /*VERSION 0.2.4*/
-*Behavior on lack of $DISPLAY evironment 
+*Behavior on lack of $DISPLAY evironment
 variable has been corrected.
-*Size adjustment is now quantized at 16 pixels, 
+*Size adjustment is now quantized at 16 pixels,
 in order to avoid complete image distortion,
 present at certain resolutions, when using shared memory
 (conditional or not).
@@ -39,12 +39,12 @@ values of options.
 /*VERSION 0.2.5*/
 *Drawing of the correct cursor is now supported through
 the Xfixes extension.
-*Change of behavior on lack of any Xserver extension and 
+*Change of behavior on lack of any Xserver extension and
 failure to open sound device. The program now exits and informs
 instead of continuing with a different configuration.
 *Exit status also indicates the nature of any error that occured.
 *Documentation has been updated with exit status explanations.
-*Subsampling of the chroma planes is made by averaging, while 
+*Subsampling of the chroma planes is made by averaging, while
 pixel discarding is an option(used to be otherwise).
 
 
@@ -54,15 +54,20 @@ Now, instead of dropping sound buffers, image
 capturing speeds up. That is, waiting for timer to
 expire is disabled until sync is achieved.
 When not recording sound, this does not apply.
-*Theora return values are now properly checked, 
+*Theora return values are now properly checked,
 to avoid inserting corrupt packages into the stream.
 *Major memory leaks have been fixed. These were related
 to the rectangle insertion algorithm and discarding of
 used sound buffers,
-*Segmentation fault on seemingly random occasions has been 
+*Segmentation fault on seemingly random occasions has been
 found and is now fixed. Reason was lack of thread safety over
 libogg calls.
 
 
+/*VERSION 0.3.1*/
+*Implemented cache functionality
+(Encoding by default happens right after the recording)
+*A few new options were added related to caching.
+*Removed uneeded bitmap screenshot function.
 
 
