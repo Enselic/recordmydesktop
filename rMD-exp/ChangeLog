@@ -64,9 +64,10 @@ found and is now fixed. Reason was lack of thread safety over
 libogg calls.
 
 
-/*VERSION 0.3.1*/
+/*VERSION 0.3.0*/
 *Implemented cache functionality
 (Encoding by default happens right after the recording)
+*Corrected damage event handling. Now Xv windows are recorded, too.
 *A few new options were added related to caching.
 *Removed uneeded bitmap screenshot function.
 
