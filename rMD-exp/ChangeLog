@@ -67,7 +67,7 @@ libogg calls.
 /*VERSION 0.3.0*/
 *Implemented cache functionality
 (Encoding by default happens right after the recording)
-*Corrected damage event handling. Now Xv windows are recorded, too.
+*Corrected damage event handling.
 *Saving under the same file-name,no longer deletes the previous one,
 instead it saves under a number postfixed file.
 *Opening the sound device doesn't block anymore.
