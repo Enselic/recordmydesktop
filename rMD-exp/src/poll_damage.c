@@ -62,7 +62,7 @@ void *PollDamage(void *pdata){
         XNextEvent(((ProgData *)pdata)->dpy,&event);
         if (event.type == MapNotify ){
             XWindowAttributes attribs;
-            if (XGetWindowAttributes (((ProgData *)pdata)->dpy,
+            if (!((XMapEvent *)(&event))->override_redirect && XGetWindowAttributes (((ProgData *)pdata)->dpy,
                                         event.xcreatewindow.window,
                                         &attribs)){
                 if (!attribs.override_redirect && attribs.depth==((ProgData *)pdata)->specs.depth)
