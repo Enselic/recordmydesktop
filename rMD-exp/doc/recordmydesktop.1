@@ -7,7 +7,7 @@ recordMyDesktop \- record desktop sessions to an Ogg\-Theora\-Vorbis file.
 
 .SH SYNOPSIS
 
-.B        recordmydesktop 
+.B        recordmydesktop
 [
 .B
 Options
@@ -22,14 +22,14 @@ filename
 .br
 of a linux desktop session. The default behavior of recording is to mark areas that have changed(through libxdamage)
 .br
-and update the frame. This behavior can be changed (option 
+and update the frame. This behavior can be changed (option
 .B
 \-\-full\-shots
 ) to produce a more accurate result
 .br
-or capture windows that do not generate events on change(windows with 3d context or video display) 
+or capture windows that do not generate events on change(windows with accelerated 3d context)
 .br
-but this will notably increase the workload. In this case, enabling the 
+but this will notably increase the workload. In this case, enabling the
 .B
 \-\-with\-shared
 option is recommended
@@ -71,8 +71,14 @@ while a command like:
 .br
 .B
 ~$ recordmydesktop foo.ogg
-.br 
+.br
 will write output to foo.ogg
+.br
+.br
+Since version 0.3, encoding will happen right after the recording finishes.
+.br
+While this behavior saves a lot of CPU, you can revert to the old one by entering the \-\-on\-the\-fly\-encoding switch.
+.br
 .br
 To specify a region for recording you can type this:
 .br
@@ -87,6 +93,8 @@ If the area extends beyond your current resolution, you will be notified appropr
 .br
 Notice also, that if any option is entered you have to specify the output file with the \-o switch.
 .br
+If you try to save under a filename that already exists, the name will be post-fixed with a number (incremented if that name exists already)
+.br
 .br
 .B
 To normally end a recording you can press ctl-c.
@@ -97,15 +105,15 @@ SIGINT
 to the program).
 .br
 .br
-For further manipulation of the end result look at the 
+For further manipulation of the end result look at the
 .B
 OPTIONS
-and 
+and
 .B
 NOTES
 sections.
 .br
-.br 
+.br
 .br
 .SH EXIT STATUS
 0 is success
@@ -129,7 +137,7 @@ The following error codes indicate the nature of the error:
 .br
 7 XInitThreads failed.
 .br
-8 No $DISPLAY environment variable and none specified as argument. 
+8 No $DISPLAY environment variable and none specified as argument.
 .br
 9 Cannot connect to Xserver.
 .br
@@ -140,8 +148,8 @@ The following error codes indicate the nature of the error:
 12 Cannot attach shared memory to proccess.
 .br
 13 Cannot open file for writting.
-.br 
-.br 
+.br
+.br
 .SH OPTIONS
 .PP
 .B
@@ -149,7 +157,7 @@ Generic Options:
 .br
 .TP
 .B
-    \-h or \-\-help    
+    \-h or \-\-help
     Print help summary and exit.
 .br
 .TP
@@ -268,6 +276,11 @@ Encoding Options:
 .br
 .TP
 .B
+    \-\-on\-the\-fly\-encoding
+    Encode the audio-video data, while recording.
+.br
+.TP
+.B
     \-v_quality n
     A number from 0 to 63 for desired encoded video quality(default 63).
 .br
@@ -293,18 +306,18 @@ Misc Options:
 .br
 .TP
 .B
+    \-\-zero\-compression
+    Image data are always cached uncompressed.
+.br
+.TP
+.B
+    \-workdir DIR
+    Location where a temporary directory will be created to hold project files(default $HOME).
+.br
+.TP
+.B
     \-delay n[H|h|M|m]
     Number of secs(default),minutes or hours before capture starts(number can be float).
-.br
-.TP
-.B
-    \-\-scshot
-    Take a bitmap screenshot(default rmdout.bmp) and exit.
-.br
-.TP
-.B
-    \-scale\-shot N
-    Factor by which screenshot is scaled down(1<=number<=64,power of 2).
 .br
 .TP
 .B
@@ -320,11 +333,11 @@ If no other option is specified, filename can be given without the \-o switch.
 .br
 .SH USAGE
 .TP
-.B        recordmydesktop 
+.B        recordmydesktop
 .br
 [\-h| \-\-help| \-\-version| \-delay n[H|h|M|m]| \-windowid id_of_window|
 .br
-\-display DISPLAY| \-x X| \-y Y|\-width N| \-height N| \-fps N(number>0)|
+\-display DISPLAY| \-x X| \-y Y|\-width N| \-height N| \-fps N(number>0)| \-\-on\-the\-fly\-encoding|
 .br
 \-v_quality n| \-s_quality n| \-v_bitrate n| \-\-no\-framedrop| \-dummy\-cursor color|
 .br
@@ -332,7 +345,8 @@ If no other option is specified, filename can be given without the \-o switch.
 .br
 \-\-nosound| \-\-with\-shared| \-\-no\-cond\-shared| \-shared\-threshold n| \-\-full\-shots|
 .br
-\-\-quick\-subsampling| \-\-scshot| \-scale\-shot N| \-o filename]^filename
+\-\-quick\-subsampling| \-workdir DIR| \-\-zero\-compression| \-o filename]^filename
+.br
 .br
 .br
 .br
@@ -349,7 +363,7 @@ Display environment variable, specifying X server to connect to.
 .br
 Also when using that option the \-x,\-y,\-width and \-height options are relative to the specified window area.
 .br
-An easy way to find out the id of a window, is by using the 
+An easy way to find out the id of a window, is by using the
 .B
 xwininfo
 program.
@@ -357,14 +371,14 @@ program.
 Running a command like :
 .br
 .B
-xwininfo |grep "Window id:"|sed \-e "s/xwininfo\\:\\ Window id:\\ // ;s/\\ \.*//" 
+xwininfo |grep "Window id:"|sed \-e "s/xwininfo\\:\\ Window id:\\ // ;s/\\ \.*//"
 .br
 will give you only the id of the window(which should look like this: 0x4800005)
 .br
 More conviniently you can put all that in the command that launches recordMyDesktop like this:
 .br
 .B
-~$recordmydesktop -windowid $(xwininfo |grep "Window id:"|sed \-e "s/xwininfo\\:\\ Window id:\\ // ;s/\\ \.*//" ) 
+~$recordmydesktop -windowid $(xwininfo |grep "Window id:"|sed \-e "s/xwininfo\\:\\ Window id:\\ // ;s/\\ \.*//" )
 .br
 .br
     Also, the lower quality you select on a video recording (
@@ -372,7 +386,11 @@ More conviniently you can put all that in the command that launches recordMyDesk
 -v_quality
 option), the highest CPU-power that you will need.
 .br
-So it's always better to start with default values and manipulate the end\-result with another program.
+So
+.B
+if you are doing the encoding on the fly
+,it's better to start with default values and manipulate
+the end\-result with another program.
 .br
 An excellent converter is
 .B
@@ -382,13 +400,17 @@ ffmpeg2theora
 Changing the quality of a recordng with it,can be as simple as :
 .br
 .B
-ffmpeg2theora infile.ogg -v 3 -a 4 -o outfile.ogg
+ffmpeg2theora infile.ogg \-v 3 \-a 4 \-o outfile.ogg
 .br
 It can even perform resizing on the size of the recording, or change the overall duration.
 .br
 .br
 .SH BUGS
-Too resource intensive.
+Does not record 3d windows, if \-\-full\-shots isn't specified.
+.br
+Saving 65536 files with the same name, will result in upredictable behavior,
+.br
+which might manifest as an endless loop, or a segmentation fault.
 .br
 .SH AUTHORS
 John Varouhakis(johnvarouhakis@gmail.com)

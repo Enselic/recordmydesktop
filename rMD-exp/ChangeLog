@@ -72,6 +72,7 @@ libogg calls.
 instead it saves under a number postfixed file.
 *Opening the sound device doesn't block anymore.
 *A few new options were added related to caching.
+*Updated documentation.
 *Removed uneeded bitmap screenshot function.
 
 
