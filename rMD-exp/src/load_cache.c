@@ -96,9 +96,10 @@ void *LoadCache(void *pdata){
             else if(gzread(ifp,frame.header,sizeof(FrameHeader))==sizeof(FrameHeader)){
                 //sync
                 missing_frames+=frame.header->current_total-(extra_frames+frame.header->frameno);
+                fprintf(stdout,"\r[%d%%] ",
+                ((frame.header->frameno+extra_frames)*100)/frames_total);
 
-                fprintf(stdout,"\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b"
-                                "%d of %d",frame.header->frameno+extra_frames,frames_total);fflush(stdout);
+                fflush(stdout);
                 if( (frame.header->Ynum<=pow(divisor,2)) &&
                     (frame.header->Unum<=pow(divisor/2,2)) &&
                     (frame.header->Vnum<=pow(divisor/2,2)) &&
@@ -158,7 +159,7 @@ void *LoadCache(void *pdata){
             }
         }
     }
-
+    fprintf(stdout,"\n");
     CLEAR_FRAME(&frame)
     free(sound_data);
     gzclose(ifp);

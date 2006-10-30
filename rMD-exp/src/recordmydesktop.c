@@ -71,7 +71,7 @@ int main(int argc,char **argv){
         }
         if(SetBRWindow(pdata.dpy,&pdata.brwin,&pdata.specs,&pdata.args))
             exit(11);
-        
+
         QueryExtensions(pdata.dpy,&pdata.args,&pdata.damage_event, &pdata.damage_error);
 
         //init data
@@ -89,7 +89,7 @@ int main(int argc,char **argv){
 
         if((pdata.args.noshared))
             pdata.datamain=(char *)malloc(pdata.brwin.nbytes);
-        
+
         if(pdata.args.noshared)
             pdata.datatemp=(char *)malloc(pdata.brwin.nbytes);
         pdata.rect_root[0]=pdata.rect_root[1]=NULL;
@@ -109,7 +109,7 @@ int main(int argc,char **argv){
         time_cond=&pdata.time_cond;
         pause_cond=&pdata.pause_cond;
         Running=&pdata.running;
-    
+
         if((pdata.args.noshared)){
             pdata.image=XCreateImage(pdata.dpy, pdata.specs.visual, pdata.specs.depth, ZPixmap, 0,pdata.datamain,pdata.brwin.rgeom.width,
                         pdata.brwin.rgeom.height, 8, 0);
@@ -118,7 +118,7 @@ int main(int argc,char **argv){
                         pdata.brwin.rgeom.width,pdata.brwin.rgeom.height);
         }
         if((!pdata.args.noshared)||(!pdata.args.nocondshared)){
-            pdata.shimage=XShmCreateImage (pdata.dpy,pdata.specs.visual,pdata.specs.depth,ZPixmap,pdata.datash, 
+            pdata.shimage=XShmCreateImage (pdata.dpy,pdata.specs.visual,pdata.specs.depth,ZPixmap,pdata.datash,
                          &shminfo, pdata.brwin.rgeom.width,pdata.brwin.rgeom.height);
             shminfo.shmid = shmget (IPC_PRIVATE,
                                     pdata.shimage->bytes_per_line * pdata.shimage->height,
@@ -138,7 +138,7 @@ int main(int argc,char **argv){
                 exit(3);
             }
         }
-        
+
         if(pdata.args.encOnTheFly)
             InitEncoder(&pdata,&enc_data,0);
         else
@@ -200,13 +200,13 @@ int main(int argc,char **argv){
         }
         if(pdata.args.encOnTheFly)
             pthread_create(&flush_to_ogg_t,NULL,FlushToOgg,(void *)&pdata);
-        
+
 
         RegisterCallbacks(&pdata.args);
         fprintf(stderr,"Capturing!\n");
 
         //wait all threads to finish
-        
+
         pthread_join(image_capture_t,NULL);
         fprintf(stderr,"Shutting down.");
         //if no damage events have been received the thread will get stuck
@@ -246,7 +246,7 @@ int main(int argc,char **argv){
         if(pdata.args.encOnTheFly)
             pthread_join(flush_to_ogg_t,NULL);
         fprintf(stderr,".");
-        
+
         if(!pdata.args.full_shots)
             pthread_join(poll_damage_t,NULL);
 
@@ -258,7 +258,7 @@ int main(int argc,char **argv){
             shmctl (shminfo.shmid, IPC_RMID, 0);
         }
         fprintf(stderr,"\n");
-        
+
 
         //Now that we are done with recording we cancel the timer
         CancelTimer();
@@ -266,7 +266,9 @@ int main(int argc,char **argv){
 /**               Encoding                          */
         if(!pdata.args.encOnTheFly){
             if(!Aborted){
-                fprintf(stderr,"Encoding started!\nPlease wait...\n");
+                fprintf(stderr,"Encoding started!\nThis may take several minutes.\n"
+                "Pressing Ctrl-C will cancel the procedure (files we be permanetly deleted).\n"
+                "Please wait...\n");
                 pdata.running=1;
                 InitEncoder(&pdata,&enc_data,1);
                 //load encoding and flushing threads
