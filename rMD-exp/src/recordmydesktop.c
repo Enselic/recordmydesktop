@@ -267,7 +267,8 @@ int main(int argc,char **argv){
         if(!pdata.args.encOnTheFly){
             if(!Aborted){
                 fprintf(stderr,"Encoding started!\nThis may take several minutes.\n"
-                "Pressing Ctrl-C will cancel the procedure (files we be permanetly deleted).\n"
+                "Pressing Ctrl-C will cancel the procedure (resuming will not be possible, but\n"
+                "any portion of the video, which is already encoded won't be deleted).\n"
                 "Please wait...\n");
                 pdata.running=1;
                 InitEncoder(&pdata,&enc_data,1);

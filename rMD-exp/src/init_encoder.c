@@ -27,6 +27,34 @@
 
 #include <recordmydesktop.h>
 
+int IncrementalNaming(char **name){
+    struct stat buff;
+    char *base_name;
+    int i=0;
+    base_name=malloc(strlen(*name));
+    strcpy(base_name,*name);
+
+    //this will go on an endless loop if you have 65536? files with the same name
+    //or it will crash and die.anyone interested in trying ?
+    while (stat(*name,&buff)==0){
+        //create new name
+        char *tname=malloc(strlen(*name)+10);
+        char numbuf[8];
+
+        strcpy(tname,base_name);
+        strcat(tname,".");
+        I16TOA((++i),numbuf)
+        strcat(tname,numbuf);
+        //save new name
+        free(*name);
+        *name=malloc(strlen(tname)+1);
+        strcpy(*name,tname);
+        free(tname);
+    }
+    free(base_name);
+    return 0;
+}
+
 void InitEncoder(ProgData *pdata,EncData *enc_data_t,int buffer_ready){
     int y1,y2;
     (pdata)->enc_data=enc_data_t;
@@ -38,12 +66,13 @@ void InitEncoder(ProgData *pdata,EncData *enc_data_t,int buffer_ready){
     ogg_stream_init(&(enc_data_t)->m_ogg_ts,y1);
     if(!pdata->args.nosound)
         ogg_stream_init(&(enc_data_t)->m_ogg_vs,y2);
-    
+
+    IncrementalNaming(&(pdata)->args.filename);
     (enc_data_t)->fp=fopen((pdata)->args.filename,"w");
     if((enc_data_t)->fp==NULL){
         fprintf(stderr,"Cannot open file %s for writting!\n",(pdata)->args.filename);
         exit(13);
-    }    
+    }
     theora_info_init(&(enc_data_t)->m_th_inf);
     (enc_data_t)->m_th_inf.frame_width=(pdata)->brwin.rgeom.width;
     (enc_data_t)->m_th_inf.frame_height=(pdata)->brwin.rgeom.height;
@@ -87,7 +116,7 @@ void InitEncoder(ProgData *pdata,EncData *enc_data_t,int buffer_ready){
         vorbis_block_init(&(enc_data_t)->m_vo_dsp,&(enc_data_t)->m_vo_block);
     }
 
-    
+
     theora_encode_header(&(enc_data_t)->m_th_st,&(enc_data_t)->m_ogg_pckt1);
     ogg_stream_packetin(&(enc_data_t)->m_ogg_ts,&(enc_data_t)->m_ogg_pckt1);
     if(ogg_stream_pageout(&(enc_data_t)->m_ogg_ts,&(enc_data_t)->m_ogg_pg)!=1){
@@ -109,16 +138,16 @@ void InitEncoder(ProgData *pdata,EncData *enc_data_t,int buffer_ready){
         ogg_packet header;
         ogg_packet header_comm;
         ogg_packet header_code;
-    
+
         vorbis_analysis_headerout(&(enc_data_t)->m_vo_dsp,&(enc_data_t)->m_vo_cmmnt,&header,&header_comm,&header_code);
-        ogg_stream_packetin(&(enc_data_t)->m_ogg_vs,&header); 
+        ogg_stream_packetin(&(enc_data_t)->m_ogg_vs,&header);
         if(ogg_stream_pageout(&(enc_data_t)->m_ogg_vs,&(enc_data_t)->m_ogg_pg)!=1){
             fprintf(stderr,"Internal Ogg library error.\n");
             exit(2);
         }
         fwrite((enc_data_t)->m_ogg_pg.header,1,(enc_data_t)->m_ogg_pg.header_len,(enc_data_t)->fp);
         fwrite((enc_data_t)->m_ogg_pg.body,1,(enc_data_t)->m_ogg_pg.body_len,(enc_data_t)->fp);
-    
+
         ogg_stream_packetin(&(enc_data_t)->m_ogg_vs,&header_comm);
         ogg_stream_packetin(&(enc_data_t)->m_ogg_vs,&header_code);
     }
@@ -167,7 +196,7 @@ void InitEncoder(ProgData *pdata,EncData *enc_data_t,int buffer_ready){
     theora_info_clear(&(enc_data_t)->m_th_inf);
 
 }
- 
+
 
 
 
