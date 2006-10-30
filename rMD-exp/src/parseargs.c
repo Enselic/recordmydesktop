@@ -51,7 +51,7 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
     "\t-height N\t\tHeight of recorded window.\n\n"
 
     "\t-dummy-cursor color\tColor of the dummy cursor [black|white]\n"
-    "\t--no-cursor\tDisable drawing of the cursor.\n"
+    "\t--no-cursor\t\tDisable drawing of the cursor.\n"
     "\t--with-shared\t\tEnable usage of MIT-shared memory extension at all times.\n"
     "\t--no-cond-shared\tDo not use the MIT-shared memory extension when aquiring large areas.\n"
     "\t-shared-threshold n\tThreshold over which shared memory is used(default 75).\n"
