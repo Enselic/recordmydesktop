@@ -81,7 +81,8 @@ int main(int argc,char **argv){
         }
         //Right now only wm's that I know of performing 3d compositing are beryl and compiz.
         //No, the blue screen in metacity doesn't count :)
-        else if(!strcmp(pdata.window_manager,"compiz") || !strcmp(pdata.window_manager,"beryl")){
+        //names can be compiz for compiz and beryl/beryl-co/beryl-core for beryl(so it's strncmp )
+        else if(!strcmp(pdata.window_manager,"compiz") || !strncmp(pdata.window_manager,"beryl",5)){
             fprintf(stderr,"\nDetected 3d compositing window manager.\n"
                            "Reverting to full screen capture at every frame.\n"
                            "To disable this check run with --no-wm-check\n"
