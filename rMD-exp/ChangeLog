@@ -72,6 +72,8 @@ libogg calls.
 instead it saves under a number postfixed file.
 *Opening the sound device doesn't block anymore.
 *A few new options were added related to caching.
+*Program now checks if it is run uder a known 3d compositing window manager
+and set behavior accordingly, to reduce the need for extra options at launch.
 *Updated documentation.
 *Removed uneeded bitmap screenshot function.
 

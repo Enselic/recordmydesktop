@@ -52,6 +52,7 @@
 #include <zlib.h>
 #include <X11/Xlib.h>
 #include <X11/Xlibint.h>
+#include <X11/Xatom.h>
 #include <X11/extensions/Xfixes.h>
 #include <X11/extensions/Xdamage.h>
 #include <X11/extensions/XShm.h>

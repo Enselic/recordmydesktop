@@ -26,7 +26,6 @@
 
 
 #include <recordmydesktop.h>
-#include <X11/Xatom.h>
 
 char *rmdWMCheck(Display *dpy,Window root){
 
