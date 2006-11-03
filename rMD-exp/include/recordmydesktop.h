@@ -213,6 +213,7 @@ typedef struct _ProgData{
     DisplaySpecs specs;//Display specific information
     BRWindow brwin;//recording window
     Display *dpy;//curtrent display
+    char *window_manager;//name of the window manager at program launch
     XImage *image;//the image that holds the current full screenshot
     XImage *shimage;//the image that holds the current full screenshot(shared memory)
     unsigned char *dummy_pointer;//a dummy pointer to be drawn in every frame
@@ -613,5 +614,6 @@ void *LoadCache(void *pdata);
 void SyncEncodeImageBuffer(ProgData *pdata);
 void CancelTimer(void);
 void SyncEncodeSoundBuffer(ProgData *pdata,signed char *buff);
+char *rmdWMCheck(Display *dpy,Window root);
 #endif
 

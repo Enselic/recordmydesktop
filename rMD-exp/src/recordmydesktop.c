@@ -74,6 +74,8 @@ int main(int argc,char **argv){
 
         QueryExtensions(pdata.dpy,&pdata.args,&pdata.damage_event, &pdata.damage_error);
 
+
+        pdata.window_manager=rmdWMCheck(pdata.dpy,pdata.specs.root);
         //init data
 
 
