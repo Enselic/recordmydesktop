@@ -266,7 +266,7 @@ Sound Options:
 .br
 .TP
 .B
-    \-\-nosound
+    \-\-no\-sound
     Do not record sound.
 .br
 .PP
@@ -303,6 +303,13 @@ Encoding Options:
 .br
 .B
 Misc Options:
+.br
+.TP
+.B
+    \-\-no\-wm\-check
+    When a 3d compositing window manager is detected the program will function as if the
+    \-\-full\-shots and \-\-with\-shared options have been specified. This option disables that
+    behavior alltogether.
 .br
 .TP
 .B
@@ -343,9 +350,9 @@ If no other option is specified, filename can be given without the \-o switch.
 .br
 \-\-no\-cursor| \-freq N(number>0)| \-channels N(number>0)| \-device SOUND_DEVICE|
 .br
-\-\-nosound| \-\-with\-shared| \-\-no\-cond\-shared| \-shared\-threshold n| \-\-full\-shots|
+\-\-no\-sound| \-\-with\-shared| \-\-no\-cond\-shared| \-shared\-threshold n| \-\-full\-shots|
 .br
-\-\-quick\-subsampling| \-workdir DIR| \-\-zero\-compression| \-o filename]^filename
+\-\-quick\-subsampling| \-workdir DIR| \-\-zero\-compression| \-\-no\-wm\-check| \-o filename]^filename
 .br
 .br
 .br

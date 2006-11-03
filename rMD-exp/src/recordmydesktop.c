@@ -72,12 +72,31 @@ int main(int argc,char **argv){
         if(SetBRWindow(pdata.dpy,&pdata.brwin,&pdata.specs,&pdata.args))
             exit(11);
 
+
+        //check if we are under compiz or beryl,in which case we must enable full-shots
+        //and with it use of shared memory.User can override this
+        pdata.window_manager=((pdata.args.nowmcheck)?NULL:rmdWMCheck(pdata.dpy,pdata.specs.root));
+        if(pdata.window_manager==NULL){
+            fprintf(stderr,"Not taking window manager into account.\n");
+        }
+        //Right now only wm's that I know of performing 3d compositing are beryl and compiz.
+        //No, the blue screen in metacity doesn't count :)
+        else if(!strcmp(pdata.window_manager,"compiz") || !strcmp(pdata.window_manager,"beryl")){
+            fprintf(stderr,"\nDetected 3d compositing window manager.\n"
+                           "Reverting to full screen capture at every frame.\n"
+                           "To disable this check run with --no-wm-check\n"
+                           "(though that is not advised, since it will probably produce faulty results).\n\n");
+            pdata.args.full_shots=1;
+            pdata.args.noshared=0;
+            pdata.args.nocondshared=1;
+        }
+
         QueryExtensions(pdata.dpy,&pdata.args,&pdata.damage_event, &pdata.damage_error);
 
 
-        pdata.window_manager=rmdWMCheck(pdata.dpy,pdata.specs.root);
-        //init data
 
+
+        //init data
 
         //these are globals, look for them at the header
         frames_total=frames_lost=encoder_busy=capture_busy=0;
@@ -136,7 +155,7 @@ int main(int argc,char **argv){
         if(!pdata.args.nosound){
             pdata.sound_handle=OpenDev(pdata.args.device,&pdata.args.channels,&pdata.args.frequency,&pdata.periodsize,            &pdata.periodtime,&pdata.hard_pause);
             if(pdata.sound_handle==NULL){
-                fprintf(stderr,"Error while opening/configuring soundcard %s\nTry running with the --nosound or specify a correct device.\n",pdata.args.device);
+                fprintf(stderr,"Error while opening/configuring soundcard %s\nTry running with the --no-sound or specify a correct device.\n",pdata.args.device);
                 exit(3);
             }
         }

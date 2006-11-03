@@ -138,7 +138,9 @@ typedef struct _ProgArgs{
     char *device;       //default sound device(default according to alsa or oss)
     int nosound;        //do not record sound(default 0)
     int noshared;       //do not use shared memory extension(default 1)
-    int nocondshared;   //de not use shared memory on large image aquititions
+    int nocondshared;   //do not use shared memory on large image aquititions
+    int nowmcheck;      //do not check if there's a 3d comp window manager
+                        //(which changes full-shots and with-shared to 1)
     int shared_thres;   //threshold to use shared memory
     int full_shots;     //do not poll damage, take full screenshots
     int no_quick_subsample;//average pixels in chroma planes
@@ -384,7 +386,7 @@ int capture_busy,
     (args)->windowid=(args)->x=(args)->y\
     =(args)->width=(args)->height=(args)->quietmode\
     =(args)->nosound=(args)->full_shots=(args)->encOnTheFly\
-    =(args)->zerocompression=0;\
+    =(args)->zerocompression=(args)->nowmcheck=0;\
     (args)->noshared=1;\
     (args)->dropframes=(args)->nocondshared=0;\
     (args)->no_quick_subsample=1;\
