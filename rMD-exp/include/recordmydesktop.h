@@ -461,20 +461,23 @@ int capture_busy,
 }
 
 #define UPDATE_YUV_BUFFER_IM(yuv,data,x_tm,y_tm,width_tm,height_tm){\
-    int i,k,j=0;\
+    int k,i;\
+    register unsigned char *datap=data;\
     int x_2=x_tm/2,y_2=y_tm/2;\
-    for(k=0;k<height_tm;k++){\
-        for(i=0;i<width_tm;i++){\
-            yuv->y[x_tm+i+(k+y_tm)*yuv->y_width]=Yr[data[(j*4)+__RBYTE]] + Yg[data[(j*4)+__GBYTE]] + Yb[data[(j*4)+__BBYTE]] ;\
-            if((k%2)&&(i%2)){\
-                yuv->u[x_2+i/2+(k/2+y_2)*yuv->uv_width]=\
-                Ur[data[(k*width_tm+i)*4+__RBYTE]] + Ug[data[(k*width_tm+i)*4+__GBYTE]] + Ub[data[(k*width_tm+i)*4+__BBYTE]];\
-                yuv->v[x_2+i/2+(k/2+y_2)*yuv->uv_width]=\
-                Vr[data[(k*width_tm+i)*4+__RBYTE]] + Vg[data[(k*width_tm+i)*4+__GBYTE]] + Vb[data[(k*width_tm+i)*4+__BBYTE]];\
-            }\
-            \
-            j++;\
+    for(k=0;k<height_tm*width_tm;k++){\
+            yuv->y[k]=Yr[datap[__RBYTE]] + Yg[datap[__GBYTE]] + Yb[datap[__BBYTE]] ;\
+            datap+=4;\
+    }\
+    datap=data;\
+    for(k=0;k<height_tm;k+=2){\
+        for(i=0;i<width_tm;i+=2){\
+            yuv->u[x_2+i/2+(k/2+y_2)*yuv->uv_width]=\
+            Ur[datap[__RBYTE]] + Ug[datap[__GBYTE]] + Ub[datap[__BBYTE]];\
+            yuv->v[x_2+i/2+(k/2+y_2)*yuv->uv_width]=\
+            Vr[datap[__RBYTE]] + Vg[datap[__GBYTE]] + Vb[datap[__BBYTE]];\
+            datap+=8;\
         }\
+        datap+=width_tm*4;\
     }\
 }
 
