@@ -27,37 +27,6 @@
 #include <recordmydesktop.h>
 
 
-void MakeChecksums(unsigned char *buf,int width,int height,int divisor,unsigned short int *checksums){
-    int i,k,j,m;
-
-    for(i=0;i<divisor;i++){
-        for(k=0;k<divisor;k++){
-            int A=1,B=0;
-            for(j=0;j<height/divisor;j++){
-                for(m=0;m<width/divisor;m++){
-                    A+=buf[i*(width*height/divisor)+j*width+k*width/divisor+m];
-                    B+=A;
-                }
-            }
-            A=A%65521;
-            B=B%65521;
-            checksums[i*divisor+k]=B*65536+A;
-//             A = (A & 0xffff) + (A >> 16) * (15);
-//             B = (B & 0xffff) + (B >> 16) * (15);
-//
-//             if (A >= 65521)
-//                A -= 65521;
-//
-//             B = (B & 0xffff) + (B >> 16) * (15);
-//             if (B >= 65521)
-//                     B -= 65521;
-//             checksums[i*divisor+k]= ((B << 16) | A) ;
-
-
-        }
-    }
-}
-
 int CompareBlocks(unsigned char *incoming,unsigned char *old,int blockno,int width, int height,int divisor){
     int j,i,
         block_i=blockno/divisor,//place on the grid
