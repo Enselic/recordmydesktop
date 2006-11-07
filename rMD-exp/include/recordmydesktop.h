@@ -478,7 +478,7 @@ int capture_busy,
 
 #define UPDATE_YUV_BUFFER_SH_AVG(yuv,data,x_tm,y_tm,width_tm,height_tm){\
     int k,i;\
-    register unsigned int t_val;\
+    register unsigned int t_val,t1,t2,t3,t4;\
     register unsigned int *datapi=(unsigned int*)data+x_tm+y_tm*yuv->y_width,\
                           *datapi_next=(unsigned int*)data+x_tm+(y_tm+1)*yuv->y_width;\
     register unsigned char  *yuv_y=yuv->y+x_tm+y_tm*yuv->y_width,\
@@ -501,14 +501,18 @@ int capture_busy,
     datapi=(unsigned int*)data+x_tm+y_tm*yuv->y_width;\
     for(k=0;k<height_tm;k+=2){\
         for(i=0;i<width_tm;i+=2){\
-            t_val=(((((*datapi)&0xff000000) +((*(datapi+1))&0xff000000)+\
-            ((*(datapi_next))&0xff000000)+((*(datapi_next+1))&0xff000000))/4)&0xff000000) \
-            +(((((*datapi)&0x00ff0000) +((*(datapi+1))&0x00ff0000)+\
-            ((*(datapi_next))&0x00ff0000)+((*(datapi_next+1))&0x00ff0000))/4)&0x00ff0000)\
-            +(((((*datapi)&0x0000ff00) +((*(datapi+1))&0x0000ff00)+\
-            ((*(datapi_next))&0x0000ff00)+((*(datapi_next+1))&0x0000ff00))/4)&0x0000ff00)\
-            +(((((*datapi)&0x000000ff) +((*(datapi+1))&0x000000ff)+\
-            ((*(datapi_next))&0x000000ff)+((*(datapi_next+1))&0x000000ff))/4)&0x000000ff);\
+            t1=*datapi;\
+            t2=*(datapi+1);\
+            t3=*datapi_next;\
+            t4=*(datapi_next+1);\
+            t_val=((((t1&0xff000000) +(t2&0xff000000)+\
+            (t3&0xff000000)+(t4&0xff000000))/4)&0xff000000) \
+            +((((t1&0x00ff0000) +(t2&0x00ff0000)+\
+            (t3&0x00ff0000)+(t4&0x00ff0000))/4)&0x00ff0000)\
+            +((((t1&0x0000ff00) +(t2&0x0000ff00)+\
+            (t3&0x0000ff00)+(t4&0x0000ff00))/4)&0x0000ff00)\
+            +((((t1&0x000000ff) +(t2&0x000000ff)+\
+            (t3&0x000000ff)+(t4&0x000000ff))/4)&0x000000ff);\
 \
             *yuv_u=\
             _ur[__RVALUE(t_val)] + _ug[__GVALUE(t_val)] + _ub[__BVALUE(t_val)];\
@@ -568,7 +572,7 @@ int capture_busy,
 
 #define UPDATE_YUV_BUFFER_IM_AVG(yuv,data,x_tm,y_tm,width_tm,height_tm){\
     int k,i;\
-    register unsigned int t_val;\
+    register unsigned int t_val,t1,t2,t3,t4;\
     register unsigned int *datapi=(unsigned int*)data,\
                           *datapi_next=(unsigned int*)data+width_tm;\
     register unsigned char  *yuv_y=yuv->y+x_tm+y_tm*yuv->y_width,\
@@ -590,14 +594,18 @@ int capture_busy,
     datapi=(unsigned int*)data;\
     for(k=0;k<height_tm;k+=2){\
         for(i=0;i<width_tm;i+=2){\
-            t_val=(((((*datapi)&0xff000000) +((*(datapi+1))&0xff000000)+\
-            ((*(datapi_next))&0xff000000)+((*(datapi_next+1))&0xff000000))/4)&0xff000000) \
-            +(((((*datapi)&0x00ff0000) +((*(datapi+1))&0x00ff0000)+\
-            ((*(datapi_next))&0x00ff0000)+((*(datapi_next+1))&0x00ff0000))/4)&0x00ff0000)\
-            +(((((*datapi)&0x0000ff00) +((*(datapi+1))&0x0000ff00)+\
-            ((*(datapi_next))&0x0000ff00)+((*(datapi_next+1))&0x0000ff00))/4)&0x0000ff00)\
-            +(((((*datapi)&0x000000ff) +((*(datapi+1))&0x000000ff)+\
-            ((*(datapi_next))&0x000000ff)+((*(datapi_next+1))&0x000000ff))/4)&0x000000ff);\
+            t1=*datapi;\
+            t2=*(datapi+1);\
+            t3=*datapi_next;\
+            t4=*(datapi_next+1);\
+            t_val=((((t1&0xff000000) +(t2&0xff000000)+\
+            (t3&0xff000000)+(t4&0xff000000))/4)&0xff000000) \
+            +((((t1&0x00ff0000) +(t2&0x00ff0000)+\
+            (t3&0x00ff0000)+(t4&0x00ff0000))/4)&0x00ff0000)\
+            +((((t1&0x0000ff00) +(t2&0x0000ff00)+\
+            (t3&0x0000ff00)+(t4&0x0000ff00))/4)&0x0000ff00)\
+            +((((t1&0x000000ff) +(t2&0x000000ff)+\
+            (t3&0x000000ff)+(t4&0x000000ff))/4)&0x000000ff);\
 \
             *yuv_u=\
             _ur[__RVALUE(t_val)] + _ug[__GVALUE(t_val)] + _ub[__BVALUE(t_val)];\
