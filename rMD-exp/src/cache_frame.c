@@ -31,12 +31,18 @@ int CompareBlocks(unsigned char *incoming,unsigned char *old,int blockno,int wid
     int j,i,
         block_i=blockno/divisor,//place on the grid
         block_k=blockno%divisor;
+    register unsigned char *incoming_reg=&(incoming[block_i*(width*height/divisor)+block_k*width/divisor]),
+                           *old_reg=&(old[block_i*(width*height/divisor)+block_k*width/divisor]);
 
-    for(j=0;j<height/divisor;j++)//we copy rows
-            for(i=0;i<width/divisor;i++)
-                if(incoming[block_i*(width*height/divisor)+j*width+block_k*width/divisor+i]!=
-                    old[block_i*(width*height/divisor)+j*width+block_k*width/divisor+i])
-                    return 1;
+    for(j=0;j<height/divisor;j++){
+        for(i=0;i<width/divisor;i++){
+            if((*(incoming_reg++))!=(*(old_reg++)))
+                return 1;
+        }
+        incoming_reg+=(width-width/divisor);
+        old_reg+=(width-width/divisor);
+    }
+
     return 0;
 }
 
@@ -44,10 +50,11 @@ void FlushBlock(unsigned char *buf,int blockno,int width, int height,int divisor
     int j,
         block_i=blockno/divisor,//place on the grid
         block_k=blockno%divisor;
-
-    for(j=0;j<height/divisor;j++)//we flush in rows
-        gzwrite(fp,(void *)&buf[block_i*(width*height/divisor)+j*width+block_k*width/divisor],width/divisor);
-
+    register unsigned char *buf_reg=(&buf[block_i*(width*height/divisor)+block_k*width/divisor]);
+    for(j=0;j<height/divisor;j++){//we flush in rows
+        gzwrite(fp,(void *)buf_reg,width/divisor);
+        buf_reg+=width;
+    }
 }
 
 void *CacheImageBuffer(void *pdata){
