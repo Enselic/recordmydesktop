@@ -69,11 +69,22 @@
 #define __RBYTE 2
 #define __GBYTE 1
 #define __BBYTE 0
+
+#define __RVALUE(tmp_val) (((tmp_val)&0x00ff0000)>>16)
+#define __GVALUE(tmp_val) (((tmp_val)&0x0000ff00)>>8)
+#define __BVALUE(tmp_val) (((tmp_val)&0x000000ff))
+
 #elif __BYTE_ORDER == __BIG_ENDIAN
+
 #define __ABYTE 0
 #define __RBYTE 1
 #define __GBYTE 2
 #define __BBYTE 3
+
+#define __RVALUE(tmp_val) (((tmp_val)&0x0000ff00)>>8)
+#define __GVALUE(tmp_val) (((tmp_val)&0x00ff0000)>>16)
+#define __BVALUE(tmp_val) (((tmp_val)&0xff000000)>>24)
+
 #else
 #error Only little-endian and big-endian systems are supported
 #endif
@@ -462,25 +473,41 @@ int capture_busy,
 
 #define UPDATE_YUV_BUFFER_IM(yuv,data,x_tm,y_tm,width_tm,height_tm){\
     int k,i;\
-    register unsigned char *datap=data;\
-    int x_2=x_tm/2,y_2=y_tm/2;\
-    for(k=0;k<height_tm*width_tm;k++){\
-            yuv->y[k]=Yr[datap[__RBYTE]] + Yg[datap[__GBYTE]] + Yb[datap[__BBYTE]] ;\
-            datap+=4;\
+    register unsigned int t_val;\
+    register unsigned int *datapi=(unsigned int*)data;\
+    register unsigned char  *yuv_y=yuv->y+x_tm+y_tm*yuv->y_width,\
+                            *yuv_u=yuv->u+x_tm/2+(y_tm*yuv->uv_width)/2,\
+                            *yuv_v=yuv->v+x_tm/2+(y_tm*yuv->uv_width)/2,\
+                            *_yr=Yr,*_yg=Yg,*_yb=Yb,\
+                            *_ur=Ur,*_ug=Ug,*_ub=Ub,\
+                            *_vr=Vr,*_vg=Vg,*_vb=Vb;\
+\
+    for(k=0;k<height_tm;k++){\
+        for(i=0;i<width_tm;i++){\
+            t_val=*datapi;\
+            *yuv_y=_yr[__RVALUE(t_val)] + _yg[__GVALUE(t_val)] + _yb[__BVALUE(t_val)] ;\
+            datapi++;\
+            yuv_y++;\
+        }\
+        yuv_y+=yuv->y_width-width_tm;\
     }\
-    datap=data;\
+    datapi=(unsigned int*)data;\
     for(k=0;k<height_tm;k+=2){\
         for(i=0;i<width_tm;i+=2){\
-            yuv->u[x_2+i/2+(k/2+y_2)*yuv->uv_width]=\
-            Ur[datap[__RBYTE]] + Ug[datap[__GBYTE]] + Ub[datap[__BBYTE]];\
-            yuv->v[x_2+i/2+(k/2+y_2)*yuv->uv_width]=\
-            Vr[datap[__RBYTE]] + Vg[datap[__GBYTE]] + Vb[datap[__BBYTE]];\
-            datap+=8;\
+            t_val=*datapi;\
+            *yuv_u=\
+            _ur[__RVALUE(t_val)] + _ug[__GVALUE(t_val)] + _ub[__BVALUE(t_val)];\
+            *yuv_v=\
+            _vr[__RVALUE(t_val)] + _vg[__GVALUE(t_val)] + _vb[__BVALUE(t_val)];\
+            datapi+=2;\
+            yuv_u++;\
+            yuv_v++;\
         }\
-        datap+=width_tm*4;\
+        yuv_u+=(yuv->y_width-width_tm)/2;\
+        yuv_v+=(yuv->y_width-width_tm)/2;\
+        datapi+=width_tm;\
     }\
 }
-
 
 
 #define UPDATE_YUV_BUFFER_IM_AVG(yuv,data,x_tm,y_tm,width_tm,height_tm){\
