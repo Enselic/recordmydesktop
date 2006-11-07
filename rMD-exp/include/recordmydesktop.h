@@ -438,15 +438,41 @@ int capture_busy,
     +data_array[(k_tm*width_img+i_tm-1)*4+offset]+data_array[((k_tm-1)*width_img+i_tm-1)*4+offset])/4)
 
 #define UPDATE_YUV_BUFFER_SH(yuv,data,x_tm,y_tm,width_tm,height_tm){\
-    int i,k;\
-    for(k=y_tm;k<y_tm+height_tm;k++){\
-        for(i=x_tm;i<x_tm+width_tm;i++){\
-            yuv->y[i+k*yuv->y_width]=Yr[data[(i+k*yuv->y_width)*4+__RBYTE]] + Yg[data[(i+k*yuv->y_width)*4+__GBYTE]] + Yb[data[(i+k*yuv->y_width)*4+__BBYTE]];\
-            if((k%2)&&(i%2)){\
-                yuv->u[i/2+k/2*yuv->uv_width]=Ur[data[(i+k*yuv->y_width)*4+__RBYTE]] + Ug[data[(i+k*yuv->y_width)*4+__GBYTE]] + Ub[data[(i+k*yuv->y_width)*4+__BBYTE]] ;\
-                yuv->v[i/2+k/2*yuv->uv_width]=Vr[data[(i+k*yuv->y_width)*4+__RBYTE]] + Vg[data[(i+k*yuv->y_width)*4+__GBYTE]] + Vb[data[(i+k*yuv->y_width)*4+__BBYTE]] ;\
-            }\
+    int k,i;\
+    register unsigned int t_val;\
+    register unsigned int *datapi=(unsigned int*)data+x_tm+y_tm*yuv->y_width;\
+    register unsigned char  *yuv_y=yuv->y+x_tm+y_tm*yuv->y_width,\
+                            *yuv_u=yuv->u+x_tm/2+(y_tm*yuv->uv_width)/2,\
+                            *yuv_v=yuv->v+x_tm/2+(y_tm*yuv->uv_width)/2,\
+                            *_yr=Yr,*_yg=Yg,*_yb=Yb,\
+                            *_ur=Ur,*_ug=Ug,*_ub=Ub,\
+                            *_vr=Vr,*_vg=Vg,*_vb=Vb;\
+\
+    for(k=0;k<height_tm;k++){\
+        for(i=0;i<width_tm;i++){\
+            t_val=*datapi;\
+            *yuv_y=_yr[__RVALUE(t_val)] + _yg[__GVALUE(t_val)] + _yb[__BVALUE(t_val)] ;\
+            datapi++;\
+            yuv_y++;\
         }\
+        yuv_y+=yuv->y_width-width_tm;\
+        datapi+=yuv->y_width-width_tm;\
+    }\
+    datapi=(unsigned int*)data+x_tm+y_tm*yuv->y_width;\
+    for(k=0;k<height_tm;k+=2){\
+        for(i=0;i<width_tm;i+=2){\
+            t_val=*datapi;\
+            *yuv_u=\
+            _ur[__RVALUE(t_val)] + _ug[__GVALUE(t_val)] + _ub[__BVALUE(t_val)];\
+            *yuv_v=\
+            _vr[__RVALUE(t_val)] + _vg[__GVALUE(t_val)] + _vb[__BVALUE(t_val)];\
+            datapi+=2;\
+            yuv_u++;\
+            yuv_v++;\
+        }\
+        yuv_u+=(yuv->y_width-width_tm)/2;\
+        yuv_v+=(yuv->y_width-width_tm)/2;\
+        datapi+=(2*yuv->y_width-width_tm);\
     }\
 }
 
