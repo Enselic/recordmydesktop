@@ -477,25 +477,56 @@ int capture_busy,
 }
 
 #define UPDATE_YUV_BUFFER_SH_AVG(yuv,data,x_tm,y_tm,width_tm,height_tm){\
-    int i,k;\
-    unsigned char avg0,avg1,avg2;\
-    for(k=y_tm;k<y_tm+height_tm;k++){\
-        for(i=x_tm;i<x_tm+width_tm;i++){\
-            yuv->y[i+k*yuv->y_width]=Yr[data[(i+k*yuv->y_width)*4+__RBYTE]] + Yg[data[(i+k*yuv->y_width)*4+__GBYTE]] + Yb[data[(i+k*yuv->y_width)*4+__BBYTE]];\
-            if((k%2)&&(i%2)){\
-                avg2=AVG_4_PIXELS(data,(yuv->y_width),k,i,__RBYTE);\
-                avg1=AVG_4_PIXELS(data,(yuv->y_width),k,i,__GBYTE);\
-                avg0=AVG_4_PIXELS(data,(yuv->y_width),k,i,__BBYTE);\
-                yuv->u[i/2+k/2*yuv->uv_width]=Ur[avg2] +\
-                Ug[avg1] +\
-                Ub[avg0] ;\
-                yuv->v[i/2+k/2*yuv->uv_width]=Vr[avg2] +\
-                Vg[avg1] +\
-                Vb[avg0] ;\
-            }\
+    int k,i;\
+    register unsigned int t_val;\
+    register unsigned int *datapi=(unsigned int*)data+x_tm+y_tm*yuv->y_width,\
+                          *datapi_next=(unsigned int*)data+x_tm+(y_tm+1)*yuv->y_width;\
+    register unsigned char  *yuv_y=yuv->y+x_tm+y_tm*yuv->y_width,\
+                            *yuv_u=yuv->u+x_tm/2+(y_tm*yuv->uv_width)/2,\
+                            *yuv_v=yuv->v+x_tm/2+(y_tm*yuv->uv_width)/2,\
+                            *_yr=Yr,*_yg=Yg,*_yb=Yb,\
+                            *_ur=Ur,*_ug=Ug,*_ub=Ub,\
+                            *_vr=Vr,*_vg=Vg,*_vb=Vb;\
+\
+    for(k=0;k<height_tm;k++){\
+        for(i=0;i<width_tm;i++){\
+            t_val=*datapi;\
+            *yuv_y=_yr[__RVALUE(t_val)] + _yg[__GVALUE(t_val)] + _yb[__BVALUE(t_val)] ;\
+            datapi++;\
+            yuv_y++;\
         }\
+        yuv_y+=yuv->y_width-width_tm;\
+        datapi+=yuv->y_width-width_tm;\
+    }\
+    datapi=(unsigned int*)data+x_tm+y_tm*yuv->y_width;\
+    for(k=0;k<height_tm;k+=2){\
+        for(i=0;i<width_tm;i+=2){\
+            t_val=(((((*datapi)&0xff000000) +((*(datapi+1))&0xff000000)+\
+            ((*(datapi_next))&0xff000000)+((*(datapi_next+1))&0xff000000))/4)&0xff000000) \
+            +(((((*datapi)&0x00ff0000) +((*(datapi+1))&0x00ff0000)+\
+            ((*(datapi_next))&0x00ff0000)+((*(datapi_next+1))&0x00ff0000))/4)&0x00ff0000)\
+            +(((((*datapi)&0x0000ff00) +((*(datapi+1))&0x0000ff00)+\
+            ((*(datapi_next))&0x0000ff00)+((*(datapi_next+1))&0x0000ff00))/4)&0x0000ff00)\
+            +(((((*datapi)&0x000000ff) +((*(datapi+1))&0x000000ff)+\
+            ((*(datapi_next))&0x000000ff)+((*(datapi_next+1))&0x000000ff))/4)&0x000000ff);\
+\
+            *yuv_u=\
+            _ur[__RVALUE(t_val)] + _ug[__GVALUE(t_val)] + _ub[__BVALUE(t_val)];\
+            *yuv_v=\
+            _vr[__RVALUE(t_val)] + _vg[__GVALUE(t_val)] + _vb[__BVALUE(t_val)];\
+            datapi+=2;\
+            datapi_next+=2;\
+            yuv_u++;\
+            yuv_v++;\
+        }\
+        yuv_u+=(yuv->y_width-width_tm)/2;\
+        yuv_v+=(yuv->y_width-width_tm)/2;\
+        datapi+=(2*yuv->y_width-width_tm);\
+        datapi_next+=(2*yuv->y_width-width_tm);\
     }\
 }
+
+
 
 #define UPDATE_YUV_BUFFER_IM(yuv,data,x_tm,y_tm,width_tm,height_tm){\
     int k,i;\
@@ -535,30 +566,56 @@ int capture_busy,
     }\
 }
 
-
 #define UPDATE_YUV_BUFFER_IM_AVG(yuv,data,x_tm,y_tm,width_tm,height_tm){\
-    int i,k,j=0;\
-    unsigned char avg0,avg1,avg2;\
-    int x_2=x_tm/2,y_2=y_tm/2;\
+    int k,i;\
+    register unsigned int t_val;\
+    register unsigned int *datapi=(unsigned int*)data,\
+                          *datapi_next=(unsigned int*)data+width_tm;\
+    register unsigned char  *yuv_y=yuv->y+x_tm+y_tm*yuv->y_width,\
+                            *yuv_u=yuv->u+x_tm/2+(y_tm*yuv->uv_width)/2,\
+                            *yuv_v=yuv->v+x_tm/2+(y_tm*yuv->uv_width)/2,\
+                            *_yr=Yr,*_yg=Yg,*_yb=Yb,\
+                            *_ur=Ur,*_ug=Ug,*_ub=Ub,\
+                            *_vr=Vr,*_vg=Vg,*_vb=Vb;\
+\
     for(k=0;k<height_tm;k++){\
         for(i=0;i<width_tm;i++){\
-            yuv->y[x_tm+i+(k+y_tm)*yuv->y_width]=Yr[data[(j*4)+__RBYTE]] + Yg[data[(j*4)+__GBYTE]] + Yb[data[(j*4)+__BBYTE]] ;\
-            if((k%2)&&(i%2)){\
-                avg2=AVG_4_PIXELS(data,width_tm,k,i,__RBYTE);\
-                avg1=AVG_4_PIXELS(data,width_tm,k,i,__GBYTE);\
-                avg0=AVG_4_PIXELS(data,width_tm,k,i,__BBYTE);\
-                yuv->u[x_2+i/2+(k/2+y_2)*yuv->uv_width]=\
-                Ur[avg2] + Ug[avg1] +\
-                Ub[avg0];\
-                yuv->v[x_2+i/2+(k/2+y_2)*yuv->uv_width]=\
-                Vr[avg2] + Vg[avg1] +\
-                Vb[avg0];\
-            }\
-            \
-            j++;\
+            t_val=*datapi;\
+            *yuv_y=_yr[__RVALUE(t_val)] + _yg[__GVALUE(t_val)] + _yb[__BVALUE(t_val)] ;\
+            datapi++;\
+            yuv_y++;\
         }\
+        yuv_y+=yuv->y_width-width_tm;\
+    }\
+    datapi=(unsigned int*)data;\
+    for(k=0;k<height_tm;k+=2){\
+        for(i=0;i<width_tm;i+=2){\
+            t_val=(((((*datapi)&0xff000000) +((*(datapi+1))&0xff000000)+\
+            ((*(datapi_next))&0xff000000)+((*(datapi_next+1))&0xff000000))/4)&0xff000000) \
+            +(((((*datapi)&0x00ff0000) +((*(datapi+1))&0x00ff0000)+\
+            ((*(datapi_next))&0x00ff0000)+((*(datapi_next+1))&0x00ff0000))/4)&0x00ff0000)\
+            +(((((*datapi)&0x0000ff00) +((*(datapi+1))&0x0000ff00)+\
+            ((*(datapi_next))&0x0000ff00)+((*(datapi_next+1))&0x0000ff00))/4)&0x0000ff00)\
+            +(((((*datapi)&0x000000ff) +((*(datapi+1))&0x000000ff)+\
+            ((*(datapi_next))&0x000000ff)+((*(datapi_next+1))&0x000000ff))/4)&0x000000ff);\
+\
+            *yuv_u=\
+            _ur[__RVALUE(t_val)] + _ug[__GVALUE(t_val)] + _ub[__BVALUE(t_val)];\
+            *yuv_v=\
+            _vr[__RVALUE(t_val)] + _vg[__GVALUE(t_val)] + _vb[__BVALUE(t_val)];\
+            datapi+=2;\
+            datapi_next+=2;\
+            yuv_u++;\
+            yuv_v++;\
+        }\
+        yuv_u+=(yuv->y_width-width_tm)/2;\
+        yuv_v+=(yuv->y_width-width_tm)/2;\
+        datapi+=width_tm;\
+        datapi_next+=width_tm;\
     }\
 }
+
+
 
 #define XFIXES_POINTER_TO_YUV(yuv,data,x_tm,y_tm,width_tm,height_tm,column_discard_stride){\
     int i,k,j=0;\
