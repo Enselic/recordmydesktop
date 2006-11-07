@@ -80,3 +80,4 @@ void SyncEncodeImageBuffer(ProgData *pdata){
         }
     }
 }
+
