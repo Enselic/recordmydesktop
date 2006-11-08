@@ -161,6 +161,7 @@ typedef struct _ProgArgs{
     int encOnTheFly;    //encode while recording, no caching(default 0)
     char *workdir;      //directory to be used for cache files(default $HOME)
     int zerocompression;//image data are always flushed uncompressed
+    int overwrite;//overwite a previously existing file(do not add a .number postfix)
 }ProgArgs;
 
 
@@ -398,7 +399,8 @@ int capture_busy,
     (args)->windowid=(args)->x=(args)->y\
     =(args)->width=(args)->height=(args)->quietmode\
     =(args)->nosound=(args)->full_shots=(args)->encOnTheFly\
-    =(args)->zerocompression=(args)->nowmcheck=0;\
+    =(args)->zerocompression=(args)->nowmcheck\
+    =(args)->overwrite=0;\
     (args)->noshared=1;\
     (args)->dropframes=(args)->nocondshared=0;\
     (args)->no_quick_subsample=1;\

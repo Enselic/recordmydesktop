@@ -36,7 +36,7 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
     "\t -v_quality n| -s_quality n| -v_bitrate n| --no-framedrop| -dummy-cursor color|\n"
     "\t --no-cursor| -freq N(number>0)| -channels N(number>0)| -device SOUND_DEVICE|\n"
     "\t --no-sound| --with-shared| --no-cond-shared| -shared-threshold n| --full-shots|\n"
-    "\t --quick-subsampling| -workdir DIR| --zero-compression| --no-wm-check| -o filename]^filename\n\n\n"
+    "\t --quick-subsampling| -workdir DIR| --zero-compression| --no-wm-check| --overwite| -o filename]^filename\n\n\n"
 
     "General Options:\n"
     "\t-h or --help\t\tPrint this help and exit.\n"
@@ -77,6 +77,8 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
     "\t--zero-compression\tImage data are always cached uncompressed.\n"
     "\t-workdir DIR\t\tLocation where a temporary directory will be created to hold project files(default $HOME).\n"
     "\t-delay n[H|h|M|m]\tNumber of secs(default),minutes or hours before capture starts(number can be float)\n"
+    "\t--overwrite\t\tIf there is already a file with the same name, delete it\n"
+    "\t\t\t\t(default is to add a number postfix to the new one).\n"
     "\t-o filename\t\tName of recorded video(default out.ogg).\n"
     "\n\tIf no other options are specified, filename can be given without the -o switch.\n\n\n";
 
@@ -399,6 +401,8 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
         else if(!strcmp(argv[i],"--on-the-fly-encoding")){
             arg_return->encOnTheFly=1;
         }
+        else if(!strcmp(argv[i],"--overwrite"))
+            arg_return->overwrite=1;
         else if(!strcmp(argv[i],"--no-wm-check"))
             arg_return->nowmcheck=1;
         else if(!strcmp(argv[i],"--zero-compression")){

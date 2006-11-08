@@ -66,8 +66,8 @@ void InitEncoder(ProgData *pdata,EncData *enc_data_t,int buffer_ready){
     ogg_stream_init(&(enc_data_t)->m_ogg_ts,y1);
     if(!pdata->args.nosound)
         ogg_stream_init(&(enc_data_t)->m_ogg_vs,y2);
-
-    IncrementalNaming(&(pdata)->args.filename);
+    if(!pdata->args.overwrite)
+        IncrementalNaming(&(pdata)->args.filename);
     (enc_data_t)->fp=fopen((pdata)->args.filename,"w");
     if((enc_data_t)->fp==NULL){
         fprintf(stderr,"Cannot open file %s for writting!\n",(pdata)->args.filename);
