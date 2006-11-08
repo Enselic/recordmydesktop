@@ -25,67 +25,44 @@
 **********************************************************************************/
 
 
-#include <recordmydesktop.h> 
-void SetExpired(int signum){
-    frames_total++;
-    if(capture_busy){
-        frames_lost++;
+#include <recordmydesktop.h>
+
+char *rmdWMCheck(Display *dpy,Window root){
+
+    Window  *wm_child;
+    Atom    nwm_atom,
+            utf8_string,
+            wm_name_atom,
+            rt;
+    unsigned long   nbytes,
+                    nitems;
+
+    char *wm_name_str=NULL;
+    int fmt;
+
+    utf8_string = XInternAtom(dpy, "UTF8_STRING", False);
+
+    nwm_atom =XInternAtom(dpy,"_NET_SUPPORTING_WM_CHECK",True);
+    wm_name_atom =XInternAtom(dpy,"_NET_WM_NAME",True);
+
+    if(nwm_atom!=None && wm_name_atom!=None){
+        if(!((XGetWindowProperty(  dpy,root,nwm_atom,0,100,
+                                False,XA_WINDOW,
+                                &rt,&fmt,&nitems, &nbytes,
+                                (unsigned char **)((void*)&wm_child))
+                                ==Success ) &&
+        (XGetWindowProperty( dpy,*wm_child,wm_name_atom,0,100,
+                                False,utf8_string,&rt,
+                                &fmt,&nitems, &nbytes,
+                                (unsigned char **)((void*)&wm_name_str))
+                                ==Success ))){
+            fprintf(stderr,"Warning!!!\nYour window manager appears to be non-compliant!\n");
+        }
     }
-    pthread_cond_broadcast(time_cond);//sig handlers should not call this func
-                                    //could be a set_expired and main thread
-                                    //doing a while(running) if set_expired broadcast else usleep(n)
-}
-
-void SetPaused(int signum){
-    if(!Paused)
-        Paused=1;
-    else{
-//         pthread_cond_broadcast(pause_cond);//thsi should work, but it doesn't
-        int i;//this is a bug
-        Paused=0;//normally with the broadcast all the threads should restart, but sound capture thread
-        for(i=0;i<15;i++)//remains dead. If a bunch of signals, restarts all threads, why can't a broadcast do the same?
-            pthread_cond_signal(pause_cond);//if you have any idea please contact me.
-                                            //(misses the signal?)
-    }
-}
+    fprintf(stderr,"Your window manager appears to be %s\n\n",
+                    ((wm_name_str!=NULL)?wm_name_str:"Uknown"));
 
 
-void SetRunning(int signum){
-    *Running=0;
-    if(signum==SIGABRT)
-        Aborted=1;
-}
-
-void CancelTimer(void){
-    struct itimerval value;
-    value.it_interval.tv_sec=
-    value.it_value.tv_sec=
-    value.it_interval.tv_usec=
-    value.it_value.tv_usec=0;
-
-    setitimer(ITIMER_REAL,&value,NULL);
-}
-
-void RegisterCallbacks(ProgArgs *args){
-
-    struct itimerval value;
-    struct sigaction time_act,pause_act,end_act;
-
-
-    value.it_interval.tv_sec=value.it_value.tv_sec=0;
-    value.it_interval.tv_usec=value.it_value.tv_usec=(1000000)/args->fps;
-    setitimer(ITIMER_REAL,&value,NULL);
-    time_act.sa_handler=SetExpired;
-    pause_act.sa_handler=SetPaused;
-    end_act.sa_handler=SetRunning;
-    sigfillset(&(time_act.sa_mask)); 
-    sigfillset(&(pause_act.sa_mask)); 
-    sigfillset(&(end_act.sa_mask)); 
-    time_act.sa_flags=pause_act.sa_flags=end_act.sa_flags=0;
-    sigaction(SIGALRM,&time_act,NULL);
-    sigaction(SIGUSR1,&pause_act,NULL);
-    sigaction(SIGINT,&end_act,NULL);
-    sigaction(SIGTERM,&end_act,NULL);
-    sigaction(SIGABRT,&end_act,NULL);
+    return wm_name_str;
 }
 

@@ -51,12 +51,16 @@ int main(int argc,char **argv){
     }
     else{
         EncData enc_data;
+        CacheData cache_data;
         pthread_t   poll_damage_t,
                     image_capture_t,
                     image_encode_t,
+                    image_cache_t,
                     sound_capture_t,
                     sound_encode_t,
-                    flush_to_ogg_t;
+                    sound_cache_t,
+                    flush_to_ogg_t,
+                    load_cache_t;
         XShmSegmentInfo shminfo;
         int i;
 
@@ -67,47 +71,68 @@ int main(int argc,char **argv){
         }
         if(SetBRWindow(pdata.dpy,&pdata.brwin,&pdata.specs,&pdata.args))
             exit(11);
-        
+
+
+        //check if we are under compiz or beryl,in which case we must enable full-shots
+        //and with it use of shared memory.User can override this
+        pdata.window_manager=((pdata.args.nowmcheck)?NULL:rmdWMCheck(pdata.dpy,pdata.specs.root));
+        if(pdata.window_manager==NULL){
+            fprintf(stderr,"Not taking window manager into account.\n");
+        }
+        //Right now only wm's that I know of performing 3d compositing are beryl and compiz.
+        //No, the blue screen in metacity doesn't count :)
+        //names can be compiz for compiz and beryl/beryl-co/beryl-core for beryl(so it's strncmp )
+        else if(!strcmp(pdata.window_manager,"compiz") || !strncmp(pdata.window_manager,"beryl",5)){
+            fprintf(stderr,"\nDetected 3d compositing window manager.\n"
+                           "Reverting to full screen capture at every frame.\n"
+                           "To disable this check run with --no-wm-check\n"
+                           "(though that is not advised, since it will probably produce faulty results).\n\n");
+            pdata.args.full_shots=1;
+            pdata.args.noshared=0;
+            pdata.args.nocondshared=1;
+        }
+
         QueryExtensions(pdata.dpy,&pdata.args,&pdata.damage_event, &pdata.damage_error);
 
-        //init data
 
+
+
+        //init data
 
         //these are globals, look for them at the header
         frames_total=frames_lost=encoder_busy=capture_busy=0;
 
-        if(!pdata.args.scshot){
-            fprintf(stderr,"Initializing...\n");
-            MakeMatrices();
-            if(pdata.args.have_dummy_cursor){
-                pdata.dummy_pointer=MakeDummyPointer(&pdata.specs,16,pdata.args.cursor_color,0,&pdata.npxl);
-                pdata.dummy_p_size=16;
-            }
+        fprintf(stderr,"Initializing...\n");
+        MakeMatrices();
+        if(pdata.args.have_dummy_cursor){
+            pdata.dummy_pointer=MakeDummyPointer(&pdata.specs,16,pdata.args.cursor_color,0,&pdata.npxl);
+            pdata.dummy_p_size=16;
         }
-        if((pdata.args.noshared)||(pdata.args.scshot))
-            pdata.datamain=(char *)malloc(pdata.brwin.nbytes);
-        if(!pdata.args.scshot){
-            if(pdata.args.noshared)
-                pdata.datatemp=(char *)malloc(pdata.brwin.nbytes);
-            pdata.rect_root[0]=pdata.rect_root[1]=NULL;
-            pthread_mutex_init(&pdata.list_mutex[0],NULL);
-            pthread_mutex_init(&pdata.list_mutex[1],NULL);
-            pthread_mutex_init(&pdata.sound_buffer_mutex,NULL);
-            pthread_mutex_init(&pdata.libogg_mutex,NULL);
-            pthread_mutex_init(&pdata.yuv_mutex,NULL);
 
-            pthread_cond_init(&pdata.time_cond,NULL);
-            pthread_cond_init(&pdata.pause_cond,NULL);
-            pthread_cond_init(&pdata.image_buffer_ready,NULL);
-            pthread_cond_init(&pdata.sound_buffer_ready,NULL);
-            pthread_cond_init(&pdata.sound_data_read,NULL);
-            pdata.list_selector=Paused=Aborted=pdata.avd=0;
-            pdata.running=1;       
-            time_cond=&pdata.time_cond;
-            pause_cond=&pdata.pause_cond;
-            Running=&pdata.running;
-        }
-        if((pdata.args.noshared)||(pdata.args.scshot)){
+        if((pdata.args.noshared))
+            pdata.datamain=(char *)malloc(pdata.brwin.nbytes);
+
+        if(pdata.args.noshared)
+            pdata.datatemp=(char *)malloc(pdata.brwin.nbytes);
+        pdata.rect_root[0]=pdata.rect_root[1]=NULL;
+        pthread_mutex_init(&pdata.list_mutex[0],NULL);
+        pthread_mutex_init(&pdata.list_mutex[1],NULL);
+        pthread_mutex_init(&pdata.sound_buffer_mutex,NULL);
+        pthread_mutex_init(&pdata.libogg_mutex,NULL);
+        pthread_mutex_init(&pdata.yuv_mutex,NULL);
+
+        pthread_cond_init(&pdata.time_cond,NULL);
+        pthread_cond_init(&pdata.pause_cond,NULL);
+        pthread_cond_init(&pdata.image_buffer_ready,NULL);
+        pthread_cond_init(&pdata.sound_buffer_ready,NULL);
+        pthread_cond_init(&pdata.sound_data_read,NULL);
+        pdata.list_selector=Paused=Aborted=pdata.avd=0;
+        pdata.running=1;
+        time_cond=&pdata.time_cond;
+        pause_cond=&pdata.pause_cond;
+        Running=&pdata.running;
+
+        if((pdata.args.noshared)){
             pdata.image=XCreateImage(pdata.dpy, pdata.specs.visual, pdata.specs.depth, ZPixmap, 0,pdata.datamain,pdata.brwin.rgeom.width,
                         pdata.brwin.rgeom.height, 8, 0);
             XInitImage(pdata.image);
@@ -115,7 +140,7 @@ int main(int argc,char **argv){
                         pdata.brwin.rgeom.width,pdata.brwin.rgeom.height);
         }
         if((!pdata.args.noshared)||(!pdata.args.nocondshared)){
-            pdata.shimage=XShmCreateImage (pdata.dpy,pdata.specs.visual,pdata.specs.depth,ZPixmap,pdata.datash, 
+            pdata.shimage=XShmCreateImage (pdata.dpy,pdata.specs.visual,pdata.specs.depth,ZPixmap,pdata.datash,
                          &shminfo, pdata.brwin.rgeom.width,pdata.brwin.rgeom.height);
             shminfo.shmid = shmget (IPC_PRIVATE,
                                     pdata.shimage->bytes_per_line * pdata.shimage->height,
@@ -128,18 +153,6 @@ int main(int argc,char **argv){
             }
             XShmGetImage(pdata.dpy,pdata.specs.root,pdata.shimage,pdata.brwin.rgeom.x,pdata.brwin.rgeom.y,AllPlanes);
         }
-        if(pdata.args.scshot){
-            if(pdata.args.delay>0){
-                fprintf(stderr,"Will sleep for %d seconds now.\n",pdata.args.delay);
-                sleep(pdata.args.delay);
-            }
-            //get a new screenshot
-            GetZPixmap(pdata.dpy,pdata.specs.root,pdata.image->data,pdata.brwin.rgeom.x,pdata.brwin.rgeom.y,
-                    pdata.brwin.rgeom.width,pdata.brwin.rgeom.height);
-            ZPixmapToBMP(pdata.image,&pdata.brwin,((!strcmp(pdata.args.filename,"out.ogg"))?"rmdout.bmp":pdata.args.filename),pdata.brwin.nbytes,pdata.args.scale_shot);
-            fprintf(stderr,"done!\n");
-            exit(0);
-        }
         if(!pdata.args.nosound){
             pdata.sound_handle=OpenDev(pdata.args.device,&pdata.args.channels,&pdata.args.frequency,&pdata.periodsize,            &pdata.periodtime,&pdata.hard_pause);
             if(pdata.sound_handle==NULL){
@@ -147,12 +160,18 @@ int main(int argc,char **argv){
                 exit(3);
             }
         }
-        InitEncoder(&pdata,&enc_data);
+
+        if(pdata.args.encOnTheFly)
+            InitEncoder(&pdata,&enc_data,0);
+        else
+            InitCacheData(&pdata,&enc_data,&cache_data);
+
         for(i=0;i<(pdata.enc_data->yuv.y_width*pdata.enc_data->yuv.y_height);i++)
             pdata.enc_data->yuv.y[i]=0;
         for(i=0;i<(pdata.enc_data->yuv.uv_width*pdata.enc_data->yuv.uv_height);i++){
             pdata.enc_data->yuv.v[i]=pdata.enc_data->yuv.u[i]=127;
         }
+
         if((pdata.args.nocondshared)&&(!pdata.args.noshared)){
             if(pdata.args.no_quick_subsample){
                 UPDATE_YUV_BUFFER_IM_AVG((&pdata.enc_data->yuv),((unsigned char*)pdata.shimage->data),
@@ -189,50 +208,120 @@ int main(int argc,char **argv){
         if(!pdata.args.full_shots)
             pthread_create(&poll_damage_t,NULL,PollDamage,(void *)&pdata);
         pthread_create(&image_capture_t,NULL,GetFrame,(void *)&pdata);
-        pthread_create(&image_encode_t,NULL,EncodeImageBuffer,(void *)&pdata);
+        if(pdata.args.encOnTheFly)
+            pthread_create(&image_encode_t,NULL,EncodeImageBuffer,(void *)&pdata);
+        else
+            pthread_create(&image_cache_t,NULL,CacheImageBuffer,(void *)&pdata);
+
         if(!pdata.args.nosound){
             pthread_create(&sound_capture_t,NULL,CaptureSound,(void *)&pdata);
-            pthread_create(&sound_encode_t,NULL,EncodeSoundBuffer,(void *)&pdata);
+            if(pdata.args.encOnTheFly)
+                pthread_create(&sound_encode_t,NULL,EncodeSoundBuffer,(void *)&pdata);
+            else
+                pthread_create(&sound_cache_t,NULL,CacheSoundBuffer,(void *)&pdata);
         }
-        pthread_create(&flush_to_ogg_t,NULL,FlushToOgg,(void *)&pdata);
-        
+        if(pdata.args.encOnTheFly)
+            pthread_create(&flush_to_ogg_t,NULL,FlushToOgg,(void *)&pdata);
+
 
         RegisterCallbacks(&pdata.args);
         fprintf(stderr,"Capturing!\n");
 
         //wait all threads to finish
-        
+
         pthread_join(image_capture_t,NULL);
         fprintf(stderr,"Shutting down.");
-        pthread_join(image_encode_t,NULL);
+        //if no damage events have been received the thread will get stuck
+        pthread_cond_broadcast(&pdata.image_buffer_ready);
+        if(pdata.args.encOnTheFly)
+            pthread_join(image_encode_t,NULL);
+        else
+            pthread_join(image_cache_t,NULL);
+
+
         fprintf(stderr,".");
         if(!pdata.args.nosound){
             int *snd_exit;
-            pthread_join(sound_capture_t,(&snd_exit));
+            pthread_join(sound_capture_t,(void *)(&snd_exit));
             fprintf(stderr,".");
-            if(!(*snd_exit))
-                pthread_join(sound_encode_t,NULL);
-            else{
-                pthread_cancel(sound_encode_t);
-                exit_status=*snd_exit;
+
+            if(pdata.args.encOnTheFly){
+                if(!(*snd_exit))
+                    pthread_join(sound_encode_t,NULL);
+                else{
+                    pthread_cancel(sound_encode_t);
+                    exit_status=*snd_exit;
+                }
             }
-            fprintf(stderr,".");
+            else{
+                if(!(*snd_exit))
+                    pthread_join(sound_cache_t,NULL);
+                else{
+                    pthread_cancel(sound_cache_t);
+                    exit_status=*snd_exit;
+                }
+            }
         }
         else
             fprintf(stderr,"..");
-        pthread_join(flush_to_ogg_t,NULL);
+
+        if(pdata.args.encOnTheFly)
+            pthread_join(flush_to_ogg_t,NULL);
         fprintf(stderr,".");
+
         if(!pdata.args.full_shots)
             pthread_join(poll_damage_t,NULL);
+
+
         fprintf(stderr,".");
         if((!pdata.args.noshared)||(!pdata.args.nocondshared)){
             XShmDetach (pdata.dpy, &shminfo);
-//             XDestroyImage (pdata.image);
             shmdt (&shminfo.shmaddr);
             shmctl (shminfo.shmid, IPC_RMID, 0);
         }
         fprintf(stderr,"\n");
+
+
+        //Now that we are done with recording we cancel the timer
+        CancelTimer();
+
+/**               Encoding                          */
+        if(!pdata.args.encOnTheFly){
+            if(!Aborted){
+                fprintf(stderr,"Encoding started!\nThis may take several minutes.\n"
+                "Pressing Ctrl-C will cancel the procedure (resuming will not be possible, but\n"
+                "any portion of the video, which is already encoded won't be deleted).\n"
+                "Please wait...\n");
+                pdata.running=1;
+                InitEncoder(&pdata,&enc_data,1);
+                //load encoding and flushing threads
+                if(!pdata.args.nosound){
+                    //before we start loading again
+                    //we need to free any left-overs
+                    while(pdata.sound_buffer!=NULL){
+                        free(pdata.sound_buffer->data);
+                        pdata.sound_buffer=pdata.sound_buffer->next;
+                    }
+                }
+                pthread_create(&flush_to_ogg_t,NULL,FlushToOgg,(void *)&pdata);
+
+
+                //start loading image and audio
+                pthread_create(&load_cache_t,NULL,LoadCache,(void *)&pdata);
+
+                //join and finish
+                pthread_join(load_cache_t,NULL);
+                fprintf(stderr,"Encoding finished!\nWait a moment please...\n");
+                pthread_join(flush_to_ogg_t,NULL);
+                fprintf(stderr,"Done!!!\n");
+            }
+        }
+/**@_______________________________________________@*/
+
+        //This can happen earlier, but in some cases it might get stuck.
+        //So we must make sure the recording is not wasted.
         XCloseDisplay(pdata.dpy);
+
         if(Aborted){
             if(remove(pdata.args.filename)){
                 perror("Error while removing file:\n");

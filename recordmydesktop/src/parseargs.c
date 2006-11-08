@@ -32,11 +32,11 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
     int i;
     char *usage="\nUsage:\n"
     "\trecordmydesktop [-h| --help| --version| -delay n[H|h|M|m]| -windowid id_of_window|\n"
-    "\t-display DISPLAY| -x X| -y Y|-width N| -height N| -fps N(number>0)|\n"
+    "\t-display DISPLAY| -x X| -y Y|-width N| -height N| -fps N(number>0)| --on-the-fly-encoding|\n"
     "\t -v_quality n| -s_quality n| -v_bitrate n| --no-framedrop| -dummy-cursor color|\n"
     "\t --no-cursor| -freq N(number>0)| -channels N(number>0)| -device SOUND_DEVICE|\n"
-    "\t --nosound| --with-shared| --no-cond-shared| -shared-threshold n| --full-shots|\n"
-    "\t --quick-subsampling| --scshot| -scale-shot N| -o filename]^filename\n\n\n"
+    "\t --no-sound| --with-shared| --no-cond-shared| -shared-threshold n| --full-shots|\n"
+    "\t --quick-subsampling| -workdir DIR| --zero-compression| --no-wm-check| --overwite| -o filename]^filename\n\n\n"
 
     "General Options:\n"
     "\t-h or --help\t\tPrint this help and exit.\n"
@@ -51,7 +51,7 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
     "\t-height N\t\tHeight of recorded window.\n\n"
 
     "\t-dummy-cursor color\tColor of the dummy cursor [black|white]\n"
-    "\t--no-cursor\tDisable drawing of the cursor.\n"
+    "\t--no-cursor\t\tDisable drawing of the cursor.\n"
     "\t--with-shared\t\tEnable usage of MIT-shared memory extension at all times.\n"
     "\t--no-cond-shared\tDo not use the MIT-shared memory extension when aquiring large areas.\n"
     "\t-shared-threshold n\tThreshold over which shared memory is used(default 75).\n"
@@ -63,18 +63,22 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
     "\t-channels N(number>0)\tA positive number denoting desired sound channels in recording.\n"
     "\t-freq N(number>0)\tA positive number denoting desired sound frequency.\n"
     "\t-device SOUND_DEVICE\tSound device(default hw0:0).\n"
-    "\t--nosound\t\tDo not record sound.\n\n"
+    "\t--no-sound\t\tDo not record sound.\n\n"
 
     "Encoding Options\n"
+    "\t--on-the-fly-encoding\tEncode the audio-video data, while recording.\n"
     "\t-v_quality n\t\tA number from 0 to 63 for desired encoded video quality(default 63).\n"
     "\t-v_bitrate n\t\tA number from 45000 to 2000000 for desired encoded video bitrate(default 45000).\n"
     "\t--drop-frames\t\tAllow theora encoder to drop frames.\n"
     "\t-s_quality n\t\tDesired audio quality(-1 to 10).\n\n"
 
     "Misc Options:\n"
+    "\t--no-wm-check\tDo not try to detect the window manager(and set options according to it)\n"
+    "\t--zero-compression\tImage data are always cached uncompressed.\n"
+    "\t-workdir DIR\t\tLocation where a temporary directory will be created to hold project files(default $HOME).\n"
     "\t-delay n[H|h|M|m]\tNumber of secs(default),minutes or hours before capture starts(number can be float)\n"
-    "\t--scshot\t\tTake a bitmap screenshot(default rmdout.bmp) and exit.\n"
-    "\t-scale-shot N\t\tFactor by which screenshot is scaled down(1<=number<=64,power of 2).\n"
+    "\t--overwrite\t\tIf there is already a file with the same name, delete it\n"
+    "\t\t\t\t(default is to add a number postfix to the new one).\n"
     "\t-o filename\t\tName of recorded video(default out.ogg).\n"
     "\n\tIf no other options are specified, filename can be given without the -o switch.\n\n\n";
 
@@ -279,7 +283,7 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
                     return 1;
                 }
                 arg_return->have_dummy_cursor=1;
-                arg_return->xfixes_cursor=0;    
+                arg_return->xfixes_cursor=0;
             }
             else{
                 fprintf(stderr,"Argument Usage: -dummy-cursor [black|white]\n");
@@ -353,24 +357,6 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
             }
             i++;
         }
-        else if(!strcmp(argv[i],"-scale-shot")){
-            if(i+1<argc){
-                int num=atoi(argv[i+1]);
-                if((num==1)||(num==2)||(num==4)||(num==8)
-                ||(num==16)||(num==32)||(num==64)){
-                    arg_return->scale_shot=num;
-                }
-                else{
-                    fprintf(stderr,"Argument Usage: -scale-shot N(0<number<64,power of 2)\n");
-                    return 1;
-                }
-            }
-            else{
-                fprintf(stderr,"Argument Usage: -scale-shot N(0<number<64,power of 2)\n");
-                return 1;
-            }
-            i++;
-        }
         else if(!strcmp(argv[i],"-device")){
             if(i+1<argc){
                 free(arg_return->device);
@@ -383,7 +369,19 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
             }
             i++;
         }
-        else if(!strcmp(argv[i],"--nosound"))
+        else if(!strcmp(argv[i],"-workdir")){
+            if(i+1<argc){
+                free(arg_return->workdir);
+                arg_return->workdir=malloc(strlen(argv[i+1])+1);
+                strcpy(arg_return->workdir,argv[i+1]);
+            }
+            else{
+                fprintf(stderr,"Argument Usage: -workdir DIR\n");
+                return 1;
+            }
+            i++;
+        }
+        else if(!strcmp(argv[i],"--no-sound"))
             arg_return->nosound=1;
         else if(!strcmp(argv[i],"--drop-frames"))
             arg_return->dropframes=1;
@@ -397,12 +395,18 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
             arg_return->full_shots=1;
             arg_return->nocondshared=1;
         }
-        else if(!strcmp(argv[i],"--scshot")){
-            arg_return->scshot=1;
-            arg_return->nocondshared=1;
-        }
         else if(!strcmp(argv[i],"--quick-subsampling")){
             arg_return->no_quick_subsample=0;
+        }
+        else if(!strcmp(argv[i],"--on-the-fly-encoding")){
+            arg_return->encOnTheFly=1;
+        }
+        else if(!strcmp(argv[i],"--overwrite"))
+            arg_return->overwrite=1;
+        else if(!strcmp(argv[i],"--no-wm-check"))
+            arg_return->nowmcheck=1;
+        else if(!strcmp(argv[i],"--zero-compression")){
+            arg_return->zerocompression=1;
         }
         else if(!strcmp(argv[i],"--help")||!strcmp(argv[i],"-h")){
             fprintf(stderr,"%s",usage);
@@ -415,7 +419,7 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
         else{
             fprintf(stderr,"\n\tError parsing arguments.\n\tType --help or -h for usage.\n\n");
             return 1;
-        }    
+        }
     }
     return 0;
 }

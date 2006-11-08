@@ -24,55 +24,44 @@
 *    For further information contact me at johnvarouhakis@gmail.com              *
 **********************************************************************************/
 
-
 #include <recordmydesktop.h>
+void *CacheSoundBuffer(void *pdata){
+//We are simply going to throw sound on the disk.
+//It's sound is tiny compared to that of image, so
+//compressing would reducethe overall size by only an
+//insignificant fraction.
+    pthread_mutex_t smut;
+    pthread_mutex_init(&smut,NULL);
+    while((((ProgData *)pdata)->running)){
+        SndBuffer *buff;
 
-int ZPixmapToBMP(XImage *imgz,BRWindow *brwin,char *fname,int nbytes,int scale){
-        FILE *fpbmp;
-        int i,k;
-        int siz=52+nbytes/(pow(scale,2));
-        int offs=54+1024;
-        short int rsrvd=0;
-        int hsiz=40;
-        int width=brwin->rgeom.width/scale,height=brwin->rgeom.height/scale,nbts=nbytes/(pow(scale,2));
-        unsigned short int planes=1;
-        unsigned short int bpp=24;
-        unsigned int cmpr=0;
-        unsigned int ncols=0;
-        char *dtap=imgz->data;
-
-        /*Write header*/
-        fpbmp=fopen(fname,"wb");
-        fputc('B',fpbmp);
-        fputc('M',fpbmp);
-        fwrite(&siz,4,1,fpbmp);
-        fwrite(&rsrvd,2,1,fpbmp);
-        fwrite(&rsrvd,2,1,fpbmp);
-        fwrite(&offs,4,1,fpbmp);
-        fwrite(&hsiz,4,1,fpbmp);
-        fwrite(&(width),4,1,fpbmp);
-        fwrite(&(height),4,1,fpbmp);
-        fwrite(&planes,2,1,fpbmp);
-        fwrite(&bpp,2,1,fpbmp);
-        fwrite(&cmpr,4,1,fpbmp);
-        fwrite(&nbts,4,1,fpbmp);
-        fwrite(&(width),4,1,fpbmp);
-        fwrite(&(height),4,1,fpbmp);
-        fwrite(&(ncols),4,1,fpbmp);
-        fwrite(&(ncols),4,1,fpbmp);
-        for(i=0;i<1024;i++)
-            fputc(0,fpbmp);
-        /*Data*/
-        for(k=(nbytes/imgz->bytes_per_line)-1;k>=0;k-=scale){
-            for(i=0;i<imgz->bytes_per_line/4;i+=scale){
-                fwrite(&dtap[(i*4)+k*(imgz->bytes_per_line)],1,1,fpbmp);
-                fwrite(&dtap[(i*4)+k*(imgz->bytes_per_line)+1],1,1,fpbmp);
-                fwrite(&dtap[(i*4)+k*(imgz->bytes_per_line)+2],1,1,fpbmp);
-            }
+        if(Paused){
+            pthread_mutex_t tmut;
+            pthread_mutex_init(&tmut,NULL);
+            pthread_cond_wait(&((ProgData *)pdata)->pause_cond,&tmut);
         }
- 
-        fclose(fpbmp);
-        return 0;
+
+        if(((ProgData *)pdata)->sound_buffer==NULL)
+            pthread_cond_wait(&((ProgData *)pdata)->sound_data_read,&smut);
+
+        pthread_mutex_lock(&((ProgData *)pdata)->sound_buffer_mutex);
+        buff=((ProgData *)pdata)->sound_buffer;
+        //advance the list
+        ((ProgData *)pdata)->sound_buffer=((ProgData *)pdata)->sound_buffer->next;
+        pthread_mutex_unlock(&((ProgData *)pdata)->sound_buffer_mutex);
+
+        fwrite(buff->data,((ProgData *)pdata)->periodsize,1,((ProgData *)pdata)->cache_data->afp);
+
+
+
+        ((ProgData *)pdata)->avd-=((ProgData *)pdata)->periodtime;
+
+        free(buff->data);
+        free(buff);
+    }
+
+    fclose(((ProgData *)pdata)->cache_data->afp);
+    pthread_exit(&errno);
 }
 
  

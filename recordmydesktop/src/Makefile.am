@@ -3,7 +3,6 @@ bin_PROGRAMS = recordmydesktop
 
 
 recordmydesktop_SOURCES=	recordmydesktop.c\
-							zpixmaptobmp.c\
 							getzpixmap.c\
 							parseargs.c\
 							rectinsert.c\
@@ -20,9 +19,14 @@ recordmydesktop_SOURCES=	recordmydesktop.c\
 							opendev.c\
 							capture_sound.c\
 							encode_sound_buffer.c\
-							init_encoder.c
+							init_encoder.c\
+							cache_frame.c\
+							cache_audio.c\
+							rmd_cache.c\
+							load_cache.c\
+							wm_check.c
 
-INCLUDES= $(all_includes) -I../include -I$x_includes
+INCLUDES= $(all_includes) -I../include
 
-recordmydesktop_LDFLAGS = -D_THREAD_SAFE -pthread -Wall
-
+recordmydesktop_LDFLAGS = @X_LIBS@ @X_EXTRA_LIBS@ @X_PRE_LIBS@
+recordmydesktop_CFLAGS = -D_THREAD_SAFE -pthread -Wall

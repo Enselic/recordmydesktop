@@ -90,4 +90,32 @@ void *EncodeSoundBuffer(void *pdata){
     pthread_exit(&errno);
 }
 
- 
+void SyncEncodeSoundBuffer(ProgData *pdata,signed char *buff){
+    float **vorbis_buffer;
+    int count=0,i,j;
+    int sampread=pdata->periodsize/(2*pdata->args.channels);
+    vorbis_buffer=vorbis_analysis_buffer(&pdata->enc_data->m_vo_dsp,sampread);
+    for(i=0;i<sampread;i++){
+        for(j=0;j<pdata->args.channels;j++){
+            vorbis_buffer[j][i]=((buff[count+1]<<8)|
+                                    (0x00ff&(int)buff[count]))/32768.f;
+            count+=2;
+        }
+    }
+
+    vorbis_analysis_wrote(&pdata->enc_data->m_vo_dsp,sampread);
+
+    while(vorbis_analysis_blockout(&pdata->enc_data->m_vo_dsp,&pdata->enc_data->m_vo_block)==1){
+        
+        vorbis_analysis(&pdata->enc_data->m_vo_block,NULL);
+        vorbis_bitrate_addblock(&pdata->enc_data->m_vo_block);
+        
+        while(vorbis_bitrate_flushpacket(&pdata->enc_data->m_vo_dsp,&pdata->enc_data->m_ogg_pckt2)){
+            pthread_mutex_lock(&pdata->libogg_mutex);
+            ogg_stream_packetin(&pdata->enc_data->m_ogg_vs,&pdata->enc_data->m_ogg_pckt2);
+            pthread_mutex_unlock(&pdata->libogg_mutex);
+        }
+    }
+    pdata->avd-=pdata->periodtime;
+}
+
