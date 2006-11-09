@@ -71,7 +71,7 @@ void InitCacheData(ProgData *pdata,EncData *enc_data_t,CacheData *cache_data_t){
     //image data
     cache_data_t->imgdata=malloc(strlen(cache_data_t->projname)+11);
     strcpy(cache_data_t->imgdata,cache_data_t->projname);
-    strcat(cache_data_t->imgdata,"img.out.gz");
+    strcat(cache_data_t->imgdata,"img.out");
     //audio data
     cache_data_t->audiodata=malloc(strlen(cache_data_t->projname)+10);
     strcpy(cache_data_t->audiodata,cache_data_t->projname);
@@ -84,10 +84,19 @@ void InitCacheData(ProgData *pdata,EncData *enc_data_t,CacheData *cache_data_t){
         fprintf(stderr,"Could not create temporary directory %s !!!\n",cache_data_t->projname);
         exit(13);
     }
-    cache_data_t->ifp=gzopen(cache_data_t->imgdata,"wb0f");
-    if(cache_data_t->ifp==NULL){
-        fprintf(stderr,"Could not create temporary file %s !!!\n",cache_data_t->imgdata);
-        exit(13);
+    if(!pdata->args.zerocompression){
+        cache_data_t->ifp=gzopen(cache_data_t->imgdata,"wb0f");
+        if(cache_data_t->ifp==NULL){
+            fprintf(stderr,"Could not create temporary file %s !!!\n",cache_data_t->imgdata);
+            exit(13);
+        }
+    }
+    else{
+        cache_data_t->uncifp=fopen(cache_data_t->imgdata,"wb0f");
+        if(cache_data_t->uncifp==NULL){
+            fprintf(stderr,"Could not create temporary file %s !!!\n",cache_data_t->imgdata);
+            exit(13);
+        }
     }
     if(!pdata->args.nosound){
         cache_data_t->afp=fopen(cache_data_t->audiodata,"wb");

@@ -43,7 +43,8 @@ void LoadBlock(unsigned char *dest,unsigned char *source,int blockno,int width, 
 void *LoadCache(void *pdata){
 
     yuv_buffer *yuv=&((ProgData *)pdata)->enc_data->yuv;
-    gzFile *ifp=((ProgData *)pdata)->cache_data->ifp;
+    gzFile *ifp=NULL;
+    FILE *ucfp=NULL;
     FILE *afp=((ProgData *)pdata)->cache_data->afp;
     FrameHeader fheader;
     CachedFrame frame;
@@ -61,11 +62,21 @@ void *LoadCache(void *pdata){
     //we allocate the frame that we will use
     INIT_FRAME(&frame,&fheader,yuv)
     //and the we open our files
-    ifp=gzopen(((ProgData *)pdata)->cache_data->imgdata,"rb");
-    if(ifp==NULL){
-        thread_exit=-1;
-        pthread_exit(&thread_exit);
+    if(!((ProgData *)pdata)->args.zerocompression){
+        ifp=gzopen(((ProgData *)pdata)->cache_data->imgdata,"rb");
+        if(ifp==NULL){
+            thread_exit=-1;
+            pthread_exit(&thread_exit);
+        }
     }
+    else{
+        ucfp=fopen(((ProgData *)pdata)->cache_data->imgdata,"rb");
+        if(ucfp==NULL){
+            thread_exit=-1;
+            pthread_exit(&thread_exit);
+        }
+    }
+
 
     if(!((ProgData *)pdata)->args.nosound){
         afp=fopen(((ProgData *)pdata)->cache_data->audiodata,"rb");
@@ -84,7 +95,6 @@ void *LoadCache(void *pdata){
     ((ProgData *)pdata)->avd=0;
     //If sound finishes first,we go on with the video.
     //If video ends we will do one more run to flush audio in the ogg file
-
     while(((ProgData *)pdata)->running){
         //video load and encoding
         if(((ProgData *)pdata)->avd<=0 || ((ProgData *)pdata)->args.nosound || audio_end){
@@ -93,7 +103,10 @@ void *LoadCache(void *pdata){
                 missing_frames--;
                 SyncEncodeImageBuffer((ProgData *)pdata);
             }
-            else if(gzread(ifp,frame.header,sizeof(FrameHeader))==sizeof(FrameHeader)){
+            else if(((!((ProgData *)pdata)->args.zerocompression)&&
+                    (gzread(ifp,frame.header,sizeof(FrameHeader))==sizeof(FrameHeader) ))||
+                    ((((ProgData *)pdata)->args.zerocompression)&&
+                    (fread(frame.header,sizeof(FrameHeader),1,ucfp)==1))){
                 //sync
                 missing_frames+=frame.header->current_total-(extra_frames+frame.header->frameno);
                 fprintf(stdout,"\r[%d%%] ",
@@ -103,12 +116,26 @@ void *LoadCache(void *pdata){
                 if( (frame.header->Ynum<=pow(divisor,2)) &&
                     (frame.header->Unum<=pow(divisor/2,2)) &&
                     (frame.header->Vnum<=pow(divisor/2,2)) &&
-                    (gzread(ifp,frame.YBlocks,frame.header->Ynum)==frame.header->Ynum) &&
+
+                    (
+                    ((!((ProgData *)pdata)->args.zerocompression)&&
+                    ((gzread(ifp,frame.YBlocks,frame.header->Ynum)==frame.header->Ynum) &&
                     (gzread(ifp,frame.UBlocks,frame.header->Unum)==frame.header->Unum) &&
                     (gzread(ifp,frame.VBlocks,frame.header->Vnum)==frame.header->Vnum) &&
                     (gzread(ifp,frame.YData,blockszy*frame.header->Ynum)==blockszy*frame.header->Ynum) &&
                     (gzread(ifp,frame.UData,(blockszuv*frame.header->Unum))==(blockszuv*frame.header->Unum)) &&
-                    (gzread(ifp,frame.VData,(blockszuv*frame.header->Vnum))==(blockszuv*frame.header->Vnum))){
+                    (gzread(ifp,frame.VData,(blockszuv*frame.header->Vnum))==(blockszuv*frame.header->Vnum)))) ||
+
+                    ((((ProgData *)pdata)->args.zerocompression)&&
+                    ((fread(frame.YBlocks,1,frame.header->Ynum,ucfp)==frame.header->Ynum) &&
+                    (fread(frame.UBlocks,1,frame.header->Unum,ucfp)==frame.header->Unum) &&
+                    (fread(frame.VBlocks,1,frame.header->Vnum,ucfp)==frame.header->Vnum) &&
+                    (frame.header->Ynum==0 ||fread(frame.YData,blockszy,frame.header->Ynum,ucfp)==frame.header->Ynum) &&
+                    (frame.header->Unum==0 ||fread(frame.UData,blockszuv,frame.header->Unum,ucfp)==frame.header->Unum) &&
+                    (frame.header->Vnum==0 ||fread(frame.VData,blockszuv,frame.header->Vnum,ucfp)==frame.header->Vnum)))
+
+                    )
+                        ){
                         //load the blocks for each buffer
                         if(frame.header->Ynum)
                             for(j=0;j<frame.header->Ynum;j++)
@@ -162,7 +189,11 @@ void *LoadCache(void *pdata){
     fprintf(stdout,"\n");
     CLEAR_FRAME(&frame)
     free(sound_data);
-    gzclose(ifp);
+
+    if(!((ProgData *)pdata)->args.zerocompression)
+        gzclose(ifp);
+    else
+        fclose(ucfp);
 
     if(remove(((ProgData *)pdata)->cache_data->imgdata)){
         fprintf(stderr,"Couldn't remove temporary file %s",((ProgData *)pdata)->cache_data->imgdata);
