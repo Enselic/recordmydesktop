@@ -313,6 +313,9 @@ int main(int argc,char **argv){
                 pthread_join(load_cache_t,NULL);
                 fprintf(stderr,"Encoding finished!\nWait a moment please...\n");
                 pthread_join(flush_to_ogg_t,NULL);
+                fprintf(stderr,"Cleanning up cache...\n");
+                if(PurgeCache(pdata.cache_data,!pdata.args.nosound))
+                    fprintf(stderr,"Some error occured while cleaning up cache!\n");
                 fprintf(stderr,"Done!!!\n");
             }
         }

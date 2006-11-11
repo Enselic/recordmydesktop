@@ -26,6 +26,78 @@
 
 #include <recordmydesktop.h>
 
+
+void CacheFileN(char *name,char **newname,int n){//nth cache file
+    char numbuf[8];
+    strcpy(*newname,name);
+    strcat(*newname,".");
+    I16TOA((n),numbuf)
+    strcat(*newname,numbuf);
+}
+
+int SwapCacheFilesWrite(char *name,int n,gzFile **fp,FILE **ucfp){
+    char *newname=malloc(strlen(name)+10);
+    CacheFileN(name,&newname,n);
+    if(*fp==NULL){
+        fflush(*ucfp);
+        fclose(*ucfp);
+        *ucfp=fopen(newname,"wb");
+    }
+    else{
+        gzflush(*fp,Z_FINISH);
+        gzclose(*fp);
+        *fp=gzopen(newname,"wb0f");
+    }
+    free(newname);
+    return ((*fp==NULL)&&(*ucfp==NULL));
+}
+
+int SwapCacheFilesRead(char *name,int n,gzFile **fp,FILE **ucfp){
+    char *newname=malloc(strlen(name)+10);
+    CacheFileN(name,&newname,n);
+    if(*fp==NULL){
+        fclose(*ucfp);
+        *ucfp=fopen(newname,"rb");
+    }
+    else{
+
+        gzclose(*fp);
+        *fp=gzopen(newname,"rb");
+    }
+    free(newname);
+    return ((*fp==NULL)&&(*ucfp==NULL));
+}
+
+int PurgeCache(CacheData *cache_data_t,int sound){
+    struct stat buff;
+    char *fname;
+    fname=malloc(strlen(cache_data_t->imgdata)+10);
+    strcpy(fname,cache_data_t->imgdata);
+    int exit_value=0;
+    int nth_cache=1;
+
+    while (stat(fname,&buff)==0){
+        if(remove(fname)){
+            fprintf(stderr,"Couldn't remove temporary file %s",cache_data_t->imgdata);
+            exit_value=1;
+        }
+        CacheFileN(cache_data_t->imgdata,&fname,nth_cache);
+        nth_cache++;
+    }
+    free(fname);
+    if(sound){
+        if(remove(cache_data_t->audiodata)){
+            fprintf(stderr,"Couldn't remove temporary file %s",cache_data_t->audiodata);
+            exit_value=1;
+        }
+    }
+    if(remove(cache_data_t->projname)){
+        fprintf(stderr,"Couldn't remove temporary directory %s",cache_data_t->projname);
+        exit_value=1;
+    }
+    return exit_value;
+}
+
 void InitCacheData(ProgData *pdata,EncData *enc_data_t,CacheData *cache_data_t){
     int width,height,offset_x,offset_y,pid;
     char pidbuf[8];

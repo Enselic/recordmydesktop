@@ -89,6 +89,9 @@
 #error Only little-endian and big-endian systems are supported
 #endif
 
+//500 mb file size
+#define CACHE_FILE_SIZE_LIMIT (500*1<<20)
+
 
 //do not be confused
 //this is useless and obsolete.
@@ -713,6 +716,7 @@ int capture_busy,
 
 /**Function prototypes*/
 
+/** TODO document all the functions*/
 void *PollDamage(void *pdata);
 void *GetFrame(void *pdata);
 void *EncodeImageBuffer(void *pdata);
@@ -743,5 +747,9 @@ void SyncEncodeImageBuffer(ProgData *pdata);
 void CancelTimer(void);
 void SyncEncodeSoundBuffer(ProgData *pdata,signed char *buff);
 char *rmdWMCheck(Display *dpy,Window root);
+void CacheFileN(char *name,char **newname,int n);
+int SwapCacheFilesWrite(char *name,int n,gzFile **fp,FILE **ucfp);
+int SwapCacheFilesRead(char *name,int n,gzFile **fp,FILE **ucfp);
+int PurgeCache(CacheData *cache_data_t,int sound);
 #endif
 

@@ -51,6 +51,7 @@ void *LoadCache(void *pdata){
     signed char *sound_data=(signed char *)malloc(((ProgData *)pdata)->periodsize);
 
     int j=0,
+        nth_cache=1,
         audio_end=0,
         extra_frames=0,//total number of duplicated frames
         missing_frames=0,//if this is found >0 current run will not load
@@ -171,7 +172,13 @@ void *LoadCache(void *pdata){
                 }
             }
             else{
-                raise(SIGINT);
+                if(SwapCacheFilesRead(((ProgData *)pdata)->cache_data->imgdata,nth_cache,&ifp,&ucfp)){
+                    raise(SIGINT);
+                }
+                else{
+                    fprintf(stderr,"\t[Cache File %d]",nth_cache);
+                    nth_cache++;
+                }
                 continue;
             }
         }
@@ -190,25 +197,8 @@ void *LoadCache(void *pdata){
     CLEAR_FRAME(&frame)
     free(sound_data);
 
-    if(!((ProgData *)pdata)->args.zerocompression)
-        gzclose(ifp);
-    else
-        fclose(ucfp);
-
-    if(remove(((ProgData *)pdata)->cache_data->imgdata)){
-        fprintf(stderr,"Couldn't remove temporary file %s",((ProgData *)pdata)->cache_data->imgdata);
-        thread_exit=1;
-    }
     if(!((ProgData *)pdata)->args.nosound){
         fclose(afp);
-        if(remove(((ProgData *)pdata)->cache_data->audiodata)){
-            fprintf(stderr,"Couldn't remove temporary file %s",((ProgData *)pdata)->cache_data->audiodata);
-            thread_exit=1;
-        }
-    }
-    if(remove(((ProgData *)pdata)->cache_data->projname)){
-        fprintf(stderr,"Couldn't remove temporary directory %s",((ProgData *)pdata)->cache_data->projname);
-        thread_exit=1;
     }
 
     pthread_exit(&thread_exit);

@@ -46,7 +46,7 @@ int CompareBlocks(unsigned char *incoming,unsigned char *old,int blockno,int wid
     return 0;
 }
 
-void FlushBlock(unsigned char *buf,int blockno,int width, int height,int divisor,gzFile *fp,FILE *ucfp){
+int FlushBlock(unsigned char *buf,int blockno,int width, int height,int divisor,gzFile *fp,FILE *ucfp){
     int j,
         block_i=blockno/divisor,//place on the grid
         block_k=blockno%divisor;
@@ -63,6 +63,7 @@ void FlushBlock(unsigned char *buf,int blockno,int width, int height,int divisor
             buf_reg+=width;
         }
     }
+    return ((height*width)/pow(divisor,2));
 }
 
 void *CacheImageBuffer(void *pdata){
@@ -72,7 +73,13 @@ void *CacheImageBuffer(void *pdata){
     yuv_buffer yuv[2];
     gzFile *fp=NULL;
     FILE *ucfp=NULL;
-    int i,current=0,divisor=16,firstrun=1,frameno=0;
+    int i,
+        current=0,
+        divisor=16,
+        firstrun=1,
+        frameno=0,
+        nbytes=0,
+        nth_cache=1;
 
     if(!((ProgData *)pdata)->args.zerocompression){
         fp=((ProgData *)pdata)->cache_data->ifp;
@@ -174,34 +181,65 @@ void *CacheImageBuffer(void *pdata){
         fheader.Vnum=vnum;
         fheader.pad=0;
         if(!((ProgData *)pdata)->args.zerocompression){
-            gzwrite(fp,(void*)&fheader,sizeof(FrameHeader));
+            nbytes+=gzwrite(fp,(void*)&fheader,sizeof(FrameHeader));
             //flush indexes
-            if(ynum)gzwrite(fp,yblocks,ynum);
-            if(unum)gzwrite(fp,ublocks,unum);
-            if(vnum)gzwrite(fp,vblocks,vnum);
+            if(ynum)nbytes+=gzwrite(fp,yblocks,ynum);
+            if(unum)nbytes+=gzwrite(fp,ublocks,unum);
+            if(vnum)nbytes+=gzwrite(fp,vblocks,vnum);
         }
         else{
-            fwrite((void*)&fheader,sizeof(FrameHeader),1,ucfp);
+            nbytes+=sizeof(FrameHeader)*fwrite((void*)&fheader,sizeof(FrameHeader),1,ucfp);
             //flush indexes
-            if(ynum)fwrite(yblocks,ynum,1,ucfp);
-            if(unum)fwrite(ublocks,unum,1,ucfp);
-            if(vnum)fwrite(vblocks,vnum,1,ucfp);
+            if(ynum)nbytes+=ynum*fwrite(yblocks,ynum,1,ucfp);
+            if(unum)nbytes+=unum*fwrite(ublocks,unum,1,ucfp);
+            if(vnum)nbytes+=vnum*fwrite(vblocks,vnum,1,ucfp);
         }
         //flush the blocks for each buffer
         if(ynum)
             for(j=0;j<ynum;j++)
-                FlushBlock(yuv[current].y,yblocks[j],yuv[current].y_width,yuv[current].y_height,divisor,fp,ucfp);
+                nbytes+=FlushBlock( yuv[current].y,yblocks[j],
+                                    yuv[current].y_width,
+                                    yuv[current].y_height,
+                                    divisor,
+                                    fp,
+                                    ucfp);
         if(unum)
             for(j=0;j<unum;j++)
-                FlushBlock(yuv[current].u,ublocks[j],yuv[current].uv_width,yuv[current].uv_height,divisor/2,fp,ucfp);
+                nbytes+=FlushBlock( yuv[current].u,ublocks[j],
+                                    yuv[current].uv_width,
+                                    yuv[current].uv_height,
+                                    divisor/2,
+                                    fp,
+                                    ucfp);
         if(vnum)
             for(j=0;j<vnum;j++)
-                FlushBlock(yuv[current].v,vblocks[j],yuv[current].uv_width,yuv[current].uv_height,divisor/2,fp,ucfp);
+                nbytes+=FlushBlock( yuv[current].v,vblocks[j],
+                                    yuv[current].uv_width,
+                                    yuv[current].uv_height,
+                                    divisor/2,
+                                    fp,
+                                    ucfp);
 
 
         /**@________________@**/
         ((ProgData *)pdata)->avd+=((ProgData *)pdata)->frametime*2*((ProgData *)pdata)->args.channels;
-
+        if(nbytes>CACHE_FILE_SIZE_LIMIT){
+            if(SwapCacheFilesWrite(((ProgData *)pdata)->cache_data->imgdata,nth_cache,&fp,&ucfp)){
+                fprintf(stderr,"New cache file could not be created.\nEnding recording...\n");
+                fflush(stderr);
+                raise(SIGINT);  //if for some reason we cannot make a new file
+                                //we have to stop. If we are out of space,which means
+                                //that encoding cannot happen either,
+                                //InitEncoder will cause an abrupt end with an
+                                //error code and the cache will remain intact.
+                                //If we've chosen separate two-stages, the program will make a
+                                //clean exit.
+                                //In either case data will be preserved so if
+                                //space is freed the recording can be proccessed later.
+            }
+            nth_cache++;
+            nbytes=0;
+        }
     }
 
     //clean up since we're not finished
