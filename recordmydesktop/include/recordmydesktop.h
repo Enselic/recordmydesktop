@@ -70,10 +70,6 @@
 #define __GBYTE 1
 #define __BBYTE 0
 
-#define __RVALUE(tmp_val) (((tmp_val)&0x00ff0000)>>16)
-#define __GVALUE(tmp_val) (((tmp_val)&0x0000ff00)>>8)
-#define __BVALUE(tmp_val) (((tmp_val)&0x000000ff))
-
 #elif __BYTE_ORDER == __BIG_ENDIAN
 
 #define __ABYTE 0
@@ -81,13 +77,13 @@
 #define __GBYTE 2
 #define __BBYTE 3
 
-#define __RVALUE(tmp_val) (((tmp_val)&0x0000ff00)>>8)
-#define __GVALUE(tmp_val) (((tmp_val)&0x00ff0000)>>16)
-#define __BVALUE(tmp_val) (((tmp_val)&0xff000000)>>24)
-
 #else
 #error Only little-endian and big-endian systems are supported
 #endif
+
+#define __RVALUE(tmp_val) (((tmp_val)&0x00ff0000)>>16)
+#define __GVALUE(tmp_val) (((tmp_val)&0x0000ff00)>>8)
+#define __BVALUE(tmp_val) (((tmp_val)&0x000000ff))
 
 //500 mb file size
 #define CACHE_FILE_SIZE_LIMIT (500*1<<20)
