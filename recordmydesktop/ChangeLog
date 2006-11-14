@@ -1,14 +1,16 @@
 /*VERSION 0.3.0*/
 *Implemented cache functionality
 (Encoding by default happens right after the recording)
-*Corrected damage event handling.
+*Better damage event handling.
 *Saving under the same file-name,no longer deletes the previous one,
 instead it saves under a number postfixed file.
 *Opening the sound device doesn't block anymore.
 *A few new options were added related to caching.
 *Program now checks if it is run uder a known 3d compositing window manager
 and set behavior accordingly, to reduce the need for extra options at launch.
-*Updated documentation.
+*documented all fuctions in header.
+*Removed unneeded casts that bloated the code.
+*Updated man page.
 *Removed uneeded bitmap screenshot function.
 
 
