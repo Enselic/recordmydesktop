@@ -12,6 +12,7 @@ gtk_recordMyDesktop_PYTHON = \
 							rmdPrefsWidget.py\
 							rmdSimple.py\
 							rmdConfig.py\
+							rmdMonitor.py\
 							__init__.py
 
 desktopdir = $(datadir)/applications

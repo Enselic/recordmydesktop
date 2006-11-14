@@ -1,31 +1,31 @@
 AC_PREREQ(2.59)
 AC_INIT(src/gtk-recordMyDesktop)
 
-AM_INIT_AUTOMAKE(gtk-recordMyDesktop, 0.2.1-r4)
+AM_INIT_AUTOMAKE(gtk-recordMyDesktop, 0.3)
 
 AS_AC_EXPAND(LIBDIR, $libdir)
 AC_MSG_NOTICE(Storing library files in $LIBDIR)
 AC_SUBST(PYGTK_REQ, 2.4)
 
-#The following test is needed for the expansion bellow 
+#The following test is needed for the expansion bellow
 if test "x$prefix" == "xNONE"; then
     export prefix="/usr/local/"
-else 
+else
     echo "prefix set to $prefix"
 fi
 
 #this expansion is needed because in some cases the datadir expansion will
 #not give an absolute path but one based on the $prefix env variable.
-#This value gets directly in the rmdConfig.py file which will later fail 
+#This value gets directly in the rmdConfig.py file which will later fail
 #if it has a value of ${prefix}/something. So it needs to know which was the prefix during
 #installation. And that's why the above test is needed. In case no prefix is given
-#we still have to insert the default to avoid a path of NONE/something. and NONE can't be 
+#we still have to insert the default to avoid a path of NONE/something. and NONE can't be
 #replaced within the script since it is also a valid name for a directory.
 #also,this behavior doesn't affect already existing dist tarballs and probably has to do with
 #the environment that the autotools were used, to produce the tarballs
-#(both cases were noticed with v1.7 of autowhatever, but on different environments)  
+#(both cases were noticed with v1.7 of autowhatever, but on different environments)
 #did you really read this? If you are a packager, you must be a very responsible one!Congrats!
-AS_AC_EXPAND(PREFIX,$prefix) 
+AS_AC_EXPAND(PREFIX,$prefix)
 
 AS_AC_EXPAND(DATADIR, "$datadir")
 AC_MSG_NOTICE(Storing data files in $DATADIR)
@@ -71,7 +71,7 @@ export PYTHONPATH=$PYGST_DIR:$PYTHONPATH
 
 
 
-AC_CONFIG_FILES([Makefile 
+AC_CONFIG_FILES([Makefile
         src/Makefile
         src/rmdConfig.py
         po/Makefile.in])

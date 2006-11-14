@@ -35,7 +35,8 @@ if USE_EGG==1:
     import egg.trayicon
 import rmdSelect as isel
 import rmdTrayPopup as iTP
-import os,signal
+import rmdMonitor as imon
+import os,signal,popen2
 
 #values struct:
 
@@ -78,8 +79,8 @@ class trayIcon(object):
         13*256:'Cannot open file for writting.',
         11:'Segmentation Fault'
         }
- 
- 
+
+
     state=0#0 stopped,1 recording,2 paused
     rmdPid=None
     optionsOpen=[1]
@@ -97,9 +98,9 @@ class trayIcon(object):
         else:
             widget.set_from_stock(icon)
 
-            
+
     def __buttonPress__(self,button):
-        if button==1 :
+        if button==1 and self.state>=0:
             if self.state == 0:
                 if self.optionsOpen[0]==1:
                     self.parent.hide()
@@ -119,9 +120,9 @@ class trayIcon(object):
                 self.__set_icon__(self.trayIcon,gtk.STOCK_MEDIA_STOP)
                 self.state=1
                 self.__pauseRMD__()
-              
 
-        elif button == 3:
+
+        elif button == 3 and self.state>=0:
             if self.state == 0:
                 self.tray_popup.show()
             elif self.state == 1:
@@ -144,13 +145,13 @@ class trayIcon(object):
             self.__set_icon__(self.trayIcon,gtk.STOCK_MEDIA_STOP)
             self.state=1
             self.__execRMD__()
-         
+
     def __execRMD__(self):
         self.parent.update()
         execargs=["recordmydesktop","-o",'%s'%self.parent.values[4],
                   "-fps","%d"%self.parent.values[0]]
         if self.parent.values[2]==False :
-            execargs.append("--nosound")
+            execargs.append("--no-sound")
         if self.parent.values[1] == 1:
             execargs.append("-dummy-cursor")
             execargs.append("white")
@@ -159,7 +160,7 @@ class trayIcon(object):
             execargs.append("black")
         elif self.parent.values[1] == 3:
             execargs.append("--no-cursor")
-        
+
         if self.parent.values[3] == 0:
             execargs.append("--full-shots")
             if self.parent.values[13] == 0:
@@ -202,18 +203,17 @@ class trayIcon(object):
         execargs.append('%d'%self.parent.values[15])
         if self.parent.values[16] == 0:
             execargs.append('--quick-subsampling')
-        
-        
+
+
         #print execargs
 
-        self.rmdPid=os.fork()
 
-        if self.rmdPid==0:
-            res=os.execvp("recordmydesktop",execargs)
-        else:
-            self.timed_id=gobject.timeout_add(1000,self.__check_status__)
-            
-        
+
+        self.childP=popen2.Popen3(execargs,"t")
+        self.rmdPid=self.childP.pid
+        self.timed_id=gobject.timeout_add(1000,self.__check_status__)
+
+
     def __exit_status_dialog(self,status):
         dialog = gtk.Dialog(title=None, parent=None, flags=0, buttons=None)
         label1=None
@@ -234,7 +234,7 @@ class trayIcon(object):
 
     def __pauseRMD__(self):
         os.kill(self.rmdPid,signal.SIGUSR1)
-        
+
     def __stopRMD__(self):
         if self.timed_id!=None:
             gobject.source_remove(self.timed_id)
@@ -242,7 +242,13 @@ class trayIcon(object):
         exit_ret=os.waitpid(self.rmdPid,os.WNOHANG)
         if exit_ret[0] == 0:
             os.kill(self.rmdPid,signal.SIGTERM)
+            self.state=-1
+            monitor=imon.rmdMonitor(self.childP.fromchild,self.rmdPid)
+
             exit_ret=os.waitpid(self.rmdPid,0)
+
+            self.state=0
+                #os.slee
             #if exit_ret[0]==self.rmdPid:
             #self.__exit_status_dialog(exit_ret[1])
         else:
