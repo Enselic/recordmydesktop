@@ -206,22 +206,22 @@ int main(int argc,char **argv){
 
         /*start threads*/
         if(!pdata.args.full_shots)
-            pthread_create(&poll_damage_t,NULL,PollDamage,(void *)&pdata);
-        pthread_create(&image_capture_t,NULL,GetFrame,(void *)&pdata);
+            pthread_create(&poll_damage_t,NULL,(void *)PollDamage,(void *)&pdata);
+        pthread_create(&image_capture_t,NULL,(void *)GetFrame,(void *)&pdata);
         if(pdata.args.encOnTheFly)
-            pthread_create(&image_encode_t,NULL,EncodeImageBuffer,(void *)&pdata);
+            pthread_create(&image_encode_t,NULL,(void *)EncodeImageBuffer,(void *)&pdata);
         else
-            pthread_create(&image_cache_t,NULL,CacheImageBuffer,(void *)&pdata);
+            pthread_create(&image_cache_t,NULL,(void *)CacheImageBuffer,(void *)&pdata);
 
         if(!pdata.args.nosound){
-            pthread_create(&sound_capture_t,NULL,CaptureSound,(void *)&pdata);
+            pthread_create(&sound_capture_t,NULL,(void *)CaptureSound,(void *)&pdata);
             if(pdata.args.encOnTheFly)
-                pthread_create(&sound_encode_t,NULL,EncodeSoundBuffer,(void *)&pdata);
+                pthread_create(&sound_encode_t,NULL,(void *)EncodeSoundBuffer,(void *)&pdata);
             else
-                pthread_create(&sound_cache_t,NULL,CacheSoundBuffer,(void *)&pdata);
+                pthread_create(&sound_cache_t,NULL,(void *)CacheSoundBuffer,(void *)&pdata);
         }
         if(pdata.args.encOnTheFly)
-            pthread_create(&flush_to_ogg_t,NULL,FlushToOgg,(void *)&pdata);
+            pthread_create(&flush_to_ogg_t,NULL,(void *)FlushToOgg,(void *)&pdata);
 
 
         RegisterCallbacks(&pdata.args);
@@ -303,11 +303,11 @@ int main(int argc,char **argv){
                         pdata.sound_buffer=pdata.sound_buffer->next;
                     }
                 }
-                pthread_create(&flush_to_ogg_t,NULL,FlushToOgg,(void *)&pdata);
+                pthread_create(&flush_to_ogg_t,NULL,(void *)FlushToOgg,(void *)&pdata);
 
 
                 //start loading image and audio
-                pthread_create(&load_cache_t,NULL,LoadCache,(void *)&pdata);
+                pthread_create(&load_cache_t,NULL,(void *)LoadCache,(void *)&pdata);
 
                 //join and finish
                 pthread_join(load_cache_t,NULL);

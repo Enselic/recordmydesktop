@@ -27,83 +27,83 @@
 
 #include <recordmydesktop.h>
 
-void *CaptureSound(void *pdata){
+void *CaptureSound(ProgData *pdata){
 
-    int frames=((ProgData *)pdata)->periodsize>>((ProgData *)pdata)->args.channels;
-//     fprintf(stderr,"fr %d  ps %d\n",frames,((ProgData *)pdata)->periodsize);fflush(stderr);
+    int frames=pdata->periodsize>>pdata->args.channels;
+//     fprintf(stderr,"fr %d  ps %d\n",frames,pdata->periodsize);fflush(stderr);
     pthread_mutex_t pmut;
     pthread_mutex_init(&pmut,NULL);
-    ((ProgData *)pdata)->sound_buffer=NULL;
+    pdata->sound_buffer=NULL;
 
-    while(((ProgData *)pdata)->running){
+    while(pdata->running){
         int sret=0;
         SndBuffer *newbuf,*tmp;
         if(Paused){
-            if(!((ProgData *)pdata)->hard_pause){
-                snd_pcm_pause(((ProgData *)pdata)->sound_handle,1);
-                pthread_cond_wait(&((ProgData *)pdata)->pause_cond,&pmut);
-                snd_pcm_pause(((ProgData *)pdata)->sound_handle,0);
+            if(!pdata->hard_pause){
+                snd_pcm_pause(pdata->sound_handle,1);
+                pthread_cond_wait(&pdata->pause_cond,&pmut);
+                snd_pcm_pause(pdata->sound_handle,0);
             }
             else{//device doesn't support pause(is this the norm?mine doesn't)
-                snd_pcm_close(((ProgData *)pdata)->sound_handle);
-                pthread_cond_wait(&((ProgData *)pdata)->pause_cond,&pmut);
+                snd_pcm_close(pdata->sound_handle);
+                pthread_cond_wait(&pdata->pause_cond,&pmut);
 
-                ((ProgData *)pdata)->sound_handle=
-                    OpenDev(((ProgData *)pdata)->args.device,
-                            &((ProgData *)pdata)->args.channels,
-                            &((ProgData *)pdata)->args.frequency,
+                pdata->sound_handle=
+                    OpenDev(pdata->args.device,
+                            &pdata->args.channels,
+                            &pdata->args.frequency,
                             NULL,
                             NULL,
                             NULL//let's hope that the device capabilities didn't magically change
                             );
-                if(((ProgData *)pdata)->sound_handle==NULL){
+                if(pdata->sound_handle==NULL){
                     fprintf(stderr,"Couldn't reopen sound device.Exiting\n");
-                    ((ProgData *)pdata)->running=0;
+                    pdata->running=0;
                     errno=3;
                     pthread_exit(&errno);
-                }                
+                }
             }
         }
 
         //create new buffer
         newbuf=(SndBuffer *)malloc(sizeof(SndBuffer *));
-        newbuf->data=(signed char *)malloc(((ProgData *)pdata)->periodsize);
+        newbuf->data=(signed char *)malloc(pdata->periodsize);
         newbuf->next=NULL;
-       
-        //read data into new buffer 
+
+        //read data into new buffer
         while(sret<frames){
-            int temp_sret=snd_pcm_readi(((ProgData *)pdata)->sound_handle,
-                                newbuf->data+2*((ProgData *)pdata)->args.channels*sret,
+            int temp_sret=snd_pcm_readi(pdata->sound_handle,
+                                newbuf->data+2*pdata->args.channels*sret,
                                 frames-sret);
             if(temp_sret==-EPIPE)
-                snd_pcm_prepare(((ProgData *)pdata)->sound_handle);
+                snd_pcm_prepare(pdata->sound_handle);
             else if (temp_sret<0){
                 fprintf(stderr,"An error occured while reading sound data:\n %s\n",snd_strerror(temp_sret));
-                snd_pcm_prepare(((ProgData *)pdata)->sound_handle);
+                snd_pcm_prepare(pdata->sound_handle);
             }
             else
                 sret+=temp_sret;
         }
 
         //queue the new buffer
-        pthread_mutex_lock(&((ProgData *)pdata)->sound_buffer_mutex);
-        tmp=((ProgData *)pdata)->sound_buffer;
-        if(((ProgData *)pdata)->sound_buffer==NULL)
-                ((ProgData *)pdata)->sound_buffer=newbuf;
+        pthread_mutex_lock(&pdata->sound_buffer_mutex);
+        tmp=pdata->sound_buffer;
+        if(pdata->sound_buffer==NULL)
+                pdata->sound_buffer=newbuf;
         else{
             while(tmp->next!=NULL)
                 tmp=tmp->next;
             tmp->next=newbuf;
         }
-        pthread_mutex_unlock(&((ProgData *)pdata)->sound_buffer_mutex);
+        pthread_mutex_unlock(&pdata->sound_buffer_mutex);
 
 
         //signal that there are data to be proccessed
-        pthread_cond_signal(&((ProgData *)pdata)->sound_data_read);
+        pthread_cond_signal(&pdata->sound_data_read);
     }
-    snd_pcm_close(((ProgData *)pdata)->sound_handle);
+    snd_pcm_close(pdata->sound_handle);
     pthread_exit(&errno);
-} 
+}
 
 
 

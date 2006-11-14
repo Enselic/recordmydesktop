@@ -713,10 +713,10 @@ int capture_busy,
 /**Function prototypes*/
 
 /** TODO document all the functions*/
-void *PollDamage(void *pdata);
-void *GetFrame(void *pdata);
-void *EncodeImageBuffer(void *pdata);
-void *FlushToOgg(void *pdata);
+void *PollDamage(ProgData *pdata);
+void *GetFrame(ProgData *pdata);
+void *EncodeImageBuffer(ProgData *pdata);
+void *FlushToOgg(ProgData *pdata);
 void UpdateYUVBuffer(yuv_buffer *yuv,unsigned char *data,int x,int y,int width,int height);
 void ClearList(RectArea **root);
 int RectInsert(RectArea **root,WGeometry *wgeom);
@@ -729,16 +729,16 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return);
 void QueryExtensions(Display *dpy,ProgArgs *args,int *damage_event,int *damage_error);
 int SetBRWindow(Display *dpy,BRWindow *brwin,DisplaySpecs *specs,ProgArgs *args);
 unsigned char *MakeDummyPointer(DisplaySpecs *specs,int size,int color,int type,unsigned char *npxl);
-void *CaptureSound(void *pdata);
-void *EncodeSoundBuffer(void *pdata);
+void *CaptureSound(ProgData *pdata);
+void *EncodeSoundBuffer(ProgData *pdata);
 snd_pcm_t *OpenDev(const char *pcm_dev,unsigned int *channels,unsigned int *frequency,snd_pcm_uframes_t *periodsize,unsigned int *periodtime,int *hardpause);
 void InitEncoder(ProgData *pdata,EncData *enc_data_t,int buffer_ready);
 void MakeMatrices();
 void SizePack2_8_16(int *start,int *size,int limit);
-void *CacheImageBuffer(void *pdata);
+void *CacheImageBuffer(ProgData *pdata);
 void InitCacheData(ProgData *pdata,EncData *enc_data_t,CacheData *cache_data_t);
-void *CacheSoundBuffer(void *pdata);
-void *LoadCache(void *pdata);
+void *CacheSoundBuffer(ProgData *pdata);
+void *LoadCache(ProgData *pdata);
 void SyncEncodeImageBuffer(ProgData *pdata);
 void CancelTimer(void);
 void SyncEncodeSoundBuffer(ProgData *pdata,signed char *buff);

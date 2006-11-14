@@ -40,15 +40,15 @@ void LoadBlock(unsigned char *dest,unsigned char *source,int blockno,int width, 
 
 
 
-void *LoadCache(void *pdata){
+void *LoadCache(ProgData *pdata){
 
-    yuv_buffer *yuv=&((ProgData *)pdata)->enc_data->yuv;
+    yuv_buffer *yuv=&pdata->enc_data->yuv;
     gzFile *ifp=NULL;
     FILE *ucfp=NULL;
-    FILE *afp=((ProgData *)pdata)->cache_data->afp;
+    FILE *afp=pdata->cache_data->afp;
     FrameHeader fheader;
     CachedFrame frame;
-    signed char *sound_data=(signed char *)malloc(((ProgData *)pdata)->periodsize);
+    signed char *sound_data=(signed char *)malloc(pdata->periodsize);
 
     int j=0,
         nth_cache=1,
@@ -63,15 +63,15 @@ void *LoadCache(void *pdata){
     //we allocate the frame that we will use
     INIT_FRAME(&frame,&fheader,yuv)
     //and the we open our files
-    if(!((ProgData *)pdata)->args.zerocompression){
-        ifp=gzopen(((ProgData *)pdata)->cache_data->imgdata,"rb");
+    if(!pdata->args.zerocompression){
+        ifp=gzopen(pdata->cache_data->imgdata,"rb");
         if(ifp==NULL){
             thread_exit=-1;
             pthread_exit(&thread_exit);
         }
     }
     else{
-        ucfp=fopen(((ProgData *)pdata)->cache_data->imgdata,"rb");
+        ucfp=fopen(pdata->cache_data->imgdata,"rb");
         if(ucfp==NULL){
             thread_exit=-1;
             pthread_exit(&thread_exit);
@@ -79,8 +79,8 @@ void *LoadCache(void *pdata){
     }
 
 
-    if(!((ProgData *)pdata)->args.nosound){
-        afp=fopen(((ProgData *)pdata)->cache_data->audiodata,"rb");
+    if(!pdata->args.nosound){
+        afp=fopen(pdata->cache_data->audiodata,"rb");
         if(afp==NULL){
             thread_exit=-1;
             pthread_exit(&thread_exit);
@@ -93,20 +93,20 @@ void *LoadCache(void *pdata){
 
     //this will be used now to define if we proccess audio or video
     //on any given loop.
-    ((ProgData *)pdata)->avd=0;
+    pdata->avd=0;
     //If sound finishes first,we go on with the video.
     //If video ends we will do one more run to flush audio in the ogg file
-    while(((ProgData *)pdata)->running){
+    while(pdata->running){
         //video load and encoding
-        if(((ProgData *)pdata)->avd<=0 || ((ProgData *)pdata)->args.nosound || audio_end){
+        if(pdata->avd<=0 || pdata->args.nosound || audio_end){
             if(missing_frames>0){
                 extra_frames++;
                 missing_frames--;
-                SyncEncodeImageBuffer((ProgData *)pdata);
+                SyncEncodeImageBuffer(pdata);
             }
-            else if(((!((ProgData *)pdata)->args.zerocompression)&&
+            else if(((!pdata->args.zerocompression)&&
                     (gzread(ifp,frame.header,sizeof(FrameHeader))==sizeof(FrameHeader) ))||
-                    ((((ProgData *)pdata)->args.zerocompression)&&
+                    ((pdata->args.zerocompression)&&
                     (fread(frame.header,sizeof(FrameHeader),1,ucfp)==1))){
                 //sync
                 missing_frames+=frame.header->current_total-(extra_frames+frame.header->frameno);
@@ -119,7 +119,7 @@ void *LoadCache(void *pdata){
                     (frame.header->Vnum<=pow(divisor/2,2)) &&
 
                     (
-                    ((!((ProgData *)pdata)->args.zerocompression)&&
+                    ((!pdata->args.zerocompression)&&
                     ((gzread(ifp,frame.YBlocks,frame.header->Ynum)==frame.header->Ynum) &&
                     (gzread(ifp,frame.UBlocks,frame.header->Unum)==frame.header->Unum) &&
                     (gzread(ifp,frame.VBlocks,frame.header->Vnum)==frame.header->Vnum) &&
@@ -127,7 +127,7 @@ void *LoadCache(void *pdata){
                     (gzread(ifp,frame.UData,(blockszuv*frame.header->Unum))==(blockszuv*frame.header->Unum)) &&
                     (gzread(ifp,frame.VData,(blockszuv*frame.header->Vnum))==(blockszuv*frame.header->Vnum)))) ||
 
-                    ((((ProgData *)pdata)->args.zerocompression)&&
+                    ((pdata->args.zerocompression)&&
                     ((fread(frame.YBlocks,1,frame.header->Ynum,ucfp)==frame.header->Ynum) &&
                     (fread(frame.UBlocks,1,frame.header->Unum,ucfp)==frame.header->Unum) &&
                     (fread(frame.VBlocks,1,frame.header->Vnum,ucfp)==frame.header->Vnum) &&
@@ -164,7 +164,7 @@ void *LoadCache(void *pdata){
                                             divisor/2);
                         //encode. This is not made in a thread since now blocking is not a problem
                         //and this way sync problems can be avoided more easily.
-                        SyncEncodeImageBuffer((ProgData *)pdata);
+                        SyncEncodeImageBuffer(pdata);
                 }
                 else{
                     raise(SIGINT);
@@ -172,7 +172,7 @@ void *LoadCache(void *pdata){
                 }
             }
             else{
-                if(SwapCacheFilesRead(((ProgData *)pdata)->cache_data->imgdata,nth_cache,&ifp,&ucfp)){
+                if(SwapCacheFilesRead(pdata->cache_data->imgdata,nth_cache,&ifp,&ucfp)){
                     raise(SIGINT);
                 }
                 else{
@@ -185,11 +185,11 @@ void *LoadCache(void *pdata){
         //audio load and encoding
         else{
             if(!audio_end){
-                int nbytes=fread(sound_data,((ProgData *)pdata)->periodsize,1,afp);
+                int nbytes=fread(sound_data,pdata->periodsize,1,afp);
                 if(nbytes<=0)
                     audio_end=1;
                 else
-                    SyncEncodeSoundBuffer((ProgData *)pdata,sound_data);
+                    SyncEncodeSoundBuffer(pdata,sound_data);
             }
         }
     }
@@ -197,7 +197,7 @@ void *LoadCache(void *pdata){
     CLEAR_FRAME(&frame)
     free(sound_data);
 
-    if(!((ProgData *)pdata)->args.nosound){
+    if(!pdata->args.nosound){
         fclose(afp);
     }
 

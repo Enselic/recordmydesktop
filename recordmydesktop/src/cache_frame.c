@@ -66,7 +66,7 @@ int FlushBlock(unsigned char *buf,int blockno,int width, int height,int divisor,
     return ((height*width)/pow(divisor,2));
 }
 
-void *CacheImageBuffer(void *pdata){
+void *CacheImageBuffer(ProgData *pdata){
     pthread_mutex_t pmut,imut;
     pthread_mutex_init(&pmut,NULL);
     pthread_mutex_init(&imut,NULL);
@@ -81,21 +81,21 @@ void *CacheImageBuffer(void *pdata){
         nbytes=0,
         nth_cache=1;
 
-    if(!((ProgData *)pdata)->args.zerocompression){
-        fp=((ProgData *)pdata)->cache_data->ifp;
+    if(!pdata->args.zerocompression){
+        fp=pdata->cache_data->ifp;
         if(fp==NULL)exit(13);
     }
     else{
-        ucfp=((ProgData *)pdata)->cache_data->uncifp;
+        ucfp=pdata->cache_data->uncifp;
         if(ucfp==NULL)exit(13);
     }
 
 
     for(i=0;i<2;i++){
-        yuv[i].y_width=((ProgData *)pdata)->enc_data->yuv.y_width;
-        yuv[i].y_height=((ProgData *)pdata)->enc_data->yuv.y_height;
-        yuv[i].uv_width=((ProgData *)pdata)->enc_data->yuv.uv_width;
-        yuv[i].uv_height=((ProgData *)pdata)->enc_data->yuv.uv_height;
+        yuv[i].y_width=pdata->enc_data->yuv.y_width;
+        yuv[i].y_height=pdata->enc_data->yuv.y_height;
+        yuv[i].uv_width=pdata->enc_data->yuv.uv_width;
+        yuv[i].uv_height=pdata->enc_data->yuv.uv_height;
 
         yuv[i].y=(unsigned char *)malloc(yuv[i].y_width*yuv[i].y_height);
         yuv[i].u=(unsigned char *)malloc(yuv[i].uv_width*yuv[i].uv_height);
@@ -103,7 +103,7 @@ void *CacheImageBuffer(void *pdata){
     }
 
 
-    while(((ProgData *)pdata)->running){
+    while(pdata->running){
         int prev;
         int j;
         unsigned short ynum,unum,vnum;
@@ -111,20 +111,20 @@ void *CacheImageBuffer(void *pdata){
         FrameHeader fheader;
         ynum=unum=vnum=0;
 
-        pthread_cond_wait(&((ProgData *)pdata)->image_buffer_ready,&imut);
+        pthread_cond_wait(&pdata->image_buffer_ready,&imut);
         if(Paused)
-            pthread_cond_wait(&((ProgData *)pdata)->pause_cond,&pmut);
-        pthread_mutex_lock(&((ProgData *)pdata)->yuv_mutex);
+            pthread_cond_wait(&pdata->pause_cond,&pmut);
+        pthread_mutex_lock(&pdata->yuv_mutex);
 
         //rotate buffers
         prev=current;
         current=(current)?0:1;
         //copy incoming
-        memcpy(yuv[current].y,((ProgData *)pdata)->enc_data->yuv.y,yuv[current].y_width*yuv[current].y_height);
-        memcpy(yuv[current].u,((ProgData *)pdata)->enc_data->yuv.u,yuv[current].uv_width*yuv[current].uv_height);
-        memcpy(yuv[current].v,((ProgData *)pdata)->enc_data->yuv.v,yuv[current].uv_width*yuv[current].uv_height);
+        memcpy(yuv[current].y,pdata->enc_data->yuv.y,yuv[current].y_width*yuv[current].y_height);
+        memcpy(yuv[current].u,pdata->enc_data->yuv.u,yuv[current].uv_width*yuv[current].uv_height);
+        memcpy(yuv[current].v,pdata->enc_data->yuv.v,yuv[current].uv_width*yuv[current].uv_height);
         //release main buffer
-        pthread_mutex_unlock(&((ProgData *)pdata)->yuv_mutex);
+        pthread_mutex_unlock(&pdata->yuv_mutex);
         //get checksums for new
 
         //find and flush different blocks
@@ -166,7 +166,7 @@ void *CacheImageBuffer(void *pdata){
 
         }
         /**WRITE FRAME TO DISK*/
-        if(!((ProgData *)pdata)->args.zerocompression){
+        if(!pdata->args.zerocompression){
             if(ynum+unum+vnum>(pow(divisor,2)+pow(divisor/2,2)*2)/10)
                 gzsetparams (fp,1,Z_FILTERED);
             else
@@ -180,7 +180,7 @@ void *CacheImageBuffer(void *pdata){
         fheader.Unum=unum;
         fheader.Vnum=vnum;
         fheader.pad=0;
-        if(!((ProgData *)pdata)->args.zerocompression){
+        if(!pdata->args.zerocompression){
             nbytes+=gzwrite(fp,(void*)&fheader,sizeof(FrameHeader));
             //flush indexes
             if(ynum)nbytes+=gzwrite(fp,yblocks,ynum);
@@ -222,9 +222,9 @@ void *CacheImageBuffer(void *pdata){
 
 
         /**@________________@**/
-        ((ProgData *)pdata)->avd+=((ProgData *)pdata)->frametime*2*((ProgData *)pdata)->args.channels;
+        pdata->avd+=pdata->frametime*2*pdata->args.channels;
         if(nbytes>CACHE_FILE_SIZE_LIMIT){
-            if(SwapCacheFilesWrite(((ProgData *)pdata)->cache_data->imgdata,nth_cache,&fp,&ucfp)){
+            if(SwapCacheFilesWrite(pdata->cache_data->imgdata,nth_cache,&fp,&ucfp)){
                 fprintf(stderr,"New cache file could not be created.\nEnding recording...\n");
                 fflush(stderr);
                 raise(SIGINT);  //if for some reason we cannot make a new file
@@ -249,7 +249,7 @@ void *CacheImageBuffer(void *pdata){
         free(yuv[i].v);
     }
     fprintf(stderr,"Saved %d frames in a total of %d requests\n",frameno,frames_total);
-    if(!((ProgData *)pdata)->args.zerocompression){
+    if(!pdata->args.zerocompression){
         gzflush(fp,Z_FINISH);
         gzclose(fp);
     }

@@ -27,7 +27,7 @@
 
 #include <recordmydesktop.h>
 
-void *PollDamage(void *pdata){
+void *PollDamage(ProgData *pdata){
     Window root_return,
            parent_return,
            *children;
@@ -36,10 +36,10 @@ void *PollDamage(void *pdata){
                  inserts=0;
     XEvent event;
 
-    XSelectInput (((ProgData *)pdata)->dpy,((ProgData *)pdata)->specs.root, SubstructureNotifyMask);
+    XSelectInput (pdata->dpy,pdata->specs.root, SubstructureNotifyMask);
 
-    XQueryTree (((ProgData *)pdata)->dpy,
-                ((ProgData *)pdata)->specs.root,
+    XQueryTree (pdata->dpy,
+                pdata->specs.root,
                 &root_return,
                 &parent_return,
                 &children,
@@ -47,38 +47,38 @@ void *PollDamage(void *pdata){
 
     for (i = 0; i < nchildren; i++){
         XWindowAttributes attribs;
-        if (XGetWindowAttributes (((ProgData *)pdata)->dpy,children[i],&attribs)){
-            if (!attribs.override_redirect && attribs.depth==((ProgData *)pdata)->specs.depth)
-                XDamageCreate (((ProgData *)pdata)->dpy, children[i],XDamageReportRawRectangles);
+        if (XGetWindowAttributes (pdata->dpy,children[i],&attribs)){
+            if (!attribs.override_redirect && attribs.depth==pdata->specs.depth)
+                XDamageCreate (pdata->dpy, children[i],XDamageReportRawRectangles);
         }
     }
 
-    XDamageCreate( ((ProgData *)pdata)->dpy, ((ProgData *)pdata)->brwin.windowid, XDamageReportRawRectangles);
+    XDamageCreate( pdata->dpy, pdata->brwin.windowid, XDamageReportRawRectangles);
 
 
-    while(((ProgData *)pdata)->running){
+    while(pdata->running){
         //damage polling doesn't stop,eventually full image may be needed
         //30/10/2006 : when and why did I write the above line? what did I mean?
-        XNextEvent(((ProgData *)pdata)->dpy,&event);
+        XNextEvent(pdata->dpy,&event);
         if (event.type == MapNotify ){
             XWindowAttributes attribs;
-            if (!((XMapEvent *)(&event))->override_redirect && XGetWindowAttributes (((ProgData *)pdata)->dpy,
+            if (!((XMapEvent *)(&event))->override_redirect && XGetWindowAttributes (pdata->dpy,
                                         event.xcreatewindow.window,
                                         &attribs)){
-                if (!attribs.override_redirect && attribs.depth==((ProgData *)pdata)->specs.depth)
-                    XDamageCreate (((ProgData *)pdata)->dpy,event.xcreatewindow.window,XDamageReportRawRectangles);
+                if (!attribs.override_redirect && attribs.depth==pdata->specs.depth)
+                    XDamageCreate (pdata->dpy,event.xcreatewindow.window,XDamageReportRawRectangles);
             }
         }
-        else if(event.type == ((ProgData *)pdata)->damage_event + XDamageNotify ){
+        else if(event.type == pdata->damage_event + XDamageNotify ){
             XDamageNotifyEvent *e =(XDamageNotifyEvent *)( &event );
             WGeometry wgeom;
-            CLIP_EVENT_AREA(e,&(((ProgData *)pdata)->brwin),&wgeom);
+            CLIP_EVENT_AREA(e,&(pdata->brwin),&wgeom);
             if((wgeom.x>=0)&&(wgeom.y>=0)&&(wgeom.width>0)&&(wgeom.height>0))
             {
-                int tlist_sel=((ProgData *)pdata)->list_selector;
-                pthread_mutex_lock(&((ProgData *)pdata)->list_mutex[tlist_sel]);
-                inserts+=RectInsert(&((ProgData *)pdata)->rect_root[tlist_sel],&wgeom);
-                pthread_mutex_unlock(&((ProgData *)pdata)->list_mutex[tlist_sel]);
+                int tlist_sel=pdata->list_selector;
+                pthread_mutex_lock(&pdata->list_mutex[tlist_sel]);
+                inserts+=RectInsert(&pdata->rect_root[tlist_sel],&wgeom);
+                pthread_mutex_unlock(&pdata->list_mutex[tlist_sel]);
             }
         }
 

@@ -25,39 +25,39 @@
 **********************************************************************************/
 
 #include <recordmydesktop.h>
-void *EncodeImageBuffer(void *pdata){
+void *EncodeImageBuffer(ProgData *pdata){
     pthread_mutex_t pmut,imut;
     pthread_mutex_init(&pmut,NULL);
     pthread_mutex_init(&imut,NULL);
-    while(((ProgData *)pdata)->running){
-        pthread_cond_wait(&((ProgData *)pdata)->image_buffer_ready,&imut);
+    while(pdata->running){
+        pthread_cond_wait(&pdata->image_buffer_ready,&imut);
         encoder_busy=1;
         if(Paused)
-            pthread_cond_wait(&((ProgData *)pdata)->pause_cond,&pmut);//this may not be needed
-        pthread_mutex_lock(&((ProgData *)pdata)->yuv_mutex);
-        if(theora_encode_YUVin(&((ProgData *)pdata)->enc_data->m_th_st,&((ProgData *)pdata)->enc_data->yuv)){
+            pthread_cond_wait(&pdata->pause_cond,&pmut);//this may not be needed
+        pthread_mutex_lock(&pdata->yuv_mutex);
+        if(theora_encode_YUVin(&pdata->enc_data->m_th_st,&pdata->enc_data->yuv)){
             fprintf(stderr,"Encoder not ready!\n");
-            pthread_mutex_unlock(&((ProgData *)pdata)->yuv_mutex);
+            pthread_mutex_unlock(&pdata->yuv_mutex);
         }
         else{
-            pthread_mutex_unlock(&((ProgData *)pdata)->yuv_mutex);
-            if(theora_encode_packetout(&((ProgData *)pdata)->enc_data->m_th_st,0,&((ProgData *)pdata)->enc_data->m_ogg_pckt1)==1){
-                pthread_mutex_lock(&((ProgData *)pdata)->libogg_mutex);
-                ogg_stream_packetin(&((ProgData *)pdata)->enc_data->m_ogg_ts,&((ProgData *)pdata)->enc_data->m_ogg_pckt1);
-                pthread_mutex_unlock(&((ProgData *)pdata)->libogg_mutex);
-                ((ProgData *)pdata)->avd+=((ProgData *)pdata)->frametime*2*((ProgData *)pdata)->args.channels;
+            pthread_mutex_unlock(&pdata->yuv_mutex);
+            if(theora_encode_packetout(&pdata->enc_data->m_th_st,0,&pdata->enc_data->m_ogg_pckt1)==1){
+                pthread_mutex_lock(&pdata->libogg_mutex);
+                ogg_stream_packetin(&pdata->enc_data->m_ogg_ts,&pdata->enc_data->m_ogg_pckt1);
+                pthread_mutex_unlock(&pdata->libogg_mutex);
+                pdata->avd+=pdata->frametime*2*pdata->args.channels;
             }
         }
         encoder_busy=0;
     }
     //last packet
-    if(theora_encode_YUVin(&((ProgData *)pdata)->enc_data->m_th_st,&((ProgData *)pdata)->enc_data->yuv)){
+    if(theora_encode_YUVin(&pdata->enc_data->m_th_st,&pdata->enc_data->yuv)){
             fprintf(stderr,"Encoder not ready!\n");
     }
 
-    theora_encode_packetout(&((ProgData *)pdata)->enc_data->m_th_st,1,&((ProgData *)pdata)->enc_data->m_ogg_pckt1);
+    theora_encode_packetout(&pdata->enc_data->m_th_st,1,&pdata->enc_data->m_ogg_pckt1);
 
-//     ogg_stream_packetin(&((ProgData *)pdata)->enc_data->m_ogg_ts,&((ProgData *)pdata)->enc_data->m_ogg_pckt);
+//     ogg_stream_packetin(&pdata->enc_data->m_ogg_ts,&pdata->enc_data->m_ogg_pckt);
 
     pthread_exit(&errno);
 }
