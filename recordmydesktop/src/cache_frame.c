@@ -249,9 +249,13 @@ void *CacheImageBuffer(void *pdata){
         free(yuv[i].v);
     }
     fprintf(stderr,"Saved %d frames in a total of %d requests\n",frameno,frames_total);
-    if(!((ProgData *)pdata)->args.zerocompression)
+    if(!((ProgData *)pdata)->args.zerocompression){
+        gzflush(fp,Z_FINISH);
         gzclose(fp);
-    else
+    }
+    else{
+        fflush(ucfp);
         fclose(ucfp);
+    }
     pthread_exit(&errno);
 }
