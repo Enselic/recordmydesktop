@@ -11,6 +11,7 @@ and set behavior accordingly, to reduce the need for extra options at launch.
 *documented all fuctions in header.
 *Removed unneeded casts that bloated the code.
 *Updated man page.
+*Corrected X11 library checking during configuration.
 *Removed uneeded bitmap screenshot function.
 
 
