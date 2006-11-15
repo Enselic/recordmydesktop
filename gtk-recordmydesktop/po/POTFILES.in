@@ -4,3 +4,4 @@
 src/rmdSimple.py
 src/rmdPrefsWidget.py
 src/rmdTrayPopup.py
+src/rmdTrayIcon.py

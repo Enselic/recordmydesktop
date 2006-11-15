@@ -28,6 +28,11 @@
 import pygtk
 pygtk.require('2.0')
 import gtk,gobject
+import locale, gettext
+import rmdConfig
+_ = gettext.gettext
+gettext.textdomain('gtk-recordMyDesktop')
+gettext.bindtextdomain('gtk-recordMyDesktop',rmdConfig.locale_install_dir)
 USE_EGG=1
 if gtk.pygtk_version[0]==2 and gtk.pygtk_version[1]>=10:
     USE_EGG=0
@@ -63,21 +68,21 @@ class trayIcon(object):
     #values=[15,0,0,1,os.path.join(os.getenv('HOME'),'out.ogg'),[-1,-1,-1,-1],0,
             #1,22050,'hw:0,0',63,10,"$DISPLAY",0,1,75,1]
     exit_status={
-        0:'Success',
-        1*256:'Error while parsing the arguments.',
-        2*256:'Initializing the encoder failed(either vorbis or theora)',
-        3*256:'Could not open/configure sound card.',
-        4*256:'Xdamage extension not present.',
-        5*256:'Shared memory extension not present.',
-        6*256:'Xfixes extension not present.',
-        7*256:'XInitThreads failed.',
-        8*256:'No $DISPLAY environment variable and none specified as argument.',
-        9*256:'Cannot connect to Xserver.',
-        10*256:'Color depth is not 24bpp.',
-        11*256:'Improper window specification.',
-        12*256:'Cannot attach shared memory to proccess.',
-        13*256:'Cannot open file for writting.',
-        11:'Segmentation Fault'
+        0:_('Success'),
+        1*256:_('Error while parsing the arguments.'),
+        2*256:_('Initializing the encoder failed(either vorbis or theora)'),
+        3*256:_('Could not open/configure sound card.'),
+        4*256:_('Xdamage extension not present.'),
+        5*256:_('Shared memory extension not present.'),
+        6*256:_('Xfixes extension not present.'),
+        7*256:_('XInitThreads failed.'),
+        8*256:_('No $DISPLAY environment variable and none specified as argument.'),
+        9*256:_('Cannot connect to Xserver.'),
+        10*256:_('Color depth is not 24bpp.'),
+        11*256:_('Improper window specification.'),
+        12*256:_('Cannot attach shared memory to proccess.'),
+        13*256:_('Cannot open file for writting.'),
+        11:('Segmentation Fault')
         }
 
 
