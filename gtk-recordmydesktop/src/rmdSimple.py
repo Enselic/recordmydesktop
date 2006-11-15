@@ -56,7 +56,7 @@ class simpleWidget(object):
                    _('Select the audio quality of your recording.'),
                    _('Click here to access more options.')]
     tipLabelStrings=[_('\nLeft click and drag, on the preview image,\nto select an area for recording.\nRight click on it, to reset the area.')]
-    
+
     options=None
     optionsOpen=[0]
     def __subWidgets__(self):
@@ -68,27 +68,27 @@ class simpleWidget(object):
         self.NESQBox=gtk.HBox(homogeneous=False, spacing=10)
         self.NETABox=gtk.VBox(homogeneous=False, spacing=10)
         self.NWBox=gtk.VBox(homogeneous=False, spacing=0)
-        
-        
-        
+
+
+
         self.NBox.pack_start(self.NWBox,expand=False,fill=False)
         self.NBox.pack_start(self.NEBox,expand=True,fill=True)
         self.NEBox.pack_start(self.NEVQBox,expand=False,fill=False)
         self.NEBox.pack_start(self.NESQBox,expand=False,fill=False)
         self.NEBox.pack_start(self.NETABox,expand=False,fill=False)
-        
+
         self.SBox=gtk.HBox(homogeneous=True, spacing=0)
         self.SEBox=gtk.HBox(homogeneous=False, spacing=10)
         self.SWBox=gtk.HBox(homogeneous=False, spacing=10)
         self.SBox.pack_start(self.SWBox,expand=True,fill=True)
-        self.SBox.pack_start(self.SEBox,expand=True,fill=True)        
-        
+        self.SBox.pack_start(self.SEBox,expand=True,fill=True)
+
         self.labelbox.pack_start(self.NBox,expand=False,fill=False)
         self.labelbox.pack_end(self.SBox,expand=False,fill=False)
-        
+
         self.wroot = gtk.gdk.get_default_root_window()
         (self.wwidth, self.wheight) = self.wroot.get_size()
-        
+
         self.factor=1;
         twidth=self.wwidth
         while twidth>320 or self.factor<4:
@@ -111,7 +111,7 @@ class simpleWidget(object):
         self.s_quality.set_digits(0)
         self.v_label=gtk.Label("         "+self.labelStrings[0])
         self.s_label=gtk.Label(self.labelStrings[1])
-        
+
         self.advanced_button=gtk.Button(self.buttonStrings[0])
         self.tipLabel=gtk.Label(self.tipLabelStrings[0])
         self.NEVQBox.pack_start(self.v_label,expand=False,fill=False)
@@ -121,7 +121,7 @@ class simpleWidget(object):
         self.NESQBox.pack_start(self.s_quality,expand=True,fill=True)
         self.NETABox.pack_start(self.advanced_button,expand=False,fill=False)
         self.NETABox.pack_start(self.tipLabel,expand=False,fill=False)
-        
+
         self.win_button=gtk.Button(self.buttonStrings[1])
         self.start_button=gtk.Button(None,gtk.STOCK_MEDIA_RECORD)
         self.file_button=gtk.Button(None,gtk.STOCK_SAVE_AS)
@@ -130,12 +130,12 @@ class simpleWidget(object):
         self.SWBox.pack_start(self.start_button,False,False)
         self.SEBox.pack_end(self.quit_button,False,False)
         self.SEBox.pack_end(self.file_button,False,False)
-        
+
         self.win_button.show()
         self.start_button.show()
         self.file_button.show()
         self.quit_button.show()
-        
+
         self.v_quality.show()
         self.s_button.show()
         self.s_quality.show()
@@ -152,14 +152,14 @@ class simpleWidget(object):
         self.SEBox.show()
         self.SWBox.show()
         self.SBox.show()
-        
+
         self.labelbox.show()
         self.window.add(self.labelbox)
     def __tooltips__(self):
         self.tooltips=gtk.Tooltips()
         self.tooltips.set_tip(self.win_button,self.tooltipLabels[0])
         self.tooltips.set_tip(self.start_button,self.tooltipLabels[1])
-        self.tooltips.set_tip(self.file_button,self.tooltipLabels[2])        
+        self.tooltips.set_tip(self.file_button,self.tooltipLabels[2])
         self.tooltips.set_tip(self.quit_button,self.tooltipLabels[3])
         self.tooltips.set_tip(self.v_quality,self.tooltipLabels[4])
         self.tooltips.set_tip(self.v_label,self.tooltipLabels[4])
@@ -167,7 +167,7 @@ class simpleWidget(object):
         self.tooltips.set_tip(self.s_quality,self.tooltipLabels[6])
         self.tooltips.set_tip(self.s_label,self.tooltipLabels[6])
         self.tooltips.set_tip(self.advanced_button,self.tooltipLabels[7])
-        
+
     def __exit__(self,Event=None):
         gtk.main_quit()
         self.values[0]=-1
@@ -177,7 +177,7 @@ class simpleWidget(object):
         self.window.hide()
         self.hidden[0]=1
     def show(self,Event=None):
-        self.window.show()        
+        self.window.show()
         self.hidden[0]=0
     def advanced(self,button=None):
         if self.optionsOpen[0] ==0:
@@ -188,10 +188,10 @@ class simpleWidget(object):
             if self.options != None:
                 self.options.window.destroy()
                 self.optionsOpen[0]=0
-    
+
     def __fileSelQuit__(self,Event=None):
         self.fileSel.destroy()
-        
+
     def __fileSelOk__(self,Event=None):
         self.values[4]=self.fileSel.get_filename()
         #self.pathEntry.set_text(self.fileSel.get_filename())
@@ -199,10 +199,10 @@ class simpleWidget(object):
 
     def __fileSelect__(self,Event=None):
         self.fileSel = gtk.FileSelection(title=None)
-        self.fileSel.ok_button.connect("clicked", self.__fileSelOk__) 
+        self.fileSel.ok_button.connect("clicked", self.__fileSelOk__)
         self.fileSel.cancel_button.connect("clicked", self.__fileSelQuit__)
         self.fileSel.set_filename(self.values[4])
-        self.fileSel.show() 
+        self.fileSel.show()
     def __select_window__(self,button):
         (stdin,stdout,stderr)=os.popen3('xwininfo','t')
         wid=stdout.readlines()
@@ -218,7 +218,7 @@ class simpleWidget(object):
             elif i.lstrip().startswith('Width:'):
                 width=int(i.split(' ')[len(i.split(' '))-1])
             elif i.lstrip().startswith('Height:'):
-                height=int(i.split(' ')[len(i.split(' '))-1])            
+                height=int(i.split(' ')[len(i.split(' '))-1])
         if x<0:
             width+=x
             x=0
@@ -226,13 +226,13 @@ class simpleWidget(object):
             height+=y
             y=0
         if width+x>self.wwidth: width=self.wwidth-x
-        if height+y>self.wheight: height=self.wheight-y    
+        if height+y>self.wheight: height=self.wheight-y
         self.values[5][0]=x
         self.values[5][1]=y
         self.values[5][2]=width+x
         self.values[5][3]=height+y
         self.image.update_image()
-              
+
     def __makeCons__(self):
         self.advanced_button.connect("clicked",self.advanced)
         self.file_button.connect("clicked",self.__fileSelect__)
@@ -247,23 +247,23 @@ class simpleWidget(object):
     def update(self)  :
         self.values[10]=int((self.v_quality.get_value()*63)/100)
         self.values[11]=int(self.v_quality.get_value()/10)
-        
+
     def __init__(self):
         self.values= [15,0,True,1,os.path.join(os.getenv('HOME'),'out.ogg'),[-1,-1,-1,-1],0,
-            1,22050,'hw:0,0',63,10,"$DISPLAY",0,1,75,1]
+            1,22050,'hw:0,0',63,10,"$DISPLAY",0,1,75,1,os.path.join(os.getenv('HOME')),1,1,False]
         self.optionsOpen=[0]
         self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
         self.window.connect("destroy", self.__exit__)
         self.window.set_border_width(10)
         self.window.set_title("recordMyDesktop")
         self.__subWidgets__()
-        
+
         #self.timed_id=gobject.timeout_add(2000,self.__update_image__)
         #if resolution is low let it decide size on it's own
         if self.wwidth>640:
             self.window.set_size_request(int(self.wwidth/self.factor*2.3),-1)
         self.window.set_resizable(False)
-        
+
         self.trayIcon=trayIcon(self)
         self.__makeCons__()
         self.__tooltips__()

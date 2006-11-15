@@ -208,8 +208,14 @@ class trayIcon(object):
         execargs.append('%d'%self.parent.values[15])
         if self.parent.values[16] == 0:
             execargs.append('--quick-subsampling')
-
-
+        execargs.append('-workdir')
+        execargs.append('%s'%self.parent.values[17])
+        if self.parent.values[18] == 0:
+            execargs.append('--on-the-fly-encoding')
+        if self.parent.values[19] == 0:
+            execargs.append('--zero-compression')
+        if self.parent.values[20] == True:
+            execargs.append('--overwrite')
         #print execargs
 
 
