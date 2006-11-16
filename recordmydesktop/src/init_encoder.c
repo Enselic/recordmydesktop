@@ -29,10 +29,10 @@
 
 int IncrementalNaming(char **name){
     struct stat buff;
-    char *base_name;
+    char *base_name__;
     int i=0;
-    base_name=malloc(strlen(*name));
-    strcpy(base_name,*name);
+    base_name__=malloc(strlen(*name)+1);
+    strcpy(base_name__,*name);
 
     //this will go on an endless loop if you have 65536? files with the same name
     //or it will crash and die.anyone interested in trying ?
@@ -41,17 +41,20 @@ int IncrementalNaming(char **name){
         char *tname=malloc(strlen(*name)+10);
         char numbuf[8];
 
-        strcpy(tname,base_name);
+        strcpy(tname,base_name__);
         strcat(tname,".");
-        I16TOA((++i),numbuf)
+        i++;
+        I16TOA((i),numbuf)
         strcat(tname,numbuf);
         //save new name
+
         free(*name);
         *name=malloc(strlen(tname)+1);
         strcpy(*name,tname);
         free(tname);
     }
-    free(base_name);
+
+    free(base_name__);
     return 0;
 }
 
