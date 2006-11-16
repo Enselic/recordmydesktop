@@ -170,9 +170,10 @@ class simpleWidget(object):
 
     def __exit__(self,Event=None):
         if self.exited==0:
+            self.update()
             self.exited=1
             gtk.main_quit()
-            self.values[0]=-1
+            #self.values[0]=-1
             self.optionsOpen[0]=0
             self.window.destroy()
             if self.save_prefs()==False:
@@ -254,12 +255,102 @@ class simpleWidget(object):
 
     def update(self)  :
         self.values[10]=int((self.v_quality.get_value()*63)/100)
-        self.values[11]=int(self.v_quality.get_value()/10)
+        self.values[11]=int(self.s_quality.get_value()/10)
     def load_prefs(self):
-
-        return False
+        path=os.path.join(os.getenv("HOME"),".gtk-recordmydesktop")
+        try:
+            self.values=[]
+            savefile=open(path,"r")
+            #the header
+            savefile.readline()
+            savefile.readline()
+            #the options,each has a coment above
+            for i in range(2):
+                savefile.readline()
+                self.values.append(int(savefile.readline()))
+            savefile.readline()
+            self.values.append(int(savefile.readline())==1)
+            savefile.readline()
+            self.values.append(int(savefile.readline()))
+            savefile.readline()
+            self.values.append(savefile.readline().replace("\n",""))
+            #recording area is not saved
+            self.values.append(rmdConfig.default_values[5])
+            for i in range(3):
+                savefile.readline()
+                self.values.append(int(savefile.readline()))
+            savefile.readline()
+            self.values.append(savefile.readline().replace("\n",""))
+            for i in range(2):
+                savefile.readline()
+                self.values.append(int(savefile.readline()))
+            savefile.readline()
+            self.values.append(savefile.readline().replace("\n",""))
+            for i in range(4):
+                savefile.readline()
+                self.values.append(int(savefile.readline()))
+            savefile.readline()
+            self.values.append(savefile.readline().replace("\n",""))
+            for i in range(2):
+                savefile.readline()
+                self.values.append(int(savefile.readline()))
+            savefile.readline()
+            self.values.append(int(savefile.readline())==1)
+            return True
+        except:
+            return False
     def save_prefs(self):
-        return False
+        try:
+            path=os.path.join(os.getenv("HOME"),".gtk-recordmydesktop")
+            savefile=open(path,"w")
+            savefile.write("#Order and overall number of lines must be preserved\n")
+            savefile.write("#For this file to be read correctly\n")
+            savefile.write("#Framerate\n")
+            savefile.write("%d\n"%self.values[0])
+            savefile.write("#Cursor(0 xfixes,1 white,2 black,3 none)\n")
+            savefile.write("%d\n"%self.values[1])
+            savefile.write("#Sound,0 disabled 1 enabled\n")
+            savefile.write("%d\n"%self.values[2])
+            savefile.write("#Full shots,1 disabled 0 enabled\n")
+            savefile.write("%d\n"%self.values[3])
+            savefile.write("#Filename\n")
+            savefile.write("%s\n"%self.values[4])
+            savefile.write("#Delay,seconds\n")
+            savefile.write("%d\n"%self.values[6])
+            savefile.write("#Number of channels\n")
+            savefile.write("%d\n"%self.values[7])
+            savefile.write("#Frequency\n")
+            savefile.write("%d\n"%self.values[8])
+            savefile.write("#Sound-device\n")
+            savefile.write("%s\n"%self.values[9])
+            savefile.write("#Video quality(0-63)\n")
+            savefile.write("%d\n"%self.values[10])
+            savefile.write("#Audio quality(0-10)\n")
+            savefile.write("%d\n"%self.values[11])
+            savefile.write("#Display\n")
+            savefile.write("%s\n"%self.values[12])
+            savefile.write("#Shared memory,1 disabled 0 enabled\n")
+            savefile.write("%d\n"%self.values[13])
+            savefile.write("#Drop frames(encoder option),1 disabled 0 enabled\n")
+            savefile.write("%d\n"%self.values[14])
+            savefile.write("#Shared memory threshold,0-100\n")
+            savefile.write("%d\n"%self.values[15])
+            savefile.write("#Quick subsampling,1 disabled 0 enabled\n")
+            savefile.write("%d\n"%self.values[16])
+            savefile.write("#Working directory(temporary files)\n")
+            savefile.write("%s\n"%self.values[17])
+            savefile.write("#On the fly encoding,1 disabled 0 enabled\n")
+            savefile.write("%d\n"%self.values[18])
+            savefile.write("#Zero compression,1 disabled 0 enabled\n")
+            savefile.write("%d\n"%self.values[19])
+            savefile.write("#overwrite existing files,0 disabled 1 enabled\n")
+            savefile.write("%d\n"%self.values[20])
+
+            savefile.flush()
+            savefile.close()
+            return True
+        except:
+            return False
 
     def __init__(self):
         if self.load_prefs()==False:
