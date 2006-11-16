@@ -230,9 +230,10 @@ class trayIcon(object):
         dialog = gtk.Dialog(title=None, parent=None, flags=0, buttons=None)
         label1=None
         try:
-            label1 = gtk.Label("\t\tRecording is finished.\nrecordMyDesktop has exited with status %d\nDescription:%s\n"%(status,self.exit_status[int(status)]))
+            label1 = gtk.Label("\t\t"+_("Recording is finished.\nrecordMyDesktop has exited with status")+
+            ": %d\n"%(status)+_("Description")+":%s\n"%(self.exit_status[int(status)]))
         except:
-            label1 = gtk.Label("\t\tRecording is finished.\nrecordMyDesktop has exited with uknown\nerror code: %d \n"%(status))
+            label1 = gtk.Label("\t\t"+_("Recording is finished.\nrecordMyDesktop has exited with uknown\nerror code")+": %d \n"%(status))
         dialog.vbox.pack_start(label1, True, True, 0)
         label1.show()
         button = gtk.Button(label=None, stock=gtk.STOCK_OK)
