@@ -3,3 +3,29 @@ VERSION='@VERSION@'
 PREFIX='@PREFIX@'
 locale_install_dir=os.path.join('@DATADIR@'.replace("${prefix}",PREFIX), 'locale')
 
+#binary values expressed with 1 and zero instead of True and False
+#are upside down. That means 0 is enabled and 1 disabled
+
+default_values=[15,     #framerate
+                0,      #cursor
+                True,   #sound
+                1,      #full shots,0 on 1 off
+                os.path.join(os.getenv('HOME'),'out.ogg'), #filename
+                [-1,-1,-1,-1],  #recording area(<0 means auto)
+                0,          #delay ,unused on 0.3
+                1,          #no of channels
+                22050,      #frequency
+                'hw:0,0',   #device
+                63,         #video quality
+                10,         #audio quality
+                "$DISPLAY", #display, this is not interpreted as an env variable
+                            #but when the value is set to this the argument is omitted
+                0,          #shared memory,0 on 1 off
+                1,          #drop frames,unused in 0.3,0 on 1 off
+                75,         #shared threshold
+                1,          #quick subsampling,0 on 1 off
+                os.path.join(os.getenv('HOME')), #working directory
+                1,          #on the fly encoding,0 on 1 off
+                1,          #zero compression,0 on 1 off
+                False       #overwrite existing files
+                ]

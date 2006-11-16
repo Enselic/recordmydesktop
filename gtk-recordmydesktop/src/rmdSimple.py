@@ -253,8 +253,7 @@ class simpleWidget(object):
         self.values[11]=int(self.v_quality.get_value()/10)
 
     def __init__(self):
-        self.values= [15,0,True,1,os.path.join(os.getenv('HOME'),'out.ogg'),[-1,-1,-1,-1],0,
-            1,22050,'hw:0,0',63,10,"$DISPLAY",0,1,75,1,os.path.join(os.getenv('HOME')),1,1,False]
+        self.values= rmdConfig.default_values
         self.optionsOpen=[0]
         self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
         self.window.connect("destroy", self.__exit__)
