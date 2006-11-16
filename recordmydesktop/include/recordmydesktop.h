@@ -675,19 +675,19 @@ int capture_busy,
 
 
 #define I16TOA(number,buffer){\
-    int t_num=(number),k=0,i=0;\
+    int t_num=(number),__k=0,__i=0;\
     char *t_buf=malloc(8);\
     t_num=t_num&((2<<15)-1);\
     while(t_num>0){\
         int digit=t_num%10;\
-        t_buf[k]=digit+48;\
+        t_buf[__k]=digit+48;\
         t_num-=digit;\
         t_num/=10;\
-        k++;\
+        __k++;\
     }\
-    while(k>0)\
-        (buffer)[i++]=t_buf[--k];\
-    (buffer)[i]='\0';\
+    while(__k>0)\
+        (buffer)[__i++]=t_buf[--__k];\
+    (buffer)[__i]='\0';\
     free(t_buf);\
 };\
 
