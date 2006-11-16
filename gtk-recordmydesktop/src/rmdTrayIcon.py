@@ -82,7 +82,7 @@ class trayIcon(object):
         11*256:_('Improper window specification.'),
         12*256:_('Cannot attach shared memory to proccess.'),
         13*256:_('Cannot open file for writting.'),
-        11:('Segmentation Fault')
+        11:_('Segmentation Fault')
         }
 
 

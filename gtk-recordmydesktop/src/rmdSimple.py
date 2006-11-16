@@ -49,9 +49,9 @@ class simpleWidget(object):
     buttonStrings=[_('Advanced'),_('Select Window')]
     tooltipLabels=[_('Click here to select a window to record'),
                    _('Click to start the recording.\nThis window will hide itself.'),
-                   _('Click to choose a filename and location.\nDefault is out.ogg in your home folder.\nEXISTING FILES WILL BE OVER-WRITTEN WITHOUT WARNING!'),
+                   _('Click to choose a filename and location.\nDefault is out.ogg in your home folder.\nIf the file already exists, the new one\nwill have a number attached on its name\n(this behavior can be changed )'),
                    _('Click to exit the program.'),
-                   _('Select the video quality of your recording.\n(Lower quality will require more proccessing power.)'),
+                   _('Select the video quality of your recording.\n(Lower quality will require more proccessing power,\nso it\'s recommended, when encoding on the fly,\nto leave at 100)'),
                    _('Enable/Disable sound recording.'),
                    _('Select the audio quality of your recording.'),
                    _('Click here to access more options.')]
