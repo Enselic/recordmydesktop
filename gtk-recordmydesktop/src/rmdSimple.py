@@ -188,7 +188,11 @@ class simpleWidget(object):
             if self.options != None:
                 self.options.window.destroy()
                 self.optionsOpen[0]=0
-
+    def close_advanced(self):
+        if self.options != None:
+            if self.optionsOpen[0] ==1:
+                self.options.window.destroy()
+                self.optionsOpen[0]=0
     def __fileSelQuit__(self,Event=None):
         self.fileSel.destroy()
 

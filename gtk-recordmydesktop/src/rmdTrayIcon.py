@@ -152,6 +152,7 @@ class trayIcon(object):
             self.__execRMD__()
 
     def __execRMD__(self):
+        self.parent.close_advanced()
         self.parent.update()
         execargs=["recordmydesktop","-o",'%s'%self.parent.values[4],
                   "-fps","%d"%self.parent.values[0]]
