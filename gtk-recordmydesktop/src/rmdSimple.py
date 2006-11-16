@@ -169,10 +169,14 @@ class simpleWidget(object):
         self.tooltips.set_tip(self.advanced_button,self.tooltipLabels[7])
 
     def __exit__(self,Event=None):
-        gtk.main_quit()
-        self.values[0]=-1
-        self.optionsOpen[0]=0
-        self.window.destroy()
+        if self.exited==0:
+            self.exited=1
+            gtk.main_quit()
+            self.values[0]=-1
+            self.optionsOpen[0]=0
+            self.window.destroy()
+            if self.save_prefs()==False:
+                print "Warning!!!Couldn't save preferences"
     def hide(self,Event=None):
         self.window.hide()
         self.hidden[0]=1
@@ -251,10 +255,17 @@ class simpleWidget(object):
     def update(self)  :
         self.values[10]=int((self.v_quality.get_value()*63)/100)
         self.values[11]=int(self.v_quality.get_value()/10)
+    def load_prefs(self):
+
+        return False
+    def save_prefs(self):
+        return False
 
     def __init__(self):
-        self.values= rmdConfig.default_values
+        if self.load_prefs()==False:
+            self.values= rmdConfig.default_values
         self.optionsOpen=[0]
+        self.exited=0
         self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
         self.window.connect("destroy", self.__exit__)
         self.window.set_border_width(10)
