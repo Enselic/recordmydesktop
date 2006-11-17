@@ -47,7 +47,7 @@ class prefsWidget(object):
                     _('Drop Frames(encoder)'),_('Startup Delay(secs)'),]
     mouseStrings=[_('Normal'),_('White'),_('Black'),_('None')]
     stateStrings=[_('Enabled'),_('Disabled')]#0,1
-    tabStrings=[_('Files'),_('Performance'),_('Sound'),_('Advanced')]
+    tabStrings=[_('Files'),_('Performance'),_('Sound'),_('Misc')]
 
     def destroy(self,Event=None):
         self.values[0]=self.fpsSpinButton.get_value_as_int()
