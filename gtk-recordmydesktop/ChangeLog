@@ -1,3 +1,10 @@
+/*VERSION 0.3*/
+*Changed the advanced window to a more sensible layout.
+*Added options new to recordMyDesktop 0.3 and updated changed ones.
+*Added tooltips on all options available through the advanced window.
+*Implemented options saving, at program exit.
+*Added support for localisation on all user-visible strings.
+
 /*VERSION 0.2.1-r3*/
 *bug in gtk version check,
 thanks to Giovanni Scafora for quickly reporting it.
