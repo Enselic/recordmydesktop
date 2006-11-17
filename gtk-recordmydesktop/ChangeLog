@@ -1,5 +1,31 @@
-/*VERSION 0.1*/
-First Version
+/*VERSION 0.2.1-r3*/
+*bug in gtk version check,
+thanks to Giovanni Scafora for quickly reporting it.
+
+/*VERSION 0.2.1-r2*/
+*Support for gtk-StatusIcon and gtk.2.10, which if present
+make the egg(gnome-python-extras) dependency obsolete
+*"cannot write to file" error has been added to unexpected exit status dialog.
+*Updated Italian translation by Giovanni Scafora
+
+/*VERSION 0.2.1-r1*/
+*Italian translation by Giovanni Scafora
+*Spanish translation by José "L. Redrejo" Rodríguez
+*Applied patch from Giovanni Scafora to po/Makefile.in.in
+*Fix on $prefix env variable not expanding within $datadir.
+
+/*VERSION 0.2.1*/
+*Changed the UI.
+*A basic window now appears on launch,
+while non-visible options can be
+accessed through an 'advanced' button.
+*The window contains a preview of the recording area,
+and the selected region is outlined.
+*Selection of the area can happen directly on the preview image.
+*Selection of a window option
+*Transition to automake build system
+*Localization support
+    Added: Greek language
 
 /*VERSION 0.2*/
 *Separated functionality in tabs.
@@ -20,34 +46,6 @@ vi)     Drop frames(theora encoder option).
 vii)    Threshold for conditional use of MIT-Shm.
 viii)   Quick-subsampling.
 
-
-/*VERSION 0.2.1*/
-*Changed the UI.
-*A basic window now appears on launch,
-while non-visible options can be
-accessed through an 'advanced' button.
-*The window contains a preview of the recording area,
-and the selected region is outlined.
-*Selection of the area can happen directly on the preview image.
-*Selection of a window option
-*Transition to automake build system
-*Localization support
-    Added: Greek language
-
-/*VERSION 0.2.1-r1*/
-*Italian translation by Giovanni Scafora
-*Spanish translation by José "L. Redrejo" Rodríguez
-*Applied patch from Giovanni Scafora to po/Makefile.in.in 
-*Fix on $prefix env variable not expanding within $datadir.
-
-/*VERSION 0.2.1-r2*/
-*Support for gtk-StatusIcon and gtk.2.10, which if present
-make the egg(gnome-python-extras) dependency obsolete
-*"cannot write to file" error has been added to unexpected exit status dialog.
-*Updated Italian translation by Giovanni Scafora
-
-
-/*VERSION 0.2.1-r3*/
-*bug in gtk version check,
-thanks to Giovanni Scafora for quickly reporting it.
+/*VERSION 0.1*/
+First Version
 
