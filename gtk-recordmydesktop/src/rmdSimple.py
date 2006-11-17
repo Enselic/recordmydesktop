@@ -99,12 +99,12 @@ class simpleWidget(object):
 
         self.NWBox.pack_start(self.image,False,False)
         #quality
-        self.v_adj=gtk.Adjustment(value=(self.values[10]*100)/63, lower=0, upper=100, step_incr=1, page_incr=10, page_size=0)
+        self.v_adj=gtk.Adjustment(value=int(round((float(self.values[10])*100.0)/63.0)), lower=0, upper=100, step_incr=1, page_incr=10, page_size=0)
         self.v_quality=gtk.HScale(self.v_adj)
         self.v_quality.set_value_pos(gtk.POS_LEFT)
         self.v_quality.set_digits(0)
         self.s_button= gtk.CheckButton(label=None)
-        self.s_adj=gtk.Adjustment(value=(self.values[11]*10), lower=0, upper=100, step_incr=1, page_incr=10, page_size=0)
+        self.s_adj=gtk.Adjustment(value=int(round(float(self.values[11])*10.0)), lower=0, upper=100, step_incr=1, page_incr=10, page_size=0)
         #print (self.values[11]*10)
         self.s_quality=gtk.HScale(self.s_adj)
         self.s_quality.set_value_pos(gtk.POS_LEFT)
@@ -254,8 +254,12 @@ class simpleWidget(object):
         self.values[2]=widget.get_active()
 
     def update(self)  :
-        self.values[10]=int((self.v_quality.get_value()*63)/100)
-        self.values[11]=int(self.s_quality.get_value()/10)
+        self.values[10]=int(round((float(self.v_quality.get_value())*63.0)/100.0))
+        self.values[11]=int(round(float(self.s_quality.get_value())/10.0))
+        if self.values[10]>63:
+            self.values[10]=63
+        if self.values[11]>10:
+            self.values[11]=10
     def load_prefs(self):
         path=os.path.join(os.getenv("HOME"),".gtk-recordmydesktop")
         try:
