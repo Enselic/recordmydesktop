@@ -1,5 +1,5 @@
 NOTICE:
-gtk-recordMyDesktop is ONLY A FRONTEND to recordMyDesktop. You have to obtain and 
+gtk-recordMyDesktop is ONLY A FRONTEND to recordMyDesktop. You have to obtain and
 install that first.
 If you don't have it look here:
 http://recordmydesktop.sourceforge.net
@@ -9,7 +9,7 @@ DEPENDENCIES:
 GNU automake >=1.5
 PyGTK >= 2.4 (You will need the dev package, too)
 Gnome Python Extras >= 2.11.3 or PyGTK>=2.10 (Be carefull since this is checked on runtime. )
-recordMyDesktop 2.5
+recordMyDesktop 3.0
 
 To compile the program you have to go through the regular drill:
 
