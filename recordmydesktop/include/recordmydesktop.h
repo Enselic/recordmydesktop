@@ -420,8 +420,8 @@ int capture_busy,
     (args)->v_bitrate=45000;\
     (args)->v_quality=63;\
     (args)->s_quality=10;\
-    (args)->workdir=(char *)malloc(strlen(getenv("HOME"))+1);\
-    strcpy((args)->workdir,getenv("HOME"));\
+    (args)->workdir=(char *)malloc(5);\
+    strcpy((args)->workdir,"/tmp");\
 }
 
 #define QUERY_DISPLAY_SPECS(display,specstruct){\

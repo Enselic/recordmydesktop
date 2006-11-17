@@ -24,7 +24,7 @@ default_values=[15,     #framerate
                 1,          #drop frames,unused in 0.3,0 on 1 off
                 75,         #shared threshold
                 1,          #quick subsampling,0 on 1 off
-                os.path.join(os.getenv('HOME')), #working directory
+                "/tmp",     #working directory
                 1,          #on the fly encoding,0 on 1 off
                 1,          #zero compression,0 on 1 off
                 False       #overwrite existing files
