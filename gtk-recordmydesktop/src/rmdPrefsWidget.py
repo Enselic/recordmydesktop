@@ -48,6 +48,26 @@ class prefsWidget(object):
     mouseStrings=[_('Normal'),_('White'),_('Black'),_('None')]
     stateStrings=[_('Enabled'),_('Disabled')]#0,1
     tabStrings=[_('Files'),_('Performance'),_('Sound'),_('Misc')]
+    tooltipLabels=[_('By default, if you try to save under a filename that already\nexists, the new file will be renamed\n(for example if you try to save as out.ogg and that file exists, your file will be named out.ogg.1).\nBy checking this box, this behavior is disabled and the old file is overwritten.\n'),
+                    _('Directory where temporary files will be saved.'),
+                    _('Frames Per Second'),
+                    _('Encode simultaneously with the recording.\nThis will require a lot more processing power.\n'),
+                    _('Do not apply compression on the temporary files.\nIf enabled, the program will need less processing power,\nin the expense of hard disk space.\nThis option is valid only when encoding on the fly is disabled.'),
+                    _('This option, if enabled, will cause the program to require less\nprocessing power, but it might make the colors look a bit more blurry.'),
+                    _('Amount of screen change, within a frame that triggers retrieval\nof the screenshot through the MIT-Shared memory extension.\nThis option has no effect when using the full shots option.\n'),
+                    _('This option should be enabled when recording 3d windows.\nIt is also auto-enabled when recording a\nknown 3d compositing window manager.\n '),
+                    _('Number of audio channels.'),
+                    _('Sound frequency.'),
+                    _('ALSA sound device, that is used for sound recording.'),
+                    _('Connection to the Xserver.'),
+                    _('The mouse cursor that will be drawn.\nNormal is for the real cursor that you see while recording,\nwhile black and white are fake cursors, drawn by the program.\nYou can also disable cursor drawing.'),
+                    _('Use the MIT-Shared memory extension, whenever appropriate,\n depending on the rest of the program settings.\nDisabling this option is not recommended,\nas it may severely slow down the program.'),
+                    ]
+    def __tooltips__(self):
+        self.tooltips=gtk.Tooltips()
+        for i in range(14):
+            self.tooltips.set_tip(self.eboxes[i],self.tooltipLabels[i])
+
 
     def destroy(self,Event=None):
         self.values[0]=self.fpsSpinButton.get_value_as_int()
@@ -80,6 +100,7 @@ class prefsWidget(object):
         self.labels={}
         self.boxes={}
         self.labelbox={}
+        self.eboxes={}
         for i in range(4):
             self.labelbox[i]=gtk.VBox(homogeneous=False, spacing=20)
         self.notebook = gtk.Notebook()
@@ -91,7 +112,9 @@ class prefsWidget(object):
             self.boxes[i]=gtk.HBox(homogeneous=False, spacing=40)
             self.boxes[i].pack_start(self.labels[i],expand=False,fill=False)
             self.labels[i].show()
-            self.labelbox[0].pack_start(self.boxes[i],expand=False,fill=False)
+            self.eboxes[i]=gtk.EventBox()
+            self.eboxes[i].add(self.boxes[i])
+            self.labelbox[0].pack_start(self.eboxes[i],expand=False,fill=False)
 
         self.overwriteFilesButton=gtk.CheckButton(label=None)
         self.overwriteFilesButton.set_active(self.values[20])
@@ -102,8 +125,7 @@ class prefsWidget(object):
         self.workdirEntry.set_text(self.values[17])
         self.workdirEntry.show()
         self.boxes[1].pack_end(self.workdirEntry,expand=True,fill=True)
-        for i in range(2):
-            self.boxes[i].show()
+
 #Performance page
         for i in xrange(2,8):
             self.labels[i]=gtk.Label(self.labelStrings[i])
@@ -111,7 +133,9 @@ class prefsWidget(object):
             self.boxes[i]=gtk.HBox(homogeneous=False, spacing=40)
             self.boxes[i].pack_start(self.labels[i],expand=False,fill=False)
             self.labels[i].show()
-            self.labelbox[1].pack_start(self.boxes[i],expand=False,fill=False)
+            self.eboxes[i]=gtk.EventBox()
+            self.eboxes[i].add(self.boxes[i])
+            self.labelbox[1].pack_start(self.eboxes[i],expand=False,fill=False)
 
         self.fpsAdjustment=gtk.Adjustment(value=self.values[0], lower=1, upper=50, step_incr=1, page_incr=5, page_size=0)
         self.fpsSpinButton= gtk.SpinButton(self.fpsAdjustment, climb_rate=0.5, digits=0)
@@ -152,8 +176,6 @@ class prefsWidget(object):
         self.boxes[7].pack_end(self.fullComboBox,expand=False,fill=False)
 
 
-        for i in xrange(2,8):
-            self.boxes[i].show()
 #sound page
         for i in xrange(8,11):
             self.labels[i]=gtk.Label(self.labelStrings[i])
@@ -161,7 +183,9 @@ class prefsWidget(object):
             self.boxes[i]=gtk.HBox(homogeneous=False, spacing=0)
             self.boxes[i].pack_start(self.labels[i],expand=False,fill=False)
             self.labels[i].show()
-            self.labelbox[2].pack_start(self.boxes[i],expand=False,fill=False)
+            self.eboxes[i]=gtk.EventBox()
+            self.eboxes[i].add(self.boxes[i])
+            self.labelbox[2].pack_start(self.eboxes[i],expand=False,fill=False)
 
 
         self.channelsAdjustment=gtk.Adjustment(value=self.values[7], lower=1,upper=2, step_incr=1, page_incr=1, page_size=1)
@@ -181,8 +205,6 @@ class prefsWidget(object):
         self.deviceEntry.show()
         self.boxes[10].pack_end(self.deviceEntry,expand=False,fill=False)
 
-        for i in xrange(8,11):
-            self.boxes[i].show()
 #misc page
         for i in xrange(11,14):
             self.labels[i]=gtk.Label(self.labelStrings[i])
@@ -190,7 +212,9 @@ class prefsWidget(object):
             self.boxes[i]=gtk.HBox(homogeneous=False, spacing=0)
             self.boxes[i].pack_start(self.labels[i],expand=False,fill=False)
             self.labels[i].show()
-            self.labelbox[3].pack_start(self.boxes[i],expand=False,fill=False)
+            self.eboxes[i]=gtk.EventBox()
+            self.eboxes[i].add(self.boxes[i])
+            self.labelbox[3].pack_start(self.eboxes[i],expand=False,fill=False)
 
         self.displayEntry= gtk.Entry(max=0)
         self.displayEntry.set_text(self.values[12])
@@ -213,9 +237,9 @@ class prefsWidget(object):
         self.sharedComboBox.show()
         self.boxes[13].pack_end(self.sharedComboBox,expand=False,fill=False)
 
-        for i in xrange(11,14):
+        for i in range(14):
             self.boxes[i].show()
-
+            self.eboxes[i].show()
 
 #append and show
         for i in range(4):
@@ -234,8 +258,7 @@ class prefsWidget(object):
         self.window.set_border_width(10)
         self.window.set_title("recordMyDesktop")
         self.__subWidgets__()
-
-        #self.window.set_size_request(350,-1)
+        self.__tooltips__()
         self.window.show()
 
     def main(self):
