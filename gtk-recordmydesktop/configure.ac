@@ -1,7 +1,7 @@
 AC_PREREQ(2.59)
 AC_INIT(src/gtk-recordMyDesktop)
 
-AM_INIT_AUTOMAKE(gtk-recordMyDesktop, 0.3)
+AM_INIT_AUTOMAKE(gtk-recordMyDesktop, 0.3.0r1)
 
 AS_AC_EXPAND(LIBDIR, $libdir)
 AC_MSG_NOTICE(Storing library files in $LIBDIR)
