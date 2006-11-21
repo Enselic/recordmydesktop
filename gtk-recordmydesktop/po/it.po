@@ -1,4 +1,4 @@
-# translation of messages.po to Italian
+# translation of it.po to Italian
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-11-19 03:41+0200\n"
-"PO-Revision-Date: 2006-10-09 18:36+0200\n"
+"PO-Revision-Date: 2006-11-21 12:43+0100\n"
 "Last-Translator: Giovanni Scafora <linuxmania@gmail.com>\n"
-"Language-Team:  <linuxmania@gmail.com>\n"
+"Language-Team: Italian <linuxmania@gmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -53,6 +53,11 @@ msgid ""
 "will have a number attached on its name\n"
 "(this behavior can be changed )"
 msgstr ""
+"Premere per scegliere il nome del file e dove salvarlo.\n"
+"Il nome di default è out.ogg e sarà salvato all'interno\n"
+"della vostra home. Qualora già esistesse, quello nuovo\n"
+"sarà seguito da un numero\n"
+"(questo può essere cambiato)"
 
 #: src/rmdSimple.py:53
 msgid "Click to exit the program."
@@ -65,6 +70,10 @@ msgid ""
 "so it's recommended, when encoding on the fly,\n"
 "to leave at 100)"
 msgstr ""
+"Selezionare la qualità video della vostra registrazione.\n"
+"(Una bassa qualità richiederà una potenza di calcolo\n"
+"superiore, per questo motivo è consigliabile lasciarlo\n"
+"a 100 durante l'encoding)"
 
 #: src/rmdSimple.py:55
 msgid "Enable/Disable sound recording."
@@ -93,11 +102,11 @@ msgstr ""
 
 #: src/rmdPrefsWidget.py:42
 msgid "Overwite Existing Files"
-msgstr ""
+msgstr "Sovrascrivi i file esistenti"
 
 #: src/rmdPrefsWidget.py:42
 msgid "Working Directory"
-msgstr ""
+msgstr "Directory di lavoro"
 
 #: src/rmdPrefsWidget.py:43 src/rmdPrefsWidget.py:53
 msgid "Frames Per Second"
@@ -105,11 +114,11 @@ msgstr "Fotogrammi per secondo"
 
 #: src/rmdPrefsWidget.py:43
 msgid "Encode On the Fly"
-msgstr ""
+msgstr "Codifica al volo"
 
 #: src/rmdPrefsWidget.py:43
 msgid "Zero Compression"
-msgstr ""
+msgstr "Compressione zero"
 
 #: src/rmdPrefsWidget.py:44
 msgid "Quick Subsampling"
@@ -137,7 +146,7 @@ msgstr "Dispositivo"
 
 #: src/rmdPrefsWidget.py:45
 msgid "Display"
-msgstr "Dysplay"
+msgstr "Display"
 
 #: src/rmdPrefsWidget.py:45
 msgid "Mouse Cursor"
@@ -181,11 +190,11 @@ msgstr "Disabilitato"
 
 #: src/rmdPrefsWidget.py:50
 msgid "Files"
-msgstr ""
+msgstr "File"
 
 #: src/rmdPrefsWidget.py:50
 msgid "Performance"
-msgstr ""
+msgstr "Prestazione"
 
 #: src/rmdPrefsWidget.py:50
 msgid "Sound"
@@ -193,7 +202,7 @@ msgstr "Audio"
 
 #: src/rmdPrefsWidget.py:50
 msgid "Misc"
-msgstr ""
+msgstr "Varie"
 
 #: src/rmdPrefsWidget.py:51
 msgid ""
@@ -204,16 +213,25 @@ msgid ""
 "By checking this box, this behavior is disabled and the old file is "
 "overwritten.\n"
 msgstr ""
+"Di default, quando salvate il lavoro utilizzando\n"
+"un nome di un file già esistente, il nuovo file sarà\n"
+"rinominato (per esempio se provaste a salvare un\n"
+"file con il nome out.ogg e questo file già esistesse,\n"
+"il nuovo file sarebbe rinominato in out.ogg.1).\n"
+"Abilitando questa opzione, questo comportamento sarà\n"
+"disabilitato e i vecchi file saranno sovrascritti.\n"
 
 #: src/rmdPrefsWidget.py:52
 msgid "Directory where temporary files will be saved."
-msgstr ""
+msgstr "Directory dove temporaneamente saranno salvati i file."
 
 #: src/rmdPrefsWidget.py:54
 msgid ""
 "Encode simultaneously with the recording.\n"
 "This will require a lot more processing power.\n"
 msgstr ""
+"Codifica simultaneamente con la registrazione.\n"
+"Ciò richiederà una maggiore potenza di calcolo.\n"
 
 #: src/rmdPrefsWidget.py:55
 msgid ""
@@ -222,12 +240,20 @@ msgid ""
 "in the expense of hard disk space.\n"
 "This option is valid only when encoding on the fly is disabled."
 msgstr ""
+"Non abilitare la compressione sui file temporanei.\n"
+"Se abilitata, il programma necessiterà di minor potenza\n"
+"di calcolo, ma di maggior spazio sul disco rigido.\n"
+"Questa opzione è valida solo quando la codifica\n"
+"al volo è disabilitata."
 
 #: src/rmdPrefsWidget.py:56
 msgid ""
 "This option, if enabled, will cause the program to require less\n"
 "processing power, but it might make the colors look a bit more blurry."
 msgstr ""
+"Questa opzione, se abilitata, forzerà il programma a\n"
+"richiedere minor potenza di calcolo, ma i colori\n"
+"diventerebbero meno definiti."
 
 #: src/rmdPrefsWidget.py:57
 msgid ""
@@ -235,6 +261,10 @@ msgid ""
 "of the screenshot through the MIT-Shared memory extension.\n"
 "This option has no effect when using the full shots option.\n"
 msgstr ""
+"Numero dei cambi di schermo in un frame che effettua\n"
+"screenshots attraverso l'estensione MIT-shared memory.\n"
+"Questa opzione non ha effetto quando si abilita l'opzione\n"
+"a schermo intero.\n"
 
 #: src/rmdPrefsWidget.py:58
 msgid ""
@@ -243,22 +273,28 @@ msgid ""
 "known 3d compositing window manager.\n"
 " "
 msgstr ""
+"Questa opzione dovrebbe essere abilitata quando si\n"
+"registra una finestra in 3d.\n"
+"Questa sarà automaticamente abilitata quando si\n"
+"registra da un 3d window manager compositing\n"
+"conosciuto. "
+" "
 
 #: src/rmdPrefsWidget.py:59
 msgid "Number of audio channels."
-msgstr ""
+msgstr "Numero dei canali audio."
 
 #: src/rmdPrefsWidget.py:60
 msgid "Sound frequency."
-msgstr ""
+msgstr "Frequenza audio."
 
 #: src/rmdPrefsWidget.py:61
 msgid "ALSA sound device, that is used for sound recording."
-msgstr ""
+msgstr "Dispositivo audio ALSA usato per la registrazione dell'audio."
 
 #: src/rmdPrefsWidget.py:62
 msgid "Connection to the Xserver."
-msgstr ""
+msgstr "Connessione al server X."
 
 #: src/rmdPrefsWidget.py:63
 msgid ""
@@ -267,6 +303,11 @@ msgid ""
 "while black and white are fake cursors, drawn by the program.\n"
 "You can also disable cursor drawing."
 msgstr ""
+"Il cursore del mouse che sarà visualizzato.\n"
+"Normale mostra il cursore che vedrete durante la\n"
+"registrazione, mentre nero e bianco sono dei cursori\n"
+"finti, disegnati dal programma.\n"
+"Potete anche disabilitare la visualizzazione del mouse."
 
 #: src/rmdPrefsWidget.py:64
 msgid ""
@@ -275,6 +316,10 @@ msgid ""
 "Disabling this option is not recommended,\n"
 "as it may severely slow down the program."
 msgstr ""
+"Usare l'estensione MIT-Shared memory, ogni volta che\n"
+"l'uso sia appropriato, in base alle impostazioni del\n"
+"programma. Non è consigliabile disabilitare questa\n"
+"opzione, in quanto può rallentare molto il programma."
 
 #: src/rmdTrayPopup.py:70
 msgid "gtk-recordMyDesktop"
@@ -300,77 +345,83 @@ msgstr "Giovanni Scafora \t<linuxmania@gmail.com>"
 
 #: src/rmdTrayPopup.py:82
 msgid "_Select Area On Screen"
-msgstr "_Seleziona un'area sullo schermo"
+msgstr "_Selezionare un'area sullo schermo"
 
 #: src/rmdTrayIcon.py:71
 msgid "Success"
-msgstr ""
+msgstr "Operazione riuscita con successo"
 
 #: src/rmdTrayIcon.py:72
 msgid "Error while parsing the arguments."
-msgstr ""
+msgstr "Si è verificato un errore durante il parsing degli argomenti."
 
 #: src/rmdTrayIcon.py:73
 msgid "Initializing the encoder failed(either vorbis or theora)"
 msgstr ""
+"L'inizializzazione della codifica non è andata a buon\n"
+"fine (controllare vorbis o theora)"
 
 #: src/rmdTrayIcon.py:74
 msgid "Could not open/configure sound card."
-msgstr ""
+msgstr "Non è stato possibile aprire/configurare la scheda audio."
 
 #: src/rmdTrayIcon.py:75
 msgid "Xdamage extension not present."
-msgstr ""
+msgstr "Non è stato possibile trovare l'estensione Xdamage."
 
 #: src/rmdTrayIcon.py:76
 msgid "Shared memory extension not present."
-msgstr ""
+msgstr "Non è stato possibile trovare l'estensione Shared memory."
 
 #: src/rmdTrayIcon.py:77
 msgid "Xfixes extension not present."
-msgstr ""
+msgstr "Non è stato possibile trovare l'estensione Xfixes."
 
 #: src/rmdTrayIcon.py:78
 msgid "XInitThreads failed."
-msgstr ""
+msgstr "XInitThreads non è andato a buon fine."
 
 #: src/rmdTrayIcon.py:79
 msgid "No $DISPLAY environment variable and none specified as argument."
-msgstr ""
+msgstr "Non è stata specificata come argomento nessuna variabile d'ambiente $DISPLAY."
 
 #: src/rmdTrayIcon.py:80
 msgid "Cannot connect to Xserver."
-msgstr ""
+msgstr "Non è stato possibile connettersi al server X."
 
 #: src/rmdTrayIcon.py:81
 msgid "Color depth is not 24bpp."
-msgstr ""
+msgstr "La profondità del colore non è di 24bpp."
 
 #: src/rmdTrayIcon.py:82
 msgid "Improper window specification."
-msgstr ""
+msgstr "Specifica impropria della finestra."
 
 #: src/rmdTrayIcon.py:83
 msgid "Cannot attach shared memory to proccess."
 msgstr ""
+"Non è stato possibile fissare la memoria comune\n"
+"dei processi."
 
 #: src/rmdTrayIcon.py:84
 msgid "Cannot open file for writting."
-msgstr ""
+msgstr "Non è stato possibile aprire un file per la scrittura."
 
 #: src/rmdTrayIcon.py:85
 msgid "Segmentation Fault"
-msgstr ""
+msgstr "Segmentation Fault"
 
 #: src/rmdTrayIcon.py:233
 msgid ""
 "Recording is finished.\n"
 "recordMyDesktop has exited with status"
 msgstr ""
+"La registrazione è terminata.\n"
+"recordMyDesktop è uscito con lo stato"
 
 #: src/rmdTrayIcon.py:234
 msgid "Description"
-msgstr ""
+msgstr "Descrizione"
 
 #: src/rmdTrayIcon.py:236
 msgid ""
@@ -378,6 +429,9 @@ msgid ""
 "recordMyDesktop has exited with uknown\n"
 "error code"
 msgstr ""
+"La registrazione è terminata.\n"
+"recordMyDesktop è uscito con un codice\n"
+"di errore sconosciuto"
 
 #: src/rmdMonitor.py:14
 msgid ""
@@ -386,30 +440,12 @@ msgid ""
 "If you press Cancel or close this window,\n"
 "this proccess cannot be resumed!"
 msgstr ""
+"Attendere fin quando la registrazione sarà terminata\n"
+"ATTENZIONE!!!\n"
+"Se premete su Cancella o chiudi questa finestra, il\n"
+"processo non potrà essere ripreso!"
 
 #: src/rmdMonitor.py:38 src/rmdMonitor.py:59
 msgid "complete"
-msgstr ""
+msgstr "completo"
 
-#~ msgid ""
-#~ "Click to choose a filename and location.\n"
-#~ "Default is out.ogg in your home folder.\n"
-#~ "EXISTING FILES WILL BE OVER-WRITTEN WITHOUT WARNING!"
-#~ msgstr ""
-#~ "Premere qui per assegnare un nome al file ed il path dove salvarlo.\n"
-#~ "Di default, il nome è out.ogg e verrà salvato all'interno della tua home "
-#~ "directory.\n"
-#~ "I FILE ESISTENTI SARANNO SOVRASCRITTI SENZA ALCUN PREAVVISO!"
-
-#~ msgid ""
-#~ "Select the video quality of your recording.\n"
-#~ "(Lower quality will require more proccessing power.)"
-#~ msgstr ""
-#~ "Seleziona la qualità video della registrazione.\n"
-#~ "(Una qualità inferiore richiederà una maggiore elaborazione.)"
-
-#~ msgid " "
-#~ msgstr "  "
-
-#~ msgid "Basic"
-#~ msgstr "Predefinito"
