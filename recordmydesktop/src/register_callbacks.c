@@ -25,15 +25,17 @@
 **********************************************************************************/
 
 
-#include <recordmydesktop.h> 
+#include <recordmydesktop.h>
 void SetExpired(int signum){
-    frames_total++;
-    if(capture_busy){
-        frames_lost++;
+    if(!Paused){
+        frames_total++;
+        if(capture_busy){
+            frames_lost++;
+        }
+        pthread_cond_broadcast(time_cond);//sig handlers should not call this func
+                                        //could be a set_expired and main thread
+                                        //doing a while(running) if set_expired broadcast else usleep(n)
     }
-    pthread_cond_broadcast(time_cond);//sig handlers should not call this func
-                                    //could be a set_expired and main thread
-                                    //doing a while(running) if set_expired broadcast else usleep(n)
 }
 
 void SetPaused(int signum){
@@ -78,9 +80,9 @@ void RegisterCallbacks(ProgArgs *args){
     time_act.sa_handler=SetExpired;
     pause_act.sa_handler=SetPaused;
     end_act.sa_handler=SetRunning;
-    sigfillset(&(time_act.sa_mask)); 
-    sigfillset(&(pause_act.sa_mask)); 
-    sigfillset(&(end_act.sa_mask)); 
+    sigfillset(&(time_act.sa_mask));
+    sigfillset(&(pause_act.sa_mask));
+    sigfillset(&(end_act.sa_mask));
     time_act.sa_flags=pause_act.sa_flags=end_act.sa_flags=0;
     sigaction(SIGALRM,&time_act,NULL);
     sigaction(SIGUSR1,&pause_act,NULL);
