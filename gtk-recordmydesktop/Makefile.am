@@ -6,6 +6,6 @@ include $(srcdir)/m4/common.mk
 include $(srcdir)/m4/pychecker.mk
 
 
-SUBDIRS = src  po
-EXTRA_DIST= config.rpath  m4
+SUBDIRS = src  po  m4
+EXTRA_DIST= config.rpath
 

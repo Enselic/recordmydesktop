@@ -1,7 +1,7 @@
 AC_PREREQ(2.59)
 AC_INIT(src/gtk-recordMyDesktop)
 
-AM_INIT_AUTOMAKE(gtk-recordMyDesktop, 0.3.0r1)
+AM_INIT_AUTOMAKE(gtk-recordMyDesktop, 0.3.0r2)
 
 AS_AC_EXPAND(LIBDIR, $libdir)
 AC_MSG_NOTICE(Storing library files in $LIBDIR)
@@ -74,5 +74,6 @@ export PYTHONPATH=$PYGST_DIR:$PYTHONPATH
 AC_CONFIG_FILES([Makefile
         src/Makefile
         src/rmdConfig.py
-        po/Makefile.in])
+        po/Makefile.in
+        m4/Makefile])
 AC_OUTPUT
