@@ -1,4 +1,4 @@
-SUBDIRS = src doc
+SUBDIRS = src doc include
 
-EXTRA_DIST=include
+
 

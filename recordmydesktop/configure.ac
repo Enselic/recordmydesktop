@@ -3,7 +3,7 @@
 
 AC_PREREQ(2.59)
 AC_INIT(src/recordmydesktop.c)
-AM_INIT_AUTOMAKE(recordmydesktop,0.3.0r1,)
+AM_INIT_AUTOMAKE(recordmydesktop,0.3.0r2,)
 
 AC_CONFIG_SRCDIR([src/recordmydesktop.c])
 AM_CONFIG_HEADER(config.h)
@@ -66,6 +66,7 @@ AC_FUNC_MALLOC
 
 AC_CONFIG_FILES([Makefile
         src/Makefile
+        include/Makefile
         doc/Makefile ])
 AC_OUTPUT
 
