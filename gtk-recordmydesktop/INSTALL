@@ -13,9 +13,9 @@ recordMyDesktop 3.0
 
 To compile the program you have to go through the regular drill:
 
-~$ gzip -d gtk-recordMyDesktop-x.y.z.tar.gz
-~$ tar -x gtk-recordMyDesktop-x.y.z.tar
-~$ cd gtk-recordMyDesktop-x.y.z
+~$ gzip -d gtk-recordmydesktop-x.y.z.tar.gz
+~$ tar -x gtk-recordmydesktop-x.y.z.tar
+~$ cd gtk-recordmydesktop-x.y.z
 ~$ ./configure
 ~$ make
 ~$ sudo make install
