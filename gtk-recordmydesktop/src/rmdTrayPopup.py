@@ -20,6 +20,9 @@
 #This file has been modified to be used in gtk-recordMyDesktop
 #original file name is tray_popup.py in istanbul-0.2.1
 
+
+#25/11/2006: picked aboutdialog close-button fix from upstream Istanbul
+
 import gtk
 import locale, gettext
 import rmdConfig
@@ -44,7 +47,7 @@ class TrayPopupMenu:
         self._setup_prefs_widget()
         self._setup_select_area()
         self._setup_quit()
-        
+
     def _prefs_widget(self,button):
         if self.optionsOpen[0] ==0:
             self.optionsOpen[0]=1
@@ -59,7 +62,7 @@ class TrayPopupMenu:
                gtk.STOCK_PREFERENCES)
         self.popupmenu_prefs_widget.connect('activate', self._prefs_widget)
         self.popupmenu.add(self.popupmenu_prefs_widget)
-        
+
     def _setup_about(self):
         self.popupmenu_aboutitem = gtk.ImageMenuItem(gtk.STOCK_ABOUT)
         self.popupmenu_aboutitem.connect('activate', self._about)
@@ -75,6 +78,7 @@ class TrayPopupMenu:
         aboutdialog.set_website('http://recordmydesktop.sourceforge.net')
         aboutdialog.set_license('GPL-2')
         aboutdialog.set_translator_credits(_('Translator Credits And Information(Replace with your info)'))
+        aboutdialog.connect('response', lambda widget, response: widget.destroy())
         aboutdialog.show_all()
 
     def _setup_select_area(self):
