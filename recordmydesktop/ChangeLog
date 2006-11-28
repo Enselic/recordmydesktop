@@ -1,3 +1,6 @@
+/*VERSION 0.3.0r2*/
+*Minor corrections on the inclusion of the include/ directory in the project.
+
 /*VERSION 0.3.0r1*/
 *Fixed paused function, which was broken in 0.3.0
 
