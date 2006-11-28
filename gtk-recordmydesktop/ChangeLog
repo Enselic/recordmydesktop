@@ -1,6 +1,7 @@
 /*VERSION 0.3.0r2*/
 *Added french translation by David Valot
 *Fixed non responding close button in about dialog.
+*Added recordMyDesktop crash logging.
 
 /*VERSION 0.3.0r1*/
 *Updated italian translation by Giovanni Scafora

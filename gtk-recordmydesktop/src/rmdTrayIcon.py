@@ -41,7 +41,7 @@ if USE_EGG==1:
 import rmdSelect as isel
 import rmdTrayPopup as iTP
 import rmdMonitor as imon
-import os,signal,popen2
+import os,signal,popen2,fcntl
 
 #values struct:
 
@@ -154,79 +154,96 @@ class trayIcon(object):
     def __execRMD__(self):
         self.parent.close_advanced()
         self.parent.update()
-        execargs=["recordmydesktop","-o",'%s'%self.parent.values[4],
+        self.execargs=["recordmydesktop","-o",'%s'%self.parent.values[4],
                   "-fps","%d"%self.parent.values[0]]
         if self.parent.values[2]==False :
-            execargs.append("--no-sound")
+            self.execargs.append("--no-sound")
         if self.parent.values[1] == 1:
-            execargs.append("-dummy-cursor")
-            execargs.append("white")
+            self.execargs.append("-dummy-cursor")
+            self.execargs.append("white")
         elif self.parent.values[1] == 2:
-            execargs.append("-dummy-cursor")
-            execargs.append("black")
+            self.execargs.append("-dummy-cursor")
+            self.execargs.append("black")
         elif self.parent.values[1] == 3:
-            execargs.append("--no-cursor")
+            self.execargs.append("--no-cursor")
 
         if self.parent.values[3] == 0:
-            execargs.append("--full-shots")
+            self.execargs.append("--full-shots")
             if self.parent.values[13] == 0:
-                execargs.append("--with-shared")
+                self.execargs.append("--with-shared")
         if self.parent.values[3] == 1 and self.parent.values[13] == 1 :
-            execargs.append("--no-cond-shared")
+           self.execargs.append("--no-cond-shared")
 
         if self.parent.values[5][0]>0  :
-            execargs.append('-x')
-            execargs.append('%d'%self.parent.values[5][0])
+            self.execargs.append('-x')
+            self.execargs.append('%d'%self.parent.values[5][0])
         if self.parent.values[5][1]>0:
-            execargs.append('-y')
-            execargs.append('%d'%self.parent.values[5][1])
+            self.execargs.append('-y')
+            self.execargs.append('%d'%self.parent.values[5][1])
         if self.parent.values[5][2]>0 and self.parent.values[5][3]>0:
-            execargs.append('-width')
-            execargs.append('%d'%(self.parent.values[5][2]-self.parent.values[5][0]))
-            execargs.append('-height')
-            execargs.append('%d'%(self.parent.values[5][3]-self.parent.values[5][1]))
+            self.execargs.append('-width')
+            self.execargs.append('%d'%(self.parent.values[5][2]-self.parent.values[5][0]))
+            self.execargs.append('-height')
+            self.execargs.append('%d'%(self.parent.values[5][3]-self.parent.values[5][1]))
             for i in range(4):
                 self.parent.values[5][i]=-1
         if self.parent.values[6]>0:
-            execargs.append('-delay')
-            execargs.append('%d'%self.parent.values[6])
-        execargs.append('-channels')
-        execargs.append('%d'%self.parent.values[7])
-        execargs.append('-freq')
-        execargs.append('%d'%self.parent.values[8])
-        execargs.append('-device')
-        execargs.append('%s'%self.parent.values[9])
-        execargs.append('-v_quality')
-        execargs.append('%d'%self.parent.values[10])
-        execargs.append('-s_quality')
-        execargs.append('%d'%self.parent.values[11])
+            self.execargs.append('-delay')
+            self.execargs.append('%d'%self.parent.values[6])
+        self.execargs.append('-channels')
+        self.execargs.append('%d'%self.parent.values[7])
+        self.execargs.append('-freq')
+        self.execargs.append('%d'%self.parent.values[8])
+        self.execargs.append('-device')
+        self.execargs.append('%s'%self.parent.values[9])
+        self.execargs.append('-v_quality')
+        self.execargs.append('%d'%self.parent.values[10])
+        self.execargs.append('-s_quality')
+        self.execargs.append('%d'%self.parent.values[11])
         if self.parent.values[12] != "$DISPLAY":
-            execargs.append('-display')
-            execargs.append('%s'%self.parent.values[12])
+            self.execargs.append('-display')
+            self.execargs.append('%s'%self.parent.values[12])
         if self.parent.values[14] == 0:
-            execargs.append('--drop-frames')
-        execargs.append('-shared-threshold')
-        execargs.append('%d'%self.parent.values[15])
+            self.execargs.append('--drop-frames')
+        self.execargs.append('-shared-threshold')
+        self.execargs.append('%d'%self.parent.values[15])
         if self.parent.values[16] == 0:
-            execargs.append('--quick-subsampling')
-        execargs.append('-workdir')
-        execargs.append('%s'%self.parent.values[17])
+            self.execargs.append('--quick-subsampling')
+        self.execargs.append('-workdir')
+        self.execargs.append('%s'%self.parent.values[17])
         if self.parent.values[18] == 0:
-            execargs.append('--on-the-fly-encoding')
+            self.execargs.append('--on-the-fly-encoding')
         if self.parent.values[19] == 0:
-            execargs.append('--zero-compression')
+            self.execargs.append('--zero-compression')
         if self.parent.values[20] == True:
-            execargs.append('--overwrite')
+            self.execargs.append('--overwrite')
         #print execargs
 
 
 
-        self.childP=popen2.Popen3(execargs,"t")
+        self.childP=popen2.Popen3(self.execargs,"t")
+        flags = fcntl.fcntl(self.childP.childerr, fcntl.F_GETFL)
+        fcntl.fcntl(self.childP.childerr, fcntl.F_SETFL, flags | os.O_NONBLOCK)
         self.rmdPid=self.childP.pid
         self.timed_id=gobject.timeout_add(1000,self.__check_status__)
 
 
     def __exit_status_dialog(self,status):
+        #first try to write down a log for examination
+        try:
+            error_log=open(os.path.join(os.getenv("HOME"),"gtk-recordMyDesktop-crash.log"),"w")
+            error_log.write("#This is the command given at initialization:\n")
+            for i in self.execargs:
+                error_log.write("%s "%i)
+            error_log.write("\n\n\n#recordMyDesktop stderror output:\n")
+            try:
+                for err_line in self.childP.childerr.readlines():
+                    error_log.write(err_line)
+            except:
+                    error_log.write("Couldn't write stderror of recordMyDesktop!\n")
+            self.childP.childerr.close()
+        except:
+            print "Couldn't write error log.\n"
         dialog = gtk.Dialog(title=None, parent=None, flags=0, buttons=None)
         label1=None
         try:
