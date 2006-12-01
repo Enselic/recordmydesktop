@@ -83,7 +83,7 @@ While this behavior saves a lot of CPU, you can revert to the old one by enterin
 To specify a region for recording you can type this:
 .br
 .B
-~$ recordmydesktop -x X_pos -y Y_pos -width WIDTH -height HEIGHT -o foo.ogg
+~$ recordmydesktop \-x X_pos \-y Y_pos \-width WIDTH \-height HEIGHT \-o foo.ogg
 .br
 where X_pos and Y_pos specify the offset in pixels from the upper left
 .br
@@ -394,7 +394,7 @@ will give you only the id of the window(which should look like this: 0x4800005)
 More conviniently you can put all that in the command that launches recordMyDesktop like this:
 .br
 .B
-~$recordmydesktop -windowid $(xwininfo |grep "Window id:"|sed \-e "s/xwininfo\\:\\ Window id:\\ // ;s/\\ \.*//" )
+~$recordmydesktop \-windowid $(xwininfo |grep "Window id:"|sed \-e "s/xwininfo\\:\\ Window id:\\ // ;s/\\ \.*//" )
 .br
 .br
     Also, the lower quality you select on a video recording (
