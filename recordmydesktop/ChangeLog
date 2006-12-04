@@ -1,3 +1,10 @@
+/*VERSION 0.3.1*/
+*Added Added custom X error handler, to avoid BadWindow on
+XGetWindowAttributes, with XQueryTree.
+*Fixed sound_buffer initialization, which could cause segfault in startup.
+
+
+
 /*VERSION 0.3.0r2*/
 *Minor corrections on the inclusion of the include/ directory in the project.
 
