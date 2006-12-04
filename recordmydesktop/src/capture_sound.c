@@ -33,7 +33,6 @@ void *CaptureSound(ProgData *pdata){
 //     fprintf(stderr,"fr %d  ps %d\n",frames,pdata->periodsize);fflush(stderr);
     pthread_mutex_t pmut;
     pthread_mutex_init(&pmut,NULL);
-    pdata->sound_buffer=NULL;
 
     while(pdata->running){
         int sret=0;

@@ -27,6 +27,21 @@
 
 #include <recordmydesktop.h>
 
+int rmdErrorHandler( Display *dpy, XErrorEvent *e )
+{
+    char error_desc[1024];
+    XGetErrorText(dpy,e->error_code,error_desc,sizeof(error_desc));
+    fprintf(stderr,"X Error: %s\n",error_desc);
+    fflush(stderr);
+    if((e->error_code==BadWindow)&&(e->request_code==X_GetWindowAttributes)){
+        fprintf(stderr,"BadWindow on XGetWindowAttributes.\nIgnoring...");
+        fflush(stderr);
+        return 0;
+    }
+    else
+        exit(1);
+}
+
 void *PollDamage(ProgData *pdata){
     Window root_return,
            parent_return,
@@ -35,6 +50,8 @@ void *PollDamage(ProgData *pdata){
                  nchildren,
                  inserts=0;
     XEvent event;
+
+    XSetErrorHandler(rmdErrorHandler);
 
     XSelectInput (pdata->dpy,pdata->specs.root, SubstructureNotifyMask);
 
@@ -52,7 +69,7 @@ void *PollDamage(ProgData *pdata){
                 XDamageCreate (pdata->dpy, children[i],XDamageReportRawRectangles);
         }
     }
-
+    XFree(children);
     XDamageCreate( pdata->dpy, pdata->brwin.windowid, XDamageReportRawRectangles);
 
 
