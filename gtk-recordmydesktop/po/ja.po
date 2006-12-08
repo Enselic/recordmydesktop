@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: recordmydesktop\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2006-12-07 14:50-0000\n"
+"PO-Revision-Date: 2006-12-07 23:36-0000\n"
 "Last-Translator: Paul D <freethenewt@yahoo.co.uk>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -111,7 +111,7 @@ msgstr "ゼロ圧縮"
 
 #: src/rmdPrefsWidget.py:44
 msgid "Quick Subsampling"
-msgstr "早くサブサンプル"
+msgstr "高速サブサンプル"
 
 #: src/rmdPrefsWidget.py:44
 msgid "Shared Threshold"
@@ -127,7 +127,7 @@ msgstr "線（チャンネル）"
 
 #: src/rmdPrefsWidget.py:45
 msgid "Frequency"
-msgstr "周波数"
+msgstr "周波数（サンプル率）"
 
 #: src/rmdPrefsWidget.py:45
 msgid "Device"
