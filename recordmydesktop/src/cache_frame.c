@@ -35,10 +35,12 @@ int CompareBlocks(unsigned char *incoming,unsigned char *old,int blockno,int wid
                            *old_reg=&(old[block_i*(width*height/divisor)+block_k*width/divisor]);
 
     for(j=0;j<height/divisor;j++){
-        if(memcmp(incoming_reg,old_reg,width/divisor))
-            return 1;
-        incoming_reg+=width;
-        old_reg+=width;
+        for(i=0;i<width/divisor;i++){
+            if((*(incoming_reg++))!=(*(old_reg++)))
+                return 1;
+        }
+        incoming_reg+=(width-width/divisor);
+        old_reg+=(width-width/divisor);
     }
 
     return 0;
