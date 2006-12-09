@@ -48,8 +48,6 @@ void *LoadCache(ProgData *pdata){
     FILE *afp=pdata->cache_data->afp;
     FrameHeader fheader;
     CachedFrame frame;
-    signed char *sound_data=(signed char *)malloc(pdata->periodsize);
-
     int j=0,
         nth_cache=1,
         audio_end=0,
@@ -59,7 +57,10 @@ void *LoadCache(ProgData *pdata){
         thread_exit=0,//0 success, -1 couldn't find files,1 couldn't remove
         divisor=16,
         blockszy=0,//size of y plane block in bytes
-        blockszuv=0;//size of u,v plane blocks in bytes
+        blockszuv=0,//size of u,v plane blocks in bytes
+        framesize=((snd_pcm_format_width(SND_PCM_FORMAT_S16_LE))/8)*pdata->args.channels;//audio frame size
+    signed char *sound_data=(signed char *)malloc(pdata->periodsize*framesize);
+
     //we allocate the frame that we will use
     INIT_FRAME(&frame,&fheader,yuv)
     //and the we open our files
@@ -185,7 +186,7 @@ void *LoadCache(ProgData *pdata){
         //audio load and encoding
         else{
             if(!audio_end){
-                int nbytes=fread(sound_data,pdata->periodsize,1,afp);
+                int nbytes=fread(sound_data,pdata->periodsize*framesize,1,afp);
                 if(nbytes<=0)
                     audio_end=1;
                 else

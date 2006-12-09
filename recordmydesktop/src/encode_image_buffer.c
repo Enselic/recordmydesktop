@@ -45,7 +45,7 @@ void *EncodeImageBuffer(ProgData *pdata){
                 pthread_mutex_lock(&pdata->libogg_mutex);
                 ogg_stream_packetin(&pdata->enc_data->m_ogg_ts,&pdata->enc_data->m_ogg_pckt1);
                 pthread_mutex_unlock(&pdata->libogg_mutex);
-                pdata->avd+=pdata->frametime*2*pdata->args.channels;
+                pdata->avd+=pdata->frametime;
             }
         }
         encoder_busy=0;
@@ -76,7 +76,7 @@ void SyncEncodeImageBuffer(ProgData *pdata){
             ogg_stream_packetin(&pdata->enc_data->m_ogg_ts,
                                 &pdata->enc_data->m_ogg_pckt1);
             pthread_mutex_unlock(&pdata->libogg_mutex);
-            pdata->avd+=pdata->frametime*2*pdata->args.channels;
+            pdata->avd+=pdata->frametime;
         }
     }
 }

@@ -29,7 +29,7 @@
 
 void *EncodeSoundBuffer(ProgData *pdata){
 
-    int sampread=pdata->periodsize/(2*pdata->args.channels);
+    int sampread=pdata->periodsize;
     pthread_mutex_t smut;
     pthread_mutex_init(&smut,NULL);
     while((pdata->running)){
@@ -93,7 +93,7 @@ void *EncodeSoundBuffer(ProgData *pdata){
 void SyncEncodeSoundBuffer(ProgData *pdata,signed char *buff){
     float **vorbis_buffer;
     int count=0,i,j;
-    int sampread=pdata->periodsize/(2*pdata->args.channels);
+    int sampread=pdata->periodsize;
     vorbis_buffer=vorbis_analysis_buffer(&pdata->enc_data->m_vo_dsp,sampread);
     for(i=0;i<sampread;i++){
         for(j=0;j<pdata->args.channels;j++){

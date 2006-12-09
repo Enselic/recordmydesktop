@@ -222,7 +222,7 @@ void *CacheImageBuffer(ProgData *pdata){
 
 
         /**@________________@**/
-        pdata->avd+=pdata->frametime*2*pdata->args.channels;
+        pdata->avd+=pdata->frametime;
         if(nbytes>CACHE_FILE_SIZE_LIMIT){
             if(SwapCacheFilesWrite(pdata->cache_data->imgdata,nth_cache,&fp,&ucfp)){
                 fprintf(stderr,"New cache file could not be created.\nEnding recording...\n");

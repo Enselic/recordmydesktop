@@ -30,6 +30,7 @@ void *CacheSoundBuffer(ProgData *pdata){
 //It's sound is tiny compared to that of image, so
 //compressing would reducethe overall size by only an
 //insignificant fraction.
+    int framesize=((snd_pcm_format_width(SND_PCM_FORMAT_S16_LE))/8)*pdata->args.channels;
     pthread_mutex_t smut;
     pthread_mutex_init(&smut,NULL);
     while((pdata->running)){
@@ -50,7 +51,7 @@ void *CacheSoundBuffer(ProgData *pdata){
         pdata->sound_buffer=pdata->sound_buffer->next;
         pthread_mutex_unlock(&pdata->sound_buffer_mutex);
 
-        fwrite(buff->data,pdata->periodsize,1,pdata->cache_data->afp);
+        fwrite(buff->data,pdata->periodsize*framesize,1,pdata->cache_data->afp);
 
 
 

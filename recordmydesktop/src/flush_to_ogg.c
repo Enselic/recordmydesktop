@@ -54,20 +54,24 @@ void *FlushToOgg(ProgData *pdata){
 
     }
     //last packages
+    pdata->enc_data->m_ogg_ts.e_o_s=1;
     videoflag=ogg_stream_flush(&pdata->enc_data->m_ogg_ts,&videopage);
     if(videoflag){
         video_bytesout+=fwrite(videopage.header,1,videopage.header_len,pdata->enc_data->fp);
         video_bytesout+=fwrite(videopage.body,1,videopage.body_len,pdata->enc_data->fp);
         videoflag=0;
     }
-    if(!pdata->args.nosound)
-        audioflag=ogg_stream_flush(&pdata->enc_data->m_ogg_vs,&audiopage);
-    if(audioflag){
-        audio_bytesout+=fwrite(audiopage.header,1,audiopage.header_len,pdata->enc_data->fp);
-        audio_bytesout+=fwrite(audiopage.body,1,audiopage.body_len,pdata->enc_data->fp);
-        audioflag=0;
+    if(!pdata->args.nosound){
+        pdata->enc_data->m_ogg_vs.e_o_s=1;
+        do{
+            audioflag=ogg_stream_flush(&pdata->enc_data->m_ogg_vs,&audiopage);
+            if(audioflag){
+                audio_bytesout+=fwrite(audiopage.header,1,audiopage.header_len,pdata->enc_data->fp);
+                audio_bytesout+=fwrite(audiopage.body,1,audiopage.body_len,pdata->enc_data->fp);
+                audioflag=0;
+            }
+        }while(!ogg_page_eos(&audiopage));
     }
-
     ogg_stream_clear(&pdata->enc_data->m_ogg_ts);
     if(!pdata->args.nosound)
         ogg_stream_clear(&pdata->enc_data->m_ogg_vs);
