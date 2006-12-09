@@ -29,7 +29,7 @@
 
 char *rmdWMCheck(Display *dpy,Window root){
 
-    Window  *wm_child;
+    Window  *wm_child=NULL;
     Atom    nwm_atom,
             utf8_string,
             wm_name_atom,
@@ -46,21 +46,23 @@ char *rmdWMCheck(Display *dpy,Window root){
     wm_name_atom =XInternAtom(dpy,"_NET_WM_NAME",True);
 
     if(nwm_atom!=None && wm_name_atom!=None){
-        if(!((XGetWindowProperty(  dpy,root,nwm_atom,0,100,
+        if(XGetWindowProperty(  dpy,root,nwm_atom,0,100,
                                 False,XA_WINDOW,
                                 &rt,&fmt,&nitems, &nbytes,
                                 (unsigned char **)((void*)&wm_child))
-                                ==Success ) &&
-        (XGetWindowProperty( dpy,*wm_child,wm_name_atom,0,100,
+                            != Success ){
+            fprintf(stderr,"Error while trying to get a window to identify the window manager.\n");
+        }
+        if((wm_child == NULL) || (XGetWindowProperty( dpy,*wm_child,wm_name_atom,0,100,
                                 False,utf8_string,&rt,
                                 &fmt,&nitems, &nbytes,
                                 (unsigned char **)((void*)&wm_name_str))
-                                ==Success ))){
+                             != Success )){
             fprintf(stderr,"Warning!!!\nYour window manager appears to be non-compliant!\n");
         }
     }
     fprintf(stderr,"Your window manager appears to be %s\n\n",
-                    ((wm_name_str!=NULL)?wm_name_str:"Uknown"));
+                    ((wm_name_str!=NULL)?wm_name_str:"Unknown"));
 
 
     return wm_name_str;
