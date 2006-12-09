@@ -31,7 +31,7 @@
 
 
 snd_pcm_t *OpenDev(const char *pcm_dev,unsigned int *channels,unsigned int *frequency,snd_pcm_uframes_t *periodsize,unsigned int *periodtime,int *hard_pause){
-    
+
     snd_pcm_t *mhandle;
     snd_pcm_hw_params_t *hwparams;
     unsigned int periods=2;
@@ -76,7 +76,7 @@ snd_pcm_t *OpenDev(const char *pcm_dev,unsigned int *channels,unsigned int *freq
         fprintf(stderr, "Couldn't set periods.\n");
         return NULL;
     }
-    buffsize=(exactrate*(*channels))/2;
+    buffsize=(exactrate)>>2;
     if (snd_pcm_hw_params_set_buffer_size_near(mhandle, hwparams,&buffsize)<0){
         fprintf(stderr, "Couldn't set buffer size.\n");
         return NULL;

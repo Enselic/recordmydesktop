@@ -29,8 +29,8 @@
 
 void *CaptureSound(ProgData *pdata){
 
-    int frames=pdata->periodsize>>pdata->args.channels;
-//     fprintf(stderr,"fr %d  ps %d\n",frames,pdata->periodsize);fflush(stderr);
+    int frames=pdata->periodsize;
+    int framesize=snd_pcm_format_width(SND_PCM_FORMAT_S16_LE)*pdata->args.channels;
     pthread_mutex_t pmut;
     pthread_mutex_init(&pmut,NULL);
 
@@ -66,16 +66,18 @@ void *CaptureSound(ProgData *pdata){
 
         //create new buffer
         newbuf=(SndBuffer *)malloc(sizeof(SndBuffer *));
-        newbuf->data=(signed char *)malloc(pdata->periodsize);
+        newbuf->data=(signed char *)malloc(frames*framesize);
         newbuf->next=NULL;
 
         //read data into new buffer
         while(sret<frames){
             int temp_sret=snd_pcm_readi(pdata->sound_handle,
-                                newbuf->data+2*pdata->args.channels*sret,
+                                newbuf->data+framesize*sret,
                                 frames-sret);
-            if(temp_sret==-EPIPE)
+            if(temp_sret==-EPIPE){
+                fprintf(stderr,"An error occured while reading sound data:\n %s\n",snd_strerror(temp_sret));
                 snd_pcm_prepare(pdata->sound_handle);
+            }
             else if (temp_sret<0){
                 fprintf(stderr,"An error occured while reading sound data:\n %s\n",snd_strerror(temp_sret));
                 snd_pcm_prepare(pdata->sound_handle);
