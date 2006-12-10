@@ -75,7 +75,7 @@ void *CaptureSound(ProgData *pdata){
                                 newbuf->data+framesize*sret,
                                 frames-sret);
             if(temp_sret==-EPIPE){
-                fprintf(stderr,"An error occured while reading sound data:\n %s\n",snd_strerror(temp_sret));
+                fprintf(stderr,"%s: Underrun occurred.\n",snd_strerror(temp_sret));
                 snd_pcm_prepare(pdata->sound_handle);
             }
             else if (temp_sret<0){
