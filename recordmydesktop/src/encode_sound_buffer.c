@@ -79,21 +79,15 @@ void *EncodeSoundBuffer(ProgData *pdata){
         free(buff);
     }
 
-    vorbis_analysis_wrote(&pdata->enc_data->m_vo_dsp,0);
-//     while(vorbis_analysis_blockout(&pdata->enc_data->m_vo_dsp,&pdata->enc_data->m_vo_block)==1){
-//         vorbis_analysis(&pdata->enc_data->m_vo_block,NULL);
-//         vorbis_bitrate_addblock(&pdata->enc_data->m_vo_block);
-//         while(vorbis_bitrate_flushpacket(&pdata->enc_data->m_vo_dsp,&pdata->enc_data->m_ogg_pckt2))
-//             ogg_stream_packetin(&pdata->enc_data->m_ogg_vs,&pdata->enc_data->m_ogg_pckt2);
-//     }
 
+//     SyncEncodeSoundBuffer(pdata,NULL);
     pthread_exit(&errno);
 }
 
 void SyncEncodeSoundBuffer(ProgData *pdata,signed char *buff){
     float **vorbis_buffer;
     int count=0,i,j;
-    int sampread=pdata->periodsize;
+    int sampread=(buff!=NULL)?pdata->periodsize:0;
     vorbis_buffer=vorbis_analysis_buffer(&pdata->enc_data->m_vo_dsp,sampread);
     for(i=0;i<sampread;i++){
         for(j=0;j<pdata->args.channels;j++){
@@ -104,18 +98,19 @@ void SyncEncodeSoundBuffer(ProgData *pdata,signed char *buff){
     }
 
     vorbis_analysis_wrote(&pdata->enc_data->m_vo_dsp,sampread);
-
+    pthread_mutex_lock(&pdata->libogg_mutex);
     while(vorbis_analysis_blockout(&pdata->enc_data->m_vo_dsp,&pdata->enc_data->m_vo_block)==1){
 
         vorbis_analysis(&pdata->enc_data->m_vo_block,NULL);
         vorbis_bitrate_addblock(&pdata->enc_data->m_vo_block);
 
         while(vorbis_bitrate_flushpacket(&pdata->enc_data->m_vo_dsp,&pdata->enc_data->m_ogg_pckt2)){
-            pthread_mutex_lock(&pdata->libogg_mutex);
             ogg_stream_packetin(&pdata->enc_data->m_ogg_vs,&pdata->enc_data->m_ogg_pckt2);
-            pthread_mutex_unlock(&pdata->libogg_mutex);
         }
     }
+    if(!pdata->running)pdata->enc_data->m_ogg_vs.e_o_s=1;
+    pthread_mutex_unlock(&pdata->libogg_mutex);
+
     pdata->avd-=pdata->periodtime;
 }
 

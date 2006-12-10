@@ -36,14 +36,16 @@ snd_pcm_t *OpenDev(const char *pcm_dev,unsigned int *channels,unsigned int *freq
     snd_pcm_hw_params_t *hwparams;
     unsigned int periods=2;
     unsigned int exactrate = *frequency;
-
+    snd_pcm_uframes_t buffsize=1024;
     snd_pcm_hw_params_alloca(&hwparams);
-    snd_pcm_uframes_t buffsize=4096;
+
 
     if (snd_pcm_open(&mhandle, pcm_dev, SND_PCM_STREAM_CAPTURE, SND_PCM_ASYNC)<0){
         fprintf(stderr, "Couldn't open PCM device %s\n", pcm_dev);
         return NULL;
     }
+    else
+        fprintf(stderr, "Opened PCM device %s\n", pcm_dev);
     if (snd_pcm_hw_params_any(mhandle, hwparams)<0){
         fprintf(stderr, "Couldn't configure PCM device.\n");
         return NULL;
@@ -76,7 +78,7 @@ snd_pcm_t *OpenDev(const char *pcm_dev,unsigned int *channels,unsigned int *freq
         fprintf(stderr, "Couldn't set periods.\n");
         return NULL;
     }
-    buffsize=(exactrate)>>2;
+
     if (snd_pcm_hw_params_set_buffer_size_near(mhandle, hwparams,&buffsize)<0){
         fprintf(stderr, "Couldn't set buffer size.\n");
         return NULL;
@@ -87,11 +89,13 @@ snd_pcm_t *OpenDev(const char *pcm_dev,unsigned int *channels,unsigned int *freq
     }
     if(hard_pause!=NULL)
         if(!snd_pcm_hw_params_can_pause(hwparams)){
-//             fprintf(stderr, "Current sound device doesn't seem to support pausing!\nI will attempt to close/reopen device in case you opt to pause during recording.\n");
             *hard_pause=1;
         }
     if(periodsize!=NULL)
         snd_pcm_hw_params_get_period_size(hwparams,periodsize,0);
+    snd_pcm_hw_params_get_buffer_size(hwparams,&buffsize);
+    fprintf(stderr,"buffsize %d,periodsize %d\n",buffsize,*periodsize);
+
     if(periodtime!=NULL)
         snd_pcm_hw_params_get_period_time(hwparams,periodtime,0);
     fprintf(stderr,"Recording on device %s is set to:\n%d channels at %dHz\n",pcm_dev,*channels,*frequency);

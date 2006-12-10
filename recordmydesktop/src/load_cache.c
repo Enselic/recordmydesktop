@@ -194,6 +194,8 @@ void *LoadCache(ProgData *pdata){
             }
         }
     }
+    SyncEncodeImageBuffer(pdata);
+    SyncEncodeSoundBuffer(pdata,sound_data);
     fprintf(stdout,"\n");
     CLEAR_FRAME(&frame)
     free(sound_data);

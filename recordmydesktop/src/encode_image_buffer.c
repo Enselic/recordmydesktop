@@ -51,14 +51,8 @@ void *EncodeImageBuffer(ProgData *pdata){
         encoder_busy=0;
     }
     //last packet
-    if(theora_encode_YUVin(&pdata->enc_data->m_th_st,&pdata->enc_data->yuv)){
-            fprintf(stderr,"Encoder not ready!\n");
-    }
 
-    theora_encode_packetout(&pdata->enc_data->m_th_st,1,&pdata->enc_data->m_ogg_pckt1);
-
-//     ogg_stream_packetin(&pdata->enc_data->m_ogg_ts,&pdata->enc_data->m_ogg_pckt);
-
+//     SyncEncodeImageBuffer(pdata);
     pthread_exit(&errno);
 }
 
@@ -70,11 +64,12 @@ void SyncEncodeImageBuffer(ProgData *pdata){
         fprintf(stderr,"Encoder not ready!\n");
     }
     else{
-        if(theora_encode_packetout(&pdata->enc_data->m_th_st,0,
+        if(theora_encode_packetout(&pdata->enc_data->m_th_st,!pdata->running,
                                     &pdata->enc_data->m_ogg_pckt1)==1){
             pthread_mutex_lock(&pdata->libogg_mutex);
             ogg_stream_packetin(&pdata->enc_data->m_ogg_ts,
                                 &pdata->enc_data->m_ogg_pckt1);
+            if(!pdata->running)pdata->enc_data->m_ogg_ts.e_o_s=1;
             pthread_mutex_unlock(&pdata->libogg_mutex);
             pdata->avd+=pdata->frametime;
         }

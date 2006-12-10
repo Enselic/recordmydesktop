@@ -26,55 +26,137 @@
 
 #include <recordmydesktop.h>
 
+//we copy the page because the next call to ogg_stream_pageout
+//will invalidate it. But we must have pages from both streams at every time in
+//order to do correct multiplexing
+void ogg_page_cp(ogg_page *new,ogg_page *old){
+    int i=0;
+    register unsigned char *newp,*oldp;
+
+    new->header_len=old->header_len;
+    new->header=malloc(new->header_len);
+    new->body_len=old->body_len;
+    new->body=malloc(new->body_len);
+
+    newp=new->header;
+    oldp=old->header;
+    for(i=0;i<new->header_len;i++)
+        *(newp++)=*(oldp++);
+    newp=new->body;
+    oldp=old->body;
+    for(i=0;i<new->body_len;i++)
+        *(newp++)=*(oldp++);
+
+}
+//free our copy
+void ogg_page_cp_free(ogg_page *pg){
+    pg->header_len=pg->body_len=0;
+    free(pg->header);
+    free(pg->body);
+}
+
 void *FlushToOgg(ProgData *pdata){
     int videoflag=0,audioflag=0;
     double video_bytesout=0,audio_bytesout=0;
-    ogg_page videopage,audiopage;
-    while(pdata->running){
-        pthread_mutex_lock(&pdata->libogg_mutex);
-        videoflag=ogg_stream_pageout(&pdata->enc_data->m_ogg_ts,&videopage);
-        pthread_mutex_unlock(&pdata->libogg_mutex);
-        if(videoflag){
-            video_bytesout+=fwrite(videopage.header,1,videopage.header_len,pdata->enc_data->fp);
-            video_bytesout+=fwrite(videopage.body,1,videopage.body_len,pdata->enc_data->fp);
-            videoflag=0;
-            if(!pdata->args.nosound){
-                pthread_mutex_lock(&pdata->libogg_mutex);
-                audioflag=ogg_stream_pageout(&pdata->enc_data->m_ogg_vs,&audiopage);
-                pthread_mutex_unlock(&pdata->libogg_mutex);
-                if(audioflag){
-                    audio_bytesout+=fwrite(audiopage.header,1,audiopage.header_len,pdata->enc_data->fp);
-                    audio_bytesout+=fwrite(audiopage.body,1,audiopage.body_len,pdata->enc_data->fp);
-                    audioflag=0;
+    ogg_page    videopage,//owned by libogg
+                videopage_copy,//owned by the application
+                audiopage,//owned by libogg
+                audiopage_copy;//owned by the application
+
+    double audiotime=0;
+    double videotime=0;
+    int working=1,
+        th_st_fin=0,
+        v_st_fin=(pdata->args.nosound);
+    while(working){
+        int audio_or_video=0;
+        if(pdata->running){
+            pthread_mutex_lock(&pdata->libogg_mutex);
+            if(!videoflag){
+                videoflag=ogg_stream_pageout(&pdata->enc_data->m_ogg_ts,&videopage);
+                videotime=(videoflag)?theora_granule_time(&pdata->enc_data->m_th_st,ogg_page_granulepos(&videopage)):-1;
+                if(videoflag)ogg_page_cp(&videopage_copy,&videopage);
+            }
+            if(!pdata->args.nosound)
+                if(!audioflag){
+                    audioflag=ogg_stream_pageout(&pdata->enc_data->m_ogg_vs,&audiopage);
+                    audiotime=(audioflag)?vorbis_granule_time(&pdata->enc_data->m_vo_dsp,ogg_page_granulepos(&audiopage)):-1;
+                    if(audioflag)ogg_page_cp(&audiopage_copy,&audiopage);
                 }
+            pthread_mutex_unlock(&pdata->libogg_mutex);
+        }
+        else{
+            if(!th_st_fin && !videoflag){
+                pthread_mutex_lock(&pdata->libogg_mutex);
+                videoflag=ogg_stream_flush(&pdata->enc_data->m_ogg_ts,&videopage);
+                videotime=(videoflag)?theora_granule_time(&pdata->enc_data->m_th_st,ogg_page_granulepos(&videopage)):-1;
+                if(videoflag)ogg_page_cp(&videopage_copy,&videopage);
+                pthread_mutex_unlock(&pdata->libogg_mutex);
+                //we need the last page to properly close the stream
+                if(!videoflag)SyncEncodeImageBuffer(pdata);
+            }
+            if(!pdata->args.nosound && !v_st_fin &&!audioflag){
+                pthread_mutex_lock(&pdata->libogg_mutex);
+                audioflag=ogg_stream_flush(&pdata->enc_data->m_ogg_vs,&audiopage);
+                audiotime=(audioflag)?vorbis_granule_time(&pdata->enc_data->m_vo_dsp,ogg_page_granulepos(&audiopage)):-1;
+                if(audioflag)ogg_page_cp(&audiopage_copy,&audiopage);
+                pthread_mutex_unlock(&pdata->libogg_mutex);
+                //we need the last page to properly close the stream
+                if(!audioflag)SyncEncodeSoundBuffer(pdata,NULL);
             }
         }
-        else
+        if(th_st_fin)videoflag=0;
+        if(v_st_fin)audioflag=0;
+        if((!audioflag && !v_st_fin && !pdata->args.nosound) || (!videoflag && !th_st_fin)){
             usleep(10000);
+            continue;
+        }
+        if(!audioflag){
+            audio_or_video=1;
+        }
+        else if(!videoflag) {
+            audio_or_video=0;
+        }
+        else{
+            if(audiotime<videotime)
+                audio_or_video=0;
+            else
+                audio_or_video=1;
+        }
+        if(audio_or_video==1){
+            video_bytesout+=fwrite(videopage_copy.header,1,videopage_copy.header_len,pdata->enc_data->fp);
+            video_bytesout+=fwrite(videopage_copy.body,1,videopage_copy.body_len,pdata->enc_data->fp);
+            videoflag=0;
+            if(!pdata->running){
+                pthread_mutex_lock(&pdata->libogg_mutex);
+                if(ogg_page_eos(&videopage_copy))
+                    th_st_fin=1;
+                pthread_mutex_unlock(&pdata->libogg_mutex);
+            }
+            ogg_page_cp_free(&videopage_copy);
+        }
+        else{
+            audio_bytesout+=fwrite(audiopage_copy.header,1,audiopage_copy.header_len,pdata->enc_data->fp);
+            audio_bytesout+=fwrite(audiopage_copy.body,1,audiopage_copy.body_len,pdata->enc_data->fp);
+            audioflag=0;
+            if(!pdata->running){
+                pthread_mutex_lock(&pdata->libogg_mutex);
+                if(ogg_page_eos(&audiopage_copy))
+                    v_st_fin=1;
+                pthread_mutex_unlock(&pdata->libogg_mutex);
+            }
+            ogg_page_cp_free(&audiopage_copy);
+        }
+        working=(!th_st_fin || !v_st_fin);
 
     }
     //last packages
-    pdata->enc_data->m_ogg_ts.e_o_s=1;
-    videoflag=ogg_stream_flush(&pdata->enc_data->m_ogg_ts,&videopage);
-    if(videoflag){
-        video_bytesout+=fwrite(videopage.header,1,videopage.header_len,pdata->enc_data->fp);
-        video_bytesout+=fwrite(videopage.body,1,videopage.body_len,pdata->enc_data->fp);
-        videoflag=0;
-    }
-    if(!pdata->args.nosound){
-        pdata->enc_data->m_ogg_vs.e_o_s=1;
-        do{
-            audioflag=ogg_stream_flush(&pdata->enc_data->m_ogg_vs,&audiopage);
-            if(audioflag){
-                audio_bytesout+=fwrite(audiopage.header,1,audiopage.header_len,pdata->enc_data->fp);
-                audio_bytesout+=fwrite(audiopage.body,1,audiopage.body_len,pdata->enc_data->fp);
-                audioflag=0;
-            }
-        }while(!ogg_page_eos(&audiopage));
-    }
+
+    pthread_mutex_lock(&pdata->libogg_mutex);
     ogg_stream_clear(&pdata->enc_data->m_ogg_ts);
     if(!pdata->args.nosound)
         ogg_stream_clear(&pdata->enc_data->m_ogg_vs);
+    pthread_mutex_unlock(&pdata->libogg_mutex);
 //this always gives me a segfault :(
 //     theora_clear(&pdata->enc_data->m_th_st);
 
