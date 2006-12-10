@@ -41,9 +41,13 @@ void *CacheSoundBuffer(ProgData *pdata){
             pthread_mutex_init(&tmut,NULL);
             pthread_cond_wait(&pdata->pause_cond,&tmut);
         }
-
-        if(pdata->sound_buffer==NULL)
+        if(pdata->sound_buffer==NULL){
+            pdata->v_enc_thread_waiting=1;
             pthread_cond_wait(&pdata->sound_data_read,&smut);
+            pdata->v_enc_thread_waiting=0;
+        }
+        if(pdata->sound_buffer==NULL || !pdata->running)
+            break;
 
         pthread_mutex_lock(&pdata->sound_buffer_mutex);
         buff=pdata->sound_buffer;

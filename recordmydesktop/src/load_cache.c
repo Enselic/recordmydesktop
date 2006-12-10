@@ -194,8 +194,11 @@ void *LoadCache(ProgData *pdata){
             }
         }
     }
-    SyncEncodeImageBuffer(pdata);
-    SyncEncodeSoundBuffer(pdata,sound_data);
+//     SyncEncodeImageBuffer(pdata);
+//     SyncEncodeSoundBuffer(pdata,sound_data);
+    pdata->v_encoding_clean=pdata->th_encoding_clean=1;
+    pthread_cond_signal(&pdata->theora_lib_clean);
+    pthread_cond_signal(&pdata->vorbis_lib_clean);
     fprintf(stdout,"\n");
     CLEAR_FRAME(&frame)
     free(sound_data);

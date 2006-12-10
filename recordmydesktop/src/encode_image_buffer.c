@@ -29,12 +29,16 @@ void *EncodeImageBuffer(ProgData *pdata){
     pthread_mutex_t pmut,imut;
     pthread_mutex_init(&pmut,NULL);
     pthread_mutex_init(&imut,NULL);
+    pdata->th_encoding_clean=0;
     while(pdata->running){
+        pdata->th_enc_thread_waiting=1;
         pthread_cond_wait(&pdata->image_buffer_ready,&imut);
+        pdata->th_enc_thread_waiting=0;
         encoder_busy=1;
         if(Paused)
             pthread_cond_wait(&pdata->pause_cond,&pmut);//this may not be needed
         pthread_mutex_lock(&pdata->yuv_mutex);
+//         pthread_mutex_lock(&pdata->libtheora_mutex);
         if(theora_encode_YUVin(&pdata->enc_data->m_th_st,&pdata->enc_data->yuv)){
             fprintf(stderr,"Encoder not ready!\n");
             pthread_mutex_unlock(&pdata->yuv_mutex);
@@ -48,10 +52,12 @@ void *EncodeImageBuffer(ProgData *pdata){
                 pdata->avd+=pdata->frametime;
             }
         }
+//         pthread_mutex_unlock(&pdata->libtheora_mutex);
         encoder_busy=0;
     }
     //last packet
-
+    pdata->th_encoding_clean=1;
+    pthread_cond_signal(&pdata->theora_lib_clean);
 //     SyncEncodeImageBuffer(pdata);
     pthread_exit(&errno);
 }
@@ -59,6 +65,7 @@ void *EncodeImageBuffer(ProgData *pdata){
 //this function is meant to be called normally
 //not through a thread of it's own
 void SyncEncodeImageBuffer(ProgData *pdata){
+//     pthread_mutex_lock(&pdata->libtheora_mutex);
     if(theora_encode_YUVin(&pdata->enc_data->m_th_st,
                             &pdata->enc_data->yuv)){
         fprintf(stderr,"Encoder not ready!\n");
@@ -74,5 +81,6 @@ void SyncEncodeImageBuffer(ProgData *pdata){
             pdata->avd+=pdata->frametime;
         }
     }
+//     pthread_mutex_unlock(&pdata->libtheora_mutex);
 }
 

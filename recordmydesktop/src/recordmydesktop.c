@@ -119,6 +119,8 @@ int main(int argc,char **argv){
         pthread_mutex_init(&pdata.list_mutex[1],NULL);
         pthread_mutex_init(&pdata.sound_buffer_mutex,NULL);
         pthread_mutex_init(&pdata.libogg_mutex,NULL);
+//         pthread_mutex_init(&pdata.libtheora_mutex,NULL);
+//         pthread_mutex_init(&pdata.libvorbis_mutex,NULL);
         pthread_mutex_init(&pdata.yuv_mutex,NULL);
 
         pthread_cond_init(&pdata.time_cond,NULL);
@@ -126,6 +128,9 @@ int main(int argc,char **argv){
         pthread_cond_init(&pdata.image_buffer_ready,NULL);
         pthread_cond_init(&pdata.sound_buffer_ready,NULL);
         pthread_cond_init(&pdata.sound_data_read,NULL);
+        pthread_cond_init(&pdata.theora_lib_clean,NULL);
+        pthread_cond_init(&pdata.vorbis_lib_clean,NULL);
+        pdata.th_encoding_clean=pdata.v_encoding_clean=1;
         pdata.list_selector=Paused=Aborted=pdata.avd=0;
         pdata.sound_buffer=NULL;
         pdata.running=1;
@@ -233,34 +238,31 @@ int main(int argc,char **argv){
         pthread_join(image_capture_t,NULL);
         fprintf(stderr,"Shutting down.");
         //if no damage events have been received the thread will get stuck
-        pthread_cond_broadcast(&pdata.image_buffer_ready);
-        if(pdata.args.encOnTheFly)
+        while(!pdata.th_enc_thread_waiting && !pdata.th_encoding_clean){
+            usleep(10000);
+            pthread_cond_signal(&pdata.image_buffer_ready);
+        }
+//         pthread_cond_broadcast(&pdata.image_buffer_ready);
+        if(pdata.args.encOnTheFly){
             pthread_join(image_encode_t,NULL);
+        }
         else
             pthread_join(image_cache_t,NULL);
 
 
         fprintf(stderr,".");
         if(!pdata.args.nosound){
-            int *snd_exit;
-            pthread_join(sound_capture_t,(void *)(&snd_exit));
+            pthread_join(sound_capture_t,NULL);
             fprintf(stderr,".");
-
+            while(!pdata.v_enc_thread_waiting && !pdata.v_encoding_clean){
+                usleep(10000);
+                pthread_cond_signal(&pdata.sound_data_read);
+            }
             if(pdata.args.encOnTheFly){
-                if(!(*snd_exit))
-                    pthread_join(sound_encode_t,NULL);
-                else{
-                    pthread_cancel(sound_encode_t);
-                    exit_status=*snd_exit;
-                }
+                pthread_join(sound_encode_t,NULL);
             }
             else{
-                if(!(*snd_exit))
-                    pthread_join(sound_cache_t,NULL);
-                else{
-                    pthread_cancel(sound_cache_t);
-                    exit_status=*snd_exit;
-                }
+                pthread_join(sound_cache_t,NULL);
             }
         }
         else

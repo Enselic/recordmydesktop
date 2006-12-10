@@ -111,7 +111,10 @@ void *CacheImageBuffer(ProgData *pdata){
         FrameHeader fheader;
         ynum=unum=vnum=0;
 
+        pdata->th_enc_thread_waiting=1;
         pthread_cond_wait(&pdata->image_buffer_ready,&imut);
+        pdata->th_enc_thread_waiting=0;
+
         if(Paused)
             pthread_cond_wait(&pdata->pause_cond,&pmut);
         pthread_mutex_lock(&pdata->yuv_mutex);

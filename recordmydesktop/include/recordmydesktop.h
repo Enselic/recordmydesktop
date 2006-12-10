@@ -255,7 +255,9 @@ typedef struct _ProgData{
                 frametime;
     pthread_mutex_t list_mutex[2],//mutexes for concurrency protection of the lists
                     sound_buffer_mutex,
-                    libogg_mutex,//libogg is not thread safe
+                    libogg_mutex,//libogg is not thread safe,
+//                     libtheora_mutex,//same for libtheora
+//                     libvorbis_mutex,//and libvorbis.
                     yuv_mutex;//this might not be needed since we only have
                               //one read-only and  one write-only thread
                               //also on previous versions, y component was looped separately
@@ -265,7 +267,13 @@ typedef struct _ProgData{
                     pause_cond,//this is blocks execution, when program is paused
                     sound_buffer_ready,//sound encoding finished
                     sound_data_read,//a buffer is ready for proccessing
-                    image_buffer_ready;//image encoding finished
+                    image_buffer_ready,//image encoding finished
+                    theora_lib_clean,//the flush_ogg thread cannot procceed to creating last
+                    vorbis_lib_clean;//packages until these two libs are no longer used, by other threads
+    int th_encoding_clean,//these indicate a wait condition on the above cond vars
+        v_encoding_clean;
+    int v_enc_thread_waiting,
+        th_enc_thread_waiting;
     snd_pcm_t *sound_handle;
     snd_pcm_uframes_t periodsize;
 }ProgData;

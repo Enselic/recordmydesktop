@@ -65,6 +65,9 @@ void *FlushToOgg(ProgData *pdata){
 
     double audiotime=0;
     double videotime=0;
+    pthread_mutex_t imut,vmut;
+    pthread_mutex_init(&imut,NULL);
+    pthread_mutex_init(&vmut,NULL);
     int working=1,
         th_st_fin=0,
         v_st_fin=(pdata->args.nosound);
@@ -93,7 +96,12 @@ void *FlushToOgg(ProgData *pdata){
                 if(videoflag)ogg_page_cp(&videopage_copy,&videopage);
                 pthread_mutex_unlock(&pdata->libogg_mutex);
                 //we need the last page to properly close the stream
-                if(!videoflag)SyncEncodeImageBuffer(pdata);
+                if(!videoflag){
+                    if(!pdata->th_encoding_clean){
+                        pthread_cond_wait(&pdata->theora_lib_clean,&imut);
+                    }
+                    SyncEncodeImageBuffer(pdata);
+                }
             }
             if(!pdata->args.nosound && !v_st_fin &&!audioflag){
                 pthread_mutex_lock(&pdata->libogg_mutex);
@@ -102,7 +110,12 @@ void *FlushToOgg(ProgData *pdata){
                 if(audioflag)ogg_page_cp(&audiopage_copy,&audiopage);
                 pthread_mutex_unlock(&pdata->libogg_mutex);
                 //we need the last page to properly close the stream
-                if(!audioflag)SyncEncodeSoundBuffer(pdata,NULL);
+                if(!audioflag){
+                    if(!pdata->v_encoding_clean){
+                        pthread_cond_wait(&pdata->vorbis_lib_clean,&vmut);
+                    }
+                    SyncEncodeSoundBuffer(pdata,NULL);
+                }
             }
         }
         if(th_st_fin)videoflag=0;
@@ -150,8 +163,6 @@ void *FlushToOgg(ProgData *pdata){
         working=(!th_st_fin || !v_st_fin);
 
     }
-    //last packages
-
     pthread_mutex_lock(&pdata->libogg_mutex);
     ogg_stream_clear(&pdata->enc_data->m_ogg_ts);
     if(!pdata->args.nosound)
@@ -161,7 +172,6 @@ void *FlushToOgg(ProgData *pdata){
 //     theora_clear(&pdata->enc_data->m_th_st);
 
     if(pdata->enc_data->fp)fclose(pdata->enc_data->fp);
-
     fprintf(stderr,"\r   \nDone.\nWritten %.0f bytes\n(%.0f of which were video data and %.0f audio data)\n\n",video_bytesout+audio_bytesout,video_bytesout,audio_bytesout);
     pthread_exit(&errno);
 }
