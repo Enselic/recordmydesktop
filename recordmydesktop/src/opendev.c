@@ -94,7 +94,6 @@ snd_pcm_t *OpenDev(const char *pcm_dev,unsigned int *channels,unsigned int *freq
     if(periodsize!=NULL)
         snd_pcm_hw_params_get_period_size(hwparams,periodsize,0);
     snd_pcm_hw_params_get_buffer_size(hwparams,&buffsize);
-    fprintf(stderr,"buffsize %d,periodsize %d\n",buffsize,*periodsize);
 
     if(periodtime!=NULL)
         snd_pcm_hw_params_get_period_time(hwparams,periodtime,0);
