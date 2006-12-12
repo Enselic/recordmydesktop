@@ -16,10 +16,14 @@ To compile the program you have to go through the regular drill:
 ~$ gzip -d gtk-recordmydesktop-x.y.z.tar.gz
 ~$ tar -x gtk-recordmydesktop-x.y.z.tar
 ~$ cd gtk-recordmydesktop-x.y.z
-~$ ./configure
+~$ ./configure --prefix=/usr/
 ~$ make
 ~$ sudo make install
 
+The --prefix=/usr/ option might not be necessary, but it
+will prevent some problems when running the program 
+(if you get messages about module recordMyDesktop not found,
+you have to use it).
 
 
 After this you should get a menu entry under multimedia.
