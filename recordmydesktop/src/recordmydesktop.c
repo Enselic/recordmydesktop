@@ -160,7 +160,13 @@ int main(int argc,char **argv){
             XShmGetImage(pdata.dpy,pdata.specs.root,pdata.shimage,pdata.brwin.rgeom.x,pdata.brwin.rgeom.y,AllPlanes);
         }
         if(!pdata.args.nosound){
-            pdata.sound_handle=OpenDev(pdata.args.device,&pdata.args.channels,&pdata.args.frequency,&pdata.periodsize,            &pdata.periodtime,&pdata.hard_pause);
+            pdata.sound_handle=OpenDev( pdata.args.device,
+                                        &pdata.args.channels,
+                                        &pdata.args.frequency,
+                                        &pdata.args.buffsize,
+                                        &pdata.periodsize,
+                                        &pdata.periodtime,
+                                        &pdata.hard_pause);
             if(pdata.sound_handle==NULL){
                 fprintf(stderr,"Error while opening/configuring soundcard %s\nTry running with the --no-sound or specify a correct device.\n",pdata.args.device);
                 exit(3);

@@ -261,6 +261,11 @@ Sound Options:
 .br
 .TP
 .B
+    \-buffer\-size N(number>0)
+    A positive number denoting the desired sound buffer size(in frames).
+.br
+.TP
+.B
     \-device SOUND_DEVICE
     Sound device(default hw0:0).
 .br
@@ -357,7 +362,7 @@ If no other option is specified, filename can be given without the \-o switch.
 .br
 \-v_quality n| \-s_quality n| \-v_bitrate n| \-\-no\-framedrop| \-dummy\-cursor color|
 .br
-\-\-no\-cursor| \-freq N(number>0)| \-channels N(number>0)| \-device SOUND_DEVICE|
+\-\-no\-cursor| \-freq N(number>0)| \-channels N(number>0)| \-buffer\-size N(number>0)| \-device SOUND_DEVICE|
 .br
 \-\-no\-sound| \-\-with\-shared| \-\-no\-cond\-shared| \-shared\-threshold n| \-\-full\-shots|
 .br

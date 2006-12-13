@@ -51,6 +51,7 @@ void *CaptureSound(ProgData *pdata){
                     OpenDev(pdata->args.device,
                             &pdata->args.channels,
                             &pdata->args.frequency,
+                            &pdata->args.buffsize,
                             NULL,
                             NULL,
                             NULL//let's hope that the device capabilities didn't magically change

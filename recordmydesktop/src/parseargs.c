@@ -34,7 +34,7 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
     "\trecordmydesktop [-h| --help| --version| -delay n[H|h|M|m]| -windowid id_of_window|\n"
     "\t-display DISPLAY| -x X| -y Y|-width N| -height N| -fps N(number>0)| --on-the-fly-encoding|\n"
     "\t -v_quality n| -s_quality n| -v_bitrate n| --no-framedrop| -dummy-cursor color|\n"
-    "\t --no-cursor| -freq N(number>0)| -channels N(number>0)| -device SOUND_DEVICE|\n"
+    "\t --no-cursor| -freq N(number>0)| -channels N(number>0)|-buffer-size N(number>0)| -device SOUND_DEVICE|\n"
     "\t --no-sound| --with-shared| --no-cond-shared| -shared-threshold n| --full-shots|\n"
     "\t --quick-subsampling| -workdir DIR| --zero-compression| --no-wm-check| --overwite| -o filename]^filename\n\n\n"
 
@@ -60,8 +60,9 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
     "\t-fps N(number>0.0)\tA positive number denoting desired framerate.\n\n"
 
     "Sound Options:\n"
-    "\t-channels N(number>0)\tA positive number denoting desired sound channels in recording.\n"
-    "\t-freq N(number>0)\tA positive number denoting desired sound frequency.\n"
+    "\t-channels N\t\tA positive number denoting desired sound channels in recording.\n"
+    "\t-freq N\t\t\tA positive number denoting desired sound frequency.\n"
+    "\t-buffer-size N\t\tA positive number denoting the desired sound buffer size(in frames)\n"
     "\t-device SOUND_DEVICE\tSound device(default hw0:0).\n"
     "\t--no-sound\t\tDo not record sound.\n\n"
 
@@ -73,7 +74,7 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
     "\t-s_quality n\t\tDesired audio quality(-1 to 10).\n\n"
 
     "Misc Options:\n"
-    "\t--no-wm-check\tDo not try to detect the window manager(and set options according to it)\n"
+    "\t--no-wm-check\t\tDo not try to detect the window manager(and set options according to it)\n"
     "\t--zero-compression\tImage data are always cached uncompressed.\n"
     "\t-workdir DIR\t\tLocation where a temporary directory will be created to hold project files(default $HOME).\n"
     "\t-delay n[H|h|M|m]\tNumber of secs(default),minutes or hours before capture starts(number can be float)\n"
@@ -377,6 +378,22 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
             }
             else{
                 fprintf(stderr,"Argument Usage: -workdir DIR\n");
+                return 1;
+            }
+            i++;
+        }
+        else if(!strcmp(argv[i],"-buffer-size")){
+            if(i+1<argc){
+                int num=atoi(argv[i+1]);
+                if(num>0)
+                    arg_return->buffsize=num;
+                else{
+                    fprintf(stderr,"Argument Usage: -buffer-size N(number>0)\n");
+                    return 1;
+                }
+            }
+            else{
+                fprintf(stderr,"Argument Usage: -buffer-size N(number>0)\n");
                 return 1;
             }
             i++;

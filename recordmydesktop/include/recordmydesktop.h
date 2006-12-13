@@ -89,11 +89,6 @@
 #define CACHE_FILE_SIZE_LIMIT (500*1<<20)
 
 
-//do not be confused
-//this is useless and obsolete.
-//There are no plans for other fotmats
-enum {UNSPECIFIED,OGG_THEORA_VORBIS};
-
 
 /**Structs*/
 
@@ -138,7 +133,6 @@ typedef struct _ProgArgs{
     int width,height;   //defaults to window width and height
     int quietmode;      //no messages to stderr,stdout
     char *filename;     //output file(default out.[ogg|*])
-    int encoding;       //encoding(default OGG_THEORA_VORBIS)
     int cursor_color;   //black or white=>1 or 0
     int have_dummy_cursor;//disable/enable drawing of the dummy cursor
     int xfixes_cursor;   //disable/enable drawing of a cursor obtained
@@ -147,6 +141,7 @@ typedef struct _ProgArgs{
     unsigned int frequency;      //desired frequency (default 22050)
     unsigned int channels;       //no of channels(default 2)
     char *device;       //default sound device(default according to alsa or oss)
+    snd_pcm_uframes_t buffsize;//buffer size(in frames) for sound capturing
     int nosound;        //do not record sound(default 0)
     int noshared;       //do not use shared memory extension(default 1)
     int nocondshared;   //do not use shared memory on large image aquititions
@@ -405,17 +400,24 @@ int capture_busy,
     }\
     else\
         (args)->display=NULL;\
-    (args)->windowid=(args)->x=(args)->y\
-    =(args)->width=(args)->height=(args)->quietmode\
-    =(args)->nosound=(args)->full_shots=(args)->encOnTheFly\
-    =(args)->zerocompression=(args)->nowmcheck\
-    =(args)->overwrite=0;\
+    (args)->windowid=\
+    (args)->x=\
+    (args)->y=\
+    (args)->width=\
+    (args)->height=\
+    (args)->quietmode=\
+    (args)->nosound=\
+    (args)->full_shots=\
+    (args)->encOnTheFly=\
+    (args)->zerocompression=\
+    (args)->nowmcheck=\
+    (args)->dropframes=\
+    (args)->overwrite=\
+    (args)->nocondshared=0;\
+    (args)->no_quick_subsample=\
     (args)->noshared=1;\
-    (args)->dropframes=(args)->nocondshared=0;\
-    (args)->no_quick_subsample=1;\
     (args)->filename=(char *)malloc(8);\
     strcpy((args)->filename,"out.ogg");\
-    (args)->encoding=OGG_THEORA_VORBIS;\
     (args)->cursor_color=1;\
     (args)->shared_thres=75;\
     (args)->have_dummy_cursor=0;\
@@ -425,6 +427,7 @@ int capture_busy,
     (args)->fps=15;\
     (args)->channels=1;\
     (args)->frequency=22050;\
+    (args)->buffsize=4096;\
     (args)->v_bitrate=45000;\
     (args)->v_quality=63;\
     (args)->s_quality=10;\
@@ -946,7 +949,8 @@ void *CaptureSound(ProgData *pdata);
 void *EncodeSoundBuffer(ProgData *pdata);
 
 /**
-* Open sound device, with the desired parameters
+* Try to open sound device, with the desired parameters,
+* and place the obtained ones on their place
 *
 * \param pcm_dev name of the device
 *
@@ -954,18 +958,22 @@ void *EncodeSoundBuffer(ProgData *pdata);
 *
 * \param frequency desired frequency(gets modified with the acieved value)
 *
-* \param periodsize Size of a period
+* \param buffsize Size of buffer
 *
-* \param periodtime Duration of a period
+* \param periodsize Size of a period(can be NULL)
+*
+* \param periodtime Duration of a period(can be NULL)
 *
 * \param hardpause Set to 1 when the device has to be stopped during pause
 *                  and to 0 when it supports pausing
+*                  (can be NULL)
 *
 * \returns snd_pcm_t handle on success, NULL on failure
 */
 snd_pcm_t *OpenDev( const char *pcm_dev,
                     unsigned int *channels,
                     unsigned int *frequency,
+                    snd_pcm_uframes_t *buffsize,
                     snd_pcm_uframes_t *periodsize,
                     unsigned int *periodtime,
                     int *hardpause);
