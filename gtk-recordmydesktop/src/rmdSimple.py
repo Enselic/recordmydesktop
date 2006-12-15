@@ -213,7 +213,7 @@ class simpleWidget(object):
         self.fileSel.set_filename(self.values[4])
         self.fileSel.show()
     def __select_window__(self,button):
-        (stdin,stdout,stderr)=os.popen3('xwininfo','t')
+        (stdin,stdout,stderr)=os.popen3(['xwininfo','-frame'],'t')
         wid=stdout.readlines()
         stdin.close()
         stdout.close()
