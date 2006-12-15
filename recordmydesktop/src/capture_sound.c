@@ -31,7 +31,7 @@ void *CaptureSound(ProgData *pdata){
 
     int frames=pdata->periodsize;
     int framesize=((snd_pcm_format_width(SND_PCM_FORMAT_S16_LE))/8)*pdata->args.channels;
-    pthread_mutex_t pmut,tmut;
+    pthread_mutex_t pmut;
     pthread_mutex_init(&pmut,NULL);
 
     //start capturing only after first frame is taken
