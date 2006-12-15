@@ -31,9 +31,13 @@ void *CaptureSound(ProgData *pdata){
 
     int frames=pdata->periodsize;
     int framesize=((snd_pcm_format_width(SND_PCM_FORMAT_S16_LE))/8)*pdata->args.channels;
-    pthread_mutex_t pmut;
+    pthread_mutex_t pmut,tmut;
     pthread_mutex_init(&pmut,NULL);
+    pthread_mutex_init(&tmut,NULL);
 
+    //start capturing only when everything else is finsihed
+    //ideally, at the same time that the first frame is captured
+    pthread_cond_wait(&pdata->time_cond,&tmut);
     while(pdata->running){
         int sret=0;
         SndBuffer *newbuf,*tmp;
