@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: gg\n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: 2006-12-03 13:44+0100\n"
-"Last-Translator: Joel Ramos <joelpramos@gmail.com>\n"
+"Last-Translator: Joel Ramos <joelpramos@gmail.com>\nSérgio Santos"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -130,11 +130,11 @@ msgstr ""
 
 #: src/rmdPrefsWidget.py:45
 msgid "Channels"
-msgstr ""
+msgstr "Canais"
 
 #: src/rmdPrefsWidget.py:45
 msgid "Frequency"
-msgstr ""
+msgstr "Frequência"
 
 #: src/rmdPrefsWidget.py:45
 msgid "Device"
@@ -142,11 +142,11 @@ msgstr ""
 
 #: src/rmdPrefsWidget.py:45
 msgid "Display"
-msgstr ""
+msgstr "Dispositivo"
 
 #: src/rmdPrefsWidget.py:45
 msgid "Mouse Cursor"
-msgstr ""
+msgstr "Cursor do rato"
 
 #: src/rmdPrefsWidget.py:46
 msgid "MIT-Shm extension"
@@ -154,51 +154,51 @@ msgstr ""
 
 #: src/rmdPrefsWidget.py:47
 msgid "Drop Frames(encoder)"
-msgstr ""
+msgstr "Perder frames(codificador)"
 
 #: src/rmdPrefsWidget.py:47
 msgid "Startup Delay(secs)"
-msgstr ""
+msgstr "Atraso ao iniciar(secs)"
 
 #: src/rmdPrefsWidget.py:48
 msgid "Normal"
-msgstr ""
+msgstr "Normal"
 
 #: src/rmdPrefsWidget.py:48
 msgid "White"
-msgstr ""
+msgstr "Branco"
 
 #: src/rmdPrefsWidget.py:48
 msgid "Black"
-msgstr ""
+msgstr "Preto"
 
 #: src/rmdPrefsWidget.py:48
 msgid "None"
-msgstr ""
+msgstr "Nenhum"
 
 #: src/rmdPrefsWidget.py:49
 msgid "Enabled"
-msgstr ""
+msgstr "Activo"
 
 #: src/rmdPrefsWidget.py:49
 msgid "Disabled"
-msgstr ""
+msgstr "Inactivo"
 
 #: src/rmdPrefsWidget.py:50
 msgid "Files"
-msgstr ""
+msgstr "Ficheiros"
 
 #: src/rmdPrefsWidget.py:50
 msgid "Performance"
-msgstr ""
+msgstr "Performance"
 
 #: src/rmdPrefsWidget.py:50
 msgid "Sound"
-msgstr ""
+msgstr "Som"
 
 #: src/rmdPrefsWidget.py:50
 msgid "Misc"
-msgstr ""
+msgstr "Variado"
 
 #: src/rmdPrefsWidget.py:51
 msgid ""
@@ -210,13 +210,15 @@ msgstr ""
 
 #: src/rmdPrefsWidget.py:52
 msgid "Directory where temporary files will be saved."
-msgstr ""
+msgstr "Directoria onde os ficheiros temporários serão salvados"
 
 #: src/rmdPrefsWidget.py:54
 msgid ""
 "Encode simultaneously with the recording.\n"
 "This will require a lot more processing power.\n"
 msgstr ""
+"Codificar simultaniamente enquanto grava.\n"
+"Isto irá necessitar de mais poder de processamento.\n"
 
 #: src/rmdPrefsWidget.py:55
 msgid ""
@@ -225,12 +227,17 @@ msgid ""
 "in the expense of hard disk space.\n"
 "This option is valid only when encoding on the fly is disabled."
 msgstr ""
+"Não aplicar compressão nos ficheiros temporários.\n"
+"Se estiver activo, o programa irá necessitar de menos poder de\n"
+"processmaneto, dispensando o espaço do disco rigído"
 
 #: src/rmdPrefsWidget.py:56
 msgid ""
 "This option, if enabled, will cause the program to require less\n"
 "processing power, but it might make the colors look a bit more blurry."
 msgstr ""
+"Se esta opção estiver activo, o prgrama irá necessitar de menos\n"
+"poder de processamento, mas as cores poder ficar distorcidas."
 
 #: src/rmdPrefsWidget.py:57
 msgid ""
@@ -246,22 +253,26 @@ msgid ""
 "known 3d compositing window manager.\n"
 " "
 msgstr ""
+"Esta opção deve estar activa quando gravar janelas 3d.\n"
+"Também é activa automaticamente quando"
+"quando há um window manager 3d"
+
 
 #: src/rmdPrefsWidget.py:59
 msgid "Number of audio channels."
-msgstr ""
+msgstr "Número de canais de audio"
 
 #: src/rmdPrefsWidget.py:60
 msgid "Sound frequency."
-msgstr ""
+msgstr "Frequência sonora"
 
 #: src/rmdPrefsWidget.py:61
 msgid "ALSA sound device, that is used for sound recording."
-msgstr ""
+msgstr "Dispositivo de som ALSA, usado para gravar som"
 
 #: src/rmdPrefsWidget.py:62
 msgid "Connection to the Xserver."
-msgstr ""
+msgstr "Conecção ao Xserver"
 
 #: src/rmdPrefsWidget.py:63
 msgid ""
@@ -270,6 +281,10 @@ msgid ""
 "while black and white are fake cursors, drawn by the program.\n"
 "You can also disable cursor drawing."
 msgstr ""
+"O cursor do rato será desenhado.\n"
+"Normal é para ver o cursor real enquanto grava,\n"
+"enquando branco e preto serão cursores falsos, desenhados pelo prgrama"
+"Também pode desactivar o desenho do cursor."
 
 #: src/rmdPrefsWidget.py:64
 msgid ""
@@ -278,14 +293,18 @@ msgid ""
 "Disabling this option is not recommended,\n"
 "as it may severely slow down the program."
 msgstr ""
+"Usar a memória partilhada MIT extendida, sempre que aproriado,\n"
+"dependendo do resto das opções do programa.\n"
+"Desactivar esta opção não é recomando,\n"
+"pois pode por o programa mais lento."
 
 #: src/rmdTrayPopup.py:70
 msgid "gtk-recordMyDesktop"
-msgstr ""
+msgstr "gtk-recordMyDesktop"
 
 #: src/rmdTrayPopup.py:72
 msgid "a graphical frontend for recordMyDesktop"
-msgstr ""
+msgstr "Uma interface gráfica para o recordMyDesktop"
 
 #: src/rmdTrayPopup.py:73
 msgid ""
@@ -293,84 +312,89 @@ msgid ""
 "Portions Copyright (C) 2005-6 Zaheer Abbas Merali, John N. Laliberte\n"
 "Portions Copyright (C) Fluendo S.L."
 msgstr ""
+"Copyright (C) John Varouhakis\n"
+"Portions Copyright (C) 2005-6 Zaheer Abbas Merali, John N. Laliberte\n"
+"Portions Copyright (C) Fluendo S.L."
 
 #: src/rmdTrayPopup.py:77
 msgid "Translator Credits And Information(Replace with your info)"
-msgstr ""
+msgstr "Joel Ramos e Sérgio Matias"
 
 #: src/rmdTrayPopup.py:82
 msgid "_Select Area On Screen"
-msgstr ""
+msgstr "_Seleccionar área no ecrã"
 
 #: src/rmdTrayIcon.py:71
 msgid "Success"
-msgstr ""
+msgstr "Sucesso"
 
 #: src/rmdTrayIcon.py:72
 msgid "Error while parsing the arguments."
-msgstr ""
+msgstr "Erro enquanto analisava os argumentos"
 
 #: src/rmdTrayIcon.py:73
 msgid "Initializing the encoder failed(either vorbis or theora)"
-msgstr ""
+msgstr "Inicialização do codificador falhou (tanto vorbis como therora)"
 
 #: src/rmdTrayIcon.py:74
 msgid "Could not open/configure sound card."
-msgstr ""
+msgstr "Impossível abrir/configurar a placa de som"
 
 #: src/rmdTrayIcon.py:75
 msgid "Xdamage extension not present."
-msgstr ""
+msgstr "Extensão Xdamage inexistente"
 
 #: src/rmdTrayIcon.py:76
 msgid "Shared memory extension not present."
-msgstr ""
+msgstr "Memória partilhada inexistente"
 
 #: src/rmdTrayIcon.py:77
 msgid "Xfixes extension not present."
-msgstr ""
+msgstr "Extensão Xfixes inexistente"
 
 #: src/rmdTrayIcon.py:78
 msgid "XInitThreads failed."
-msgstr ""
+msgstr "XInitThreads falhou"
 
 #: src/rmdTrayIcon.py:79
 msgid "No $DISPLAY environment variable and none specified as argument."
-msgstr ""
+msgstr "Sem a variavel ambiente $DISPLAY e sem argumentos especificados."
 
 #: src/rmdTrayIcon.py:80
 msgid "Cannot connect to Xserver."
-msgstr ""
+msgstr "Impossivel conectar ao Xserver"
 
 #: src/rmdTrayIcon.py:81
 msgid "Color depth is not 24bpp."
-msgstr ""
+msgstr "Profundidade da cor não é 24bpp"
 
 #: src/rmdTrayIcon.py:82
 msgid "Improper window specification."
-msgstr ""
+msgstr "Janela improriada especificada"
 
 #: src/rmdTrayIcon.py:83
 msgid "Cannot attach shared memory to proccess."
-msgstr ""
+msgstr "Impossivel anexar memória partilhada ao processo"
 
 #: src/rmdTrayIcon.py:84
 msgid "Cannot open file for writting."
-msgstr ""
+msgstr "Impossivel abrir o ficheiro para escrever"
 
 #: src/rmdTrayIcon.py:85
 msgid "Segmentation Fault"
-msgstr ""
+msgstr "Falha na Segmentação"
 
 #: src/rmdTrayIcon.py:233
 msgid ""
 "Recording is finished.\n"
 "recordMyDesktop has exited with status"
 msgstr ""
+"Gravação terminada.\n"
+"recordMyDesktop saíu com sucesso"
 
 #: src/rmdTrayIcon.py:234
 msgid "Description"
-msgstr ""
+msgstr "Descrição"
 
 #: src/rmdTrayIcon.py:236
 msgid ""
@@ -378,6 +402,8 @@ msgid ""
 "recordMyDesktop has exited with uknown\n"
 "error code"
 msgstr ""
+"Gravação terminada.\n"
+"recordMyDesktop saíu com um erro desconhecido"
 
 #: src/rmdMonitor.py:14
 msgid ""
@@ -386,9 +412,14 @@ msgid ""
 "If you press Cancel or close this window,\n"
 "this proccess cannot be resumed!"
 msgstr ""
+"Por favor espere enquanto a sua gravação é codificada\n"
+"AVISO!!\n"
+"Se primir cancelar ou fechar esta janela,\n"
+"o processo não pode ser continuado!"
 
 #: src/rmdMonitor.py:38
 #: src/rmdMonitor.py:59
 msgid "complete"
-msgstr ""
+msgstr "completo"
+
 
