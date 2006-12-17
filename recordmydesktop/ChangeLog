@@ -2,6 +2,10 @@
 *Added Added custom X error handler, to avoid BadWindow on
 XGetWindowAttributes, with XQueryTree.
 *Fixed sound_buffer initialization, which could cause segfault in startup.
+*Corrected buffer size in sound recoding. Size can now be specified as an
+option.
+*Corrected interleaving of audio and video streams.
+*Fixed missing end-of-stream in generated files.
 
 
 
