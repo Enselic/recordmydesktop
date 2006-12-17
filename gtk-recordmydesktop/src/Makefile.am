@@ -22,7 +22,7 @@ desktop_DATA =gtk-recordmydesktop.desktop
 pixmapdir = $(datadir)/pixmaps
 pixmap_DATA = gtk-recordmydesktop.png
 
-EXTRA_DIST=gtk-recordMyDesktop gtk-recordmydesktop.desktop gtk-recordmydesktop.png
+EXTRA_DIST=gtk-recordMyDesktop gtk-recordmydesktop.desktop gtk-recordmydesktop.png gtk-recordmydesktop.svg
 
 clean-local:
 	rm -rf *.pyc *.pyo

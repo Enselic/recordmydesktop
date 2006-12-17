@@ -1,14 +1,30 @@
-gtk-recordMyDesktop is written by
+gtk-recordMyDesktop (except the files specified bellow) is written by:
 
 John Varouhakis(johnvarouhakis@gmail.com)
 
-Portions of the code are taken from Istanbul
-version 0.2.1, available at http://live.gnome.org/Istanbul
-which is written by
+
+
+The files rmdTrayPopup.py, rmdSelect.py and rmdSelectThumb.py are modified
+versions of tray_popup.py and select.py, as these are found, in the istanbul/main/
+sub-directory of Istanbul version 0.2.1, available at http://live.gnome.org/Istanbul
+
+More specifically:
+rmdTrayPopup.py is a modification of tray_popup.py
+rmdSelect.py and rmdSelectThumb.py are both modifications of select.py
+
+Istanbul is written by
 
 Zaheer Abbas Merali
 John N. Laliberte
 
 and publiced under the GNU GPL Version 2.
+
+
+
+
+Design of the Graphical User Interface has been made by
+
+Daniel Campos
+
 
 

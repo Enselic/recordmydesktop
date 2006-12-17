@@ -1,3 +1,13 @@
+/*VERSION 0.3.1*/
+*Added Arabic transaltion by Anas Husseini
+*Added German transaltion by Daniel Ziegenberg
+*Added Japanese transaltion by Paul D
+*Added Portuguese transaltion by Joel Ramos and Sergio Santos
+*Added Turkish transaltion by Eren Inan Canpolat
+*Changed Icon (added svg source)
+*Select window includes borders now (-frame in xwininfo call)
+*Updated AUTHORS file with more correct information
+
 /*VERSION 0.3.0r2*/
 *Added french translation by David Valot
 *Fixed non responding close button in about dialog.
