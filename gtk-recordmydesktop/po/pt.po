@@ -2,12 +2,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gg\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2006-12-03 13:44+0100\n"
-"Last-Translator: Joel Ramos <joelpramos@gmail.com>\nSérgio Santos"
-"Language-Team: \n"
+"PO-Revision-Date: 2006-12-17 22:44+0100\n"
+"Last-Translator: Joel Ramos <joelpramos@gmail.com>\n"
+"Sérgio SantosLanguage-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language-Team: \n"
 
 #: src/rmdSimple.py:48
 #: src/rmdPrefsWidget.py:46
@@ -21,7 +22,7 @@ msgstr "Qualidade de Som"
 
 #: src/rmdSimple.py:49
 msgid "Advanced"
-msgstr "AvanÃ§ado"
+msgstr "Avançado"
 
 #: src/rmdSimple.py:49
 msgid "Select Window"
@@ -36,8 +37,8 @@ msgid ""
 "Click to start the recording.\n"
 "This window will hide itself."
 msgstr ""
-"Clique aqui para comeÃ§ar a gravar.\n"
-"Esta janela irÃ¡ esconder-se automaticamente."
+"Clique aqui para começar a gravar.\n"
+"Esta janela irá esconder-se automaticamente."
 
 #: src/rmdSimple.py:52
 msgid ""
@@ -48,9 +49,9 @@ msgid ""
 "(this behavior can be changed )"
 msgstr ""
 "Clique aqui para escolher o nome do\n"
-"ficheiro e a sua localizaÃ§Ã£o.\n"
-"O default Ã© out.ogg na pasta home.\n"
-"Se o ficheiro jÃ¡ existir, serÃ¡ criado\n"
+"ficheiro e a sua localização.\n"
+"O default é out.ogg na pasta home.\n"
+"Se o ficheiro já existir, será criado\n"
 "um novo com um numero no nome\n"
 "(este comportamento pode ser mudado )"
 
@@ -65,22 +66,22 @@ msgid ""
 "so it's recommended, when encoding on the fly,\n"
 "to leave at 100)"
 msgstr ""
-"Seleccione a qualidade do video da sua gravaÃ§Ã£o.\n"
+"Seleccione a qualidade do video da sua gravação.\n"
 "(Menor qualidade vai necessitar de maior processamento,\n"
-"por isso Ã© recomendado, quando fizer encoding on the fly,\n"
+"por isso é recomendado, quando fizer encoding on the fly,\n"
 "deixar a 100)"
 
 #: src/rmdSimple.py:55
 msgid "Enable/Disable sound recording."
-msgstr "Activar/Desactivar gravaÃ§Ã£o de som"
+msgstr "Activar/Desactivar gravação de som"
 
 #: src/rmdSimple.py:56
 msgid "Select the audio quality of your recording."
-msgstr "Seleccione a qualidade de audio da sua gravaÃ§Ã£o"
+msgstr "Seleccione a qualidade de audio da sua gravação"
 
 #: src/rmdSimple.py:57
 msgid "Click here to access more options."
-msgstr "Clique aqui para aceder a mais opÃ§Ãµes"
+msgstr "Clique aqui para aceder a mais opções"
 
 #: src/rmdSimple.py:58
 msgid ""
@@ -90,10 +91,10 @@ msgid ""
 "Right click on it, to reset the area."
 msgstr ""
 "\n"
-"Clique com o botÃ£o esquerdo e arraste,\n"
-"na imagem de prÃ©-visualizaÃ§Ã£o,\n"
-"para seleccionar uma Ã¡rea para gravar.\n"
-"Clique com o botÃ£o direito, para limpar."
+"Clique com o botão esquerdo e arraste,\n"
+"na imagem de pré-visualização,\n"
+"para seleccionar uma área para gravar.\n"
+"Clique com o botão direito, para limpar."
 
 #: src/rmdPrefsWidget.py:42
 msgid "Overwite Existing Files"
@@ -114,19 +115,19 @@ msgstr "Encode On the Fly"
 
 #: src/rmdPrefsWidget.py:43
 msgid "Zero Compression"
-msgstr "CompressÃ£o zero"
+msgstr "Compressão zero"
 
 #: src/rmdPrefsWidget.py:44
 msgid "Quick Subsampling"
-msgstr ""
+msgstr "Conversão rápida de RGB para YUV"
 
 #: src/rmdPrefsWidget.py:44
 msgid "Shared Threshold"
-msgstr ""
+msgstr "Shared Threshold"
 
 #: src/rmdPrefsWidget.py:44
 msgid "Full shots at every frame"
-msgstr ""
+msgstr "Screenshots completas a cada frame"
 
 #: src/rmdPrefsWidget.py:45
 msgid "Channels"
@@ -138,7 +139,7 @@ msgstr "Frequência"
 
 #: src/rmdPrefsWidget.py:45
 msgid "Device"
-msgstr ""
+msgstr "Dispositivo de Som"
 
 #: src/rmdPrefsWidget.py:45
 msgid "Display"
@@ -150,7 +151,7 @@ msgstr "Cursor do rato"
 
 #: src/rmdPrefsWidget.py:46
 msgid "MIT-Shm extension"
-msgstr ""
+msgstr "Extensão MIT-Shm"
 
 #: src/rmdPrefsWidget.py:47
 msgid "Drop Frames(encoder)"
@@ -207,6 +208,10 @@ msgid ""
 "(for example if you try to save as out.ogg and that file exists, your file will be named out.ogg.1).\n"
 "By checking this box, this behavior is disabled and the old file is overwritten.\n"
 msgstr ""
+"Por definição, se tentar salvar sobre um ficheiro que já\n"
+"exite, o novo ficheiro irá ser renomeado\n"
+"(por exemplo, se tentar salvar como out.ogg e esse ficheiro existir, passará a chamar-se out.ogg.1).\n"
+"Ao activar esta opção, o ficheiro antigo será substituido.\n"
 
 #: src/rmdPrefsWidget.py:52
 msgid "Directory where temporary files will be saved."
@@ -228,8 +233,7 @@ msgid ""
 "This option is valid only when encoding on the fly is disabled."
 msgstr ""
 "Não aplicar compressão nos ficheiros temporários.\n"
-"Se estiver activo, o programa irá necessitar de menos poder de\n"
-"processmaneto, dispensando o espaço do disco rigído"
+"Se estiver activo, o programa irá necessitar de menos poder de"
 
 #: src/rmdPrefsWidget.py:56
 msgid ""
@@ -245,6 +249,9 @@ msgid ""
 "of the screenshot through the MIT-Shared memory extension.\n"
 "This option has no effect when using the full shots option.\n"
 msgstr ""
+"Quantidade de ecrã, em que a frame é gravada em screenshot\n"
+"através da extensão MIT-Shared memory.\n"
+"Esta opção não tem efeito usando a opção full shots.\n"
 
 #: src/rmdPrefsWidget.py:58
 msgid ""
@@ -254,9 +261,7 @@ msgid ""
 " "
 msgstr ""
 "Esta opção deve estar activa quando gravar janelas 3d.\n"
-"Também é activa automaticamente quando"
-"quando há um window manager 3d"
-
+"Também é activa automaticamente quandoquando há um window manager 3d"
 
 #: src/rmdPrefsWidget.py:59
 msgid "Number of audio channels."
@@ -283,8 +288,7 @@ msgid ""
 msgstr ""
 "O cursor do rato será desenhado.\n"
 "Normal é para ver o cursor real enquanto grava,\n"
-"enquando branco e preto serão cursores falsos, desenhados pelo prgrama"
-"Também pode desactivar o desenho do cursor."
+"enquando branco e preto serão cursores falsos, desenhados pelo prgramaTambém pode desactivar o desenho do cursor."
 
 #: src/rmdPrefsWidget.py:64
 msgid ""
@@ -382,7 +386,7 @@ msgstr "Impossivel abrir o ficheiro para escrever"
 
 #: src/rmdTrayIcon.py:85
 msgid "Segmentation Fault"
-msgstr "Falha na Segmentação"
+msgstr "Falha de Segmentação"
 
 #: src/rmdTrayIcon.py:233
 msgid ""
@@ -421,5 +425,4 @@ msgstr ""
 #: src/rmdMonitor.py:59
 msgid "complete"
 msgstr "completo"
-
 
