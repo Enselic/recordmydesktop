@@ -1,1 +1,1 @@
-noinst_HEADERS= recordmydesktop.h
+noinst_HEADERS= recordmydesktop.h rmdfunc.h rmdtypes.h rmdmacro.h
