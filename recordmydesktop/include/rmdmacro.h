@@ -55,6 +55,12 @@
 #define __GVALUE(tmp_val) (((tmp_val)&0x0000ff00)>>8)
 #define __BVALUE(tmp_val) (((tmp_val)&0x000000ff))
 
+//xfixes pointer data are written as unsigned long
+//(even though the server returns CARD32)
+//so we need to set the step accordingly to
+//avoid problems (amd64 has 8byte ulong)
+#define RMD_ULONG_SIZE_T (sizeof(unsigned long))
+
 //500 mb file size
 #define CACHE_FILE_SIZE_LIMIT (500*1<<20)
 
@@ -172,8 +178,10 @@
 }
 
 #define AVG_4_PIXELS(data_array,width_img,k_tm,i_tm,offset)\
-    ((data_array[(k_tm*width_img+i_tm)*4+offset]+data_array[((k_tm-1)*width_img+i_tm)*4+offset]\
-    +data_array[(k_tm*width_img+i_tm-1)*4+offset]+data_array[((k_tm-1)*width_img+i_tm-1)*4+offset])/4)
+    ((data_array[(k_tm*width_img+i_tm)*RMD_ULONG_SIZE_T+offset]+\
+    data_array[((k_tm-1)*width_img+i_tm)*RMD_ULONG_SIZE_T+offset]+\
+    data_array[(k_tm*width_img+i_tm-1)*RMD_ULONG_SIZE_T+offset]+\
+    data_array[((k_tm-1)*width_img+i_tm-1)*RMD_ULONG_SIZE_T+offset])/4)
 
 #define UPDATE_YUV_BUFFER_SH(yuv,data,x_tm,y_tm,width_tm,height_tm){\
     int k,i;\
@@ -370,8 +378,9 @@
     for(k=0;k<height_tm;k++){\
         for(i=0;i<width_tm;i++){\
                 yuv->y[x_tm+i+(k+y_tm)*yuv->y_width]=\
-                (yuv->y[x_tm+i+(k+y_tm)*yuv->y_width]*(UCHAR_MAX-data[(j*4)+__ABYTE])+\
-                (Yr[data[(j*4)+__RBYTE]] + Yg[data[(j*4)+__GBYTE]] + Yb[data[(j*4)+__BBYTE]])*data[(j*4)+__ABYTE])/UCHAR_MAX ;\
+                (yuv->y[x_tm+i+(k+y_tm)*yuv->y_width]*(UCHAR_MAX-data[(j*RMD_ULONG_SIZE_T)+__ABYTE])+\
+                (Yr[data[(j*RMD_ULONG_SIZE_T)+__RBYTE]] + Yg[data[(j*RMD_ULONG_SIZE_T)+__GBYTE]] +\
+                Yb[data[(j*RMD_ULONG_SIZE_T)+__BBYTE]])*data[(j*RMD_ULONG_SIZE_T)+__ABYTE])/UCHAR_MAX ;\
                 if((k%2)&&(i%2)){\
                     avg3=AVG_4_PIXELS(data,(width_tm+column_discard_stride),k,i,__ABYTE);\
                     avg2=AVG_4_PIXELS(data,(width_tm+column_discard_stride),k,i,__RBYTE);\
