@@ -442,5 +442,12 @@ int SwapCacheFilesRead(char *name,int n,gzFile **fp,FILE **ucfp);
 */
 int PurgeCache(CacheData *cache_data_t,int sound);
 
+/**
+* Encode cache into an
+* ogg stream.
+* \param pdata ProgData struct containing all program data
+*/
+void EncodeCache(ProgData *pdata);
+
 #endif
 

@@ -24,7 +24,8 @@ recordmydesktop_SOURCES=	recordmydesktop.c\
 							cache_audio.c\
 							rmd_cache.c\
 							load_cache.c\
-							wm_check.c
+							wm_check.c\
+							encode_cache.c
 
 INCLUDES= $(all_includes) -I../include
 

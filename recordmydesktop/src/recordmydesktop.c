@@ -59,8 +59,7 @@ int main(int argc,char **argv){
                     sound_capture_t,
                     sound_encode_t,
                     sound_cache_t,
-                    flush_to_ogg_t,
-                    load_cache_t;
+                    flush_to_ogg_t;
         XShmSegmentInfo shminfo;
         int i;
 
@@ -294,41 +293,16 @@ int main(int argc,char **argv){
         //Now that we are done with recording we cancel the timer
         CancelTimer();
 
-/**               Encoding                          */
+        //encode and then cleanup cache
         if(!pdata.args.encOnTheFly){
             if(!Aborted){
-                fprintf(stderr,"Encoding started!\nThis may take several minutes.\n"
-                "Pressing Ctrl-C will cancel the procedure (resuming will not be possible, but\n"
-                "any portion of the video, which is already encoded won't be deleted).\n"
-                "Please wait...\n");
-                pdata.running=1;
-                InitEncoder(&pdata,&enc_data,1);
-                //load encoding and flushing threads
-                if(!pdata.args.nosound){
-                    //before we start loading again
-                    //we need to free any left-overs
-                    while(pdata.sound_buffer!=NULL){
-                        free(pdata.sound_buffer->data);
-                        pdata.sound_buffer=pdata.sound_buffer->next;
-                    }
-                }
-                pthread_create(&flush_to_ogg_t,NULL,(void *)FlushToOgg,(void *)&pdata);
-
-
-                //start loading image and audio
-                pthread_create(&load_cache_t,NULL,(void *)LoadCache,(void *)&pdata);
-
-                //join and finish
-                pthread_join(load_cache_t,NULL);
-                fprintf(stderr,"Encoding finished!\nWait a moment please...\n");
-                pthread_join(flush_to_ogg_t,NULL);
+                EncodeCache(&pdata);
             }
             fprintf(stderr,"Cleanning up cache...\n");
             if(PurgeCache(pdata.cache_data,!pdata.args.nosound))
                 fprintf(stderr,"Some error occured while cleaning up cache!\n");
             fprintf(stderr,"Done!!!\n");
         }
-/**@_______________________________________________@*/
 
         //This can happen earlier, but in some cases it might get stuck.
         //So we must make sure the recording is not wasted.
