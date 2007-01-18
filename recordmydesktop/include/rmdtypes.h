@@ -196,6 +196,7 @@ typedef struct _ProgData{
     char *window_manager;//name of the window manager at program launch
     XImage *image;//the image that holds the current full screenshot
     XImage *shimage;//the image that holds the current full screenshot(shared memory)
+    XShmSegmentInfo shminfo;//info structure for the image above.
     unsigned char *dummy_pointer;//a dummy pointer to be drawn in every frame
                                 //data is casted to unsigned for later use in YUV buffer
     int dummy_p_size;//initially 16x16,always square

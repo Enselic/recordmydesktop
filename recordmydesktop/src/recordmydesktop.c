@@ -52,16 +52,6 @@ int main(int argc,char **argv){
     else{
         EncData enc_data;
         CacheData cache_data;
-        pthread_t   poll_damage_t,
-                    image_capture_t,
-                    image_encode_t,
-                    image_cache_t,
-                    sound_capture_t,
-                    sound_encode_t,
-                    sound_cache_t,
-                    flush_to_ogg_t;
-        XShmSegmentInfo shminfo;
-        int i;
 
         QUERY_DISPLAY_SPECS(pdata.dpy,&pdata.specs);
         if(pdata.specs.depth!=24){
@@ -70,7 +60,6 @@ int main(int argc,char **argv){
         }
         if(SetBRWindow(pdata.dpy,&pdata.brwin,&pdata.specs,&pdata.args))
             exit(11);
-
 
         //check if we are under compiz or beryl,in which case we must enable full-shots
         //and with it use of shared memory.User can override this
@@ -94,204 +83,19 @@ int main(int argc,char **argv){
         QueryExtensions(pdata.dpy,&pdata.args,&pdata.damage_event, &pdata.damage_error);
 
 
+        if((exit_status=InitializeData(&pdata,&enc_data,&cache_data))!=0)
+            return exit_status;
 
-
-        //init data
-
-        //these are globals, look for them at the header
-        frames_total=frames_lost=encoder_busy=capture_busy=0;
-
-        fprintf(stderr,"Initializing...\n");
-        MakeMatrices();
-        if(pdata.args.have_dummy_cursor){
-            pdata.dummy_pointer=MakeDummyPointer(&pdata.specs,16,pdata.args.cursor_color,0,&pdata.npxl);
-            pdata.dummy_p_size=16;
-        }
-
-        if((pdata.args.noshared))
-            pdata.datamain=(char *)malloc(pdata.brwin.nbytes);
-
-        if(pdata.args.noshared)
-            pdata.datatemp=(char *)malloc(pdata.brwin.nbytes);
-        pdata.rect_root[0]=pdata.rect_root[1]=NULL;
-        pthread_mutex_init(&pdata.list_mutex[0],NULL);
-        pthread_mutex_init(&pdata.list_mutex[1],NULL);
-        pthread_mutex_init(&pdata.sound_buffer_mutex,NULL);
-        pthread_mutex_init(&pdata.libogg_mutex,NULL);
-//         pthread_mutex_init(&pdata.libtheora_mutex,NULL);
-//         pthread_mutex_init(&pdata.libvorbis_mutex,NULL);
-        pthread_mutex_init(&pdata.yuv_mutex,NULL);
-
-        pthread_cond_init(&pdata.time_cond,NULL);
-        pthread_cond_init(&pdata.pause_cond,NULL);
-        pthread_cond_init(&pdata.image_buffer_ready,NULL);
-        pthread_cond_init(&pdata.sound_buffer_ready,NULL);
-        pthread_cond_init(&pdata.sound_data_read,NULL);
-        pthread_cond_init(&pdata.theora_lib_clean,NULL);
-        pthread_cond_init(&pdata.vorbis_lib_clean,NULL);
-        pdata.th_encoding_clean=pdata.v_encoding_clean=1;
-        pdata.list_selector=Paused=Aborted=pdata.avd=0;
-        pdata.sound_buffer=NULL;
-        pdata.running=1;
-        time_cond=&pdata.time_cond;
-        pause_cond=&pdata.pause_cond;
-        Running=&pdata.running;
-
-        if((pdata.args.noshared)){
-            pdata.image=XCreateImage(pdata.dpy, pdata.specs.visual, pdata.specs.depth, ZPixmap, 0,pdata.datamain,pdata.brwin.rgeom.width,
-                        pdata.brwin.rgeom.height, 8, 0);
-            XInitImage(pdata.image);
-            GetZPixmap(pdata.dpy,pdata.specs.root,pdata.image->data,pdata.brwin.rgeom.x,pdata.brwin.rgeom.y,
-                        pdata.brwin.rgeom.width,pdata.brwin.rgeom.height);
-        }
-        if((!pdata.args.noshared)||(!pdata.args.nocondshared)){
-            pdata.shimage=XShmCreateImage (pdata.dpy,pdata.specs.visual,pdata.specs.depth,ZPixmap,pdata.datash,
-                         &shminfo, pdata.brwin.rgeom.width,pdata.brwin.rgeom.height);
-            shminfo.shmid = shmget (IPC_PRIVATE,
-                                    pdata.shimage->bytes_per_line * pdata.shimage->height,
-                                    IPC_CREAT|0777);
-            shminfo.shmaddr = pdata.shimage->data = shmat (shminfo.shmid, 0, 0);
-            shminfo.readOnly = False;
-            if(!XShmAttach(pdata.dpy,&shminfo)){
-                fprintf(stderr,"Failed to attach shared memory to proccess.\n");
-                exit(12);
-            }
-            XShmGetImage(pdata.dpy,pdata.specs.root,pdata.shimage,pdata.brwin.rgeom.x,pdata.brwin.rgeom.y,AllPlanes);
-        }
-        if(!pdata.args.nosound){
-            pdata.sound_handle=OpenDev( pdata.args.device,
-                                        &pdata.args.channels,
-                                        &pdata.args.frequency,
-                                        &pdata.args.buffsize,
-                                        &pdata.periodsize,
-                                        &pdata.periodtime,
-                                        &pdata.hard_pause);
-            if(pdata.sound_handle==NULL){
-                fprintf(stderr,"Error while opening/configuring soundcard %s\nTry running with the --no-sound or specify a correct device.\n",pdata.args.device);
-                exit(3);
-            }
-        }
-
-        if(pdata.args.encOnTheFly)
-            InitEncoder(&pdata,&enc_data,0);
-        else
-            InitCacheData(&pdata,&enc_data,&cache_data);
-
-        for(i=0;i<(pdata.enc_data->yuv.y_width*pdata.enc_data->yuv.y_height);i++)
-            pdata.enc_data->yuv.y[i]=0;
-        for(i=0;i<(pdata.enc_data->yuv.uv_width*pdata.enc_data->yuv.uv_height);i++){
-            pdata.enc_data->yuv.v[i]=pdata.enc_data->yuv.u[i]=127;
-        }
-
-        if((pdata.args.nocondshared)&&(!pdata.args.noshared)){
-            if(pdata.args.no_quick_subsample){
-                UPDATE_YUV_BUFFER_IM_AVG((&pdata.enc_data->yuv),((unsigned char*)pdata.shimage->data),
-                (pdata.enc_data->x_offset),(pdata.enc_data->y_offset),
-                (pdata.brwin.rgeom.width),(pdata.brwin.rgeom.height));
-            }
-            else{
-                UPDATE_YUV_BUFFER_IM((&pdata.enc_data->yuv),((unsigned char*)pdata.shimage->data),
-                (pdata.enc_data->x_offset),(pdata.enc_data->y_offset),
-                (pdata.brwin.rgeom.width),(pdata.brwin.rgeom.height));
-            }
-        }
-        else{
-            if(pdata.args.no_quick_subsample){
-                UPDATE_YUV_BUFFER_IM_AVG((&pdata.enc_data->yuv),((unsigned char*)pdata.image->data),
-                (pdata.enc_data->x_offset),(pdata.enc_data->y_offset),
-                (pdata.brwin.rgeom.width),(pdata.brwin.rgeom.height));
-            }
-            else{
-                UPDATE_YUV_BUFFER_IM((&pdata.enc_data->yuv),((unsigned char*)pdata.image->data),
-                (pdata.enc_data->x_offset),(pdata.enc_data->y_offset),
-                (pdata.brwin.rgeom.width),(pdata.brwin.rgeom.height));
-            }
-        }
-
-        pdata.frametime=(1000000)/pdata.args.fps;
-
-        if(pdata.args.delay>0){
-            fprintf(stderr,"Will sleep for %d seconds now.\n",pdata.args.delay);
-            sleep(pdata.args.delay);
-        }
-
-        /*start threads*/
-        if(!pdata.args.full_shots)
-            pthread_create(&poll_damage_t,NULL,(void *)PollDamage,(void *)&pdata);
-        pthread_create(&image_capture_t,NULL,(void *)GetFrame,(void *)&pdata);
-        if(pdata.args.encOnTheFly)
-            pthread_create(&image_encode_t,NULL,(void *)EncodeImageBuffer,(void *)&pdata);
-        else
-            pthread_create(&image_cache_t,NULL,(void *)CacheImageBuffer,(void *)&pdata);
-
-        if(!pdata.args.nosound){
-            pthread_create(&sound_capture_t,NULL,(void *)CaptureSound,(void *)&pdata);
-            if(pdata.args.encOnTheFly)
-                pthread_create(&sound_encode_t,NULL,(void *)EncodeSoundBuffer,(void *)&pdata);
-            else
-                pthread_create(&sound_cache_t,NULL,(void *)CacheSoundBuffer,(void *)&pdata);
-        }
-        if(pdata.args.encOnTheFly)
-            pthread_create(&flush_to_ogg_t,NULL,(void *)FlushToOgg,(void *)&pdata);
-
-
-        RegisterCallbacks(&pdata.args);
-        fprintf(stderr,"Capturing!\n");
-
-        //wait all threads to finish
-
-        pthread_join(image_capture_t,NULL);
-        fprintf(stderr,"Shutting down.");
-        //if no damage events have been received the thread will get stuck
-        while(!pdata.th_enc_thread_waiting && !pdata.th_encoding_clean){
-            usleep(10000);
-            pthread_cond_signal(&pdata.image_buffer_ready);
-        }
-//         pthread_cond_broadcast(&pdata.image_buffer_ready);
-        if(pdata.args.encOnTheFly){
-            pthread_join(image_encode_t,NULL);
-        }
-        else
-            pthread_join(image_cache_t,NULL);
-
-
-        fprintf(stderr,".");
-        if(!pdata.args.nosound){
-            pthread_join(sound_capture_t,NULL);
-            fprintf(stderr,".");
-            while(!pdata.v_enc_thread_waiting && !pdata.v_encoding_clean){
-                usleep(10000);
-                pthread_cond_signal(&pdata.sound_data_read);
-            }
-            if(pdata.args.encOnTheFly){
-                pthread_join(sound_encode_t,NULL);
-            }
-            else{
-                pthread_join(sound_cache_t,NULL);
-            }
-        }
-        else
-            fprintf(stderr,"..");
-
-        if(pdata.args.encOnTheFly)
-            pthread_join(flush_to_ogg_t,NULL);
-        fprintf(stderr,".");
-
-        if(!pdata.args.full_shots)
-            pthread_join(poll_damage_t,NULL);
-
+        //this is where the capturing happens.
+        rmdThreads(&pdata);
 
         fprintf(stderr,".");
         if((!pdata.args.noshared)||(!pdata.args.nocondshared)){
-            XShmDetach (pdata.dpy, &shminfo);
-            shmdt (&shminfo.shmaddr);
-            shmctl (shminfo.shmid, IPC_RMID, 0);
+            XShmDetach (pdata.dpy, &pdata.shminfo);
+            shmdt (&pdata.shminfo.shmaddr);
+            shmctl (pdata.shminfo.shmid, IPC_RMID, 0);
         }
         fprintf(stderr,"\n");
-
-
-        //Now that we are done with recording we cancel the timer
-        CancelTimer();
 
         //encode and then cleanup cache
         if(!pdata.args.encOnTheFly){

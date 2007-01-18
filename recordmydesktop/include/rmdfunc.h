@@ -449,5 +449,30 @@ int PurgeCache(CacheData *cache_data_t,int sound);
 */
 void EncodeCache(ProgData *pdata);
 
+/**
+* Launch and wait capture threads.
+* Also creates and waits the encoding threads when
+* encode-on-the-fly is enabled.
+*
+* \param pdata ProgData struct containing all program data
+*/
+void rmdThreads(ProgData *pdata);
+
+/**
+* initialize lists,mutexes,image buffers, take first screenshot,
+* and anything else needed before launching the capture threads.
+*
+* \param pdata ProgData struct containing all program data
+*
+* \param enc_data reference to enc_data structure
+*
+* \param cache_data reference to cache_data structure
+*
+* \returns 0 on success, other values must cause the program to exit
+*/
+int InitializeData(ProgData *pdata,
+                   EncData *enc_data,
+                   CacheData *cache_data);
+
 #endif
 
