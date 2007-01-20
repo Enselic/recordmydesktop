@@ -61,6 +61,18 @@
 #include <ogg/ogg.h>
 #include <alsa/asoundlib.h>
 
+//how we obtained the image we are converting to yuv
+enum{
+    __X_SHARED, //through MIT/Shm
+    __X_IPC     //through the regular X IPC mechanism
+};
+//type of pixel proccessing for the Cb,Cr planes
+//when converting from full rgb to 4:2:2 Ycbcr
+enum{
+    __PXL_DISCARD,  //only select 1 pixel in every block of four
+    __PXL_AVERAGE   //calculate the average of all four pixels
+};
+
 typedef struct _DisplaySpecs{   //this struct holds some basic information
     int screen;                 //about the display,needed mostly for
     uint width;                 //validity checks at startup
@@ -221,8 +233,6 @@ typedef struct _ProgData{
     pthread_mutex_t list_mutex[2],//mutexes for concurrency protection of the lists
                     sound_buffer_mutex,
                     libogg_mutex,//libogg is not thread safe,
-//                     libtheora_mutex,//same for libtheora
-//                     libvorbis_mutex,//and libvorbis.
                     yuv_mutex;//this might not be needed since we only have
                               //one read-only and  one write-only thread
                               //also on previous versions, y component was looped separately

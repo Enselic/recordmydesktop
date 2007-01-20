@@ -40,7 +40,7 @@ void UpdateImage(Display * dpy,
     RectArea *temp;
     unsigned char *dtap=(unsigned char*)datatemp;
     temp=*root;
-    
+
     if(temp!=NULL){
         do{
             if(noshmem){
@@ -51,34 +51,14 @@ void UpdateImage(Display * dpy,
                             temp->geom.y,
                             temp->geom.width,
                             temp->geom.height);
-    
-                pthread_mutex_lock(yuv_mutex);
-                if(no_quick_subsample){
-                    UPDATE_YUV_BUFFER_IM_AVG(yuv,dtap,
-                                    (temp->geom.x-brwin->rgeom.x+enc->x_offset),(temp->geom.y-brwin->rgeom.y+enc->y_offset),
-                                    (temp->geom.width),(temp->geom.height));
-                }
-                else{
-                    UPDATE_YUV_BUFFER_IM(yuv,dtap,
-                                    (temp->geom.x-brwin->rgeom.x+enc->x_offset),(temp->geom.y-brwin->rgeom.y+enc->y_offset),
-                                    (temp->geom.width),(temp->geom.height));
-                }
-
-                pthread_mutex_unlock(yuv_mutex);
             }
-            else{
-                if(no_quick_subsample){
-                    UPDATE_YUV_BUFFER_SH_AVG(yuv,dtap,
-                                (temp->geom.x-brwin->rgeom.x+enc->x_offset),(temp->geom.y-brwin->rgeom.y+enc->y_offset),
-                                (temp->geom.width),(temp->geom.height));
-                }
-                else{
-                    UPDATE_YUV_BUFFER_SH(yuv,dtap,
-                                (temp->geom.x-brwin->rgeom.x+enc->x_offset),(temp->geom.y-brwin->rgeom.y+enc->y_offset),
-                                (temp->geom.width),(temp->geom.height));
-                }
-            
-            }
+            pthread_mutex_lock(yuv_mutex);
+            UPDATE_YUV_BUFFER(yuv,dtap,
+                                (temp->geom.x-brwin->rgeom.x+enc->x_offset),
+                                (temp->geom.y-brwin->rgeom.y+enc->y_offset),
+                                (temp->geom.width),(temp->geom.height),
+                                noshmem,no_quick_subsample);
+            pthread_mutex_unlock(yuv_mutex);
             temp=temp->next;
         }while(temp!=NULL);
     }

@@ -51,9 +51,9 @@
 #error Only little-endian and big-endian systems are supported
 #endif
 
-#define __RVALUE(tmp_val) (((tmp_val)&0x00ff0000)>>16)
-#define __GVALUE(tmp_val) (((tmp_val)&0x0000ff00)>>8)
-#define __BVALUE(tmp_val) (((tmp_val)&0x000000ff))
+#define __RVALUE_32(tmp_val) (((tmp_val)&0x00ff0000)>>16)
+#define __GVALUE_32(tmp_val) (((tmp_val)&0x0000ff00)>>8)
+#define __BVALUE_32(tmp_val) (((tmp_val)&0x000000ff))
 
 //xfixes pointer data are written as unsigned long
 //(even though the server returns CARD32)
@@ -183,190 +183,84 @@
     data_array[(k_tm*width_img+i_tm-1)*RMD_ULONG_SIZE_T+offset]+\
     data_array[((k_tm-1)*width_img+i_tm-1)*RMD_ULONG_SIZE_T+offset])/4)
 
-#define UPDATE_YUV_BUFFER_SH(yuv,data,x_tm,y_tm,width_tm,height_tm){\
+#define CALC_TVAL_AVG_32(t_val,datapi,datapi_next){\
+    register unsigned int t1,t2,t3,t4;\
+    t1=*datapi;\
+    t2=*(datapi+1);\
+    t3=*datapi_next;\
+    t4=*(datapi_next+1);\
+    t_val=((((t1&0xff000000) +(t2&0xff000000)+\
+    (t3&0xff000000)+(t4&0xff000000))/4)&0xff000000) \
+    +((((t1&0x00ff0000) +(t2&0x00ff0000)+\
+    (t3&0x00ff0000)+(t4&0x00ff0000))/4)&0x00ff0000)\
+    +((((t1&0x0000ff00) +(t2&0x0000ff00)+\
+    (t3&0x0000ff00)+(t4&0x0000ff00))/4)&0x0000ff00)\
+    +((((t1&0x000000ff) +(t2&0x000000ff)+\
+    (t3&0x000000ff)+(t4&0x000000ff))/4)&0x000000ff);\
+}
+
+#define UPDATE_Y_PLANE_32(data,x_tm,y_tm,height_tm,width_tm,yuv,__copy_type){  \
     int k,i;\
     register unsigned int t_val;\
-    register unsigned int *datapi=(unsigned int*)data+x_tm+y_tm*yuv->y_width;\
     register unsigned char  *yuv_y=yuv->y+x_tm+y_tm*yuv->y_width,\
-                            *yuv_u=yuv->u+x_tm/2+(y_tm*yuv->uv_width)/2,\
-                            *yuv_v=yuv->v+x_tm/2+(y_tm*yuv->uv_width)/2,\
-                            *_yr=Yr,*_yg=Yg,*_yb=Yb,\
-                            *_ur=Ur,*_ug=Ug,*_ub=Ub,\
-                            *_vr=Vr,*_vg=Vg,*_vb=Vb;\
-\
+                            *_yr=Yr,*_yg=Yg,*_yb=Yb;\
+    register unsigned int *datapi=(unsigned int*)data+\
+                          ((__copy_type==__X_SHARED)?(x_tm+y_tm*yuv->y_width):0);\
     for(k=0;k<height_tm;k++){\
         for(i=0;i<width_tm;i++){\
             t_val=*datapi;\
-            *yuv_y=_yr[__RVALUE(t_val)] + _yg[__GVALUE(t_val)] + _yb[__BVALUE(t_val)] ;\
+            *yuv_y=_yr[__RVALUE_32(t_val)] + _yg[__GVALUE_32(t_val)] + _yb[__BVALUE_32(t_val)] ;\
             datapi++;\
             yuv_y++;\
         }\
         yuv_y+=yuv->y_width-width_tm;\
-        datapi+=yuv->y_width-width_tm;\
-    }\
-    datapi=(unsigned int*)data+x_tm+y_tm*yuv->y_width;\
-    for(k=0;k<height_tm;k+=2){\
-        for(i=0;i<width_tm;i+=2){\
-            t_val=*datapi;\
-            *yuv_u=\
-            _ur[__RVALUE(t_val)] + _ug[__GVALUE(t_val)] + _ub[__BVALUE(t_val)];\
-            *yuv_v=\
-            _vr[__RVALUE(t_val)] + _vg[__GVALUE(t_val)] + _vb[__BVALUE(t_val)];\
-            datapi+=2;\
-            yuv_u++;\
-            yuv_v++;\
-        }\
-        yuv_u+=(yuv->y_width-width_tm)/2;\
-        yuv_v+=(yuv->y_width-width_tm)/2;\
-        datapi+=(2*yuv->y_width-width_tm);\
+        if(__copy_type==__X_SHARED)\
+            datapi+=yuv->y_width-width_tm;\
     }\
 }
 
-#define UPDATE_YUV_BUFFER_SH_AVG(yuv,data,x_tm,y_tm,width_tm,height_tm){\
-    int k,i;\
-    register unsigned int t_val,t1,t2,t3,t4;\
-    register unsigned int *datapi=(unsigned int*)data+x_tm+y_tm*yuv->y_width,\
-                          *datapi_next=(unsigned int*)data+x_tm+(y_tm+1)*yuv->y_width;\
-    register unsigned char  *yuv_y=yuv->y+x_tm+y_tm*yuv->y_width,\
-                            *yuv_u=yuv->u+x_tm/2+(y_tm*yuv->uv_width)/2,\
-                            *yuv_v=yuv->v+x_tm/2+(y_tm*yuv->uv_width)/2,\
-                            *_yr=Yr,*_yg=Yg,*_yb=Yb,\
-                            *_ur=Ur,*_ug=Ug,*_ub=Ub,\
-                            *_vr=Vr,*_vg=Vg,*_vb=Vb;\
-\
-    for(k=0;k<height_tm;k++){\
-        for(i=0;i<width_tm;i++){\
-            t_val=*datapi;\
-            *yuv_y=_yr[__RVALUE(t_val)] + _yg[__GVALUE(t_val)] + _yb[__BVALUE(t_val)] ;\
-            datapi++;\
-            yuv_y++;\
-        }\
-        yuv_y+=yuv->y_width-width_tm;\
-        datapi+=yuv->y_width-width_tm;\
-    }\
-    datapi=(unsigned int*)data+x_tm+y_tm*yuv->y_width;\
-    for(k=0;k<height_tm;k+=2){\
-        for(i=0;i<width_tm;i+=2){\
-            t1=*datapi;\
-            t2=*(datapi+1);\
-            t3=*datapi_next;\
-            t4=*(datapi_next+1);\
-            t_val=((((t1&0xff000000) +(t2&0xff000000)+\
-            (t3&0xff000000)+(t4&0xff000000))/4)&0xff000000) \
-            +((((t1&0x00ff0000) +(t2&0x00ff0000)+\
-            (t3&0x00ff0000)+(t4&0x00ff0000))/4)&0x00ff0000)\
-            +((((t1&0x0000ff00) +(t2&0x0000ff00)+\
-            (t3&0x0000ff00)+(t4&0x0000ff00))/4)&0x0000ff00)\
-            +((((t1&0x000000ff) +(t2&0x000000ff)+\
-            (t3&0x000000ff)+(t4&0x000000ff))/4)&0x000000ff);\
-\
-            *yuv_u=\
-            _ur[__RVALUE(t_val)] + _ug[__GVALUE(t_val)] + _ub[__BVALUE(t_val)];\
-            *yuv_v=\
-            _vr[__RVALUE(t_val)] + _vg[__GVALUE(t_val)] + _vb[__BVALUE(t_val)];\
-            datapi+=2;\
-            datapi_next+=2;\
-            yuv_u++;\
-            yuv_v++;\
-        }\
-        yuv_u+=(yuv->y_width-width_tm)/2;\
-        yuv_v+=(yuv->y_width-width_tm)/2;\
-        datapi+=(2*yuv->y_width-width_tm);\
-        datapi_next+=(2*yuv->y_width-width_tm);\
-    }\
-}
-
-
-
-#define UPDATE_YUV_BUFFER_IM(yuv,data,x_tm,y_tm,width_tm,height_tm){\
+#define UPDATE_UV_PLANES_32(data,x_tm,y_tm,height_tm,width_tm,yuv,__copy_type,__sampling_type){  \
     int k,i;\
     register unsigned int t_val;\
-    register unsigned int *datapi=(unsigned int*)data;\
-    register unsigned char  *yuv_y=yuv->y+x_tm+y_tm*yuv->y_width,\
-                            *yuv_u=yuv->u+x_tm/2+(y_tm*yuv->uv_width)/2,\
+    register unsigned char  *yuv_u=yuv->u+x_tm/2+(y_tm*yuv->uv_width)/2,\
                             *yuv_v=yuv->v+x_tm/2+(y_tm*yuv->uv_width)/2,\
-                            *_yr=Yr,*_yg=Yg,*_yb=Yb,\
                             *_ur=Ur,*_ug=Ug,*_ub=Ub,\
                             *_vr=Vr,*_vg=Vg,*_vb=Vb;\
-\
-    for(k=0;k<height_tm;k++){\
-        for(i=0;i<width_tm;i++){\
-            t_val=*datapi;\
-            *yuv_y=_yr[__RVALUE(t_val)] + _yg[__GVALUE(t_val)] + _yb[__BVALUE(t_val)] ;\
-            datapi++;\
-            yuv_y++;\
-        }\
-        yuv_y+=yuv->y_width-width_tm;\
+    register unsigned int *datapi=(unsigned int*)data+\
+                          ((__copy_type==__X_SHARED)?(x_tm+y_tm*yuv->y_width):0),\
+                          *datapi_next=NULL;\
+    if(__sampling_type==__PXL_AVERAGE){\
+        datapi_next=datapi+\
+        ((__copy_type==__X_SHARED)?(yuv->y_width):(width_tm));\
     }\
-    datapi=(unsigned int*)data;\
     for(k=0;k<height_tm;k+=2){\
         for(i=0;i<width_tm;i+=2){\
-            t_val=*datapi;\
+            if(__sampling_type==__PXL_AVERAGE){\
+                CALC_TVAL_AVG_32(t_val,datapi,datapi_next)\
+            }\
+            else\
+                t_val=*datapi;\
             *yuv_u=\
-            _ur[__RVALUE(t_val)] + _ug[__GVALUE(t_val)] + _ub[__BVALUE(t_val)];\
+            _ur[__RVALUE_32(t_val)] + _ug[__GVALUE_32(t_val)] + _ub[__BVALUE_32(t_val)];\
             *yuv_v=\
-            _vr[__RVALUE(t_val)] + _vg[__GVALUE(t_val)] + _vb[__BVALUE(t_val)];\
+            _vr[__RVALUE_32(t_val)] + _vg[__GVALUE_32(t_val)] + _vb[__BVALUE_32(t_val)];\
             datapi+=2;\
+            if(__sampling_type==__PXL_AVERAGE)\
+                datapi_next+=2;\
             yuv_u++;\
             yuv_v++;\
         }\
         yuv_u+=(yuv->y_width-width_tm)/2;\
         yuv_v+=(yuv->y_width-width_tm)/2;\
-        datapi+=width_tm;\
+        datapi+=((__copy_type==__X_SHARED)?(2*yuv->y_width-width_tm):width_tm);\
+        if(__sampling_type==__PXL_AVERAGE)\
+            datapi_next+=((__copy_type==__X_SHARED)?(2*yuv->y_width-width_tm):width_tm);\
     }\
 }
 
-#define UPDATE_YUV_BUFFER_IM_AVG(yuv,data,x_tm,y_tm,width_tm,height_tm){\
-    int k,i;\
-    register unsigned int t_val,t1,t2,t3,t4;\
-    register unsigned int *datapi=(unsigned int*)data,\
-                          *datapi_next=(unsigned int*)data+width_tm;\
-    register unsigned char  *yuv_y=yuv->y+x_tm+y_tm*yuv->y_width,\
-                            *yuv_u=yuv->u+x_tm/2+(y_tm*yuv->uv_width)/2,\
-                            *yuv_v=yuv->v+x_tm/2+(y_tm*yuv->uv_width)/2,\
-                            *_yr=Yr,*_yg=Yg,*_yb=Yb,\
-                            *_ur=Ur,*_ug=Ug,*_ub=Ub,\
-                            *_vr=Vr,*_vg=Vg,*_vb=Vb;\
-\
-    for(k=0;k<height_tm;k++){\
-        for(i=0;i<width_tm;i++){\
-            t_val=*datapi;\
-            *yuv_y=_yr[__RVALUE(t_val)] + _yg[__GVALUE(t_val)] + _yb[__BVALUE(t_val)] ;\
-            datapi++;\
-            yuv_y++;\
-        }\
-        yuv_y+=yuv->y_width-width_tm;\
-    }\
-    datapi=(unsigned int*)data;\
-    for(k=0;k<height_tm;k+=2){\
-        for(i=0;i<width_tm;i+=2){\
-            t1=*datapi;\
-            t2=*(datapi+1);\
-            t3=*datapi_next;\
-            t4=*(datapi_next+1);\
-            t_val=((((t1&0xff000000) +(t2&0xff000000)+\
-            (t3&0xff000000)+(t4&0xff000000))/4)&0xff000000) \
-            +((((t1&0x00ff0000) +(t2&0x00ff0000)+\
-            (t3&0x00ff0000)+(t4&0x00ff0000))/4)&0x00ff0000)\
-            +((((t1&0x0000ff00) +(t2&0x0000ff00)+\
-            (t3&0x0000ff00)+(t4&0x0000ff00))/4)&0x0000ff00)\
-            +((((t1&0x000000ff) +(t2&0x000000ff)+\
-            (t3&0x000000ff)+(t4&0x000000ff))/4)&0x000000ff);\
-\
-            *yuv_u=\
-            _ur[__RVALUE(t_val)] + _ug[__GVALUE(t_val)] + _ub[__BVALUE(t_val)];\
-            *yuv_v=\
-            _vr[__RVALUE(t_val)] + _vg[__GVALUE(t_val)] + _vb[__BVALUE(t_val)];\
-            datapi+=2;\
-            datapi_next+=2;\
-            yuv_u++;\
-            yuv_v++;\
-        }\
-        yuv_u+=(yuv->y_width-width_tm)/2;\
-        yuv_v+=(yuv->y_width-width_tm)/2;\
-        datapi+=width_tm;\
-        datapi_next+=width_tm;\
-    }\
+#define UPDATE_YUV_BUFFER(yuv,data,x_tm,y_tm,width_tm,height_tm,__copy_type,__sampling_type){\
+    UPDATE_Y_PLANE_32(data,x_tm,y_tm,height_tm,width_tm,yuv,__copy_type)\
+    UPDATE_UV_PLANES_32(data,x_tm,y_tm,height_tm,width_tm,yuv,__copy_type,__sampling_type)\
 }
 
 

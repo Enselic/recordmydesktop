@@ -29,6 +29,8 @@
 
 void *GetFrame(ProgData *pdata){
     int tlist_sel=0;
+    unsigned char *dtap=NULL;   //pointer switching among shared memory and
+                                //normal buffer
     pthread_mutex_t pmut,tmut;
     uint msk_ret;
     WGeometry mouse_pos_abs,mouse_pos_rel,mouse_pos_temp;
@@ -76,9 +78,6 @@ void *GetFrame(ProgData *pdata){
                 level*=100;
                 level/=pixel_total;
                 pdata->args.noshared=(level<pdata->args.shared_thres);
-//                 if(!pdata->args.noshared){
-//                     fprintf(stderr,"shared screenshot with %d\n",level);
-//                 }
             }
         }
         if(pdata->args.xfixes_cursor){
@@ -126,6 +125,10 @@ void *GetFrame(ProgData *pdata){
                         pdata->args.noshared,
                         pdata->args.no_quick_subsample);
         else{
+
+            dtap=(((pdata->args.nocondshared)&&(!pdata->args.noshared))?
+                 ((unsigned char*)pdata->shimage->data):
+                 ((unsigned char*)pdata->image->data));
             if(pdata->args.noshared){
                 GetZPixmap( pdata->dpy,
                             pdata->specs.root,
@@ -134,34 +137,16 @@ void *GetFrame(ProgData *pdata){
                             pdata->brwin.rgeom.y,
                             pdata->brwin.rgeom.width,
                             pdata->brwin.rgeom.height);
-                pthread_mutex_lock(&pdata->yuv_mutex);
-                if(pdata->args.no_quick_subsample){
-                    UPDATE_YUV_BUFFER_IM_AVG((&pdata->enc_data->yuv),((unsigned char*)pdata->image->data),
-                    (pdata->enc_data->x_offset),(pdata->enc_data->y_offset),
-                    (pdata->brwin.rgeom.width),(pdata->brwin.rgeom.height));
-                }
-                else{
-                    UPDATE_YUV_BUFFER_IM((&pdata->enc_data->yuv),((unsigned char*)pdata->image->data),
-                    (pdata->enc_data->x_offset),(pdata->enc_data->y_offset),
-                    (pdata->brwin.rgeom.width),(pdata->brwin.rgeom.height));
-                }
-                pthread_mutex_unlock(&pdata->yuv_mutex);
             }
-            else{
-                pthread_mutex_lock(&pdata->yuv_mutex);
-                if(pdata->args.no_quick_subsample){
-                    UPDATE_YUV_BUFFER_IM_AVG((&pdata->enc_data->yuv),((unsigned char*)pdata->shimage->data),
-                    (pdata->enc_data->x_offset),(pdata->enc_data->y_offset),
-                    (pdata->brwin.rgeom.width),(pdata->brwin.rgeom.height));
-                }
-                else{
-                    UPDATE_YUV_BUFFER_IM((&pdata->enc_data->yuv),((unsigned char*)pdata->shimage->data),
-                    (pdata->enc_data->x_offset),(pdata->enc_data->y_offset),
-                    (pdata->brwin.rgeom.width),(pdata->brwin.rgeom.height));
-                }
-
-                pthread_mutex_unlock(&pdata->yuv_mutex);
-            }
+            pthread_mutex_lock(&pdata->yuv_mutex);
+            UPDATE_YUV_BUFFER((&pdata->enc_data->yuv),dtap,
+                                (pdata->enc_data->x_offset),
+                                (pdata->enc_data->y_offset),
+                                (pdata->brwin.rgeom.width),
+                                (pdata->brwin.rgeom.height),
+                                pdata->args.noshared,
+                                pdata->args.no_quick_subsample);
+            pthread_mutex_unlock(&pdata->yuv_mutex);
         }
         if(pdata->args.xfixes_cursor){
         //avoid segfaults

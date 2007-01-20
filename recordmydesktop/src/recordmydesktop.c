@@ -54,8 +54,8 @@ int main(int argc,char **argv){
         CacheData cache_data;
 
         QUERY_DISPLAY_SPECS(pdata.dpy,&pdata.specs);
-        if(pdata.specs.depth!=24){
-            fprintf(stderr,"Only 24bpp color depth mode is currently supported.\n");
+        if((pdata.specs.depth!=32)&&(pdata.specs.depth!=24)&&(pdata.specs.depth!=16)){
+            fprintf(stderr,"Only 32bpp,24bpp and 16bpp color depth modes are currently supported.\n");
             exit(10);
         }
         if(SetBRWindow(pdata.dpy,&pdata.brwin,&pdata.specs,&pdata.args))

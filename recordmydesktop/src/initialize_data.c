@@ -31,6 +31,8 @@ int InitializeData(ProgData *pdata,
                    EncData *enc_data,
                    CacheData *cache_data){
     int i;
+    unsigned char *dtap=NULL;   //pointer switching among shared memory and
+                                //normal buffer
 
     //these are globals, look for them at the header
     frames_total=frames_lost=encoder_busy=capture_busy=0;
@@ -115,30 +117,15 @@ int InitializeData(ProgData *pdata,
         pdata->enc_data->yuv.v[i]=pdata->enc_data->yuv.u[i]=127;
     }
 
-    if((pdata->args.nocondshared)&&(!pdata->args.noshared)){
-        if(pdata->args.no_quick_subsample){
-            UPDATE_YUV_BUFFER_IM_AVG((&pdata->enc_data->yuv),((unsigned char*)pdata->shimage->data),
+    dtap=(((pdata->args.nocondshared)&&(!pdata->args.noshared))?
+         ((unsigned char*)pdata->shimage->data):
+         ((unsigned char*)pdata->image->data));
+
+
+    UPDATE_YUV_BUFFER((&pdata->enc_data->yuv),dtap,
             (pdata->enc_data->x_offset),(pdata->enc_data->y_offset),
-            (pdata->brwin.rgeom.width),(pdata->brwin.rgeom.height));
-        }
-        else{
-            UPDATE_YUV_BUFFER_IM((&pdata->enc_data->yuv),((unsigned char*)pdata->shimage->data),
-            (pdata->enc_data->x_offset),(pdata->enc_data->y_offset),
-            (pdata->brwin.rgeom.width),(pdata->brwin.rgeom.height));
-        }
-    }
-    else{
-        if(pdata->args.no_quick_subsample){
-            UPDATE_YUV_BUFFER_IM_AVG((&pdata->enc_data->yuv),((unsigned char*)pdata->image->data),
-            (pdata->enc_data->x_offset),(pdata->enc_data->y_offset),
-            (pdata->brwin.rgeom.width),(pdata->brwin.rgeom.height));
-        }
-        else{
-            UPDATE_YUV_BUFFER_IM((&pdata->enc_data->yuv),((unsigned char*)pdata->image->data),
-            (pdata->enc_data->x_offset),(pdata->enc_data->y_offset),
-            (pdata->brwin.rgeom.width),(pdata->brwin.rgeom.height));
-        }
-    }
+            (pdata->brwin.rgeom.width),(pdata->brwin.rgeom.height),
+            __X_IPC,(pdata->args.no_quick_subsample));
 
     pdata->frametime=(1000000)/pdata->args.fps;
 
