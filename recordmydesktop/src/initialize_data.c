@@ -125,7 +125,8 @@ int InitializeData(ProgData *pdata,
     UPDATE_YUV_BUFFER((&pdata->enc_data->yuv),dtap,
             (pdata->enc_data->x_offset),(pdata->enc_data->y_offset),
             (pdata->brwin.rgeom.width),(pdata->brwin.rgeom.height),
-            __X_IPC,(pdata->args.no_quick_subsample));
+            __X_IPC,(pdata->args.no_quick_subsample),
+            pdata->specs.depth);
 
     pdata->frametime=(1000000)/pdata->args.fps;
 

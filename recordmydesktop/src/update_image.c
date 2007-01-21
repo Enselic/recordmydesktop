@@ -57,7 +57,8 @@ void UpdateImage(Display * dpy,
                                 (temp->geom.x-brwin->rgeom.x+enc->x_offset),
                                 (temp->geom.y-brwin->rgeom.y+enc->y_offset),
                                 (temp->geom.width),(temp->geom.height),
-                                noshmem,no_quick_subsample);
+                                noshmem,no_quick_subsample,
+                                specs->depth);
             pthread_mutex_unlock(yuv_mutex);
             temp=temp->next;
         }while(temp!=NULL);

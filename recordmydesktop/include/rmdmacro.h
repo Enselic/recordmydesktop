@@ -55,6 +55,14 @@
 #define __GVALUE_32(tmp_val) (((tmp_val)&0x0000ff00)>>8)
 #define __BVALUE_32(tmp_val) (((tmp_val)&0x000000ff))
 
+#define __R16_MASK  0xf800
+#define __G16_MASK  0x7e0
+#define __B16_MASK  0x1f
+
+#define __RVALUE_16(tmp_val) ((((tmp_val)&__R16_MASK)>>11)*8)
+#define __GVALUE_16(tmp_val) ((((tmp_val)&__G16_MASK)>>5)*4)
+#define __BVALUE_16(tmp_val) ((((tmp_val)&__B16_MASK))*8)
+
 //xfixes pointer data are written as unsigned long
 //(even though the server returns CARD32)
 //so we need to set the step accordingly to
@@ -199,6 +207,20 @@
     (t3&0x000000ff)+(t4&0x000000ff))/4)&0x000000ff);\
 }
 
+#define CALC_TVAL_AVG_16(t_val,datapi,datapi_next){\
+    register u_int16_t t1,t2,t3,t4;\
+    t1=*datapi;\
+    t2=*(datapi+1);\
+    t3=*datapi_next;\
+    t4=*(datapi_next+1);\
+    t_val=((((t1&__R16_MASK) +(t2&__R16_MASK)+\
+    (t3&__R16_MASK)+(t4&__R16_MASK))/4)&__R16_MASK) \
+    +((((t1&__G16_MASK) +(t2&__G16_MASK)+\
+    (t3&__G16_MASK)+(t4&__G16_MASK))/4)&__G16_MASK)\
+    +((((t1&__B16_MASK) +(t2&__B16_MASK)+\
+    (t3&__B16_MASK)+(t4&__B16_MASK))/4)&__B16_MASK);\
+}
+
 #define UPDATE_Y_PLANE_32(data,x_tm,y_tm,height_tm,width_tm,yuv,__copy_type){  \
     int k,i;\
     register unsigned int t_val;\
@@ -210,6 +232,26 @@
         for(i=0;i<width_tm;i++){\
             t_val=*datapi;\
             *yuv_y=_yr[__RVALUE_32(t_val)] + _yg[__GVALUE_32(t_val)] + _yb[__BVALUE_32(t_val)] ;\
+            datapi++;\
+            yuv_y++;\
+        }\
+        yuv_y+=yuv->y_width-width_tm;\
+        if(__copy_type==__X_SHARED)\
+            datapi+=yuv->y_width-width_tm;\
+    }\
+}
+
+#define UPDATE_Y_PLANE_16(data,x_tm,y_tm,height_tm,width_tm,yuv,__copy_type){  \
+    int k,i;\
+    register u_int16_t t_val;\
+    register unsigned char  *yuv_y=yuv->y+x_tm+y_tm*yuv->y_width,\
+                            *_yr=Yr,*_yg=Yg,*_yb=Yb;\
+    register u_int16_t *datapi=(u_int16_t *)data+\
+                          ((__copy_type==__X_SHARED)?(x_tm+y_tm*yuv->y_width):0);\
+    for(k=0;k<height_tm;k++){\
+        for(i=0;i<width_tm;i++){\
+            t_val=*datapi;\
+            *yuv_y=_yr[__RVALUE_16(t_val)] + _yg[__GVALUE_16(t_val)] + _yb[__BVALUE_16(t_val)] ;\
             datapi++;\
             yuv_y++;\
         }\
@@ -258,9 +300,54 @@
     }\
 }
 
-#define UPDATE_YUV_BUFFER(yuv,data,x_tm,y_tm,width_tm,height_tm,__copy_type,__sampling_type){\
-    UPDATE_Y_PLANE_32(data,x_tm,y_tm,height_tm,width_tm,yuv,__copy_type)\
-    UPDATE_UV_PLANES_32(data,x_tm,y_tm,height_tm,width_tm,yuv,__copy_type,__sampling_type)\
+#define UPDATE_UV_PLANES_16(data,x_tm,y_tm,height_tm,width_tm,yuv,__copy_type,__sampling_type){  \
+    int k,i;\
+    register u_int16_t t_val;\
+    register unsigned char  *yuv_u=yuv->u+x_tm/2+(y_tm*yuv->uv_width)/2,\
+                            *yuv_v=yuv->v+x_tm/2+(y_tm*yuv->uv_width)/2,\
+                            *_ur=Ur,*_ug=Ug,*_ub=Ub,\
+                            *_vr=Vr,*_vg=Vg,*_vb=Vb;\
+    register u_int16_t *datapi=(u_int16_t*)data+\
+                          ((__copy_type==__X_SHARED)?(x_tm+y_tm*yuv->y_width):0),\
+                          *datapi_next=NULL;\
+    if(__sampling_type==__PXL_AVERAGE){\
+        datapi_next=datapi+\
+        ((__copy_type==__X_SHARED)?(yuv->y_width):(width_tm));\
+    }\
+    for(k=0;k<height_tm;k+=2){\
+        for(i=0;i<width_tm;i+=2){\
+            if(__sampling_type==__PXL_AVERAGE){\
+                CALC_TVAL_AVG_16(t_val,datapi,datapi_next)\
+            }\
+            else\
+                t_val=*datapi;\
+            *yuv_u=\
+            _ur[__RVALUE_16(t_val)] + _ug[__GVALUE_16(t_val)] + _ub[__BVALUE_16(t_val)];\
+            *yuv_v=\
+            _vr[__RVALUE_16(t_val)] + _vg[__GVALUE_16(t_val)] + _vb[__BVALUE_16(t_val)];\
+            datapi+=2;\
+            if(__sampling_type==__PXL_AVERAGE)\
+                datapi_next+=2;\
+            yuv_u++;\
+            yuv_v++;\
+        }\
+        yuv_u+=(yuv->y_width-width_tm)/2;\
+        yuv_v+=(yuv->y_width-width_tm)/2;\
+        datapi+=((__copy_type==__X_SHARED)?(2*yuv->y_width-width_tm):width_tm);\
+        if(__sampling_type==__PXL_AVERAGE)\
+            datapi_next+=((__copy_type==__X_SHARED)?(2*yuv->y_width-width_tm):width_tm);\
+    }\
+}
+
+#define UPDATE_YUV_BUFFER(yuv,data,x_tm,y_tm,width_tm,height_tm,__copy_type,__sampling_type,__color_depth){\
+    if((__color_depth==24)||(__color_depth==32)){\
+        UPDATE_Y_PLANE_32(data,x_tm,y_tm,height_tm,width_tm,yuv,__copy_type)\
+        UPDATE_UV_PLANES_32(data,x_tm,y_tm,height_tm,width_tm,yuv,__copy_type,__sampling_type)\
+    }\
+    else if(__color_depth==16){\
+        UPDATE_Y_PLANE_16(data,x_tm,y_tm,height_tm,width_tm,yuv,__copy_type)\
+        UPDATE_UV_PLANES_16(data,x_tm,y_tm,height_tm,width_tm,yuv,__copy_type,__sampling_type)\
+    }\
 }
 
 

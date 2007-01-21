@@ -145,7 +145,8 @@ void *GetFrame(ProgData *pdata){
                                 (pdata->brwin.rgeom.width),
                                 (pdata->brwin.rgeom.height),
                                 pdata->args.noshared,
-                                pdata->args.no_quick_subsample);
+                                pdata->args.no_quick_subsample,
+                                pdata->specs.depth);
             pthread_mutex_unlock(&pdata->yuv_mutex);
         }
         if(pdata->args.xfixes_cursor){

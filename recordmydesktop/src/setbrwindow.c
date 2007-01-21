@@ -42,7 +42,7 @@ void SizePack2_8_16(int *start,int *size,int limit){
 
 
     //32 bit pack align
-    //we already have disible by two width,so 
+    //we already have disible by two width,so
     //it's 2, 4 or 6
     octoffset=((*size)%8);
     if(octoffset==2){
@@ -61,7 +61,7 @@ void SizePack2_8_16(int *start,int *size,int limit){
             (*size)-=4;
         }
     }
-    
+
     else if(octoffset==4){
         if(((*size)+(*start)+2<=limit)&&((*start)>=2)){
             (*start)-=2;
@@ -169,8 +169,9 @@ int SetBRWindow(Display *dpy,BRWindow *brwin,DisplaySpecs *specs,ProgArgs *args)
 
 
 
-    brwin->nbytes=(((brwin->rgeom.width+15)>>4)<<4)*(((brwin->rgeom.height+15)>>4)<<4)*4;
-    
-    
+    brwin->nbytes=(((brwin->rgeom.width+15)>>4)<<4)*(((brwin->rgeom.height+15)>>4)<<4)*
+                  ((specs->depth==16)?2:4);
+
+
     return 0;
 }
