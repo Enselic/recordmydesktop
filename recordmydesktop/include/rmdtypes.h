@@ -61,6 +61,9 @@
 #include <ogg/ogg.h>
 #include <alsa/asoundlib.h>
 
+typedef u_int16_t RMD_TYPE_16;
+typedef u_int32_t RMD_TYPE_32;
+
 //how we obtained the image we are converting to yuv
 enum{
     __X_SHARED, //through MIT/Shm
