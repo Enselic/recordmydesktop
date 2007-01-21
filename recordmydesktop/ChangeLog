@@ -1,3 +1,9 @@
+/*VERSION 0.3.2*/
+*Added support for displays with 16bpp color depth.
+*A bug has been fixed, that caused the Xfixes cursor to appear
+distorted on amd64.
+*A lot of code refactoring and cleanups of duplicated parts.
+
 /*VERSION 0.3.1*/
 *Added Added custom X error handler, to avoid BadWindow on
 XGetWindowAttributes, with XQueryTree.
@@ -10,7 +16,6 @@ XGetWindowAttributes, with XQueryTree.
 correcting program crash/segfault, when run under
 window managers that don't conform
 to the FreeDesktop specification.
-
 
 
 /*VERSION 0.3.0r2*/
