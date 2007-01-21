@@ -1,28 +1,28 @@
-/*********************************************************************************
-*                             recordMyDesktop                                    *
-**********************************************************************************
-*                                                                                *
-*             Copyright (C) 2006  John Varouhakis                                *
-*                                                                                *
-*                                                                                *
-*    This program is free software; you can redistribute it and/or modify        *
-*    it under the terms of the GNU General Public License as published by        *
-*    the Free Software Foundation; either version 2 of the License, or           *
-*    (at your option) any later version.                                         *
-*                                                                                *
-*    This program is distributed in the hope that it will be useful,             *
-*    but WITHOUT ANY WARRANTY; without even the implied warranty of              *
-*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the               *
-*    GNU General Public License for more details.                                *
-*                                                                                *
-*    You should have received a copy of the GNU General Public License           *
-*    along with this program; if not, write to the Free Software                 *
-*    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA   *
-*                                                                                *
-*                                                                                *
-*                                                                                *
-*    For further information contact me at johnvarouhakis@gmail.com              *
-**********************************************************************************/
+/******************************************************************************
+*                            recordMyDesktop                                  *
+*******************************************************************************
+*                                                                             *
+*            Copyright (C) 2006,2007 John Varouhakis                          *
+*                                                                             *
+*                                                                             *
+*   This program is free software; you can redistribute it and/or modify      *
+*   it under the terms of the GNU General Public License as published by      *
+*   the Free Software Foundation; either version 2 of the License, or         *
+*   (at your option) any later version.                                       *
+*                                                                             *
+*   This program is distributed in the hope that it will be useful,           *
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of            *
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
+*   GNU General Public License for more details.                              *
+*                                                                             *
+*   You should have received a copy of the GNU General Public License         *
+*   along with this program; if not, write to the Free Software               *
+*   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA  *
+*                                                                             *
+*                                                                             *
+*                                                                             *
+*   For further information contact me at johnvarouhakis@gmail.com            *
+******************************************************************************/
 
 #ifndef RMDFUNC_H
 #define RMDFUNC_H 1
@@ -107,7 +107,10 @@ int RectInsert(RectArea **root,WGeometry *wgeom);
 * \retval -10 Grouping the two geoms is possible
 *
 */
-int CollideRects(WGeometry *wgeom1,WGeometry *wgeom2,WGeometry **wgeom_return,int *ngeoms);
+int CollideRects(WGeometry *wgeom1,
+                 WGeometry *wgeom2,
+                 WGeometry **wgeom_return,
+                 int *ngeoms);
 
 /**
 * Broadcast time condition variable, increment frame count.
@@ -132,7 +135,8 @@ void RegisterCallbacks(ProgArgs *args);
 *
 * \param yuv_mutex lock on the buffer
 *
-* \param specs DisplaySpecs struct with information about the display to be recorded
+* \param specs DisplaySpecs struct with
+*              information about the display to be recorded
 *
 * \param root Root entry of the list with damaged areas
 *
@@ -140,7 +144,8 @@ void RegisterCallbacks(ProgArgs *args);
 *
 * \param enc Encoding options
 *
-* \param datatemp Buffer for pixel data to be retrieved before placed on the yuv buffer
+* \param datatemp Buffer for pixel data to be
+*                 retrieved before placed on the yuv buffer
 *
 * \param noshmem don't use MIT_Shm extension
 *
@@ -181,7 +186,13 @@ void UpdateImage(Display * dpy,
 *
 * \returns 0 on Success 1 on Failure
 */
-int GetZPixmap(Display *dpy,Window root,char *data,int x,int y,int width,int height);
+int GetZPixmap(Display *dpy,
+               Window root,
+               char *data,
+               int x,
+               int y,
+               int width,
+               int height);
 
 /**
 * Fill ProgArgs struct with arguments entered at execution
@@ -209,7 +220,10 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return);
 *
 * \note Can be an exit point if extensions are not found
 */
-void QueryExtensions(Display *dpy,ProgArgs *args,int *damage_event,int *damage_error);
+void QueryExtensions(Display *dpy,
+                     ProgArgs *args,
+                     int *damage_event,
+                     int *damage_error);
 
 /**
 * Check and align window size
@@ -218,43 +232,53 @@ void QueryExtensions(Display *dpy,ProgArgs *args,int *damage_event,int *damage_e
 *
 * \param brwin BRWindow struct contaning the initial and final window
 *
-* \param specs DisplaySpecs struct with information about the display to be recorded
+* \param specs DisplaySpecs struct with
+*              information about the display to be recorded
 *
 * \param args ProgArgs struct containing the user-set options
 *
 * \returns 0 on Success 1 on Failure
 */
-int SetBRWindow(Display *dpy,BRWindow *brwin,DisplaySpecs *specs,ProgArgs *args);
+int SetBRWindow(Display *dpy,
+                BRWindow *brwin,
+                DisplaySpecs *specs,
+                ProgArgs *args);
 
 /**
 * Create an array containing the data for the dummy pointer
 *
-* \param specs DisplaySpecs struct with information about the display to be recorded
+* \param specs DisplaySpecs struct with
+*              information about the display to be recorded
 *
-* \param size  Pointer size, always square, always 16.(exists only for the possibility to create
-*               more dummy cursors)
+* \param size  Pointer size, always square, always 16.(exists only
+*              for the possibility to create more dummy cursors)
 * \param color 0 white, 1 black
 *
 * \param type Always 0.(exists only for the possibility to create
 *               more dummy cursors)
 *
-* \param npxl Return of pixel value that denotes non-drawing, while applying the cursor
-*             on the target image
+* \param npxl Return of pixel value that denotes non-drawing, while
+*             applying the cursor on the target image
 *
 * \returns Pointer to pixel data of the cursor
 */
-unsigned char *MakeDummyPointer(DisplaySpecs *specs,int size,int color,int type,unsigned char *npxl);
+unsigned char *MakeDummyPointer(DisplaySpecs *specs,
+                                int size,
+                                int color,
+                                int type,
+                                unsigned char *npxl);
 
 /**
-* Sound capturing thread. Data are placed on a list to be picked up by other threads.
+* Sound capturing thread. Data are placed on a
+* list to be picked up by other threads.
 *
 * \param pdata ProgData struct containing all program data
 */
 void *CaptureSound(ProgData *pdata);
 
 /**
-* Sound encoding thread. Picks up data from the buffer queue , encodes and places them
-* on the vorbis stream.
+* Sound encoding thread. Picks up data from the buffer queue ,
+* encodes and places them on the vorbis stream.
 *
 * \param pdata ProgData struct containing all program data
 */
@@ -266,7 +290,8 @@ void *EncodeSoundBuffer(ProgData *pdata);
 *
 * \param pcm_dev name of the device
 *
-* \param channels desired number of channels(gets modified with the acieved value)
+* \param channels desired number of channels
+*                 (gets modified with the acieved value)
 *
 * \param frequency desired frequency(gets modified with the acieved value)
 *
@@ -339,7 +364,9 @@ void *CacheImageBuffer(ProgData *pdata);
 * \param cache_data_t Caching options
 *
 */
-void InitCacheData(ProgData *pdata,EncData *enc_data_t,CacheData *cache_data_t);
+void InitCacheData(ProgData *pdata,
+                   EncData *enc_data_t,
+                   CacheData *cache_data_t);
 
 /**
 * Sound caching thread. Simply writes the pcm buffers on disk
@@ -358,7 +385,8 @@ void *CacheSoundBuffer(ProgData *pdata);
 void *LoadCache(ProgData *pdata);
 
 /**
-* As EncodeImageBuffer, only with the assumption that this is not a thread on it's own
+* As EncodeImageBuffer, only with the assumption that
+* this is not a thread on it's own
 *
 * \param pdata ProgData struct containing all program data
 *
@@ -371,7 +399,8 @@ void SyncEncodeImageBuffer(ProgData *pdata);
 void CancelTimer(void);
 
 /**
-* As EncodeSoundBuffer, only with the assumption that this is not a thread on it's own
+* As EncodeSoundBuffer, only with the assumption that
+* this is not a thread on it's own
 *
 * \param pdata ProgData struct containing all program data
 *

@@ -1,28 +1,28 @@
-/*********************************************************************************
-*                             recordMyDesktop                                    *
-**********************************************************************************
-*                                                                                *
-*             Copyright (C) 2006  John Varouhakis                                *
-*                                                                                *
-*                                                                                *
-*    This program is free software; you can redistribute it and/or modify        *
-*    it under the terms of the GNU General Public License as published by        *
-*    the Free Software Foundation; either version 2 of the License, or           *
-*    (at your option) any later version.                                         *
-*                                                                                *
-*    This program is distributed in the hope that it will be useful,             *
-*    but WITHOUT ANY WARRANTY; without even the implied warranty of              *
-*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the               *
-*    GNU General Public License for more details.                                *
-*                                                                                *
-*    You should have received a copy of the GNU General Public License           *
-*    along with this program; if not, write to the Free Software                 *
-*    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA   *
-*                                                                                *
-*                                                                                *
-*                                                                                *
-*    For further information contact me at johnvarouhakis@gmail.com              *
-**********************************************************************************/
+/******************************************************************************
+*                            recordMyDesktop                                  *
+*******************************************************************************
+*                                                                             *
+*            Copyright (C) 2006,2007 John Varouhakis                          *
+*                                                                             *
+*                                                                             *
+*   This program is free software; you can redistribute it and/or modify      *
+*   it under the terms of the GNU General Public License as published by      *
+*   the Free Software Foundation; either version 2 of the License, or         *
+*   (at your option) any later version.                                       *
+*                                                                             *
+*   This program is distributed in the hope that it will be useful,           *
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of            *
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
+*   GNU General Public License for more details.                              *
+*                                                                             *
+*   You should have received a copy of the GNU General Public License         *
+*   along with this program; if not, write to the Free Software               *
+*   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA  *
+*                                                                             *
+*                                                                             *
+*                                                                             *
+*   For further information contact me at johnvarouhakis@gmail.com            *
+******************************************************************************/
 
 
 #include <recordmydesktop.h>
@@ -80,7 +80,8 @@ void SizePack2_8_16(int *start,int *size,int limit){
         }
     }
 
-    //16 divisble width(needed for shared memory only,but applied anyway since theora wants it, too)
+    //16 divisble width(needed for shared memory only,
+    //but applied anyway since theora wants it, too)
     //we already have divisibility by 8 so module
     //by 16 is euther 8 or 0
     hexoffset=((*size)%16);
@@ -106,7 +107,10 @@ void SizePack2_8_16(int *start,int *size,int limit){
 
 
 
-int SetBRWindow(Display *dpy,BRWindow *brwin,DisplaySpecs *specs,ProgArgs *args){
+int SetBRWindow(Display *dpy,
+                BRWindow *brwin,
+                DisplaySpecs *specs,
+                ProgArgs *args){
     //before we start recording we have to make sure the ranges are valid
     if(args->windowid==0){//root window
         //first set it up
@@ -116,12 +120,16 @@ int SetBRWindow(Display *dpy,BRWindow *brwin,DisplaySpecs *specs,ProgArgs *args)
         brwin->geom.height=specs->height;
         brwin->rgeom.x=args->x;
         brwin->rgeom.y=args->y;
-        brwin->rgeom.width=((args->width)?args->width:specs->width-brwin->rgeom.x);
-        brwin->rgeom.height=((args->height)?args->height:specs->height-brwin->rgeom.y);
+        brwin->rgeom.width=((args->width)?
+                            args->width:specs->width-brwin->rgeom.x);
+        brwin->rgeom.height=((args->height)?
+                             args->height:specs->height-brwin->rgeom.y);
         //and then check validity
         if((brwin->rgeom.x+brwin->rgeom.width>specs->width)||
             (brwin->rgeom.y+brwin->rgeom.height>specs->height)){
-            fprintf(stderr,"Window size specification out of bounds!(current resolution:%dx%d)\n",specs->width,specs->height);
+            fprintf(stderr,"Window size specification out of bounds!"
+                           "(current resolution:%dx%d)\n",
+                           specs->width,specs->height);
             return 1;
         }
     }
@@ -135,7 +143,14 @@ int SetBRWindow(Display *dpy,BRWindow *brwin,DisplaySpecs *specs,ProgArgs *args)
             fprintf(stderr,"Window must be mapped and visible!\n");
             return 1;
         }
-        XTranslateCoordinates(dpy,specs->root,args->windowid,attribs.x,attribs.y,&transl_x,&transl_y,&wchid);
+        XTranslateCoordinates(dpy,
+                              specs->root,
+                              args->windowid,
+                              attribs.x,
+                              attribs.y,
+                              &transl_x,
+                              &transl_y,
+                              &wchid);
         brwin->windowid=specs->root;
         brwin->geom.x=attribs.x-transl_x;
         brwin->geom.y=attribs.y-transl_y;
@@ -149,8 +164,10 @@ int SetBRWindow(Display *dpy,BRWindow *brwin,DisplaySpecs *specs,ProgArgs *args)
 
         brwin->rgeom.x=brwin->geom.x+args->x;
         brwin->rgeom.y=brwin->geom.y+args->y;
-        brwin->rgeom.width=((args->width)?args->width:brwin->geom.width-args->x);
-        brwin->rgeom.height=((args->height)?args->height:brwin->geom.height-args->y);
+        brwin->rgeom.width=((args->width)?
+                            args->width:brwin->geom.width-args->x);
+        brwin->rgeom.height=((args->height)?
+                             args->height:brwin->geom.height-args->y);
         if((args->x+brwin->rgeom.width>brwin->geom.width)||
             (args->y+brwin->rgeom.height>brwin->geom.height)){
             fprintf(stderr,"Specified Area is larger than window!\n");
@@ -158,20 +175,22 @@ int SetBRWindow(Display *dpy,BRWindow *brwin,DisplaySpecs *specs,ProgArgs *args)
         }
     }
     fprintf(stderr, "Initial recording window is set to:\n"
-                    "X:%d   Y:%d    Width:%d    Height:%d\n"
-                    ,brwin->rgeom.x,brwin->rgeom.y,brwin->rgeom.width,brwin->rgeom.height);
+                    "X:%d   Y:%d    Width:%d    Height:%d\n",
+                    brwin->rgeom.x,brwin->rgeom.y,
+                    brwin->rgeom.width,brwin->rgeom.height);
     SizePack2_8_16(&brwin->rgeom.x,&brwin->rgeom.width,specs->width);
     SizePack2_8_16(&brwin->rgeom.y,&brwin->rgeom.height,specs->height);
 
     fprintf(stderr, "Adjusted recording window is set to:\n"
-                    "X:%d   Y:%d    Width:%d    Height:%d\n"
-                    ,brwin->rgeom.x,brwin->rgeom.y,brwin->rgeom.width,brwin->rgeom.height);
+                    "X:%d   Y:%d    Width:%d    Height:%d\n",
+                    brwin->rgeom.x,brwin->rgeom.y,
+                    brwin->rgeom.width,brwin->rgeom.height);
 
 
 
-    brwin->nbytes=(((brwin->rgeom.width+15)>>4)<<4)*(((brwin->rgeom.height+15)>>4)<<4)*
+    brwin->nbytes=(((brwin->rgeom.width+15)>>4)<<4)*
+                  (((brwin->rgeom.height+15)>>4)<<4)*
                   ((specs->depth==16)?2:4);
-
 
     return 0;
 }

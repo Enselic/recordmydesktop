@@ -1,28 +1,28 @@
-/*********************************************************************************
-*                             recordMyDesktop                                    *
-**********************************************************************************
-*                                                                                *
-*             Copyright (C) 2006  John Varouhakis                                *
-*                                                                                *
-*                                                                                *
-*    This program is free software; you can redistribute it and/or modify        *
-*    it under the terms of the GNU General Public License as published by        *
-*    the Free Software Foundation; either version 2 of the License, or           *
-*    (at your option) any later version.                                         *
-*                                                                                *
-*    This program is distributed in the hope that it will be useful,             *
-*    but WITHOUT ANY WARRANTY; without even the implied warranty of              *
-*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the               *
-*    GNU General Public License for more details.                                *
-*                                                                                *
-*    You should have received a copy of the GNU General Public License           *
-*    along with this program; if not, write to the Free Software                 *
-*    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA   *
-*                                                                                *
-*                                                                                *
-*                                                                                *
-*    For further information contact me at johnvarouhakis@gmail.com              *
-**********************************************************************************/
+/******************************************************************************
+*                            recordMyDesktop                                  *
+*******************************************************************************
+*                                                                             *
+*            Copyright (C) 2006,2007 John Varouhakis                          *
+*                                                                             *
+*                                                                             *
+*   This program is free software; you can redistribute it and/or modify      *
+*   it under the terms of the GNU General Public License as published by      *
+*   the Free Software Foundation; either version 2 of the License, or         *
+*   (at your option) any later version.                                       *
+*                                                                             *
+*   This program is distributed in the hope that it will be useful,           *
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of            *
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
+*   GNU General Public License for more details.                              *
+*                                                                             *
+*   You should have received a copy of the GNU General Public License         *
+*   along with this program; if not, write to the Free Software               *
+*   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA  *
+*                                                                             *
+*                                                                             *
+*                                                                             *
+*   For further information contact me at johnvarouhakis@gmail.com            *
+******************************************************************************/
 
 #include <recordmydesktop.h>
 
@@ -78,7 +78,8 @@ int PurgeCache(CacheData *cache_data_t,int sound){
 
     while (stat(fname,&buff)==0){
         if(remove(fname)){
-            fprintf(stderr,"Couldn't remove temporary file %s",cache_data_t->imgdata);
+            fprintf(stderr,"Couldn't remove temporary file %s",
+                           cache_data_t->imgdata);
             exit_value=1;
         }
         CacheFileN(cache_data_t->imgdata,&fname,nth_cache);
@@ -87,18 +88,22 @@ int PurgeCache(CacheData *cache_data_t,int sound){
     free(fname);
     if(sound){
         if(remove(cache_data_t->audiodata)){
-            fprintf(stderr,"Couldn't remove temporary file %s",cache_data_t->audiodata);
+            fprintf(stderr,"Couldn't remove temporary file %s",
+                           cache_data_t->audiodata);
             exit_value=1;
         }
     }
     if(remove(cache_data_t->projname)){
-        fprintf(stderr,"Couldn't remove temporary directory %s",cache_data_t->projname);
+        fprintf(stderr,"Couldn't remove temporary directory %s",
+                       cache_data_t->projname);
         exit_value=1;
     }
     return exit_value;
 }
 
-void InitCacheData(ProgData *pdata,EncData *enc_data_t,CacheData *cache_data_t){
+void InitCacheData(ProgData *pdata,
+                   EncData *enc_data_t,
+                   CacheData *cache_data_t){
     int width,height,offset_x,offset_y,pid;
     char pidbuf[8];
 
@@ -133,7 +138,8 @@ void InitCacheData(ProgData *pdata,EncData *enc_data_t,CacheData *cache_data_t){
 
     I16TOA(pid,pidbuf)
     //names are stored relatively to current dir(i.e. no chdir)
-    cache_data_t->projname=malloc(strlen(cache_data_t->workdir)+12+strlen(pidbuf)+3);
+    cache_data_t->projname=malloc(strlen(cache_data_t->workdir)+
+                           12+strlen(pidbuf)+3);
     //projname
     strcpy(cache_data_t->projname,cache_data_t->workdir);
     strcat(cache_data_t->projname,"/");
@@ -153,27 +159,31 @@ void InitCacheData(ProgData *pdata,EncData *enc_data_t,CacheData *cache_data_t){
     //creating the needed files
 
     if(mkdir(cache_data_t->projname,0777)){
-        fprintf(stderr,"Could not create temporary directory %s !!!\n",cache_data_t->projname);
+        fprintf(stderr,"Could not create temporary directory %s !!!\n",
+                       cache_data_t->projname);
         exit(13);
     }
     if(!pdata->args.zerocompression){
         cache_data_t->ifp=gzopen(cache_data_t->imgdata,"wb0f");
         if(cache_data_t->ifp==NULL){
-            fprintf(stderr,"Could not create temporary file %s !!!\n",cache_data_t->imgdata);
+            fprintf(stderr,"Could not create temporary file %s !!!\n",
+                           cache_data_t->imgdata);
             exit(13);
         }
     }
     else{
         cache_data_t->uncifp=fopen(cache_data_t->imgdata,"wb0f");
         if(cache_data_t->uncifp==NULL){
-            fprintf(stderr,"Could not create temporary file %s !!!\n",cache_data_t->imgdata);
+            fprintf(stderr,"Could not create temporary file %s !!!\n",
+                           cache_data_t->imgdata);
             exit(13);
         }
     }
     if(!pdata->args.nosound){
         cache_data_t->afp=fopen(cache_data_t->audiodata,"wb");
         if(cache_data_t->afp==NULL){
-           fprintf(stderr,"Could not create temporary file %s !!!\n",cache_data_t->audiodata);
+           fprintf(stderr,"Could not create temporary file %s !!!\n",
+                          cache_data_t->audiodata);
            exit(13);
         }
     }

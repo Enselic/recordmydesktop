@@ -1,33 +1,34 @@
-/*********************************************************************************
-*                             recordMyDesktop                                    *
-**********************************************************************************
-*                                                                                *
-*             Copyright (C) 2006  John Varouhakis                                *
-*                                                                                *
-*                                                                                *
-*    This program is free software; you can redistribute it and/or modify        *
-*    it under the terms of the GNU General Public License as published by        *
-*    the Free Software Foundation; either version 2 of the License, or           *
-*    (at your option) any later version.                                         *
-*                                                                                *
-*    This program is distributed in the hope that it will be useful,             *
-*    but WITHOUT ANY WARRANTY; without even the implied warranty of              *
-*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the               *
-*    GNU General Public License for more details.                                *
-*                                                                                *
-*    You should have received a copy of the GNU General Public License           *
-*    along with this program; if not, write to the Free Software                 *
-*    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA   *
-*                                                                                *
-*                                                                                *
-*                                                                                *
-*    For further information contact me at johnvarouhakis@gmail.com              *
-**********************************************************************************/
+/******************************************************************************
+*                            recordMyDesktop                                  *
+*******************************************************************************
+*                                                                             *
+*            Copyright (C) 2006,2007 John Varouhakis                          *
+*                                                                             *
+*                                                                             *
+*   This program is free software; you can redistribute it and/or modify      *
+*   it under the terms of the GNU General Public License as published by      *
+*   the Free Software Foundation; either version 2 of the License, or         *
+*   (at your option) any later version.                                       *
+*                                                                             *
+*   This program is distributed in the hope that it will be useful,           *
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of            *
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
+*   GNU General Public License for more details.                              *
+*                                                                             *
+*   You should have received a copy of the GNU General Public License         *
+*   along with this program; if not, write to the Free Software               *
+*   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA  *
+*                                                                             *
+*                                                                             *
+*                                                                             *
+*   For further information contact me at johnvarouhakis@gmail.com            *
+******************************************************************************/
 
 #include <recordmydesktop.h>
 
 //we copy the page because the next call to ogg_stream_pageout
-//will invalidate it. But we must have pages from both streams at every time in
+//will invalidate it. But we must have pages from
+//both streams at every time in
 //order to do correct multiplexing
 void ogg_page_cp(ogg_page *new,ogg_page *old){
     int i=0;
@@ -76,14 +77,20 @@ void *FlushToOgg(ProgData *pdata){
         if(pdata->running){
             pthread_mutex_lock(&pdata->libogg_mutex);
             if(!videoflag){
-                videoflag=ogg_stream_pageout(&pdata->enc_data->m_ogg_ts,&videopage);
-                videotime=(videoflag)?theora_granule_time(&pdata->enc_data->m_th_st,ogg_page_granulepos(&videopage)):-1;
+                videoflag=ogg_stream_pageout(&pdata->enc_data->m_ogg_ts,
+                                             &videopage);
+                videotime=(videoflag)?
+                          theora_granule_time(&pdata->enc_data->m_th_st,
+                          ogg_page_granulepos(&videopage)):-1;
                 if(videoflag)ogg_page_cp(&videopage_copy,&videopage);
             }
             if(!pdata->args.nosound)
                 if(!audioflag){
-                    audioflag=ogg_stream_pageout(&pdata->enc_data->m_ogg_vs,&audiopage);
-                    audiotime=(audioflag)?vorbis_granule_time(&pdata->enc_data->m_vo_dsp,ogg_page_granulepos(&audiopage)):-1;
+                    audioflag=ogg_stream_pageout(&pdata->enc_data->m_ogg_vs,
+                                                 &audiopage);
+                    audiotime=(audioflag)?
+                              vorbis_granule_time(&pdata->enc_data->m_vo_dsp,
+                              ogg_page_granulepos(&audiopage)):-1;
                     if(audioflag)ogg_page_cp(&audiopage_copy,&audiopage);
                 }
             pthread_mutex_unlock(&pdata->libogg_mutex);
@@ -91,8 +98,11 @@ void *FlushToOgg(ProgData *pdata){
         else{
             if(!th_st_fin && !videoflag){
                 pthread_mutex_lock(&pdata->libogg_mutex);
-                videoflag=ogg_stream_flush(&pdata->enc_data->m_ogg_ts,&videopage);
-                videotime=(videoflag)?theora_granule_time(&pdata->enc_data->m_th_st,ogg_page_granulepos(&videopage)):-1;
+                videoflag=ogg_stream_flush(&pdata->enc_data->m_ogg_ts,
+                                           &videopage);
+                videotime=(videoflag)?
+                          theora_granule_time(&pdata->enc_data->m_th_st,
+                          ogg_page_granulepos(&videopage)):-1;
                 if(videoflag)ogg_page_cp(&videopage_copy,&videopage);
                 pthread_mutex_unlock(&pdata->libogg_mutex);
                 //we need the last page to properly close the stream
@@ -105,8 +115,11 @@ void *FlushToOgg(ProgData *pdata){
             }
             if(!pdata->args.nosound && !v_st_fin &&!audioflag){
                 pthread_mutex_lock(&pdata->libogg_mutex);
-                audioflag=ogg_stream_flush(&pdata->enc_data->m_ogg_vs,&audiopage);
-                audiotime=(audioflag)?vorbis_granule_time(&pdata->enc_data->m_vo_dsp,ogg_page_granulepos(&audiopage)):-1;
+                audioflag=ogg_stream_flush(&pdata->enc_data->m_ogg_vs,
+                                           &audiopage);
+                audiotime=(audioflag)?
+                          vorbis_granule_time(&pdata->enc_data->m_vo_dsp,
+                          ogg_page_granulepos(&audiopage)):-1;
                 if(audioflag)ogg_page_cp(&audiopage_copy,&audiopage);
                 pthread_mutex_unlock(&pdata->libogg_mutex);
                 //we need the last page to properly close the stream
@@ -120,7 +133,8 @@ void *FlushToOgg(ProgData *pdata){
         }
         if(th_st_fin)videoflag=0;
         if(v_st_fin)audioflag=0;
-        if((!audioflag && !v_st_fin && !pdata->args.nosound) || (!videoflag && !th_st_fin)){
+        if((!audioflag && !v_st_fin && !pdata->args.nosound)||
+           (!videoflag && !th_st_fin)){
             usleep(10000);
             continue;
         }
@@ -137,8 +151,12 @@ void *FlushToOgg(ProgData *pdata){
                 audio_or_video=1;
         }
         if(audio_or_video==1){
-            video_bytesout+=fwrite(videopage_copy.header,1,videopage_copy.header_len,pdata->enc_data->fp);
-            video_bytesout+=fwrite(videopage_copy.body,1,videopage_copy.body_len,pdata->enc_data->fp);
+            video_bytesout+=fwrite(videopage_copy.header,1,
+                                   videopage_copy.header_len,
+                                   pdata->enc_data->fp);
+            video_bytesout+=fwrite(videopage_copy.body,1,
+                                   videopage_copy.body_len,
+                                   pdata->enc_data->fp);
             videoflag=0;
             if(!pdata->running){
                 pthread_mutex_lock(&pdata->libogg_mutex);
@@ -149,8 +167,12 @@ void *FlushToOgg(ProgData *pdata){
             ogg_page_cp_free(&videopage_copy);
         }
         else{
-            audio_bytesout+=fwrite(audiopage_copy.header,1,audiopage_copy.header_len,pdata->enc_data->fp);
-            audio_bytesout+=fwrite(audiopage_copy.body,1,audiopage_copy.body_len,pdata->enc_data->fp);
+            audio_bytesout+=fwrite(audiopage_copy.header,1,
+                                   audiopage_copy.header_len,
+                                   pdata->enc_data->fp);
+            audio_bytesout+=fwrite(audiopage_copy.body,1,
+                                   audiopage_copy.body_len,
+                                   pdata->enc_data->fp);
             audioflag=0;
             if(!pdata->running){
                 pthread_mutex_lock(&pdata->libogg_mutex);
@@ -172,6 +194,10 @@ void *FlushToOgg(ProgData *pdata){
 //     theora_clear(&pdata->enc_data->m_th_st);
 
     if(pdata->enc_data->fp)fclose(pdata->enc_data->fp);
-    fprintf(stderr,"\r   \nDone.\nWritten %.0f bytes\n(%.0f of which were video data and %.0f audio data)\n\n",video_bytesout+audio_bytesout,video_bytesout,audio_bytesout);
+    fprintf(stderr,"\r   \nDone.\nWritten %.0f bytes\n"
+                   "(%.0f of which were video data "
+                   "and %.0f audio data)\n\n",
+                   video_bytesout+audio_bytesout,
+                   video_bytesout,audio_bytesout);
     pthread_exit(&errno);
 }

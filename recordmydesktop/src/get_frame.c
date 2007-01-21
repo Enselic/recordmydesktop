@@ -1,28 +1,28 @@
-/*********************************************************************************
-*                             recordMyDesktop                                    *
-**********************************************************************************
-*                                                                                *
-*             Copyright (C) 2006  John Varouhakis                                *
-*                                                                                *
-*                                                                                *
-*    This program is free software; you can redistribute it and/or modify        *
-*    it under the terms of the GNU General Public License as published by        *
-*    the Free Software Foundation; either version 2 of the License, or           *
-*    (at your option) any later version.                                         *
-*                                                                                *
-*    This program is distributed in the hope that it will be useful,             *
-*    but WITHOUT ANY WARRANTY; without even the implied warranty of              *
-*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the               *
-*    GNU General Public License for more details.                                *
-*                                                                                *
-*    You should have received a copy of the GNU General Public License           *
-*    along with this program; if not, write to the Free Software                 *
-*    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA   *
-*                                                                                *
-*                                                                                *
-*                                                                                *
-*    For further information contact me at johnvarouhakis@gmail.com              *
-**********************************************************************************/
+/******************************************************************************
+*                            recordMyDesktop                                  *
+*******************************************************************************
+*                                                                             *
+*            Copyright (C) 2006,2007 John Varouhakis                          *
+*                                                                             *
+*                                                                             *
+*   This program is free software; you can redistribute it and/or modify      *
+*   it under the terms of the GNU General Public License as published by      *
+*   the Free Software Foundation; either version 2 of the License, or         *
+*   (at your option) any later version.                                       *
+*                                                                             *
+*   This program is distributed in the hope that it will be useful,           *
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of            *
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
+*   GNU General Public License for more details.                              *
+*                                                                             *
+*   You should have received a copy of the GNU General Public License         *
+*   along with this program; if not, write to the Free Software               *
+*   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA  *
+*                                                                             *
+*                                                                             *
+*                                                                             *
+*   For further information contact me at johnvarouhakis@gmail.com            *
+******************************************************************************/
 
 
 #include <recordmydesktop.h>
@@ -85,8 +85,12 @@ void *GetFrame(ProgData *pdata){
         //update previous_position
             //(if full_shots is enabled this is skipped since it's pointless)
             if(!pdata->args.full_shots){
-                CLIP_DUMMY_POINTER_AREA(mouse_pos_abs,&pdata->brwin,&mouse_pos_temp);
-                if((mouse_pos_temp.x>=0)&&(mouse_pos_temp.y>=0)&&(mouse_pos_temp.width>0)&&(mouse_pos_temp.height>0))
+                CLIP_DUMMY_POINTER_AREA(mouse_pos_abs,&pdata->brwin,
+                                        &mouse_pos_temp);
+                if((mouse_pos_temp.x>=0)&&
+                   (mouse_pos_temp.y>=0)&&
+                   (mouse_pos_temp.width>0)&&
+                   (mouse_pos_temp.height>0))
                     RectInsert(&pdata->rect_root[tlist_sel],&mouse_pos_temp);
             }
             xcim=XFixesGetCursorImage(pdata->dpy);
@@ -100,8 +104,12 @@ void *GetFrame(ProgData *pdata){
         //update previous_position
         //(if full_shots is enabled this is skipped since it's pointless)
             if(!pdata->args.full_shots){
-                CLIP_DUMMY_POINTER_AREA(mouse_pos_abs,&pdata->brwin,&mouse_pos_temp);
-                if((mouse_pos_temp.x>=0)&&(mouse_pos_temp.y>=0)&&(mouse_pos_temp.width>0)&&(mouse_pos_temp.height>0))
+                CLIP_DUMMY_POINTER_AREA(mouse_pos_abs,&pdata->brwin,
+                                        &mouse_pos_temp);
+                if((mouse_pos_temp.x>=0)&&
+                   (mouse_pos_temp.y>=0)&&
+                   (mouse_pos_temp.width>0)&&
+                   (mouse_pos_temp.height>0))
                     RectInsert(&pdata->rect_root[tlist_sel],&mouse_pos_temp);
             }
         //find new one
@@ -112,7 +120,9 @@ void *GetFrame(ProgData *pdata){
                             &mouse_pos_rel.x,&mouse_pos_rel.y,&msk_ret);
         }
         if(!pdata->args.noshared)
-            XShmGetImage(pdata->dpy,pdata->specs.root,pdata->shimage,(pdata->brwin.rgeom.x),(pdata->brwin.rgeom.y),AllPlanes);
+            XShmGetImage(pdata->dpy,pdata->specs.root,pdata->shimage,
+                         (pdata->brwin.rgeom.x),
+                         (pdata->brwin.rgeom.y),AllPlanes);
         if(!pdata->args.full_shots)
             UpdateImage(pdata->dpy,
                         &pdata->enc_data->yuv,
@@ -121,7 +131,9 @@ void *GetFrame(ProgData *pdata){
                         &pdata->rect_root[tlist_sel],
                         &pdata->brwin,
                         pdata->enc_data,
-                        ((pdata->args.noshared)?(pdata->datatemp):pdata->shimage->data),
+                        ((pdata->args.noshared)?
+                         (pdata->datatemp):
+                         (pdata->shimage->data)),
                         pdata->args.noshared,
                         pdata->args.no_quick_subsample);
         else{
@@ -151,15 +163,24 @@ void *GetFrame(ProgData *pdata){
         }
         if(pdata->args.xfixes_cursor){
         //avoid segfaults
-            CLIP_DUMMY_POINTER_AREA(mouse_pos_abs,&pdata->brwin,&mouse_pos_temp);
+            CLIP_DUMMY_POINTER_AREA(mouse_pos_abs,&pdata->brwin,
+                                    &mouse_pos_temp);
         //draw the cursor
-            if((mouse_pos_temp.x>=0)&&(mouse_pos_temp.y>=0)&&(mouse_pos_temp.width>0)&&(mouse_pos_temp.height>0)){
-                XFIXES_POINTER_TO_YUV((&pdata->enc_data->yuv),((unsigned char*)xcim->pixels),
-                        (mouse_pos_temp.x-pdata->brwin.rgeom.x+pdata->enc_data->x_offset),
-                        (mouse_pos_temp.y-pdata->brwin.rgeom.y+pdata->enc_data->y_offset),
-                        mouse_pos_temp.width,
-                        mouse_pos_temp.height,
-                        (xcim->width-mouse_pos_temp.width));
+            if((mouse_pos_temp.x>=0)&&
+               (mouse_pos_temp.y>=0)&&
+               (mouse_pos_temp.width>0)&&
+               (mouse_pos_temp.height>0)){
+                XFIXES_POINTER_TO_YUV((&pdata->enc_data->yuv),
+                                      ((unsigned char*)xcim->pixels),
+                                      (mouse_pos_temp.x-
+                                       pdata->brwin.rgeom.x+
+                                       pdata->enc_data->x_offset),
+                                      (mouse_pos_temp.y-
+                                       pdata->brwin.rgeom.y+
+                                       pdata->enc_data->y_offset),
+                                      mouse_pos_temp.width,
+                                      mouse_pos_temp.height,
+                                      (xcim->width-mouse_pos_temp.width));
             }
             XFree(xcim);
             xcim=NULL;
@@ -167,16 +188,24 @@ void *GetFrame(ProgData *pdata){
 
         if(pdata->args.have_dummy_cursor){
         //avoid segfaults
-            CLIP_DUMMY_POINTER_AREA(mouse_pos_abs,&pdata->brwin,&mouse_pos_temp);
+            CLIP_DUMMY_POINTER_AREA(mouse_pos_abs,&pdata->brwin,
+                                    &mouse_pos_temp);
         //draw the cursor
-            if((mouse_pos_temp.x>=0)&&(mouse_pos_temp.y>=0)&&(mouse_pos_temp.width>0)&&(mouse_pos_temp.height>0)){
+            if((mouse_pos_temp.x>=0)&&
+               (mouse_pos_temp.y>=0)&&
+               (mouse_pos_temp.width>0)&&
+               (mouse_pos_temp.height>0)){
                 DUMMY_POINTER_TO_YUV((&pdata->enc_data->yuv),
-                                    pdata->dummy_pointer,
-                                    (mouse_pos_temp.x-pdata->brwin.rgeom.x+pdata->enc_data->x_offset),
-                                    (mouse_pos_temp.y-pdata->brwin.rgeom.y+pdata->enc_data->y_offset),
-                                    mouse_pos_temp.width,
-                                    mouse_pos_temp.height,
-                                    pdata->npxl);
+                                     pdata->dummy_pointer,
+                                     (mouse_pos_temp.x-
+                                      pdata->brwin.rgeom.x+
+                                      pdata->enc_data->x_offset),
+                                     (mouse_pos_temp.y-
+                                      pdata->brwin.rgeom.y+
+                                      pdata->enc_data->y_offset),
+                                     mouse_pos_temp.width,
+                                     mouse_pos_temp.height,
+                                     pdata->npxl);
             }
         }
         if(!pdata->args.full_shots){

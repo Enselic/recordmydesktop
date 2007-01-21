@@ -1,28 +1,28 @@
-/*********************************************************************************
-*                             recordMyDesktop                                    *
-**********************************************************************************
-*                                                                                *
-*             Copyright (C) 2006  John Varouhakis                                *
-*                                                                                *
-*                                                                                *
-*    This program is free software; you can redistribute it and/or modify        *
-*    it under the terms of the GNU General Public License as published by        *
-*    the Free Software Foundation; either version 2 of the License, or           *
-*    (at your option) any later version.                                         *
-*                                                                                *
-*    This program is distributed in the hope that it will be useful,             *
-*    but WITHOUT ANY WARRANTY; without even the implied warranty of              *
-*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the               *
-*    GNU General Public License for more details.                                *
-*                                                                                *
-*    You should have received a copy of the GNU General Public License           *
-*    along with this program; if not, write to the Free Software                 *
-*    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA   *
-*                                                                                *
-*                                                                                *
-*                                                                                *
-*    For further information contact me at johnvarouhakis@gmail.com              *
-**********************************************************************************/
+/******************************************************************************
+*                            recordMyDesktop                                  *
+*******************************************************************************
+*                                                                             *
+*            Copyright (C) 2006,2007 John Varouhakis                          *
+*                                                                             *
+*                                                                             *
+*   This program is free software; you can redistribute it and/or modify      *
+*   it under the terms of the GNU General Public License as published by      *
+*   the Free Software Foundation; either version 2 of the License, or         *
+*   (at your option) any later version.                                       *
+*                                                                             *
+*   This program is distributed in the hope that it will be useful,           *
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of            *
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
+*   GNU General Public License for more details.                              *
+*                                                                             *
+*   You should have received a copy of the GNU General Public License         *
+*   along with this program; if not, write to the Free Software               *
+*   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA  *
+*                                                                             *
+*                                                                             *
+*                                                                             *
+*   For further information contact me at johnvarouhakis@gmail.com            *
+******************************************************************************/
 
 
 #include <recordmydesktop.h>
@@ -31,12 +31,18 @@
 int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
     int i;
     char *usage="\nUsage:\n"
-    "\trecordmydesktop [-h| --help| --version| -delay n[H|h|M|m]| -windowid id_of_window|\n"
-    "\t-display DISPLAY| -x X| -y Y|-width N| -height N| -fps N(number>0)| --on-the-fly-encoding|\n"
-    "\t -v_quality n| -s_quality n| -v_bitrate n| --no-framedrop| -dummy-cursor color|\n"
-    "\t --no-cursor| -freq N(number>0)| -channels N(number>0)|-buffer-size N(number>0)| -device SOUND_DEVICE|\n"
-    "\t --no-sound| --with-shared| --no-cond-shared| -shared-threshold n| --full-shots|\n"
-    "\t --quick-subsampling| -workdir DIR| --zero-compression| --no-wm-check| --overwite| -o filename]^filename\n\n\n"
+    "\trecordmydesktop [-h| --help| --version|"
+    " -delay n[H|h|M|m]| -windowid id_of_window|\n"
+    "\t-display DISPLAY| -x X| -y Y|-width N| -height N|"
+    " -fps N(number>0)| --on-the-fly-encoding|\n"
+    "\t -v_quality n| -s_quality n| -v_bitrate n| --no-framedrop|"
+    " -dummy-cursor color|\n"
+    "\t --no-cursor| -freq N(number>0)| -channels N(number>0)|"
+    " -buffer-size N(number>0)| -device SOUND_DEVICE|\n"
+    "\t --no-sound| --with-shared| --no-cond-shared| -shared-threshold n|"
+    " --full-shots|\n"
+    "\t --quick-subsampling| -workdir DIR| --zero-compression| --no-wm-check|"
+    " --overwite| -o filename]^filename\n\n\n"
 
     "General Options:\n"
     "\t-h or --help\t\tPrint this help and exit.\n"
@@ -52,36 +58,61 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
 
     "\t-dummy-cursor color\tColor of the dummy cursor [black|white]\n"
     "\t--no-cursor\t\tDisable drawing of the cursor.\n"
-    "\t--with-shared\t\tEnable usage of MIT-shared memory extension at all times.\n"
-    "\t--no-cond-shared\tDo not use the MIT-shared memory extension when aquiring large areas.\n"
-    "\t-shared-threshold n\tThreshold over which shared memory is used(default 75).\n"
+    "\t--with-shared\t\tEnable usage of"
+    " MIT-shared memory extension at all times.\n"
+
+    "\t--no-cond-shared\tDo not use"
+    " the MIT-shared memory extension when aquiring large areas.\n"
+
+    "\t-shared-threshold n\tThreshold over"
+    " which shared memory is used(default 75).\n"
+
     "\t--full-shots\t\tTake full screenshot at every frame(Not recomended!).\n"
-    "\t--quick-subsampling\tDo subsampling of the chroma planes by discarding,not averaging.\n"
+    "\t--quick-subsampling\tDo subsampling"
+    " of the chroma planes by discarding,not averaging.\n"
+
     "\t-fps N(number>0.0)\tA positive number denoting desired framerate.\n\n"
 
     "Sound Options:\n"
-    "\t-channels N\t\tA positive number denoting desired sound channels in recording.\n"
+    "\t-channels N\t\tA positive number denoting"
+    " desired sound channels in recording.\n"
+
     "\t-freq N\t\t\tA positive number denoting desired sound frequency.\n"
-    "\t-buffer-size N\t\tA positive number denoting the desired sound buffer size(in frames)\n"
+    "\t-buffer-size N\t\tA positive number denoting the desired"
+    " sound buffer size(in frames)\n"
+
     "\t-device SOUND_DEVICE\tSound device(default hw0:0).\n"
     "\t--no-sound\t\tDo not record sound.\n\n"
 
     "Encoding Options\n"
     "\t--on-the-fly-encoding\tEncode the audio-video data, while recording.\n"
-    "\t-v_quality n\t\tA number from 0 to 63 for desired encoded video quality(default 63).\n"
-    "\t-v_bitrate n\t\tA number from 45000 to 2000000 for desired encoded video bitrate(default 45000).\n"
+    "\t-v_quality n\t\tA number from 0 to 63 for"
+    " desired encoded video quality(default 63).\n"
+
+    "\t-v_bitrate n\t\tA number from 45000 to 2000000"
+    " for desired encoded video bitrate(default 45000).\n"
+
     "\t--drop-frames\t\tAllow theora encoder to drop frames.\n"
     "\t-s_quality n\t\tDesired audio quality(-1 to 10).\n\n"
 
     "Misc Options:\n"
-    "\t--no-wm-check\t\tDo not try to detect the window manager(and set options according to it)\n"
+    "\t--no-wm-check\t\tDo not try to detect"
+    " the window manager(and set options according to it)\n"
+
     "\t--zero-compression\tImage data are always cached uncompressed.\n"
-    "\t-workdir DIR\t\tLocation where a temporary directory will be created to hold project files(default $HOME).\n"
-    "\t-delay n[H|h|M|m]\tNumber of secs(default),minutes or hours before capture starts(number can be float)\n"
-    "\t--overwrite\t\tIf there is already a file with the same name, delete it\n"
+    "\t-workdir DIR\t\tLocation where a temporary directory"
+    " will be created to hold project files(default $HOME).\n"
+
+    "\t-delay n[H|h|M|m]\tNumber of secs(default),minutes or hours"
+    " before capture starts(number can be float)\n"
+
+    "\t--overwrite\t\tIf there is already a file with the same name,"
+    " delete it\n"
+
     "\t\t\t\t(default is to add a number postfix to the new one).\n"
     "\t-o filename\t\tName of recorded video(default out.ogg).\n"
-    "\n\tIf no other options are specified, filename can be given without the -o switch.\n\n\n";
+    "\n\tIf no other options are specified, filename can be given "
+    "without the -o switch.\n\n\n";
 
     if(argc==2){
         if(argv[1][0]!='-'){
@@ -110,12 +141,14 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
                     arg_return->delay=(int)num;
                 }
                 else{
-                    fprintf(stderr,"Argument Usage: -delay n[H|h|M|m]\nwhere n is a float number\n");
+                    fprintf(stderr,"Argument Usage: -delay n[H|h|M|m]\n"
+                                   "where n is a float number\n");
                     return 1;
                 }
             }
             else{
-                fprintf(stderr,"Argument Usage: -delay n[H|h|M|m]\nwhere n is a float number\n");
+                fprintf(stderr,"Argument Usage: -delay n[H|h|M|m]\n"
+                               "where n is a float number\n");
                 return 1;
             }
             i++;
@@ -126,12 +159,14 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
                 if(num>0)
                     arg_return->windowid=num;
                 else{
-                    fprintf(stderr,"Argument Usage: -windowid id_of_window(number)\n");
+                    fprintf(stderr,"Argument Usage:"
+                                   " -windowid id_of_window(number)\n");
                     return 1;
                 }
             }
             else{
-                fprintf(stderr,"Argument Usage: -windowid id_of_window(number)\n");
+                fprintf(stderr,"Argument Usage:"
+                               " -windowid id_of_window(number)\n");
                 return 1;
             }
             i++;
@@ -247,12 +282,14 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
                 if((num>=0)&&(num<64))
                     arg_return->v_quality=num;
                 else{
-                    fprintf(stderr,"Argument Usage: -v_quality n(number 0-63)\n");
+                    fprintf(stderr,"Argument Usage:"
+                                   " -v_quality n(number 0-63)\n");
                     return 1;
                 }
             }
             else{
-                fprintf(stderr,"Argument Usage: -v_quality n(number 0-63)\n");
+                fprintf(stderr,"Argument Usage:"
+                               " -v_quality n(number 0-63)\n");
                 return 1;
             }
             i++;
@@ -263,12 +300,14 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
                 if((num>=45000)&&(num<=2000000))
                     arg_return->v_bitrate=num;
                 else{
-                    fprintf(stderr,"Argument Usage: -v_bitrate n(number 45000-2000000)\n");
+                    fprintf(stderr,"Argument Usage:"
+                                   " -v_bitrate n(number 45000-2000000)\n");
                     return 1;
                 }
             }
             else{
-                fprintf(stderr,"Argument Usage: -v_bitrate n(number 45000-2000000)\n");
+                fprintf(stderr,"Argument Usage:"
+                               " -v_bitrate n(number 45000-2000000)\n");
                 return 1;
             }
             i++;
@@ -280,14 +319,16 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
                 else if(!strcmp(argv[i+1],"black"))
                     arg_return->cursor_color=1;
                 else{
-                    fprintf(stderr,"Argument Usage: -dummy-cursor [black|white]\n");
+                    fprintf(stderr,"Argument Usage:"
+                                   " -dummy-cursor [black|white]\n");
                     return 1;
                 }
                 arg_return->have_dummy_cursor=1;
                 arg_return->xfixes_cursor=0;
             }
             else{
-                fprintf(stderr,"Argument Usage: -dummy-cursor [black|white]\n");
+                fprintf(stderr,"Argument Usage:"
+                               " -dummy-cursor [black|white]\n");
                 return 1;
             }
             i++;
@@ -332,12 +373,14 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
                 if((num>=-1)&&(num<=10))
                     arg_return->s_quality=num;
                 else{
-                    fprintf(stderr,"Argument Usage: -s_quality n(number -1 to 10)\n");
+                    fprintf(stderr,"Argument Usage:"
+                                   " -s_quality n(number -1 to 10)\n");
                     return 1;
                 }
             }
             else{
-                fprintf(stderr,"Argument Usage: -s_quality n(number -1 to 10)\n");
+                fprintf(stderr,"Argument Usage:"
+                               " -s_quality n(number -1 to 10)\n");
                 return 1;
             }
             i++;
@@ -348,12 +391,14 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
                 if((num>0)&&(num<100))
                     arg_return->shared_thres=num;
                 else{
-                    fprintf(stderr,"Argument Usage: -shared-threshold N(0<number<100)\n");
+                    fprintf(stderr,"Argument Usage:"
+                                   " -shared-threshold N(0<number<100)\n");
                     return 1;
                 }
             }
             else{
-                fprintf(stderr,"Argument Usage: -shared-threshold N(0<number<100)\n");
+                fprintf(stderr,"Argument Usage:"
+                               " -shared-threshold N(0<number<100)\n");
                 return 1;
             }
             i++;
@@ -388,7 +433,8 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
                 if(num>0)
                     arg_return->buffsize=num;
                 else{
-                    fprintf(stderr,"Argument Usage: -buffer-size N(number>0)\n");
+                    fprintf(stderr,"Argument Usage:"
+                                   " -buffer-size N(number>0)\n");
                     return 1;
                 }
             }
@@ -434,7 +480,8 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
             return 1;
         }
         else{
-            fprintf(stderr,"\n\tError parsing arguments.\n\tType --help or -h for usage.\n\n");
+            fprintf(stderr,"\n\tError parsing arguments.\n\t"
+                           "Type --help or -h for usage.\n\n");
             return 1;
         }
     }

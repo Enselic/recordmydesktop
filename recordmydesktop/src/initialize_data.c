@@ -1,28 +1,28 @@
-/*********************************************************************************
-*                             recordMyDesktop                                    *
-**********************************************************************************
-*                                                                                *
-*             Copyright (C) 2006  John Varouhakis                                *
-*                                                                                *
-*                                                                                *
-*    This program is free software; you can redistribute it and/or modify        *
-*    it under the terms of the GNU General Public License as published by        *
-*    the Free Software Foundation; either version 2 of the License, or           *
-*    (at your option) any later version.                                         *
-*                                                                                *
-*    This program is distributed in the hope that it will be useful,             *
-*    but WITHOUT ANY WARRANTY; without even the implied warranty of              *
-*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the               *
-*    GNU General Public License for more details.                                *
-*                                                                                *
-*    You should have received a copy of the GNU General Public License           *
-*    along with this program; if not, write to the Free Software                 *
-*    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA   *
-*                                                                                *
-*                                                                                *
-*                                                                                *
-*    For further information contact me at johnvarouhakis@gmail.com              *
-**********************************************************************************/
+/******************************************************************************
+*                            recordMyDesktop                                  *
+*******************************************************************************
+*                                                                             *
+*            Copyright (C) 2006,2007 John Varouhakis                          *
+*                                                                             *
+*                                                                             *
+*   This program is free software; you can redistribute it and/or modify      *
+*   it under the terms of the GNU General Public License as published by      *
+*   the Free Software Foundation; either version 2 of the License, or         *
+*   (at your option) any later version.                                       *
+*                                                                             *
+*   This program is distributed in the hope that it will be useful,           *
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of            *
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
+*   GNU General Public License for more details.                              *
+*                                                                             *
+*   You should have received a copy of the GNU General Public License         *
+*   along with this program; if not, write to the Free Software               *
+*   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA  *
+*                                                                             *
+*                                                                             *
+*                                                                             *
+*   For further information contact me at johnvarouhakis@gmail.com            *
+******************************************************************************/
 
 
 #include <recordmydesktop.h>
@@ -40,7 +40,9 @@ int InitializeData(ProgData *pdata,
     fprintf(stderr,"Initializing...\n");
     MakeMatrices();
     if(pdata->args.have_dummy_cursor){
-        pdata->dummy_pointer=MakeDummyPointer(&pdata->specs,16,pdata->args.cursor_color,0,&pdata->npxl);
+        pdata->dummy_pointer=MakeDummyPointer(&pdata->specs,16,
+                                              pdata->args.cursor_color,0,
+                                              &pdata->npxl);
         pdata->dummy_p_size=16;
     }
 
@@ -72,25 +74,49 @@ int InitializeData(ProgData *pdata,
     Running=&pdata->running;
 
     if((pdata->args.noshared)){
-        pdata->image=XCreateImage(pdata->dpy, pdata->specs.visual, pdata->specs.depth, ZPixmap, 0,pdata->datamain,pdata->brwin.rgeom.width,
-                    pdata->brwin.rgeom.height, 8, 0);
+        pdata->image=XCreateImage(pdata->dpy,
+                                  pdata->specs.visual,
+                                  pdata->specs.depth,
+                                  ZPixmap,
+                                  0,
+                                  pdata->datamain,
+                                  pdata->brwin.rgeom.width,
+                                  pdata->brwin.rgeom.height,
+                                  8,
+                                  0);
         XInitImage(pdata->image);
-        GetZPixmap(pdata->dpy,pdata->specs.root,pdata->image->data,pdata->brwin.rgeom.x,pdata->brwin.rgeom.y,
-                    pdata->brwin.rgeom.width,pdata->brwin.rgeom.height);
+        GetZPixmap(pdata->dpy,pdata->specs.root,
+                   pdata->image->data,
+                   pdata->brwin.rgeom.x,
+                   pdata->brwin.rgeom.y,
+                   pdata->brwin.rgeom.width,
+                   pdata->brwin.rgeom.height);
     }
     if((!pdata->args.noshared)||(!pdata->args.nocondshared)){
-        pdata->shimage=XShmCreateImage (pdata->dpy,pdata->specs.visual,pdata->specs.depth,ZPixmap,pdata->datash,
-                        &pdata->shminfo, pdata->brwin.rgeom.width,pdata->brwin.rgeom.height);
-        pdata->shminfo.shmid = shmget (IPC_PRIVATE,
-                                pdata->shimage->bytes_per_line * pdata->shimage->height,
-                                IPC_CREAT|0777);
-        pdata->shminfo.shmaddr = pdata->shimage->data = shmat (pdata->shminfo.shmid, 0, 0);
+        pdata->shimage=XShmCreateImage(pdata->dpy,
+                                       pdata->specs.visual,
+                                       pdata->specs.depth,
+                                       ZPixmap,pdata->datash,
+                                       &pdata->shminfo,
+                                       pdata->brwin.rgeom.width,
+                                       pdata->brwin.rgeom.height);
+        pdata->shminfo.shmid=shmget (IPC_PRIVATE,
+                                     pdata->shimage->bytes_per_line*
+                                     pdata->shimage->height,
+                                     IPC_CREAT|0777);
+        pdata->shminfo.shmaddr=pdata->shimage->data=shmat(pdata->shminfo.shmid,
+                                                          0,0);
         pdata->shminfo.readOnly = False;
         if(!XShmAttach(pdata->dpy,&pdata->shminfo)){
             fprintf(stderr,"Failed to attach shared memory to proccess.\n");
             return 12;
         }
-        XShmGetImage(pdata->dpy,pdata->specs.root,pdata->shimage,pdata->brwin.rgeom.x,pdata->brwin.rgeom.y,AllPlanes);
+        XShmGetImage(pdata->dpy,
+                     pdata->specs.root,
+                     pdata->shimage,
+                     pdata->brwin.rgeom.x,
+                     pdata->brwin.rgeom.y,
+                     AllPlanes);
     }
     if(!pdata->args.nosound){
         pdata->sound_handle=OpenDev( pdata->args.device,
@@ -101,7 +127,10 @@ int InitializeData(ProgData *pdata,
                                     &pdata->periodtime,
                                     &pdata->hard_pause);
         if(pdata->sound_handle==NULL){
-            fprintf(stderr,"Error while opening/configuring soundcard %s\nTry running with the --no-sound or specify a correct device.\n",pdata->args.device);
+            fprintf(stderr,"Error while opening/configuring soundcard %s\n"
+                           "Try running with the --no-sound or specify a "
+                           "correct device.\n",
+                           pdata->args.device);
             return 3;
         }
     }
@@ -113,7 +142,9 @@ int InitializeData(ProgData *pdata,
 
     for(i=0;i<(pdata->enc_data->yuv.y_width*pdata->enc_data->yuv.y_height);i++)
         pdata->enc_data->yuv.y[i]=0;
-    for(i=0;i<(pdata->enc_data->yuv.uv_width*pdata->enc_data->yuv.uv_height);i++){
+    for(i=0;
+        i<(pdata->enc_data->yuv.uv_width*pdata->enc_data->yuv.uv_height);
+        i++){
         pdata->enc_data->yuv.v[i]=pdata->enc_data->yuv.u[i]=127;
     }
 

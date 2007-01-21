@@ -1,28 +1,28 @@
-/*********************************************************************************
-*                             recordMyDesktop                                    *
-**********************************************************************************
-*                                                                                *
-*             Copyright (C) 2006  John Varouhakis                                *
-*                                                                                *
-*                                                                                *
-*    This program is free software; you can redistribute it and/or modify        *
-*    it under the terms of the GNU General Public License as published by        *
-*    the Free Software Foundation; either version 2 of the License, or           *
-*    (at your option) any later version.                                         *
-*                                                                                *
-*    This program is distributed in the hope that it will be useful,             *
-*    but WITHOUT ANY WARRANTY; without even the implied warranty of              *
-*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the               *
-*    GNU General Public License for more details.                                *
-*                                                                                *
-*    You should have received a copy of the GNU General Public License           *
-*    along with this program; if not, write to the Free Software                 *
-*    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA   *
-*                                                                                *
-*                                                                                *
-*                                                                                *
-*    For further information contact me at johnvarouhakis@gmail.com              *
-**********************************************************************************/
+/******************************************************************************
+*                            recordMyDesktop                                  *
+*******************************************************************************
+*                                                                             *
+*            Copyright (C) 2006,2007 John Varouhakis                          *
+*                                                                             *
+*                                                                             *
+*   This program is free software; you can redistribute it and/or modify      *
+*   it under the terms of the GNU General Public License as published by      *
+*   the Free Software Foundation; either version 2 of the License, or         *
+*   (at your option) any later version.                                       *
+*                                                                             *
+*   This program is distributed in the hope that it will be useful,           *
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of            *
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
+*   GNU General Public License for more details.                              *
+*                                                                             *
+*   You should have received a copy of the GNU General Public License         *
+*   along with this program; if not, write to the Free Software               *
+*   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA  *
+*                                                                             *
+*                                                                             *
+*                                                                             *
+*   For further information contact me at johnvarouhakis@gmail.com            *
+******************************************************************************/
 
 #ifndef RMDMACRO_H
 #define RMDMACRO_H 1
@@ -75,7 +75,8 @@
 
 #define CLIP_EVENT_AREA(e,brwin,wgeom){\
     if(((e)->area.x<=(brwin)->rgeom.x)&&((e)->area.y<=(brwin)->rgeom.y)&&\
-        ((e)->area.width>=(brwin)->rgeom.width)&&((e)->area.height<(brwin)->rgeom.height)){\
+        ((e)->area.width>=(brwin)->rgeom.width)&&\
+        ((e)->area.height<(brwin)->rgeom.height)){\
         (wgeom)->x=(brwin)->rgeom.x;\
         (wgeom)->y=(brwin)->rgeom.y;\
         (wgeom)->width=(brwin)->rgeom.width;\
@@ -99,33 +100,53 @@
         (wgeom)->height=((e)->area.y<=(brwin)->rgeom.y)?\
         (e)->area.height-((brwin)->rgeom.y-(e)->area.y):\
         ((e)->area.y<=(brwin)->rgeom.y+(brwin)->rgeom.height)?\
-        (((brwin)->rgeom.height-(e)->area.y+(brwin)->rgeom.y<(e)->area.height)?\
-        (brwin)->rgeom.height-(e)->area.y+(brwin)->rgeom.y:(e)->area.height):-1;\
+        (((brwin)->rgeom.height-(e)->area.y+\
+         (brwin)->rgeom.y<(e)->area.height)?\
+         (brwin)->rgeom.height-(e)->area.y+\
+         (brwin)->rgeom.y:(e)->area.height):-1;\
     \
-        if((wgeom)->width>(brwin)->rgeom.width)(wgeom)->width=(brwin)->rgeom.width;\
-        if((wgeom)->height>(brwin)->rgeom.height)(wgeom)->height=(brwin)->rgeom.height;\
+        if((wgeom)->width>(brwin)->rgeom.width)\
+            (wgeom)->width=(brwin)->rgeom.width;\
+        if((wgeom)->height>(brwin)->rgeom.height)\
+            (wgeom)->height=(brwin)->rgeom.height;\
     }\
 }
 
 #define CLIP_DUMMY_POINTER_AREA(dummy_p_area,brwin,wgeom){\
-    (wgeom)->x=((((dummy_p_area).x+(dummy_p_area).width>=(brwin)->rgeom.x)&&\
-    ((dummy_p_area).x<=(brwin)->rgeom.x+(brwin)->rgeom.width))?\
-    (((dummy_p_area).x<=(brwin)->rgeom.x)?(brwin)->rgeom.x:(dummy_p_area).x):-1);\
-    (wgeom)->y=((((dummy_p_area).y+(dummy_p_area).height>=(brwin)->rgeom.y)&&\
-    ((dummy_p_area).y<=(brwin)->rgeom.y+(brwin)->rgeom.height))?\
-    (((dummy_p_area).y<=(brwin)->rgeom.y)?(brwin)->rgeom.y:(dummy_p_area).y):-1);\
+    (wgeom)->x=((((dummy_p_area).x+\
+                (dummy_p_area).width>=(brwin)->rgeom.x)&&\
+                ((dummy_p_area).x<=(brwin)->rgeom.x+\
+                (brwin)->rgeom.width))?\
+                (((dummy_p_area).x<=(brwin)->rgeom.x)?\
+                (brwin)->rgeom.x:(dummy_p_area).x):-1);\
+    (wgeom)->y=((((dummy_p_area).y+\
+                (dummy_p_area).height>=(brwin)->rgeom.y)&&\
+                ((dummy_p_area).y<=(brwin)->rgeom.y+\
+                (brwin)->rgeom.height))?\
+                (((dummy_p_area).y<=(brwin)->rgeom.y)?\
+                (brwin)->rgeom.y:(dummy_p_area).y):-1);\
     (wgeom)->width=((dummy_p_area).x<=(brwin)->rgeom.x)?\
-    (dummy_p_area).width-((brwin)->rgeom.x-(dummy_p_area).x):\
-    ((dummy_p_area).x<=(brwin)->rgeom.x+(brwin)->rgeom.width)?\
-    ((brwin)->rgeom.width-(dummy_p_area).x+(brwin)->rgeom.x<(dummy_p_area).width)?\
-    (brwin)->rgeom.width-(dummy_p_area).x+(brwin)->rgeom.x:(dummy_p_area).width:-1;\
+                (dummy_p_area).width-\
+                ((brwin)->rgeom.x-(dummy_p_area).x):\
+                ((dummy_p_area).x<=(brwin)->rgeom.x+\
+                (brwin)->rgeom.width)?\
+                ((brwin)->rgeom.width-(dummy_p_area).x+\
+                (brwin)->rgeom.x<(dummy_p_area).width)?\
+                (brwin)->rgeom.width-(dummy_p_area).x+\
+                (brwin)->rgeom.x:(dummy_p_area).width:-1;\
     (wgeom)->height=((dummy_p_area).y<=(brwin)->rgeom.y)?\
-    (dummy_p_area).height-((brwin)->rgeom.y-(dummy_p_area).y):\
-    ((dummy_p_area).y<=(brwin)->rgeom.y+(brwin)->rgeom.height)?\
-    ((brwin)->rgeom.height-(dummy_p_area).y+(brwin)->rgeom.y<(dummy_p_area).height)?\
-    (brwin)->rgeom.height-(dummy_p_area).y+(brwin)->rgeom.y:(dummy_p_area).height:-1;\
-    if((wgeom)->width>(brwin)->rgeom.width)(wgeom)->width=(brwin)->rgeom.width;\
-    if((wgeom)->height>(brwin)->rgeom.height)(wgeom)->height=(brwin)->rgeom.height;\
+                (dummy_p_area).height-\
+                ((brwin)->rgeom.y-(dummy_p_area).y):\
+                ((dummy_p_area).y<=(brwin)->rgeom.y+\
+                (brwin)->rgeom.height)?\
+                ((brwin)->rgeom.height-(dummy_p_area).y+\
+                (brwin)->rgeom.y<(dummy_p_area).height)?\
+                (brwin)->rgeom.height-(dummy_p_area).y+\
+                (brwin)->rgeom.y:(dummy_p_area).height:-1;\
+    if((wgeom)->width>(brwin)->rgeom.width)\
+        (wgeom)->width=(brwin)->rgeom.width;\
+    if((wgeom)->height>(brwin)->rgeom.height)\
+        (wgeom)->height=(brwin)->rgeom.height;\
 }
 
 
@@ -221,13 +242,21 @@
     (t3&__B16_MASK)+(t4&__B16_MASK))/4)&__B16_MASK);\
 }
 
-#define UPDATE_Y_PLANE(data,x_tm,y_tm,height_tm,width_tm,yuv,__copy_type,__bit_depth__){  \
+#define UPDATE_Y_PLANE(data,\
+                       x_tm,\
+                       y_tm,\
+                       height_tm,\
+                       width_tm,\
+                       yuv,\
+                       __copy_type,\
+                       __bit_depth__){ \
     int k,i;\
     register RMD_TYPE_##__bit_depth__ t_val;\
     register unsigned char  *yuv_y=yuv->y+x_tm+y_tm*yuv->y_width,\
                             *_yr=Yr,*_yg=Yg,*_yb=Yb;\
-    register RMD_TYPE_##__bit_depth__ *datapi=(RMD_TYPE_##__bit_depth__ *)data+\
-                          ((__copy_type==__X_SHARED)?(x_tm+y_tm*yuv->y_width):0);\
+    register RMD_TYPE_##__bit_depth__ *datapi=(RMD_TYPE_##__bit_depth__ *)data\
+                                              +((__copy_type==__X_SHARED)?\
+                                              (x_tm+y_tm*yuv->y_width):0);\
     for(k=0;k<height_tm;k++){\
         for(i=0;i<width_tm;i++){\
             t_val=*datapi;\
@@ -243,16 +272,25 @@
     }\
 }
 
-#define UPDATE_UV_PLANES(data,x_tm,y_tm,height_tm,width_tm,yuv,__copy_type,__sampling_type,__bit_depth__){  \
+#define UPDATE_UV_PLANES(data,\
+                         x_tm,\
+                         y_tm,\
+                         height_tm,\
+                         width_tm,\
+                         yuv,\
+                         __copy_type,\
+                         __sampling_type,\
+                         __bit_depth__){  \
     int k,i;\
     register RMD_TYPE_##__bit_depth__ t_val;\
     register unsigned char  *yuv_u=yuv->u+x_tm/2+(y_tm*yuv->uv_width)/2,\
                             *yuv_v=yuv->v+x_tm/2+(y_tm*yuv->uv_width)/2,\
                             *_ur=Ur,*_ug=Ug,*_ub=Ub,\
                             *_vr=Vr,*_vg=Vg,*_vb=Vb;\
-    register RMD_TYPE_##__bit_depth__ *datapi=(RMD_TYPE_##__bit_depth__ *)data+\
-                          ((__copy_type==__X_SHARED)?(x_tm+y_tm*yuv->y_width):0),\
-                          *datapi_next=NULL;\
+    register RMD_TYPE_##__bit_depth__ *datapi=(RMD_TYPE_##__bit_depth__ *)data\
+                                               +((__copy_type==__X_SHARED)?\
+                                                (x_tm+y_tm*yuv->y_width):0),\
+                                      *datapi_next=NULL;\
     if(__sampling_type==__PXL_AVERAGE){\
         datapi_next=datapi+\
         ((__copy_type==__X_SHARED)?(yuv->y_width):(width_tm));\
@@ -280,40 +318,69 @@
         }\
         yuv_u+=(yuv->y_width-width_tm)/2;\
         yuv_v+=(yuv->y_width-width_tm)/2;\
-        datapi+=((__copy_type==__X_SHARED)?(2*yuv->y_width-width_tm):width_tm);\
+        datapi+=((__copy_type==__X_SHARED)?\
+                 (2*yuv->y_width-width_tm):width_tm);\
         if(__sampling_type==__PXL_AVERAGE)\
-            datapi_next+=((__copy_type==__X_SHARED)?(2*yuv->y_width-width_tm):width_tm);\
+            datapi_next+=((__copy_type==__X_SHARED)?\
+                          (2*yuv->y_width-width_tm):width_tm);\
     }\
 }
 
-#define UPDATE_YUV_BUFFER(yuv,data,x_tm,y_tm,width_tm,height_tm,__copy_type,__sampling_type,__color_depth){\
+#define UPDATE_YUV_BUFFER(yuv,\
+                          data,\
+                          x_tm,\
+                          y_tm,\
+                          width_tm,\
+                          height_tm,\
+                          __copy_type,\
+                          __sampling_type,\
+                          __color_depth){\
     if((__color_depth==24)||(__color_depth==32)){\
         UPDATE_Y_PLANE(data,x_tm,y_tm,height_tm,width_tm,yuv,__copy_type,32)\
-        UPDATE_UV_PLANES(data,x_tm,y_tm,height_tm,width_tm,yuv,__copy_type,__sampling_type,32)\
+        UPDATE_UV_PLANES(data,x_tm,y_tm,height_tm,width_tm,\
+                         yuv,__copy_type,__sampling_type,32)\
     }\
     else if(__color_depth==16){\
         UPDATE_Y_PLANE(data,x_tm,y_tm,height_tm,width_tm,yuv,__copy_type,16)\
-        UPDATE_UV_PLANES(data,x_tm,y_tm,height_tm,width_tm,yuv,__copy_type,__sampling_type,16)\
+        UPDATE_UV_PLANES(data,x_tm,y_tm,height_tm,width_tm,\
+                         yuv,__copy_type,__sampling_type,16)\
     }\
 }
 
 
 
-#define XFIXES_POINTER_TO_YUV(yuv,data,x_tm,y_tm,width_tm,height_tm,column_discard_stride){\
+#define XFIXES_POINTER_TO_YUV(yuv,\
+                              data,\
+                              x_tm,\
+                              y_tm,\
+                              width_tm,\
+                              height_tm,\
+                              column_discard_stride){\
     int i,k,j=0;\
     unsigned char avg0,avg1,avg2,avg3;\
     int x_2=x_tm/2,y_2=y_tm/2;\
     for(k=0;k<height_tm;k++){\
         for(i=0;i<width_tm;i++){\
                 yuv->y[x_tm+i+(k+y_tm)*yuv->y_width]=\
-                (yuv->y[x_tm+i+(k+y_tm)*yuv->y_width]*(UCHAR_MAX-data[(j*RMD_ULONG_SIZE_T)+__ABYTE])+\
-                (Yr[data[(j*RMD_ULONG_SIZE_T)+__RBYTE]] + Yg[data[(j*RMD_ULONG_SIZE_T)+__GBYTE]] +\
-                Yb[data[(j*RMD_ULONG_SIZE_T)+__BBYTE]])*data[(j*RMD_ULONG_SIZE_T)+__ABYTE])/UCHAR_MAX ;\
+                    (yuv->y[x_tm+i+(k+y_tm)*yuv->y_width]*\
+                    (UCHAR_MAX-data[(j*RMD_ULONG_SIZE_T)+__ABYTE])+\
+                    (Yr[data[(j*RMD_ULONG_SIZE_T)+__RBYTE]]+\
+                    Yg[data[(j*RMD_ULONG_SIZE_T)+__GBYTE]] +\
+                    Yb[data[(j*RMD_ULONG_SIZE_T)+__BBYTE]])*\
+                data[(j*RMD_ULONG_SIZE_T)+__ABYTE])/UCHAR_MAX ;\
                 if((k%2)&&(i%2)){\
-                    avg3=AVG_4_PIXELS(data,(width_tm+column_discard_stride),k,i,__ABYTE);\
-                    avg2=AVG_4_PIXELS(data,(width_tm+column_discard_stride),k,i,__RBYTE);\
-                    avg1=AVG_4_PIXELS(data,(width_tm+column_discard_stride),k,i,__GBYTE);\
-                    avg0=AVG_4_PIXELS(data,(width_tm+column_discard_stride),k,i,__BBYTE);\
+                    avg3=AVG_4_PIXELS(data,\
+                                      (width_tm+column_discard_stride),\
+                                      k,i,__ABYTE);\
+                    avg2=AVG_4_PIXELS(data,\
+                                      (width_tm+column_discard_stride),\
+                                      k,i,__RBYTE);\
+                    avg1=AVG_4_PIXELS(data,\
+                                      (width_tm+column_discard_stride),\
+                                      k,i,__GBYTE);\
+                    avg0=AVG_4_PIXELS(data,\
+                                      (width_tm+column_discard_stride),\
+                                      k,i,__BBYTE);\
                     yuv->u[x_2+i/2+(k/2+y_2)*yuv->uv_width]=\
                     (yuv->u[x_2+i/2+(k/2+y_2)*yuv->uv_width]*(UCHAR_MAX-avg3)+\
                     (Ur[avg2] + Ug[avg1] +Ub[avg0])*avg3)/UCHAR_MAX;\
@@ -327,16 +394,31 @@
     }\
 }
 
-#define DUMMY_POINTER_TO_YUV(yuv,data_tm,x_tm,y_tm,width_tm,height_tm,no_pixel){\
+#define DUMMY_POINTER_TO_YUV(yuv,\
+                             data_tm,\
+                             x_tm,\
+                             y_tm,\
+                             width_tm,\
+                             height_tm,\
+                             no_pixel){\
     int i,k,j=0;\
     int x_2=x_tm/2,y_2=y_tm/2,y_width_2=(yuv)->y_width/2;\
     for(k=0;k<height_tm;k++){\
         for(i=0;i<width_tm;i++){\
             if(data_tm[(j*4)]!=(no_pixel)){\
-                (yuv)->y[x_tm+i+(k+y_tm)*(yuv)->y_width]=Yr[data_tm[(j*4)+__RBYTE]] + Yg[data_tm[(j*4)+__GBYTE]] + Yb[data_tm[(j*4)+__BBYTE]];\
+                (yuv)->y[x_tm+i+(k+y_tm)*(yuv)->y_width]=\
+                    Yr[data_tm[(j*4)+__RBYTE]] +\
+                    Yg[data_tm[(j*4)+__GBYTE]] +\
+                    Yb[data_tm[(j*4)+__BBYTE]];\
                 if((k%2)&&(i%2)){\
-                    yuv->u[x_2+i/2+(k/2+y_2)*y_width_2]=Ur[data_tm[(k*width_tm+i)*4+__RBYTE]] + Ug[data_tm[(k*width_tm+i)*4+__GBYTE]] + Ub[data_tm[(k*width_tm+i)*4+__BBYTE]];\
-                    yuv->v[x_2+i/2+(k/2+y_2)*y_width_2]=Vr[data_tm[(k*width_tm+i)*4+__RBYTE]] + Vg[data_tm[(k*width_tm+i)*4+__GBYTE]] + Vb[data_tm[(k*width_tm+i)*4+__BBYTE]] ;\
+                    yuv->u[x_2+i/2+(k/2+y_2)*y_width_2]=\
+                        Ur[data_tm[(k*width_tm+i)*4+__RBYTE]] +\
+                        Ug[data_tm[(k*width_tm+i)*4+__GBYTE]] +\
+                        Ub[data_tm[(k*width_tm+i)*4+__BBYTE]];\
+                    yuv->v[x_2+i/2+(k/2+y_2)*y_width_2]=\
+                        Vr[data_tm[(k*width_tm+i)*4+__RBYTE]] +\
+                        Vg[data_tm[(k*width_tm+i)*4+__GBYTE]] +\
+                        Vb[data_tm[(k*width_tm+i)*4+__BBYTE]] ;\
                 }\
             }\
             j++;\

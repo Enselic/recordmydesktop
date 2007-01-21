@@ -1,39 +1,45 @@
-/*********************************************************************************
-*                             recordMyDesktop                                    *
-**********************************************************************************
-*                                                                                *
-*             Copyright (C) 2006  John Varouhakis                                *
-*                                                                                *
-*                                                                                *
-*    This program is free software; you can redistribute it and/or modify        *
-*    it under the terms of the GNU General Public License as published by        *
-*    the Free Software Foundation; either version 2 of the License, or           *
-*    (at your option) any later version.                                         *
-*                                                                                *
-*    This program is distributed in the hope that it will be useful,             *
-*    but WITHOUT ANY WARRANTY; without even the implied warranty of              *
-*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the               *
-*    GNU General Public License for more details.                                *
-*                                                                                *
-*    You should have received a copy of the GNU General Public License           *
-*    along with this program; if not, write to the Free Software                 *
-*    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA   *
-*                                                                                *
-*                                                                                *
-*                                                                                *
-*    For further information contact me at johnvarouhakis@gmail.com              *
-**********************************************************************************/
+/******************************************************************************
+*                            recordMyDesktop                                  *
+*******************************************************************************
+*                                                                             *
+*            Copyright (C) 2006,2007 John Varouhakis                          *
+*                                                                             *
+*                                                                             *
+*   This program is free software; you can redistribute it and/or modify      *
+*   it under the terms of the GNU General Public License as published by      *
+*   the Free Software Foundation; either version 2 of the License, or         *
+*   (at your option) any later version.                                       *
+*                                                                             *
+*   This program is distributed in the hope that it will be useful,           *
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of            *
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
+*   GNU General Public License for more details.                              *
+*                                                                             *
+*   You should have received a copy of the GNU General Public License         *
+*   along with this program; if not, write to the Free Software               *
+*   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA  *
+*                                                                             *
+*                                                                             *
+*                                                                             *
+*   For further information contact me at johnvarouhakis@gmail.com            *
+******************************************************************************/
 
 
 #include <recordmydesktop.h>
 
-void LoadBlock(unsigned char *dest,unsigned char *source,int blockno,int width, int height,int divisor){
+void LoadBlock(unsigned char *dest,
+               unsigned char *source,
+               int blockno,
+               int width,
+               int height,
+               int divisor){
     int j,
         block_i=blockno/divisor,//place on the grid
         block_k=blockno%divisor;
 
     for(j=0;j<height/divisor;j++)//we copy rows
-        memcpy( &dest[block_i*(width*height/divisor)+j*width+block_k*width/divisor],
+        memcpy( &dest[block_i*(width*height/divisor)+
+                 j*width+block_k*width/divisor],
                 &source[j*width/divisor],
                 width/divisor);
 }
@@ -58,7 +64,8 @@ void *LoadCache(ProgData *pdata){
         divisor=16,
         blockszy=0,//size of y plane block in bytes
         blockszuv=0,//size of u,v plane blocks in bytes
-        framesize=((snd_pcm_format_width(SND_PCM_FORMAT_S16_LE))/8)*pdata->args.channels;//audio frame size
+        framesize=((snd_pcm_format_width(SND_PCM_FORMAT_S16_LE))/8)*
+                  pdata->args.channels;//audio frame size
     signed char *sound_data=(signed char *)malloc(pdata->periodsize*framesize);
 
     //we allocate the frame that we will use
@@ -106,11 +113,13 @@ void *LoadCache(ProgData *pdata){
                 SyncEncodeImageBuffer(pdata);
             }
             else if(((!pdata->args.zerocompression)&&
-                    (gzread(ifp,frame.header,sizeof(FrameHeader))==sizeof(FrameHeader) ))||
+                    (gzread(ifp,frame.header,sizeof(FrameHeader))==
+                     sizeof(FrameHeader) ))||
                     ((pdata->args.zerocompression)&&
                     (fread(frame.header,sizeof(FrameHeader),1,ucfp)==1))){
                 //sync
-                missing_frames+=frame.header->current_total-(extra_frames+frame.header->frameno);
+                missing_frames+=frame.header->current_total-
+                                (extra_frames+frame.header->frameno);
                 fprintf(stdout,"\r[%d%%] ",
                 ((frame.header->frameno+extra_frames)*100)/frames_total);
 
@@ -121,21 +130,35 @@ void *LoadCache(ProgData *pdata){
 
                     (
                     ((!pdata->args.zerocompression)&&
-                    ((gzread(ifp,frame.YBlocks,frame.header->Ynum)==frame.header->Ynum) &&
-                    (gzread(ifp,frame.UBlocks,frame.header->Unum)==frame.header->Unum) &&
-                    (gzread(ifp,frame.VBlocks,frame.header->Vnum)==frame.header->Vnum) &&
-                    (gzread(ifp,frame.YData,blockszy*frame.header->Ynum)==blockszy*frame.header->Ynum) &&
-                    (gzread(ifp,frame.UData,(blockszuv*frame.header->Unum))==(blockszuv*frame.header->Unum)) &&
-                    (gzread(ifp,frame.VData,(blockszuv*frame.header->Vnum))==(blockszuv*frame.header->Vnum)))) ||
+                    ((gzread(ifp,frame.YBlocks,frame.header->Ynum)==
+                      frame.header->Ynum) &&
+                     (gzread(ifp,frame.UBlocks,frame.header->Unum)==
+                      frame.header->Unum) &&
+                     (gzread(ifp,frame.VBlocks,frame.header->Vnum)==
+                      frame.header->Vnum) &&
+                     (gzread(ifp,frame.YData,blockszy*frame.header->Ynum)==
+                      blockszy*frame.header->Ynum) &&
+                     (gzread(ifp,frame.UData,(blockszuv*frame.header->Unum))==
+                      (blockszuv*frame.header->Unum)) &&
+                     (gzread(ifp,frame.VData,(blockszuv*frame.header->Vnum))==
+                      (blockszuv*frame.header->Vnum)))) ||
 
                     ((pdata->args.zerocompression)&&
-                    ((fread(frame.YBlocks,1,frame.header->Ynum,ucfp)==frame.header->Ynum) &&
-                    (fread(frame.UBlocks,1,frame.header->Unum,ucfp)==frame.header->Unum) &&
-                    (fread(frame.VBlocks,1,frame.header->Vnum,ucfp)==frame.header->Vnum) &&
-                    (frame.header->Ynum==0 ||fread(frame.YData,blockszy,frame.header->Ynum,ucfp)==frame.header->Ynum) &&
-                    (frame.header->Unum==0 ||fread(frame.UData,blockszuv,frame.header->Unum,ucfp)==frame.header->Unum) &&
-                    (frame.header->Vnum==0 ||fread(frame.VData,blockszuv,frame.header->Vnum,ucfp)==frame.header->Vnum)))
-
+                    ((fread(frame.YBlocks,1,frame.header->Ynum,ucfp)==
+                      frame.header->Ynum) &&
+                     (fread(frame.UBlocks,1,frame.header->Unum,ucfp)==
+                      frame.header->Unum) &&
+                     (fread(frame.VBlocks,1,frame.header->Vnum,ucfp)==
+                      frame.header->Vnum) &&
+                     (frame.header->Ynum==0 ||
+                      fread(frame.YData,blockszy,frame.header->Ynum,ucfp)==
+                      frame.header->Ynum) &&
+                     (frame.header->Unum==0 ||
+                      fread(frame.UData,blockszuv,frame.header->Unum,ucfp)==
+                      frame.header->Unum) &&
+                     (frame.header->Vnum==0 ||
+                      fread(frame.VData,blockszuv,frame.header->Vnum,ucfp)==
+                      frame.header->Vnum)))
                     )
                         ){
                         //load the blocks for each buffer
@@ -163,8 +186,10 @@ void *LoadCache(ProgData *pdata){
                                             yuv->uv_width,
                                             yuv->uv_height,
                                             divisor/2);
-                        //encode. This is not made in a thread since now blocking is not a problem
-                        //and this way sync problems can be avoided more easily.
+                        //encode. This is not made in a thread since
+                        //now blocking is not a problem
+                        //and this way sync problems
+                        //can be avoided more easily.
                         SyncEncodeImageBuffer(pdata);
                 }
                 else{
@@ -173,7 +198,10 @@ void *LoadCache(ProgData *pdata){
                 }
             }
             else{
-                if(SwapCacheFilesRead(pdata->cache_data->imgdata,nth_cache,&ifp,&ucfp)){
+                if(SwapCacheFilesRead(pdata->cache_data->imgdata,
+                                      nth_cache,
+                                      &ifp,
+                                      &ucfp)){
                     raise(SIGINT);
                 }
                 else{

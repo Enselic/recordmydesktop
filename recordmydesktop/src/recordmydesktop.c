@@ -1,28 +1,28 @@
-/*********************************************************************************
-*                             recordMyDesktop                                    *
-**********************************************************************************
-*                                                                                *
-*             Copyright (C) 2006  John Varouhakis                                *
-*                                                                                *
-*                                                                                *
-*    This program is free software; you can redistribute it and/or modify        *
-*    it under the terms of the GNU General Public License as published by        *
-*    the Free Software Foundation; either version 2 of the License, or           *
-*    (at your option) any later version.                                         *
-*                                                                                *
-*    This program is distributed in the hope that it will be useful,             *
-*    but WITHOUT ANY WARRANTY; without even the implied warranty of              *
-*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the               *
-*    GNU General Public License for more details.                                *
-*                                                                                *
-*    You should have received a copy of the GNU General Public License           *
-*    along with this program; if not, write to the Free Software                 *
-*    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA   *
-*                                                                                *
-*                                                                                *
-*                                                                                *
-*    For further information contact me at johnvarouhakis@gmail.com              *
-**********************************************************************************/
+/******************************************************************************
+*                            recordMyDesktop                                  *
+*******************************************************************************
+*                                                                             *
+*            Copyright (C) 2006,2007 John Varouhakis                          *
+*                                                                             *
+*                                                                             *
+*   This program is free software; you can redistribute it and/or modify      *
+*   it under the terms of the GNU General Public License as published by      *
+*   the Free Software Foundation; either version 2 of the License, or         *
+*   (at your option) any later version.                                       *
+*                                                                             *
+*   This program is distributed in the hope that it will be useful,           *
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of            *
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
+*   GNU General Public License for more details.                              *
+*                                                                             *
+*   You should have received a copy of the GNU General Public License         *
+*   along with this program; if not, write to the Free Software               *
+*   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA  *
+*                                                                             *
+*                                                                             *
+*                                                                             *
+*   For further information contact me at johnvarouhakis@gmail.com            *
+******************************************************************************/
 
 
 #include <recordmydesktop.h>
@@ -54,33 +54,45 @@ int main(int argc,char **argv){
         CacheData cache_data;
 
         QUERY_DISPLAY_SPECS(pdata.dpy,&pdata.specs);
-        if((pdata.specs.depth!=32)&&(pdata.specs.depth!=24)&&(pdata.specs.depth!=16)){
-            fprintf(stderr,"Only 32bpp,24bpp and 16bpp color depth modes are currently supported.\n");
+        if((pdata.specs.depth!=32)&&
+           (pdata.specs.depth!=24)&&
+           (pdata.specs.depth!=16)){
+            fprintf(stderr,"Only 32bpp,24bpp and 16bpp"
+                           " color depth modes are currently supported.\n");
             exit(10);
         }
         if(SetBRWindow(pdata.dpy,&pdata.brwin,&pdata.specs,&pdata.args))
             exit(11);
 
-        //check if we are under compiz or beryl,in which case we must enable full-shots
+        //check if we are under compiz or beryl,
+        //in which case we must enable full-shots
         //and with it use of shared memory.User can override this
-        pdata.window_manager=((pdata.args.nowmcheck)?NULL:rmdWMCheck(pdata.dpy,pdata.specs.root));
+        pdata.window_manager=((pdata.args.nowmcheck)?
+                              NULL:rmdWMCheck(pdata.dpy,pdata.specs.root));
         if(pdata.window_manager==NULL){
             fprintf(stderr,"Not taking window manager into account.\n");
         }
-        //Right now only wm's that I know of performing 3d compositing are beryl and compiz.
+        //Right now only wm's that I know of performing
+        //3d compositing are beryl and compiz.
         //No, the blue screen in metacity doesn't count :)
-        //names can be compiz for compiz and beryl/beryl-co/beryl-core for beryl(so it's strncmp )
-        else if(!strcmp(pdata.window_manager,"compiz") || !strncmp(pdata.window_manager,"beryl",5)){
+        //names can be compiz for compiz and beryl/beryl-co/beryl-core
+        //for beryl(so it's strncmp )
+        else if(!strcmp(pdata.window_manager,"compiz") ||
+                !strncmp(pdata.window_manager,"beryl",5)){
             fprintf(stderr,"\nDetected 3d compositing window manager.\n"
                            "Reverting to full screen capture at every frame.\n"
                            "To disable this check run with --no-wm-check\n"
-                           "(though that is not advised, since it will probably produce faulty results).\n\n");
+                           "(though that is not advised, since it will "
+                           "probably produce faulty results).\n\n");
             pdata.args.full_shots=1;
             pdata.args.noshared=0;
             pdata.args.nocondshared=1;
         }
 
-        QueryExtensions(pdata.dpy,&pdata.args,&pdata.damage_event, &pdata.damage_error);
+        QueryExtensions(pdata.dpy,
+                        &pdata.args,
+                        &pdata.damage_event,
+                        &pdata.damage_error);
 
 
         if((exit_status=InitializeData(&pdata,&enc_data,&cache_data))!=0)
@@ -104,7 +116,8 @@ int main(int argc,char **argv){
             }
             fprintf(stderr,"Cleanning up cache...\n");
             if(PurgeCache(pdata.cache_data,!pdata.args.nosound))
-                fprintf(stderr,"Some error occured while cleaning up cache!\n");
+                fprintf(stderr,"Some error occured "
+                               "while cleaning up cache!\n");
             fprintf(stderr,"Done!!!\n");
         }
 
@@ -118,7 +131,8 @@ int main(int argc,char **argv){
                 return 1;
             }
             else{
-                fprintf(stderr,"SIGABRT received,file %s removed\n",pdata.args.filename);
+                fprintf(stderr,"SIGABRT received,file %s removed\n",
+                               pdata.args.filename);
                 return 0;
             }
         }

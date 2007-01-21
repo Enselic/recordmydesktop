@@ -1,28 +1,28 @@
-/*********************************************************************************
-*                             recordMyDesktop                                    *
-**********************************************************************************
-*                                                                                *
-*             Copyright (C) 2006  John Varouhakis                                *
-*                                                                                *
-*                                                                                *
-*    This program is free software; you can redistribute it and/or modify        *
-*    it under the terms of the GNU General Public License as published by        *
-*    the Free Software Foundation; either version 2 of the License, or           *
-*    (at your option) any later version.                                         *
-*                                                                                *
-*    This program is distributed in the hope that it will be useful,             *
-*    but WITHOUT ANY WARRANTY; without even the implied warranty of              *
-*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the               *
-*    GNU General Public License for more details.                                *
-*                                                                                *
-*    You should have received a copy of the GNU General Public License           *
-*    along with this program; if not, write to the Free Software                 *
-*    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA   *
-*                                                                                *
-*                                                                                *
-*                                                                                *
-*    For further information contact me at johnvarouhakis@gmail.com              *
-**********************************************************************************/
+/******************************************************************************
+*                            recordMyDesktop                                  *
+*******************************************************************************
+*                                                                             *
+*            Copyright (C) 2006,2007 John Varouhakis                          *
+*                                                                             *
+*                                                                             *
+*   This program is free software; you can redistribute it and/or modify      *
+*   it under the terms of the GNU General Public License as published by      *
+*   the Free Software Foundation; either version 2 of the License, or         *
+*   (at your option) any later version.                                       *
+*                                                                             *
+*   This program is distributed in the hope that it will be useful,           *
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of            *
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
+*   GNU General Public License for more details.                              *
+*                                                                             *
+*   You should have received a copy of the GNU General Public License         *
+*   along with this program; if not, write to the Free Software               *
+*   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA  *
+*                                                                             *
+*                                                                             *
+*                                                                             *
+*   For further information contact me at johnvarouhakis@gmail.com            *
+******************************************************************************/
 
 
 #include <recordmydesktop.h>
@@ -30,7 +30,8 @@
 void *CaptureSound(ProgData *pdata){
 
     int frames=pdata->periodsize;
-    int framesize=((snd_pcm_format_width(SND_PCM_FORMAT_S16_LE))/8)*pdata->args.channels;
+    int framesize=((snd_pcm_format_width(SND_PCM_FORMAT_S16_LE))/8)*
+                  pdata->args.channels;
     pthread_mutex_t pmut;
     pthread_mutex_init(&pmut,NULL);
 
@@ -57,7 +58,8 @@ void *CaptureSound(ProgData *pdata){
                             &pdata->args.buffsize,
                             NULL,
                             NULL,
-                            NULL//let's hope that the device capabilities didn't magically change
+                            NULL//let's hope that the device capabilities
+                                //didn't magically change
                             );
                 if(pdata->sound_handle==NULL){
                     fprintf(stderr,"Couldn't reopen sound device.Exiting\n");
@@ -79,11 +81,14 @@ void *CaptureSound(ProgData *pdata){
                                 newbuf->data+framesize*sret,
                                 frames-sret);
             if(temp_sret==-EPIPE){
-                fprintf(stderr,"%s: Underrun occurred.\n",snd_strerror(temp_sret));
+                fprintf(stderr,"%s: Underrun occurred.\n",
+                               snd_strerror(temp_sret));
                 snd_pcm_prepare(pdata->sound_handle);
             }
             else if (temp_sret<0){
-                fprintf(stderr,"An error occured while reading sound data:\n %s\n",snd_strerror(temp_sret));
+                fprintf(stderr,"An error occured while reading sound data:\n"
+                               " %s\n",
+                               snd_strerror(temp_sret));
                 snd_pcm_prepare(pdata->sound_handle);
             }
             else

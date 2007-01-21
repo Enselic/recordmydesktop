@@ -1,38 +1,46 @@
-/*********************************************************************************
-*                             recordMyDesktop                                    *
-**********************************************************************************
-*                                                                                *
-*             Copyright (C) 2006  John Varouhakis                                *
-*                                                                                *
-*                                                                                *
-*    This program is free software; you can redistribute it and/or modify        *
-*    it under the terms of the GNU General Public License as published by        *
-*    the Free Software Foundation; either version 2 of the License, or           *
-*    (at your option) any later version.                                         *
-*                                                                                *
-*    This program is distributed in the hope that it will be useful,             *
-*    but WITHOUT ANY WARRANTY; without even the implied warranty of              *
-*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the               *
-*    GNU General Public License for more details.                                *
-*                                                                                *
-*    You should have received a copy of the GNU General Public License           *
-*    along with this program; if not, write to the Free Software                 *
-*    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA   *
-*                                                                                *
-*                                                                                *
-*                                                                                *
-*    For further information contact me at johnvarouhakis@gmail.com              *
-**********************************************************************************/
+/******************************************************************************
+*                            recordMyDesktop                                  *
+*******************************************************************************
+*                                                                             *
+*            Copyright (C) 2006,2007 John Varouhakis                          *
+*                                                                             *
+*                                                                             *
+*   This program is free software; you can redistribute it and/or modify      *
+*   it under the terms of the GNU General Public License as published by      *
+*   the Free Software Foundation; either version 2 of the License, or         *
+*   (at your option) any later version.                                       *
+*                                                                             *
+*   This program is distributed in the hope that it will be useful,           *
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of            *
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
+*   GNU General Public License for more details.                              *
+*                                                                             *
+*   You should have received a copy of the GNU General Public License         *
+*   along with this program; if not, write to the Free Software               *
+*   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA  *
+*                                                                             *
+*                                                                             *
+*                                                                             *
+*   For further information contact me at johnvarouhakis@gmail.com            *
+******************************************************************************/
 
 #include <recordmydesktop.h>
 
 
-int CompareBlocks(unsigned char *incoming,unsigned char *old,int blockno,int width, int height,int divisor){
+int CompareBlocks(unsigned char *incoming,
+                  unsigned char *old,
+                  int blockno,
+                  int width,
+                  int height,
+                  int divisor){
     int j,i,
         block_i=blockno/divisor,//place on the grid
         block_k=blockno%divisor;
-    register unsigned char *incoming_reg=&(incoming[block_i*(width*height/divisor)+block_k*width/divisor]),
-                           *old_reg=&(old[block_i*(width*height/divisor)+block_k*width/divisor]);
+    register unsigned char *incoming_reg=&(incoming[block_i*
+                                         (width*height/divisor)+
+                                         block_k*width/divisor]),
+                           *old_reg=&(old[block_i*(width*height/divisor)+
+                                    block_k*width/divisor]);
 
     for(j=0;j<height/divisor;j++){
         for(i=0;i<width/divisor;i++){
@@ -46,11 +54,18 @@ int CompareBlocks(unsigned char *incoming,unsigned char *old,int blockno,int wid
     return 0;
 }
 
-int FlushBlock(unsigned char *buf,int blockno,int width, int height,int divisor,gzFile *fp,FILE *ucfp){
+int FlushBlock(unsigned char *buf,
+               int blockno,
+               int width,
+               int height,
+               int divisor,
+               gzFile *fp,
+               FILE *ucfp){
     int j,
         block_i=blockno/divisor,//place on the grid
         block_k=blockno%divisor;
-    register unsigned char *buf_reg=(&buf[block_i*(width*height/divisor)+block_k*width/divisor]);
+    register unsigned char *buf_reg=(&buf[block_i*(width*height/divisor)
+                                    +block_k*width/divisor]);
     if(ucfp==NULL){
         for(j=0;j<height/divisor;j++){//we flush in rows
             gzwrite(fp,(void *)buf_reg,width/divisor);
@@ -123,9 +138,12 @@ void *CacheImageBuffer(ProgData *pdata){
         prev=current;
         current=(current)?0:1;
         //copy incoming
-        memcpy(yuv[current].y,pdata->enc_data->yuv.y,yuv[current].y_width*yuv[current].y_height);
-        memcpy(yuv[current].u,pdata->enc_data->yuv.u,yuv[current].uv_width*yuv[current].uv_height);
-        memcpy(yuv[current].v,pdata->enc_data->yuv.v,yuv[current].uv_width*yuv[current].uv_height);
+        memcpy(yuv[current].y,pdata->enc_data->yuv.y,
+               yuv[current].y_width*yuv[current].y_height);
+        memcpy(yuv[current].u,pdata->enc_data->yuv.u,
+               yuv[current].uv_width*yuv[current].uv_height);
+        memcpy(yuv[current].v,pdata->enc_data->yuv.v,
+               yuv[current].uv_width*yuv[current].uv_height);
         //release main buffer
         pthread_mutex_unlock(&pdata->yuv_mutex);
         //get checksums for new
@@ -149,19 +167,25 @@ void *CacheImageBuffer(ProgData *pdata){
         }
         else{
             for(j=0;j<pow(divisor,2);j++){
-                if(CompareBlocks(yuv[current].y,yuv[prev].y,j,yuv[current].y_width,yuv[current].y_height,divisor)){
+                if(CompareBlocks(yuv[current].y,yuv[prev].y,j,
+                                 yuv[current].y_width,
+                                 yuv[current].y_height,divisor)){
                     ynum++;
                     yblocks[ynum-1]=j;
                 }
             }
             for(j=0;j<pow(divisor/2,2);j++){
-                if(CompareBlocks(yuv[current].u,yuv[prev].u,j,yuv[current].uv_width,yuv[current].uv_height,divisor/2)){
+                if(CompareBlocks(yuv[current].u,yuv[prev].u,j,
+                                 yuv[current].uv_width,
+                                 yuv[current].uv_height,divisor/2)){
                     unum++;
                     ublocks[unum-1]=j;
                 }
             }
             for(j=0;j<pow(divisor/2,2);j++){
-                if(CompareBlocks(yuv[current].v,yuv[prev].v,j,yuv[current].uv_width,yuv[current].uv_height,divisor/2)){
+                if(CompareBlocks(yuv[current].v,yuv[prev].v,j,
+                                 yuv[current].uv_width,
+                                 yuv[current].uv_height,divisor/2)){
                     vnum++;
                     vblocks[vnum-1]=j;
                 }
@@ -191,7 +215,8 @@ void *CacheImageBuffer(ProgData *pdata){
             if(vnum)nbytes+=gzwrite(fp,vblocks,vnum);
         }
         else{
-            nbytes+=sizeof(FrameHeader)*fwrite((void*)&fheader,sizeof(FrameHeader),1,ucfp);
+            nbytes+=sizeof(FrameHeader)*
+                    fwrite((void*)&fheader,sizeof(FrameHeader),1,ucfp);
             //flush indexes
             if(ynum)nbytes+=ynum*fwrite(yblocks,ynum,1,ucfp);
             if(unum)nbytes+=unum*fwrite(ublocks,unum,1,ucfp);
@@ -227,18 +252,23 @@ void *CacheImageBuffer(ProgData *pdata){
         /**@________________@**/
         pdata->avd+=pdata->frametime;
         if(nbytes>CACHE_FILE_SIZE_LIMIT){
-            if(SwapCacheFilesWrite(pdata->cache_data->imgdata,nth_cache,&fp,&ucfp)){
-                fprintf(stderr,"New cache file could not be created.\nEnding recording...\n");
+            if(SwapCacheFilesWrite(pdata->cache_data->imgdata,
+                                   nth_cache,&fp,&ucfp)){
+                fprintf(stderr,"New cache file could not be created.\n"
+                               "Ending recording...\n");
                 fflush(stderr);
                 raise(SIGINT);  //if for some reason we cannot make a new file
-                                //we have to stop. If we are out of space,which means
+                                //we have to stop. If we are out of space,
+                                //which means
                                 //that encoding cannot happen either,
                                 //InitEncoder will cause an abrupt end with an
                                 //error code and the cache will remain intact.
-                                //If we've chosen separate two-stages, the program will make a
+                                //If we've chosen separate two-stages,
+                                //the program will make a
                                 //clean exit.
                                 //In either case data will be preserved so if
-                                //space is freed the recording can be proccessed later.
+                                //space is freed the recording
+                                //can be proccessed later.
             }
             nth_cache++;
             nbytes=0;
@@ -251,7 +281,8 @@ void *CacheImageBuffer(ProgData *pdata){
         free(yuv[i].u);
         free(yuv[i].v);
     }
-    fprintf(stderr,"Saved %d frames in a total of %d requests\n",frameno,frames_total);
+    fprintf(stderr,"Saved %d frames in a total of %d requests\n",
+                   frameno,frames_total);
     if(!pdata->args.zerocompression){
         gzflush(fp,Z_FINISH);
         gzclose(fp);

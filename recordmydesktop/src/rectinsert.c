@@ -1,35 +1,40 @@
-/*********************************************************************************
-*                             recordMyDesktop                                    *
-**********************************************************************************
-*                                                                                *
-*             Copyright (C) 2006  John Varouhakis                                *
-*                                                                                *
-*                                                                                *
-*    This program is free software; you can redistribute it and/or modify        *
-*    it under the terms of the GNU General Public License as published by        *
-*    the Free Software Foundation; either version 2 of the License, or           *
-*    (at your option) any later version.                                         *
-*                                                                                *
-*    This program is distributed in the hope that it will be useful,             *
-*    but WITHOUT ANY WARRANTY; without even the implied warranty of              *
-*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the               *
-*    GNU General Public License for more details.                                *
-*                                                                                *
-*    You should have received a copy of the GNU General Public License           *
-*    along with this program; if not, write to the Free Software                 *
-*    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA   *
-*                                                                                *
-*                                                                                *
-*                                                                                *
-*    For further information contact me at johnvarouhakis@gmail.com              *
-**********************************************************************************/
+/******************************************************************************
+*                            recordMyDesktop                                  *
+*******************************************************************************
+*                                                                             *
+*            Copyright (C) 2006,2007 John Varouhakis                          *
+*                                                                             *
+*                                                                             *
+*   This program is free software; you can redistribute it and/or modify      *
+*   it under the terms of the GNU General Public License as published by      *
+*   the Free Software Foundation; either version 2 of the License, or         *
+*   (at your option) any later version.                                       *
+*                                                                             *
+*   This program is distributed in the hope that it will be useful,           *
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of            *
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
+*   GNU General Public License for more details.                              *
+*                                                                             *
+*   You should have received a copy of the GNU General Public License         *
+*   along with this program; if not, write to the Free Software               *
+*   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA  *
+*                                                                             *
+*                                                                             *
+*                                                                             *
+*   For further information contact me at johnvarouhakis@gmail.com            *
+******************************************************************************/
 
 
 #include <recordmydesktop.h>
-//return 1 and null if geom1 in geom2 ,2 and null if geom2 in geom1,0 if they don't collide
-//-1 and two geoms if they collide and geom1 is broken.//-2 and one or two geoms if they collide and geom2 is broken.
+//return 1 and null if geom1 in geom2 ,2 and null if geom2 in geom1,
+//0 if they don't collide
+//-1 and two geoms if they collide and geom1 is broken.
+//-2 and one or two geoms if they collide and geom2 is broken.
 //-10 if group and replace is possible
-int CollideRects(WGeometry *wgeom1,WGeometry *wgeom2,WGeometry **wgeom_return,int *ngeoms){
+int CollideRects(WGeometry *wgeom1,
+                 WGeometry *wgeom2,
+                 WGeometry **wgeom_return,
+                 int *ngeoms){
     //1 fits in 2
     if((wgeom1->x>=wgeom2->x)&&
         (wgeom1->x+wgeom1->width<=wgeom2->x+wgeom2->width)&&
@@ -59,9 +64,9 @@ int CollideRects(WGeometry *wgeom1,WGeometry *wgeom2,WGeometry **wgeom_return,in
 //this happens because libxdamage may generate many events for one change
 //and some of them may be in the the exact same region
 //so identical rects would be considered not colliding
-//in order though to avoid endless recursion on the RectInsert 
+//in order though to avoid endless recursion on the RectInsert
 //function should always start at the next element(which is logical since
-//if any rect makes it to a points none of it's part collides with previous 
+//if any rect makes it to a points none of it's part collides with previous
 //nodes on the list, too)
         int x1[2]={wgeom1->x,wgeom1->x+wgeom1->width};
         int y1[2]={wgeom1->y,wgeom1->y+wgeom1->height};
@@ -88,7 +93,8 @@ int CollideRects(WGeometry *wgeom1,WGeometry *wgeom2,WGeometry **wgeom_return,in
         tot2=enclosed[1][0]+enclosed[1][1]+enclosed[1][2]+enclosed[1][3];
         if((tot1==2)&&(tot2==2)){//same width or height, which is the best case
             //group
-            if((enclosed[1][0]&&enclosed[1][1])&&(wgeom1->width==wgeom2->width)){
+            if((enclosed[1][0]&&enclosed[1][1])&&
+               (wgeom1->width==wgeom2->width)){
                 wgeom_return[0]=(WGeometry *)malloc(sizeof(WGeometry));
                 *ngeoms=1;
                 wgeom_return[0]->x=wgeom1->x;
@@ -97,17 +103,17 @@ int CollideRects(WGeometry *wgeom1,WGeometry *wgeom2,WGeometry **wgeom_return,in
                 wgeom_return[0]->height=wgeom2->height+wgeom2->y-wgeom1->y;
                 return -10;
             }
-            else if((enclosed[1][0]&&enclosed[1][2])&&(wgeom1->height==wgeom2->height)){
-//                 wgeom_return[0]=(WGeometry *)malloc(sizeof(WGeometry));
+            else if((enclosed[1][0]&&enclosed[1][2])&&
+                    (wgeom1->height==wgeom2->height)){
                 *ngeoms=1;
                 wgeom_return[0]->x=wgeom1->x;
                 wgeom_return[0]->y=wgeom1->y;
                 wgeom_return[0]->width=wgeom2->width+wgeom2->x-wgeom1->x;
-                wgeom_return[0]->height=wgeom1->height;    
+                wgeom_return[0]->height=wgeom1->height;
                 return -10;
             }
-            else if((enclosed[1][3]&&enclosed[1][1])&&(wgeom1->height==wgeom2->height)){
-//                 wgeom_return[0]=(WGeometry *)malloc(sizeof(WGeometry));
+            else if((enclosed[1][3]&&enclosed[1][1])&&
+                    (wgeom1->height==wgeom2->height)){
                 *ngeoms=1;
                 wgeom_return[0]->x=wgeom2->x;
                 wgeom_return[0]->y=wgeom2->y;
@@ -115,8 +121,8 @@ int CollideRects(WGeometry *wgeom1,WGeometry *wgeom2,WGeometry **wgeom_return,in
                 wgeom_return[0]->height=wgeom2->height;
                 return -10;
             }
-            else if((enclosed[1][3]&&enclosed[1][2])&&(wgeom1->width==wgeom2->width)){
-//                 wgeom_return[0]=(WGeometry *)malloc(sizeof(WGeometry));
+            else if((enclosed[1][3]&&enclosed[1][2])&&
+                    (wgeom1->width==wgeom2->width)){
                 *ngeoms=1;
                 wgeom_return[0]->x=wgeom2->x;
                 wgeom_return[0]->y=wgeom2->y;
@@ -128,7 +134,6 @@ int CollideRects(WGeometry *wgeom1,WGeometry *wgeom2,WGeometry **wgeom_return,in
         }
         if(tot2==2){
             //break geom2
-//             wgeom_return[0]=(WGeometry *)malloc(sizeof(WGeometry));
             wgeom_return[0]->x=wgeom2->x;
             wgeom_return[0]->y=wgeom2->y;
             wgeom_return[0]->width=wgeom2->width;
@@ -150,14 +155,12 @@ int CollideRects(WGeometry *wgeom1,WGeometry *wgeom2,WGeometry **wgeom_return,in
         }
         else if(tot1==2){
             //if the first one breaks(which is already inserted)
-            //then we reenter the part that was left and the one 
+            //then we reenter the part that was left and the one
             //that was to be inserted
-//             wgeom_return[1]=wgeom2;
             wgeom_return[1]->x=wgeom2->x;
             wgeom_return[1]->y=wgeom2->y;
             wgeom_return[1]->width=wgeom2->width;
             wgeom_return[1]->height=wgeom2->height;
-//             wgeom_return[0]=(WGeometry *)malloc(sizeof(WGeometry));
             wgeom_return[0]->x=wgeom1->x;
             wgeom_return[0]->y=wgeom1->y;
             wgeom_return[0]->width=wgeom1->width;
@@ -178,10 +181,9 @@ int CollideRects(WGeometry *wgeom1,WGeometry *wgeom2,WGeometry **wgeom_return,in
             return -1;
 
         }
-        else if(tot2==1){//in which case there is also tot1==1 but we rather not break that
-            //break geom2 in two
-//             wgeom_return[0]=(WGeometry *)malloc(sizeof(WGeometry));
-//             wgeom_return[1]=(WGeometry *)malloc(sizeof(WGeometry));
+        else if(tot2==1){   //in which case there is also tot1==1
+                            //but we rather not break that
+                            //break geom2 in two
             *ngeoms=2;
             if(enclosed[1][0]){
 //first
@@ -205,7 +207,7 @@ int CollideRects(WGeometry *wgeom1,WGeometry *wgeom2,WGeometry **wgeom_return,in
                 wgeom_return[1]->x=x1[0];
                 wgeom_return[1]->y=y1[1];
                 wgeom_return[1]->width=x2[1]-x1[0];
-                wgeom_return[1]->height=wgeom2->height-y1[1]+y2[0];            
+                wgeom_return[1]->height=wgeom2->height-y1[1]+y2[0];
             }
             else if(enclosed[1][2]){
 //first(same as [1][0])
@@ -241,8 +243,6 @@ int CollideRects(WGeometry *wgeom1,WGeometry *wgeom2,WGeometry **wgeom_return,in
             //geom2 crossing vertically geom1
             //and geom2 crossing horizontally geom1
             //The proper one can be found by simply checking x,y positions
-//             wgeom_return[0]=(WGeometry *)malloc(sizeof(WGeometry));
-//             wgeom_return[1]=(WGeometry *)malloc(sizeof(WGeometry));
             *ngeoms=2;
             if(wgeom2->y<wgeom1->y){
                 //common
@@ -299,14 +299,17 @@ int RectInsert(RectArea **root,WGeometry *wgeom){
 
         int ngeoms=0,insert_ok=1,i=0;
         temp=*root;
-        while(insert_ok){//if something is broken list does not procceed(except on -1 collres case)
-            int collres/*=0;//*/=CollideRects(&(temp->geom),wgeom,wgeom_return,&ngeoms);
+        while(insert_ok){   //if something is broken list does not procceed
+                            //(except on -1 collres case)
+            int collres=CollideRects(&(temp->geom),wgeom,wgeom_return,&ngeoms);
             if((!collres))
                 insert_ok=1;
             else{
                 for(i=0;i<ngeoms;i++){
-                    wgeom_return[i]->width+=(wgeom_return[i]->width%2)|(wgeom_return[i]->x%2);
-                    wgeom_return[i]->height+=(wgeom_return[i]->height%2)|(wgeom_return[i]->y%2);
+                    wgeom_return[i]->width+=(wgeom_return[i]->width%2)|
+                                            (wgeom_return[i]->x%2);
+                    wgeom_return[i]->height+=(wgeom_return[i]->height%2)|
+                                             (wgeom_return[i]->y%2);
                     wgeom_return[i]->width+=(wgeom_return[i]->width%2);
                     wgeom_return[i]->height+=(wgeom_return[i]->height%2);
                     wgeom_return[i]->x-=wgeom_return[i]->x%2;
@@ -353,9 +356,11 @@ int RectInsert(RectArea **root,WGeometry *wgeom){
                     case 2://done,area is already covered
                         free(newnode);
                         break;
-                    case -1://current node is broken and reinserted(in same pos)
+                    case -1://current node is broken and reinserted
+                            //(in same pos)
                             //newnode is also reinserted
-                        if((wgeom_return[0]->width>0)&&(wgeom_return[0]->height>0)){
+                        if((wgeom_return[0]->width>0)&&
+                           (wgeom_return[0]->height>0)){
                             temp->geom.x=wgeom_return[0]->x;
                             temp->geom.y=wgeom_return[0]->y;
                             temp->geom.width=wgeom_return[0]->width;
@@ -369,11 +374,9 @@ int RectInsert(RectArea **root,WGeometry *wgeom){
                                 insert_ok=1;
                             }
                         }
-                        else{//it might happen that the old and now broken node 
-                            //is of zero width or height(so it isn't reinserted)
-                            /*TODO this may cause lines to be left not updated
-                            so maybe it is needed to increase the size by one
-                            pixel(zero width or height cause BadValue*/
+                        else{//it might happen that the old and now broken node
+                            //is of zero width or height
+                            //(so it isn't reinserted)
                             if((temp->prev==NULL)&&(temp->next!=NULL)){
                                 *root=(*root)->next;
                                 (*root)->prev=NULL;
@@ -388,7 +391,8 @@ int RectInsert(RectArea **root,WGeometry *wgeom){
                                 total_insertions--;
                                 temp->next->prev=temp->prev;
                                 temp->prev->next=temp->next;
-                                total_insertions+=RectInsert(&temp->next,wgeom);
+                                total_insertions+=RectInsert(&temp->next,
+                                                             wgeom);
                             }
                             free(temp);
                         }
@@ -403,7 +407,9 @@ int RectInsert(RectArea **root,WGeometry *wgeom){
                             temp->next=newnode;
                             newnode->prev=temp;
                             if(ngeoms>1){
-                                RectArea *newnode1=(RectArea *)malloc(sizeof(RectArea));
+                                RectArea *newnode1=
+                                (RectArea *)malloc(sizeof(RectArea));
+
                                 newnode1->geom.x=wgeom_return[1]->x;
                                 newnode1->geom.y=wgeom_return[1]->y;
                                 newnode1->geom.width=wgeom_return[1]->width;
@@ -415,8 +421,10 @@ int RectInsert(RectArea **root,WGeometry *wgeom){
                         }
                         else{
                             for(i=0;i<ngeoms;i++){
-                                if((wgeom_return[i]->width>0)&&(wgeom_return[i]->height>0))
-                                    total_insertions+=RectInsert(&temp->next,wgeom_return[i]);
+                                if((wgeom_return[i]->width>0)&&
+                                   (wgeom_return[i]->height>0))
+                                    total_insertions+=
+                                    RectInsert(&temp->next,wgeom_return[i]);
                             }
                         }
                         break;
@@ -426,7 +434,9 @@ int RectInsert(RectArea **root,WGeometry *wgeom){
                                     newnode->geom.x=wgeom_return[0]->x;
                                     newnode->geom.y=wgeom_return[0]->y;
                                     newnode->geom.width=wgeom_return[0]->width;
-                                    newnode->geom.height=wgeom_return[0]->height;
+                                    newnode->geom.height=
+                                    wgeom_return[0]->height;
+
                                     *root=newnode;
                                     free(temp);
                             }
@@ -435,8 +445,10 @@ int RectInsert(RectArea **root,WGeometry *wgeom){
                                 *root=temp->next;
                                 (*root)->prev=NULL;
                                 free(temp);
-                                if((wgeom_return[0]->width>0)&&(wgeom_return[0]->height>0))
-                                    total_insertions+=RectInsert(root,wgeom_return[0]);
+                                if((wgeom_return[0]->width>0)&&
+                                   (wgeom_return[0]->height>0))
+                                    total_insertions+=
+                                    RectInsert(root,wgeom_return[0]);
                             }
                         }
                         else if(temp->next==NULL){//last, enter anyway
@@ -454,8 +466,10 @@ int RectInsert(RectArea **root,WGeometry *wgeom){
                             temp->prev->next=temp->next;
                             temp->next->prev=temp->prev;
                             free(temp);
-                            if((wgeom_return[0]->width>0)&&(wgeom_return[0]->height>0))
-                                total_insertions+=RectInsert(&temp1,wgeom_return[0]);
+                            if((wgeom_return[0]->width>0)&&
+                               (wgeom_return[0]->height>0))
+                                total_insertions+=
+                                RectInsert(&temp1,wgeom_return[0]);
                         }
                         break;
                 }
@@ -480,8 +494,8 @@ int RectInsert(RectArea **root,WGeometry *wgeom){
         free(wgeom_return[1]);
     }
     return total_insertions;
-} 
-    
+}
+
 void ClearList(RectArea **root){
 
     RectArea *temp;
@@ -490,7 +504,7 @@ void ClearList(RectArea **root){
         while(temp->next!=NULL){
             temp=temp->next;
             free(temp->prev);
-            
+
         }
         free(temp);
         *root=NULL;

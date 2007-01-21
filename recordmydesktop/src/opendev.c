@@ -1,28 +1,28 @@
-/*********************************************************************************
-*                             recordMyDesktop                                    *
-**********************************************************************************
-*                                                                                *
-*             Copyright (C) 2006  John Varouhakis                                *
-*                                                                                *
-*                                                                                *
-*    This program is free software; you can redistribute it and/or modify        *
-*    it under the terms of the GNU General Public License as published by        *
-*    the Free Software Foundation; either version 2 of the License, or           *
-*    (at your option) any later version.                                         *
-*                                                                                *
-*    This program is distributed in the hope that it will be useful,             *
-*    but WITHOUT ANY WARRANTY; without even the implied warranty of              *
-*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the               *
-*    GNU General Public License for more details.                                *
-*                                                                                *
-*    You should have received a copy of the GNU General Public License           *
-*    along with this program; if not, write to the Free Software                 *
-*    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA   *
-*                                                                                *
-*                                                                                *
-*                                                                                *
-*    For further information contact me at johnvarouhakis@gmail.com              *
-**********************************************************************************/
+/******************************************************************************
+*                            recordMyDesktop                                  *
+*******************************************************************************
+*                                                                             *
+*            Copyright (C) 2006,2007 John Varouhakis                          *
+*                                                                             *
+*                                                                             *
+*   This program is free software; you can redistribute it and/or modify      *
+*   it under the terms of the GNU General Public License as published by      *
+*   the Free Software Foundation; either version 2 of the License, or         *
+*   (at your option) any later version.                                       *
+*                                                                             *
+*   This program is distributed in the hope that it will be useful,           *
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of            *
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
+*   GNU General Public License for more details.                              *
+*                                                                             *
+*   You should have received a copy of the GNU General Public License         *
+*   along with this program; if not, write to the Free Software               *
+*   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA  *
+*                                                                             *
+*                                                                             *
+*                                                                             *
+*   For further information contact me at johnvarouhakis@gmail.com            *
+******************************************************************************/
 
 
 
@@ -45,7 +45,7 @@ snd_pcm_t *OpenDev( const char *pcm_dev,
     snd_pcm_hw_params_alloca(&hwparams);
 
 
-    if (snd_pcm_open(&mhandle, pcm_dev, SND_PCM_STREAM_CAPTURE, SND_PCM_ASYNC)<0){
+    if (snd_pcm_open(&mhandle,pcm_dev,SND_PCM_STREAM_CAPTURE,SND_PCM_ASYNC)<0){
         fprintf(stderr, "Couldn't open PCM device %s\n", pcm_dev);
         return NULL;
     }
@@ -55,11 +55,15 @@ snd_pcm_t *OpenDev( const char *pcm_dev,
         fprintf(stderr, "Couldn't configure PCM device.\n");
         return NULL;
     }
-    if (snd_pcm_hw_params_set_access(mhandle, hwparams, SND_PCM_ACCESS_RW_INTERLEAVED)<0)    {
+    if (snd_pcm_hw_params_set_access(mhandle,
+                                     hwparams,
+                                     SND_PCM_ACCESS_RW_INTERLEAVED)<0){
         fprintf(stderr, "Couldn't set access.\n");
         return NULL;
     }
-    if (snd_pcm_hw_params_set_format(mhandle, hwparams, SND_PCM_FORMAT_S16_LE)<0){
+    if (snd_pcm_hw_params_set_format(mhandle,
+                                     hwparams,
+                                     SND_PCM_FORMAT_S16_LE)<0){
         fprintf(stderr, "Couldn't set format.\n");
         return NULL;
     }
@@ -68,7 +72,8 @@ snd_pcm_t *OpenDev( const char *pcm_dev,
         return NULL;
     }
     if (*frequency != exactrate){
-        fprintf(stderr, "Playback frequency %dHz is not available...\nUsing %dHz instead.\n",*frequency,exactrate);
+        fprintf(stderr, "Playback frequency %dHz is not available...\n"
+                        "Using %dHz instead.\n",*frequency,exactrate);
         *frequency=exactrate;
     }
     if (snd_pcm_hw_params_set_channels_near(mhandle, hwparams, channels)<0){
@@ -79,16 +84,16 @@ snd_pcm_t *OpenDev( const char *pcm_dev,
         fprintf(stderr,"Channels number should be 1(mono) or 2(stereo).\n");
         return NULL;
     }
-    if (snd_pcm_hw_params_set_periods_near(mhandle, hwparams, &periods,0)<0)    {
+    if (snd_pcm_hw_params_set_periods_near(mhandle,hwparams,&periods,0)<0){
         fprintf(stderr, "Couldn't set periods.\n");
         return NULL;
     }
 
-    if (snd_pcm_hw_params_set_buffer_size_near(mhandle, hwparams,buffsize)<0){
+    if (snd_pcm_hw_params_set_buffer_size_near(mhandle,hwparams,buffsize)<0){
         fprintf(stderr, "Couldn't set buffer size.\n");
         return NULL;
     }
-    if (snd_pcm_hw_params(mhandle, hwparams)<0){
+    if (snd_pcm_hw_params(mhandle,hwparams)<0){
         fprintf(stderr, "Couldn't set hardware parameters.\n");
         return NULL;
     }
@@ -101,7 +106,8 @@ snd_pcm_t *OpenDev( const char *pcm_dev,
 
     if(periodtime!=NULL)
         snd_pcm_hw_params_get_period_time(hwparams,periodtime,0);
-    fprintf(stderr,"Recording on device %s is set to:\n%d channels at %dHz\n",pcm_dev,*channels,*frequency);
+    fprintf(stderr,"Recording on device %s is set to:\n%d channels at %dHz\n",
+                   pcm_dev,*channels,*frequency);
     fprintf(stderr,"Buffer size set to %d frames.\n",(int)(*buffsize));
     snd_pcm_prepare(mhandle);
 

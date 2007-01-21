@@ -1,28 +1,28 @@
-/*********************************************************************************
-*                             recordMyDesktop                                    *
-**********************************************************************************
-*                                                                                *
-*             Copyright (C) 2006  John Varouhakis                                *
-*                                                                                *
-*                                                                                *
-*    This program is free software; you can redistribute it and/or modify        *
-*    it under the terms of the GNU General Public License as published by        *
-*    the Free Software Foundation; either version 2 of the License, or           *
-*    (at your option) any later version.                                         *
-*                                                                                *
-*    This program is distributed in the hope that it will be useful,             *
-*    but WITHOUT ANY WARRANTY; without even the implied warranty of              *
-*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the               *
-*    GNU General Public License for more details.                                *
-*                                                                                *
-*    You should have received a copy of the GNU General Public License           *
-*    along with this program; if not, write to the Free Software                 *
-*    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA   *
-*                                                                                *
-*                                                                                *
-*                                                                                *
-*    For further information contact me at johnvarouhakis@gmail.com              *
-**********************************************************************************/
+/******************************************************************************
+*                            recordMyDesktop                                  *
+*******************************************************************************
+*                                                                             *
+*            Copyright (C) 2006,2007 John Varouhakis                          *
+*                                                                             *
+*                                                                             *
+*   This program is free software; you can redistribute it and/or modify      *
+*   it under the terms of the GNU General Public License as published by      *
+*   the Free Software Foundation; either version 2 of the License, or         *
+*   (at your option) any later version.                                       *
+*                                                                             *
+*   This program is distributed in the hope that it will be useful,           *
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of            *
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
+*   GNU General Public License for more details.                              *
+*                                                                             *
+*   You should have received a copy of the GNU General Public License         *
+*   along with this program; if not, write to the Free Software               *
+*   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA  *
+*                                                                             *
+*                                                                             *
+*                                                                             *
+*   For further information contact me at johnvarouhakis@gmail.com            *
+******************************************************************************/
 
 #ifndef RMDTYPES_H
 #define RMDTYPES_H 1
@@ -104,7 +104,7 @@ typedef struct _BRWindow{   //'basic recorded window' specs
     WGeometry geom;         //window attributes
     WGeometry rgeom;        //part of window that is recorded
     int nbytes;             //size of zpixmap when screenshoting
-    Window windowid;           //id
+    Window windowid;        //id
 }BRWindow;
 
 //defaults in the following comment lines may be out of sync with reality
@@ -118,14 +118,14 @@ typedef struct _ProgArgs{
     int quietmode;      //no messages to stderr,stdout
     char *filename;     //output file(default out.[ogg|*])
     int cursor_color;   //black or white=>1 or 0
-    int have_dummy_cursor;//disable/enable drawing of the dummy cursor
-    int xfixes_cursor;   //disable/enable drawing of a cursor obtained
-                        //through the xfixes extension
-    float fps;            //desired framerate(default 15)
-    unsigned int frequency;      //desired frequency (default 22050)
-    unsigned int channels;       //no of channels(default 2)
-    char *device;       //default sound device(default according to alsa or oss)
-    snd_pcm_uframes_t buffsize;//buffer size(in frames) for sound capturing
+    int have_dummy_cursor;  //disable/enable drawing of the dummy cursor
+    int xfixes_cursor;      //disable/enable drawing of a cursor obtained
+                            //through the xfixes extension
+    float fps;              //desired framerate(default 15)
+    unsigned int frequency;     //desired frequency (default 22050)
+    unsigned int channels;      //no of channels(default 2)
+    char *device;               //default sound device
+    snd_pcm_uframes_t buffsize; //buffer size(in frames) for sound capturing
     int nosound;        //do not record sound(default 0)
     int noshared;       //do not use shared memory extension(default 1)
     int nocondshared;   //do not use shared memory on large image aquititions
@@ -133,25 +133,26 @@ typedef struct _ProgArgs{
                         //(which changes full-shots and with-shared to 1)
     int shared_thres;   //threshold to use shared memory
     int full_shots;     //do not poll damage, take full screenshots
-    int no_quick_subsample;//average pixels in chroma planes
-    int v_bitrate,v_quality,s_quality;//video bitrate,video-sound quality
+    int no_quick_subsample;             //average pixels in chroma planes
+    int v_bitrate,v_quality,s_quality;  //video bitrate,video-sound quality
     int dropframes;     //option for theora encoder
     int encOnTheFly;    //encode while recording, no caching(default 0)
     char *workdir;      //directory to be used for cache files(default $HOME)
     int zerocompression;//image data are always flushed uncompressed
-    int overwrite;//overwite a previously existing file(do not add a .number postfix)
+    int overwrite;      //overwite a previously existing file
+                        //(do not add a .number postfix)
 }ProgArgs;
 
 
 //this struct holds anything related to encoding AND
 //writting out to file.
 typedef struct _EncData{
-    ogg_stream_state m_ogg_ts;//theora
-    ogg_stream_state m_ogg_vs;//vorbis
-    ogg_page         m_ogg_pg;//this could be avoided since
-                              // it is used only while initializing
-    ogg_packet       m_ogg_pckt1;//theora stream
-    ogg_packet       m_ogg_pckt2;//vorbis stream
+    ogg_stream_state m_ogg_ts;  //theora
+    ogg_stream_state m_ogg_vs;  //vorbis
+    ogg_page         m_ogg_pg;  //this could be avoided since
+                                // it is used only while initializing
+    ogg_packet       m_ogg_pckt1;   //theora stream
+    ogg_packet       m_ogg_pckt2;   //vorbis stream
 //theora data
     theora_state     m_th_st;
     theora_info      m_th_inf;
@@ -173,13 +174,18 @@ typedef struct _EncData{
 //this struct will hold a few basic
 //information, needed for caching the frames.
 typedef struct _CacheData{
-    char    *workdir,  //The directory were the project will be stored, while recording.
+    char    *workdir,   //The directory were the project
+                        //will be stored, while recording.
                         //Since this will take a lot of space, the user must be
                         //able to change the location.
-            *projname,  //This is the name of the folder that will hold the project.
-                        //It is rMD-session-%d where %d is the pid of the current proccess.
-                        //This way, running two instances will not create problems
-                        //and also, a frontend can identify leftovers from a possible crash
+            *projname,  //This is the name of the folder that
+                        //will hold the project.
+                        //It is rMD-session-%d where %d is the pid
+                        //of the current proccess.
+                        //This way, running two instances
+                        //will not create problems
+                        //and also, a frontend can identify
+                        //leftovers from a possible crash
                         //and delete them
             *imgdata,   //workdir+projname+img.out.gz
             *audiodata; //workdir+projname+audio.pcm
@@ -204,54 +210,67 @@ typedef struct _SndBuffer{
 //threads,so they will have access to the program data, avoiding
 //at the same time usage of any globals.
 typedef struct _ProgData{
-    ProgArgs args;//the program arguments
-    DisplaySpecs specs;//Display specific information
-    BRWindow brwin;//recording window
-    Display *dpy;//curtrent display
-    char *window_manager;//name of the window manager at program launch
-    XImage *image;//the image that holds the current full screenshot
-    XImage *shimage;//the image that holds the current full screenshot(shared memory)
+    ProgArgs args;          //the program arguments
+    DisplaySpecs specs;     //Display specific information
+    BRWindow brwin;         //recording window
+    Display *dpy;           //curtrent display
+    char *window_manager;   //name of the window manager at program launch
+    XImage *image;          //the image that holds the current full screenshot
+    XImage *shimage;        //the image that holds the current
+                            //full screenshot(shared memory)
     XShmSegmentInfo shminfo;//info structure for the image above.
-    unsigned char *dummy_pointer;//a dummy pointer to be drawn in every frame
-                                //data is casted to unsigned for later use in YUV buffer
-    int dummy_p_size;//initially 16x16,always square
-    unsigned char npxl;//this is the no pixel convention when drawing the dummy pointer
-    char    *datamain,//the data of  image
-            *datash,//the data of shimage
-            *datatemp;//buffer for the temporary image,which will be
-                      //preallocated in case shared memory is not used.
-    RectArea *rect_root[2];//the interchanging list roots for storing the changed regions
-    int list_selector,//selector for the above
-        damage_event,//damage event base code
-        damage_error,//damage error base code
+    unsigned char *dummy_pointer;   //a dummy pointer to be drawn
+                                    //in every frame
+                                    //data is casted to unsigned for
+                                    //later use in YUV buffer
+    int dummy_p_size;       //initially 16x16,always square
+    unsigned char npxl;     //this is the no pixel convention
+                            //when drawing the dummy pointer
+    char    *datamain,      //the data of  image
+            *datash,        //the data of shimage
+            *datatemp;      //buffer for the temporary image,which will be
+                            //preallocated in case shared memory is not used.
+    RectArea *rect_root[2]; //the interchanging list roots for storing
+                            //the changed regions
+    int list_selector,      //selector for the above
+        damage_event,       //damage event base code
+        damage_error,       //damage error base code
         running;
     SndBuffer *sound_buffer;
     EncData *enc_data;
     CacheData *cache_data;
-    int hard_pause;//if sound device doesn't support pause
-                    //we have to close and reopen
-    int avd;//syncronization among audio and video
+    int hard_pause;         //if sound device doesn't support pause
+                            //we have to close and reopen
+    int avd;                //syncronization among audio and video
     unsigned int periodtime,
                 frametime;
-    pthread_mutex_t list_mutex[2],//mutexes for concurrency protection of the lists
+    pthread_mutex_t list_mutex[2],  //mutexes for concurrency
+                                    //protection of the lists
                     sound_buffer_mutex,
-                    libogg_mutex,//libogg is not thread safe,
-                    yuv_mutex;//this might not be needed since we only have
-                              //one read-only and  one write-only thread
-                              //also on previous versions, y component was looped separately
-                              //and then u and v so this was needed to avoid wrong coloring to render
-                              //Currently this mutex only prevents the cursor from flickering
-    pthread_cond_t  time_cond,//this gets a broadcast by the handler whenever it's time to get a screenshot
-                    pause_cond,//this is blocks execution, when program is paused
-                    sound_buffer_ready,//sound encoding finished
-                    sound_data_read,//a buffer is ready for proccessing
-                    image_buffer_ready,//image encoding finished
-                    theora_lib_clean,//the flush_ogg thread cannot procceed to creating last
-                    vorbis_lib_clean;//packages until these two libs are no longer used, by other threads
-    int th_encoding_clean,//these indicate a wait condition on the above cond vars
+                    libogg_mutex,   //libogg is not thread safe,
+                    yuv_mutex;  //this might not be needed since we only have
+                                //one read-only and  one write-only thread
+                                //also on previous versions,
+                                //y component was looped separately
+                                //and then u and v so this was needed
+                                //to avoid wrong coloring to render
+                                //Currently this mutex only prevents
+                                //the cursor from flickering
+    pthread_cond_t  time_cond,  //this gets a broadcast by the handler
+                                //whenever it's time to get a screenshot
+                    pause_cond, //this is blocks execution,
+                                //when program is paused
+                    sound_buffer_ready, //sound encoding finished
+                    sound_data_read,    //a buffer is ready for proccessing
+                    image_buffer_ready, //image encoding finished
+                    theora_lib_clean,   //the flush_ogg thread cannot
+                                        //procceed to creating last
+                    vorbis_lib_clean;   //packages until these two libs
+                                        //are no longer used, by other threads
+    int th_encoding_clean,
         v_encoding_clean;
-    int v_enc_thread_waiting,
-        th_enc_thread_waiting;
+    int v_enc_thread_waiting,   //these indicate a wait
+        th_enc_thread_waiting;  //condition on the above cond vars
     snd_pcm_t *sound_handle;
     snd_pcm_uframes_t periodsize;
 }ProgData;
@@ -268,17 +287,16 @@ typedef struct _ProgData{
 //number of time expirations at the time of
 //caching, will enable us to make up for lost frames.
 
-//default 4+4+2+2+2=14!bad!
-//me add pad, make god of 2 happy!
+
 typedef struct _FrameHeader{
-    char        frame_prefix[4];//always FRAM
-    u_int32_t   frameno,//number of frame(cached frames)
-                current_total;//number of frames that should have been
-                                  //taken at time of caching this one
-    u_int16_t   Ynum,//number of changed blocks in the Y plane
-                Unum,//number of changed blocks in the U plane
-                Vnum;//number of changed blocks in the V plane
-    u_int16_t   pad;//always zero
+    char        frame_prefix[4];    //always FRAM
+    u_int32_t   frameno,            //number of frame(cached frames)
+                current_total;      //number of frames that should have been
+                                    //taken at time of caching this one
+    u_int16_t   Ynum,   //number of changed blocks in the Y plane
+                Unum,   //number of changed blocks in the U plane
+                Vnum;   //number of changed blocks in the V plane
+    u_int16_t   pad;    //always zero
 
 }FrameHeader;
 
@@ -289,12 +307,12 @@ typedef struct _FrameHeader{
 
 typedef struct _CachedFrame{
     FrameHeader *header;
-    unsigned char *YBlocks;//identifying number on the grid, starting at top left
-    unsigned char *UBlocks;//       >>      >>
-    unsigned char *VBlocks;//       >>      >>
-    unsigned char *YData;//pointer to data for the blocks that have changed,
-    unsigned char *UData;//which have to be remapped on the buffer when reading
-    unsigned char *VData;
+    unsigned char *YBlocks;     //identifying number on the grid,
+    unsigned char *UBlocks;     //starting at top left
+    unsigned char *VBlocks;     //       >>      >>
+    unsigned char *YData;   //pointer to data for the blocks that have changed,
+    unsigned char *UData;   //which have to be remapped
+    unsigned char *VData;   //on the buffer when reading
 }CachedFrame;
 
 #endif
