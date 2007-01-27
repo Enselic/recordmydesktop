@@ -3,7 +3,7 @@
 
 AC_PREREQ(2.59)
 AC_INIT(src/recordmydesktop.c)
-AM_INIT_AUTOMAKE(recordmydesktop,0.3.2,)
+AM_INIT_AUTOMAKE(recordmydesktop,0.3.3-cvs,)
 
 AC_CONFIG_SRCDIR([src/recordmydesktop.c])
 AM_CONFIG_HEADER(config.h)
@@ -36,6 +36,12 @@ fi
 
 AC_CHECK_HEADER([alsa/asoundlib.h])
 AC_CHECK_HEADERS([sys/time.h unistd.h vorbis/vorbisfile.h ])
+
+
+
+AC_CHECK_TYPES([u_int16_t],,AC_MSG_ERROR([Type u_int16_t must be available!]))
+AC_CHECK_TYPES([u_int32_t],,AC_MSG_ERROR([Type u_int32_t must be available!]))
+AC_CHECK_TYPES([u_int64_t],,)
 
 # Checks for libraries.
 
