@@ -32,23 +32,24 @@ int CompareBlocks(unsigned char *incoming,
                   int blockno,
                   int width,
                   int height,
-                  int divisor){
+                  int blockwidth){
     int j,i,
-        block_i=blockno/divisor,//place on the grid
-        block_k=blockno%divisor;
-    register unsigned char *incoming_reg=&(incoming[block_i*
-                                         (width*height/divisor)+
-                                         block_k*width/divisor]),
-                           *old_reg=&(old[block_i*(width*height/divisor)+
-                                    block_k*width/divisor]);
-
-    for(j=0;j<height/divisor;j++){
-        for(i=0;i<width/divisor;i++){
+        block_i=blockno/(width/blockwidth),//place on the grid
+        block_k=blockno%(width/blockwidth);
+    register cmp_int_t *incoming_reg=(cmp_int_t *)&(incoming[(block_i*
+                                     width+
+                                     block_k)*blockwidth]),
+                       *old_reg=(cmp_int_t *)&(old[(block_i*
+                                width+
+                                block_k)*blockwidth]);
+    //blocks are square
+    for(j=0;j<blockwidth;j++){
+        for(i=0;i<blockwidth/COMPARE_STRIDE;i++){
             if((*(incoming_reg++))!=(*(old_reg++)))
                 return 1;
         }
-        incoming_reg+=(width-width/divisor);
-        old_reg+=(width-width/divisor);
+        incoming_reg+=(width-blockwidth)/COMPARE_STRIDE;
+        old_reg+=(width-blockwidth)/COMPARE_STRIDE;
     }
 
     return 0;
@@ -58,27 +59,40 @@ int FlushBlock(unsigned char *buf,
                int blockno,
                int width,
                int height,
-               int divisor,
+               int blockwidth,
                gzFile *fp,
-               FILE *ucfp){
-    int j,
-        block_i=blockno/divisor,//place on the grid
-        block_k=blockno%divisor;
-    register unsigned char *buf_reg=(&buf[block_i*(width*height/divisor)
-                                    +block_k*width/divisor]);
-    if(ucfp==NULL){
-        for(j=0;j<height/divisor;j++){//we flush in rows
-            gzwrite(fp,(void *)buf_reg,width/divisor);
-            buf_reg+=width;
+               FILE *ucfp,
+               int flush){
+    int j,i,
+        bytes_written=0,
+        block_i=blockno/(width/blockwidth),//place on the grid
+        block_k=blockno%(width/blockwidth);
+    register unsigned char *buf_reg=(&buf[(block_i*
+                                         width+
+                                         block_k)*blockwidth]);
+    static unsigned char out_buffer[CACHE_OUT_BUFFER_SIZE];
+    static unsigned int out_buffer_bytes=0;
+
+    if(out_buffer_bytes+pow(blockwidth,2)>=CACHE_OUT_BUFFER_SIZE ||
+       (flush && out_buffer_bytes)){
+        if(ucfp==NULL)
+            gzwrite(fp,(void *)out_buffer,out_buffer_bytes);
+        else
+            fwrite((void *)out_buffer,1,out_buffer_bytes,ucfp);
+        bytes_written=out_buffer_bytes;
+        out_buffer_bytes=0;
+    }
+    if(!flush){
+        register unsigned char *out_buf_reg=&out_buffer[out_buffer_bytes];
+        for(j=0;j<blockwidth;j++){
+            for(i=0;i<blockwidth;i++)
+                (*out_buf_reg++)=(*buf_reg++);
+            out_buffer_bytes+=blockwidth;
+            buf_reg+=width-blockwidth;
         }
     }
-    else{
-        for(j=0;j<height/divisor;j++){//we flush in rows
-            fwrite((void *)buf_reg,width/divisor,1,ucfp);
-            buf_reg+=width;
-        }
-    }
-    return ((height*width)/pow(divisor,2));
+
+    return bytes_written;
 }
 
 void *CacheImageBuffer(ProgData *pdata){
@@ -90,12 +104,17 @@ void *CacheImageBuffer(ProgData *pdata){
     FILE *ucfp=NULL;
     int i,
         current=0,
-        divisor=16,
+        index_entry_size=sizeof(u_int32_t),
+        blocknum_x=pdata->enc_data->yuv.y_width/Y_UNIT_WIDTH,
+        blocknum_y=pdata->enc_data->yuv.y_height/Y_UNIT_WIDTH,
         firstrun=1,
         frameno=0,
         nbytes=0,
         nth_cache=1;
-
+    u_int32_t ynum,unum,vnum;
+    u_int32_t yblocks[blocknum_x*blocknum_y],
+                ublocks[blocknum_x*blocknum_y],
+                vblocks[blocknum_x*blocknum_y];
     if(!pdata->args.zerocompression){
         fp=pdata->cache_data->ifp;
         if(fp==NULL)exit(13);
@@ -121,8 +140,6 @@ void *CacheImageBuffer(ProgData *pdata){
     while(pdata->running){
         int prev;
         int j;
-        unsigned short ynum,unum,vnum;
-        unsigned char yblocks[256],ublocks[64],vblocks[64];
         FrameHeader fheader;
         ynum=unum=vnum=0;
 
@@ -151,41 +168,41 @@ void *CacheImageBuffer(ProgData *pdata){
         //find and flush different blocks
         if(firstrun){
             firstrun=0;
-            for(j=0;j<pow(divisor,2);j++){
+            for(j=0;j<blocknum_x*blocknum_y;j++){
                     ynum++;
                     yblocks[ynum-1]=j;
-            }
-            for(j=0;j<pow(divisor/2,2);j++){
                     unum++;
                     ublocks[unum-1]=j;
-            }
-            for(j=0;j<pow(divisor/2,2);j++){
                     vnum++;
                     vblocks[vnum-1]=j;
             }
-
         }
         else{
-            for(j=0;j<pow(divisor,2);j++){
-                if(CompareBlocks(yuv[current].y,yuv[prev].y,j,
+            for(j=0;j<blocknum_x*blocknum_y;j++){
+                if(CompareBlocks(yuv[current].y,
+                                 yuv[prev].y,
+                                 j,
                                  yuv[current].y_width,
-                                 yuv[current].y_height,divisor)){
+                                 yuv[current].y_height,
+                                 Y_UNIT_WIDTH)){
                     ynum++;
                     yblocks[ynum-1]=j;
                 }
-            }
-            for(j=0;j<pow(divisor/2,2);j++){
-                if(CompareBlocks(yuv[current].u,yuv[prev].u,j,
+                if(CompareBlocks(yuv[current].u,
+                                 yuv[prev].u,
+                                 j,
                                  yuv[current].uv_width,
-                                 yuv[current].uv_height,divisor/2)){
+                                 yuv[current].uv_height,
+                                 UV_UNIT_WIDTH)){
                     unum++;
                     ublocks[unum-1]=j;
                 }
-            }
-            for(j=0;j<pow(divisor/2,2);j++){
-                if(CompareBlocks(yuv[current].v,yuv[prev].v,j,
+                if(CompareBlocks(yuv[current].v,
+                                 yuv[prev].v,
+                                 j,
                                  yuv[current].uv_width,
-                                 yuv[current].uv_height,divisor/2)){
+                                 yuv[current].uv_height,
+                                 UV_UNIT_WIDTH)){
                     vnum++;
                     vblocks[vnum-1]=j;
                 }
@@ -194,7 +211,7 @@ void *CacheImageBuffer(ProgData *pdata){
         }
         /**WRITE FRAME TO DISK*/
         if(!pdata->args.zerocompression){
-            if(ynum+unum+vnum>(pow(divisor,2)+pow(divisor/2,2)*2)/10)
+            if(ynum*4+unum+vnum>(blocknum_x*blocknum_y*6)/10)
                 gzsetparams (fp,1,Z_FILTERED);
             else
                 gzsetparams (fp,0,Z_FILTERED);
@@ -203,52 +220,60 @@ void *CacheImageBuffer(ProgData *pdata){
         strncpy(fheader.frame_prefix,"FRAM",4);
         fheader.frameno=++frameno;
         fheader.current_total=frames_total;
+
         fheader.Ynum=ynum;
         fheader.Unum=unum;
         fheader.Vnum=vnum;
-        fheader.pad=0;
         if(!pdata->args.zerocompression){
             nbytes+=gzwrite(fp,(void*)&fheader,sizeof(FrameHeader));
             //flush indexes
-            if(ynum)nbytes+=gzwrite(fp,yblocks,ynum);
-            if(unum)nbytes+=gzwrite(fp,ublocks,unum);
-            if(vnum)nbytes+=gzwrite(fp,vblocks,vnum);
+            if(ynum)nbytes+=gzwrite(fp,(void*)yblocks,ynum*index_entry_size);
+            if(unum)nbytes+=gzwrite(fp,(void*)ublocks,unum*index_entry_size);
+            if(vnum)nbytes+=gzwrite(fp,(void*)vblocks,vnum*index_entry_size);
         }
         else{
             nbytes+=sizeof(FrameHeader)*
                     fwrite((void*)&fheader,sizeof(FrameHeader),1,ucfp);
             //flush indexes
-            if(ynum)nbytes+=ynum*fwrite(yblocks,ynum,1,ucfp);
-            if(unum)nbytes+=unum*fwrite(ublocks,unum,1,ucfp);
-            if(vnum)nbytes+=vnum*fwrite(vblocks,vnum,1,ucfp);
+            if(ynum)nbytes+=index_entry_size*
+                            fwrite(yblocks,index_entry_size,ynum,ucfp);
+            if(unum)nbytes+=index_entry_size*
+                            fwrite(ublocks,index_entry_size,unum,ucfp);
+            if(vnum)nbytes+=index_entry_size*
+                            fwrite(vblocks,index_entry_size,vnum,ucfp);
         }
         //flush the blocks for each buffer
-        if(ynum)
+        if(ynum){
             for(j=0;j<ynum;j++)
                 nbytes+=FlushBlock( yuv[current].y,yblocks[j],
                                     yuv[current].y_width,
                                     yuv[current].y_height,
-                                    divisor,
+                                    Y_UNIT_WIDTH,
                                     fp,
-                                    ucfp);
-        if(unum)
+                                    ucfp,
+                                    0);
+        }
+        if(unum){
             for(j=0;j<unum;j++)
                 nbytes+=FlushBlock( yuv[current].u,ublocks[j],
                                     yuv[current].uv_width,
                                     yuv[current].uv_height,
-                                    divisor/2,
+                                    UV_UNIT_WIDTH,
                                     fp,
-                                    ucfp);
-        if(vnum)
+                                    ucfp,
+                                    0);
+        }
+        if(vnum){
             for(j=0;j<vnum;j++)
                 nbytes+=FlushBlock( yuv[current].v,vblocks[j],
                                     yuv[current].uv_width,
                                     yuv[current].uv_height,
-                                    divisor/2,
+                                    UV_UNIT_WIDTH,
                                     fp,
-                                    ucfp);
-
-
+                                    ucfp,
+                                    0);
+        }
+        nbytes+=FlushBlock(NULL,0,0,0,0,fp,ucfp,1);
         /**@________________@**/
         pdata->avd+=pdata->frametime;
         if(nbytes>CACHE_FILE_SIZE_LIMIT){
@@ -274,7 +299,6 @@ void *CacheImageBuffer(ProgData *pdata){
             nbytes=0;
         }
     }
-
     //clean up since we're not finished
     for(i=0;i<2;i++){
         free(yuv[i].y);

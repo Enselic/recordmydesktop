@@ -69,8 +69,35 @@
 //avoid problems (amd64 has 8byte ulong)
 #define RMD_ULONG_SIZE_T (sizeof(unsigned long))
 
+//size of stride when comparing planes(depending on type)
+//this is just to avoid thousands of sizeof's
+#ifdef HAVE_U_INT64_T
+    #define COMPARE_STRIDE  8
+#else
+    #define COMPARE_STRIDE  4
+#endif
+
 //500 mb file size
 #define CACHE_FILE_SIZE_LIMIT (500*1<<20)
+//minimize hard disk access
+#define CACHE_OUT_BUFFER_SIZE 4096
+
+
+//The width, in bytes, of the blocks
+//on which the y,u and v planes are broken.
+//These blocks are square.
+#define Y_UNIT_WIDTH    0x0010
+#define UV_UNIT_WIDTH   0x0008
+
+//The number of bytes for every
+//sub-block of the y,u and v planes.
+//Since the blocks are square
+//these are obviously the squares
+//of the widths(specified above),
+//but the definitions bellow are only
+//for convenience anyway.
+#define Y_UNIT_BYTES    0x0100
+#define UV_UNIT_BYTES   0x0040
 
 
 #define CLIP_EVENT_AREA(e,brwin,wgeom){\
@@ -251,10 +278,10 @@
                        __copy_type,\
                        __bit_depth__){ \
     int k,i;\
-    register RMD_TYPE_##__bit_depth__ t_val;\
+    register u_int##__bit_depth__##_t t_val;\
     register unsigned char  *yuv_y=yuv->y+x_tm+y_tm*yuv->y_width,\
                             *_yr=Yr,*_yg=Yg,*_yb=Yb;\
-    register RMD_TYPE_##__bit_depth__ *datapi=(RMD_TYPE_##__bit_depth__ *)data\
+    register u_int##__bit_depth__##_t *datapi=(u_int##__bit_depth__##_t *)data\
                                               +((__copy_type==__X_SHARED)?\
                                               (x_tm+y_tm*yuv->y_width):0);\
     for(k=0;k<height_tm;k++){\
@@ -282,12 +309,12 @@
                          __sampling_type,\
                          __bit_depth__){  \
     int k,i;\
-    register RMD_TYPE_##__bit_depth__ t_val;\
+    register u_int##__bit_depth__##_t t_val;\
     register unsigned char  *yuv_u=yuv->u+x_tm/2+(y_tm*yuv->uv_width)/2,\
                             *yuv_v=yuv->v+x_tm/2+(y_tm*yuv->uv_width)/2,\
                             *_ur=Ur,*_ug=Ug,*_ub=Ub,\
                             *_vr=Vr,*_vg=Vg,*_vb=Vb;\
-    register RMD_TYPE_##__bit_depth__ *datapi=(RMD_TYPE_##__bit_depth__ *)data\
+    register u_int##__bit_depth__##_t *datapi=(u_int##__bit_depth__##_t *)data\
                                                +((__copy_type==__X_SHARED)?\
                                                 (x_tm+y_tm*yuv->y_width):0),\
                                       *datapi_next=NULL;\
@@ -445,20 +472,18 @@
     free(t_buf);\
 };\
 
-#define INIT_FRAME(frame_t,fheader_t,yuv_t){\
+#define INIT_FRAME(frame_t,fheader_t,yuv_t,\
+                   YBlocks_t,UBlocks_t,VBlocks_t){\
     (frame_t)->header=(fheader_t);\
-    (frame_t)->YBlocks=malloc(256);\
-    (frame_t)->UBlocks=malloc(64);\
-    (frame_t)->VBlocks=malloc(64);\
+    (frame_t)->YBlocks=YBlocks_t;\
+    (frame_t)->UBlocks=UBlocks_t;\
+    (frame_t)->VBlocks=VBlocks_t;\
     (frame_t)->YData=malloc((yuv_t)->y_width*(yuv_t)->y_height);\
     (frame_t)->UData=malloc((yuv_t)->uv_width*(yuv_t)->uv_height);\
     (frame_t)->VData=malloc((yuv_t)->uv_width*(yuv_t)->uv_height);\
 };
 
 #define CLEAR_FRAME(frame_t){\
-    free((frame_t)->YBlocks);\
-    free((frame_t)->UBlocks);\
-    free((frame_t)->VBlocks);\
     free((frame_t)->YData);\
     free((frame_t)->UData);\
     free((frame_t)->VData);\

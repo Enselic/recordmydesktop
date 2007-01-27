@@ -31,6 +31,7 @@
     #include <config.h>
 #endif
 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -61,8 +62,19 @@
 #include <ogg/ogg.h>
 #include <alsa/asoundlib.h>
 
-typedef u_int16_t RMD_TYPE_16;
-typedef u_int32_t RMD_TYPE_32;
+//this type exists only
+//for comparing the planes at caching.
+//u_int64_t mught not be available everywhere.
+//The performance gain comes from casting the unsigned char
+//buffers to this type before comparing the two blocks.
+//This is made possible by the fact that blocks
+//for the Y plane are 16 bytes in width and blocks
+//for the U,V planes are 8 bytes in width
+#ifdef HAVE_U_INT64_T
+typedef u_int64_t cmp_int_t;
+#else
+typedef u_int32_t cmp_int_t;
+#endif
 
 //how we obtained the image we are converting to yuv
 enum{
@@ -293,11 +305,9 @@ typedef struct _FrameHeader{
     u_int32_t   frameno,            //number of frame(cached frames)
                 current_total;      //number of frames that should have been
                                     //taken at time of caching this one
-    u_int16_t   Ynum,   //number of changed blocks in the Y plane
+    u_int32_t   Ynum,   //number of changed blocks in the Y plane
                 Unum,   //number of changed blocks in the U plane
                 Vnum;   //number of changed blocks in the V plane
-    u_int16_t   pad;    //always zero
-
 }FrameHeader;
 
 //The frame after retrieval.
@@ -307,9 +317,9 @@ typedef struct _FrameHeader{
 
 typedef struct _CachedFrame{
     FrameHeader *header;
-    unsigned char *YBlocks;     //identifying number on the grid,
-    unsigned char *UBlocks;     //starting at top left
-    unsigned char *VBlocks;     //       >>      >>
+    u_int32_t     *YBlocks;     //identifying number on the grid,
+    u_int32_t     *UBlocks;     //starting at top left
+    u_int32_t     *VBlocks;     //       >>      >>
     unsigned char *YData;   //pointer to data for the blocks that have changed,
     unsigned char *UData;   //which have to be remapped
     unsigned char *VData;   //on the buffer when reading

@@ -32,19 +32,86 @@ void LoadBlock(unsigned char *dest,
                int blockno,
                int width,
                int height,
-               int divisor){
+               int blockwidth){
     int j,
-        block_i=blockno/divisor,//place on the grid
-        block_k=blockno%divisor;
-
-    for(j=0;j<height/divisor;j++)//we copy rows
-        memcpy( &dest[block_i*(width*height/divisor)+
-                 j*width+block_k*width/divisor],
-                &source[j*width/divisor],
-                width/divisor);
+        block_i=blockno/(width/blockwidth),//place on the grid
+        block_k=blockno%(width/blockwidth);
+    for(j=0;j<blockwidth;j++)//we copy rows
+        memcpy( &dest[(block_i*width+block_k)*blockwidth+j*width],
+                &source[j*blockwidth],
+                blockwidth);
 }
 
+//returns number of bytes
+int ReadZF(void * buffer,size_t size,size_t nmemb,FILE *ucfp,gzFile *ifp){
+    if((ifp!=NULL && ucfp!=NULL)||
+       (ifp==NULL && ucfp==NULL))
+        return -1;
+    else if(ucfp!=NULL){
+        return (size*fread(buffer,size,nmemb,ucfp));
+    }
+    else
+        return gzread(ifp,buffer,size*nmemb);
+}
 
+int ReadFrame(CachedFrame *frame,FILE *ucfp,gzFile *ifp){
+    int index_entry_size=sizeof(u_int32_t);
+    if(frame->header->Ynum>0){
+        if(ReadZF(frame->YBlocks,
+                index_entry_size,
+                frame->header->Ynum,
+                ucfp,
+                ifp)!=index_entry_size*frame->header->Ynum){
+            return -1;
+        }
+    }
+    if(frame->header->Unum>0){
+        if(ReadZF(frame->UBlocks,
+                index_entry_size,
+                frame->header->Unum,
+                ucfp,
+                ifp)!=index_entry_size*frame->header->Unum){
+            return -1;
+        }
+    }
+    if(frame->header->Vnum>0){
+        if(ReadZF(frame->VBlocks,
+                index_entry_size,
+                frame->header->Vnum,
+                ucfp,
+                ifp)!=index_entry_size*frame->header->Vnum){
+            return -1;
+        }
+    }
+    if(frame->header->Ynum>0){
+        if(ReadZF(frame->YData,
+                  Y_UNIT_BYTES,
+                  frame->header->Ynum,
+                  ucfp,
+                  ifp)!=Y_UNIT_BYTES*frame->header->Ynum){
+            return -2;
+        }
+    }
+    if(frame->header->Unum>0){
+        if(ReadZF(frame->UData,
+                  UV_UNIT_BYTES,
+                  frame->header->Unum,
+                  ucfp,
+                  ifp)!=UV_UNIT_BYTES*frame->header->Unum){
+            return -2;
+        }
+    }
+    if(frame->header->Vnum>0){
+        if(ReadZF(frame->VData,
+                  UV_UNIT_BYTES,
+                  frame->header->Vnum,
+                  ucfp,
+                  ifp)!=UV_UNIT_BYTES*frame->header->Vnum){
+            return -2;
+        }
+    }
+    return 0;
+}
 
 void *LoadCache(ProgData *pdata){
 
@@ -61,15 +128,19 @@ void *LoadCache(ProgData *pdata){
         missing_frames=0,//if this is found >0 current run will not load
                         //a frame but it will proccess the previous
         thread_exit=0,//0 success, -1 couldn't find files,1 couldn't remove
-        divisor=16,
-        blockszy=0,//size of y plane block in bytes
-        blockszuv=0,//size of u,v plane blocks in bytes
+        blocknum_x=pdata->enc_data->yuv.y_width/Y_UNIT_WIDTH,
+        blocknum_y=pdata->enc_data->yuv.y_height/Y_UNIT_WIDTH,
+        blockszy=Y_UNIT_BYTES,//size of y plane block in bytes
+        blockszuv=UV_UNIT_BYTES,//size of u,v plane blocks in bytes
         framesize=((snd_pcm_format_width(SND_PCM_FORMAT_S16_LE))/8)*
                   pdata->args.channels;//audio frame size
     signed char *sound_data=(signed char *)malloc(pdata->periodsize*framesize);
-
+    u_int32_t YBlocks[(yuv->y_width*yuv->y_height)/Y_UNIT_BYTES],
+              UBlocks[(yuv->uv_width*yuv->uv_height)/UV_UNIT_BYTES],
+              VBlocks[(yuv->uv_width*yuv->uv_height)/UV_UNIT_BYTES];
     //we allocate the frame that we will use
-    INIT_FRAME(&frame,&fheader,yuv)
+    INIT_FRAME(&frame,&fheader,yuv,
+                YBlocks,UBlocks,VBlocks)
     //and the we open our files
     if(!pdata->args.zerocompression){
         ifp=gzopen(pdata->cache_data->imgdata,"rb");
@@ -94,10 +165,6 @@ void *LoadCache(ProgData *pdata){
             pthread_exit(&thread_exit);
         }
     }
-    //these two are likely to be the same, but not guaranteed, especially on
-    //low resolutions
-    blockszy=(yuv->y_width*yuv->y_height )/pow(divisor,2);
-    blockszuv=(yuv->uv_width*yuv->uv_height)/pow(divisor/2,2);
 
     //this will be used now to define if we proccess audio or video
     //on any given loop.
@@ -113,8 +180,8 @@ void *LoadCache(ProgData *pdata){
                 SyncEncodeImageBuffer(pdata);
             }
             else if(((!pdata->args.zerocompression)&&
-                    (gzread(ifp,frame.header,sizeof(FrameHeader))==
-                     sizeof(FrameHeader) ))||
+                     (gzread(ifp,frame.header,sizeof(FrameHeader))==
+                      sizeof(FrameHeader) ))||
                     ((pdata->args.zerocompression)&&
                     (fread(frame.header,sizeof(FrameHeader),1,ucfp)==1))){
                 //sync
@@ -122,44 +189,13 @@ void *LoadCache(ProgData *pdata){
                                 (extra_frames+frame.header->frameno);
                 fprintf(stdout,"\r[%d%%] ",
                 ((frame.header->frameno+extra_frames)*100)/frames_total);
-
                 fflush(stdout);
-                if( (frame.header->Ynum<=pow(divisor,2)) &&
-                    (frame.header->Unum<=pow(divisor/2,2)) &&
-                    (frame.header->Vnum<=pow(divisor/2,2)) &&
-
-                    (
-                    ((!pdata->args.zerocompression)&&
-                    ((gzread(ifp,frame.YBlocks,frame.header->Ynum)==
-                      frame.header->Ynum) &&
-                     (gzread(ifp,frame.UBlocks,frame.header->Unum)==
-                      frame.header->Unum) &&
-                     (gzread(ifp,frame.VBlocks,frame.header->Vnum)==
-                      frame.header->Vnum) &&
-                     (gzread(ifp,frame.YData,blockszy*frame.header->Ynum)==
-                      blockszy*frame.header->Ynum) &&
-                     (gzread(ifp,frame.UData,(blockszuv*frame.header->Unum))==
-                      (blockszuv*frame.header->Unum)) &&
-                     (gzread(ifp,frame.VData,(blockszuv*frame.header->Vnum))==
-                      (blockszuv*frame.header->Vnum)))) ||
-
-                    ((pdata->args.zerocompression)&&
-                    ((fread(frame.YBlocks,1,frame.header->Ynum,ucfp)==
-                      frame.header->Ynum) &&
-                     (fread(frame.UBlocks,1,frame.header->Unum,ucfp)==
-                      frame.header->Unum) &&
-                     (fread(frame.VBlocks,1,frame.header->Vnum,ucfp)==
-                      frame.header->Vnum) &&
-                     (frame.header->Ynum==0 ||
-                      fread(frame.YData,blockszy,frame.header->Ynum,ucfp)==
-                      frame.header->Ynum) &&
-                     (frame.header->Unum==0 ||
-                      fread(frame.UData,blockszuv,frame.header->Unum,ucfp)==
-                      frame.header->Unum) &&
-                     (frame.header->Vnum==0 ||
-                      fread(frame.VData,blockszuv,frame.header->Vnum,ucfp)==
-                      frame.header->Vnum)))
-                    )
+                if( (frame.header->Ynum<=blocknum_x*blocknum_y) &&
+                    (frame.header->Unum<=blocknum_x*blocknum_y) &&
+                    (frame.header->Vnum<=blocknum_x*blocknum_y) &&
+                    (!ReadFrame(&frame,
+                                ((pdata->args.zerocompression)?ucfp:NULL),
+                                ((pdata->args.zerocompression)?NULL:ifp)))
                         ){
                         //load the blocks for each buffer
                         if(frame.header->Ynum)
@@ -169,7 +205,7 @@ void *LoadCache(ProgData *pdata){
                                             frame.YBlocks[j],
                                             yuv->y_width,
                                             yuv->y_height,
-                                            divisor);
+                                            Y_UNIT_WIDTH);
                         if(frame.header->Unum)
                             for(j=0;j<frame.header->Unum;j++)
                                 LoadBlock(  yuv->u,
@@ -177,7 +213,7 @@ void *LoadCache(ProgData *pdata){
                                             frame.UBlocks[j],
                                             yuv->uv_width,
                                             yuv->uv_height,
-                                            divisor/2);
+                                            UV_UNIT_WIDTH);
                         if(frame.header->Vnum)
                             for(j=0;j<frame.header->Vnum;j++)
                                 LoadBlock(  yuv->v,
@@ -185,7 +221,7 @@ void *LoadCache(ProgData *pdata){
                                             frame.VBlocks[j],
                                             yuv->uv_width,
                                             yuv->uv_height,
-                                            divisor/2);
+                                            UV_UNIT_WIDTH);
                         //encode. This is not made in a thread since
                         //now blocking is not a problem
                         //and this way sync problems
@@ -222,8 +258,7 @@ void *LoadCache(ProgData *pdata){
             }
         }
     }
-//     SyncEncodeImageBuffer(pdata);
-//     SyncEncodeSoundBuffer(pdata,sound_data);
+
     pdata->v_encoding_clean=pdata->th_encoding_clean=1;
     pthread_cond_signal(&pdata->theora_lib_clean);
     pthread_cond_signal(&pdata->vorbis_lib_clean);
