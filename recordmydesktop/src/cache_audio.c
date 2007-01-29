@@ -34,19 +34,20 @@ void *CacheSoundBuffer(ProgData *pdata){
     int framesize=((snd_pcm_format_width(SND_PCM_FORMAT_S16_LE))/8)*
                   pdata->args.channels;
 #endif
-    pthread_mutex_t smut;
-    pthread_mutex_init(&smut,NULL);
     while((pdata->running)){
         SndBuffer *buff;
 
         if(Paused){
-            pthread_mutex_t tmut;
-            pthread_mutex_init(&tmut,NULL);
-            pthread_cond_wait(&pdata->pause_cond,&tmut);
+            pthread_mutex_lock(&pause_mutex);
+            pthread_cond_wait(&pdata->pause_cond,&pause_mutex);
+            pthread_mutex_unlock(&pause_mutex);
         }
         if(pdata->sound_buffer==NULL){
             pdata->v_enc_thread_waiting=1;
-            pthread_cond_wait(&pdata->sound_data_read,&smut);
+            pthread_mutex_lock(&pdata->snd_buff_ready_mutex);
+            pthread_cond_wait(&pdata->sound_data_read,
+                              &pdata->snd_buff_ready_mutex);
+            pthread_mutex_unlock(&pdata->snd_buff_ready_mutex);
             pdata->v_enc_thread_waiting=0;
         }
         if(pdata->sound_buffer==NULL || !pdata->running)

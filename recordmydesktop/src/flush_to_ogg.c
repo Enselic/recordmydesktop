@@ -66,9 +66,6 @@ void *FlushToOgg(ProgData *pdata){
 
     double audiotime=0;
     double videotime=0;
-    pthread_mutex_t imut,vmut;
-    pthread_mutex_init(&imut,NULL);
-    pthread_mutex_init(&vmut,NULL);
     int working=1,
         th_st_fin=0,
         v_st_fin=(pdata->args.nosound);
@@ -108,7 +105,10 @@ void *FlushToOgg(ProgData *pdata){
                 //we need the last page to properly close the stream
                 if(!videoflag){
                     if(!pdata->th_encoding_clean){
-                        pthread_cond_wait(&pdata->theora_lib_clean,&imut);
+                        pthread_mutex_lock(&pdata->theora_lib_mutex);
+                        pthread_cond_wait(&pdata->theora_lib_clean,
+                                          &pdata->theora_lib_mutex);
+                        pthread_mutex_unlock(&pdata->theora_lib_mutex);
                     }
                     SyncEncodeImageBuffer(pdata);
                 }
@@ -125,7 +125,10 @@ void *FlushToOgg(ProgData *pdata){
                 //we need the last page to properly close the stream
                 if(!audioflag){
                     if(!pdata->v_encoding_clean){
-                        pthread_cond_wait(&pdata->vorbis_lib_clean,&vmut);
+                        pthread_mutex_lock(&pdata->vorbis_lib_mutex);
+                        pthread_cond_wait(&pdata->vorbis_lib_clean,
+                                          &pdata->vorbis_lib_mutex);
+                        pthread_mutex_unlock(&pdata->vorbis_lib_mutex);
                     }
                     SyncEncodeSoundBuffer(pdata,NULL);
                 }

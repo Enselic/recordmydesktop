@@ -55,9 +55,14 @@ int InitializeData(ProgData *pdata,
     pthread_mutex_init(&pdata->list_mutex[0],NULL);
     pthread_mutex_init(&pdata->list_mutex[1],NULL);
     pthread_mutex_init(&pdata->sound_buffer_mutex,NULL);
+    pthread_mutex_init(&pdata->snd_buff_ready_mutex,NULL);
+    pthread_mutex_init(&pdata->img_buff_ready_mutex,NULL);
+    pthread_mutex_init(&pdata->theora_lib_mutex,NULL);
+    pthread_mutex_init(&pdata->vorbis_lib_mutex,NULL);
     pthread_mutex_init(&pdata->libogg_mutex,NULL);
     pthread_mutex_init(&pdata->yuv_mutex,NULL);
-
+    pthread_mutex_init(&pause_mutex,NULL);
+    pthread_mutex_init(&time_mutex,NULL);
     pthread_cond_init(&pdata->time_cond,NULL);
     pthread_cond_init(&pdata->pause_cond,NULL);
     pthread_cond_init(&pdata->image_buffer_ready,NULL);

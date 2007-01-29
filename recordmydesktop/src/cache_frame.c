@@ -96,9 +96,6 @@ int FlushBlock(unsigned char *buf,
 }
 
 void *CacheImageBuffer(ProgData *pdata){
-    pthread_mutex_t pmut,imut;
-    pthread_mutex_init(&pmut,NULL);
-    pthread_mutex_init(&imut,NULL);
     yuv_buffer yuv[2];
     gzFile *fp=NULL;
     FILE *ucfp=NULL;
@@ -144,11 +141,18 @@ void *CacheImageBuffer(ProgData *pdata){
         ynum=unum=vnum=0;
 
         pdata->th_enc_thread_waiting=1;
-        pthread_cond_wait(&pdata->image_buffer_ready,&imut);
+        pthread_mutex_lock(&pdata->img_buff_ready_mutex);
+        pthread_cond_wait(&pdata->image_buffer_ready,
+                          &pdata->img_buff_ready_mutex);
+        pthread_mutex_unlock(&pdata->img_buff_ready_mutex);
         pdata->th_enc_thread_waiting=0;
 
-        if(Paused)
-            pthread_cond_wait(&pdata->pause_cond,&pmut);
+        if(Paused){
+            pthread_mutex_lock(&pause_mutex);
+            pthread_cond_wait(&pdata->pause_cond,&pause_mutex);
+            pthread_mutex_unlock(&pause_mutex);
+        }
+
         pthread_mutex_lock(&pdata->yuv_mutex);
 
         //rotate buffers

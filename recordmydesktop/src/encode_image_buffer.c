@@ -26,18 +26,20 @@
 
 #include <recordmydesktop.h>
 void *EncodeImageBuffer(ProgData *pdata){
-    pthread_mutex_t pmut,imut;
-    pthread_mutex_init(&pmut,NULL);
-    pthread_mutex_init(&imut,NULL);
     pdata->th_encoding_clean=0;
     while(pdata->running){
         pdata->th_enc_thread_waiting=1;
-        pthread_cond_wait(&pdata->image_buffer_ready,&imut);
+        pthread_mutex_lock(&pdata->img_buff_ready_mutex);
+        pthread_cond_wait(&pdata->image_buffer_ready,
+                          &pdata->img_buff_ready_mutex);
+        pthread_mutex_unlock(&pdata->img_buff_ready_mutex);
         pdata->th_enc_thread_waiting=0;
         encoder_busy=1;
-        if(Paused)
-            pthread_cond_wait(&pdata->pause_cond,&pmut);//this may
-                                                        //not be needed
+        if(Paused){
+            pthread_mutex_lock(&pause_mutex);
+            pthread_cond_wait(&pdata->pause_cond,&pause_mutex);
+            pthread_mutex_unlock(&pause_mutex);
+        }
         pthread_mutex_lock(&pdata->yuv_mutex);
 
         if(theora_encode_YUVin(&pdata->enc_data->m_th_st,
@@ -60,7 +62,9 @@ void *EncodeImageBuffer(ProgData *pdata){
     }
     //last packet
     pdata->th_encoding_clean=1;
+    pthread_mutex_lock(&pdata->theora_lib_mutex);
     pthread_cond_signal(&pdata->theora_lib_clean);
+    pthread_mutex_unlock(&pdata->theora_lib_mutex);
     pthread_exit(&errno);
 }
 

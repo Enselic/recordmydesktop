@@ -273,6 +273,10 @@ typedef struct _ProgData{
     pthread_mutex_t list_mutex[2],  //mutexes for concurrency
                                     //protection of the lists
                     sound_buffer_mutex,
+                    snd_buff_ready_mutex,
+                    img_buff_ready_mutex,
+                    theora_lib_mutex,
+                    vorbis_lib_mutex,
                     libogg_mutex,   //libogg is not thread safe,
                     yuv_mutex;  //this might not be needed since we only have
                                 //one read-only and  one write-only thread

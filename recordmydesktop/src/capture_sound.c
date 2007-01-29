@@ -34,9 +34,6 @@ void *CaptureSound(ProgData *pdata){
     int framesize=((snd_pcm_format_width(SND_PCM_FORMAT_S16_LE))/8)*
                   pdata->args.channels;
 #endif
-    pthread_mutex_t pmut;
-    pthread_mutex_init(&pmut,NULL);
-
     //start capturing only after first frame is taken
     usleep(pdata->frametime);
 
@@ -47,13 +44,16 @@ void *CaptureSound(ProgData *pdata){
 #ifdef HAVE_LIBASOUND
             if(!pdata->hard_pause){
                 snd_pcm_pause(pdata->sound_handle,1);
-                pthread_cond_wait(&pdata->pause_cond,&pmut);
+                pthread_mutex_lock(&pause_mutex);
+                pthread_cond_wait(&pdata->pause_cond,&pause_mutex);
+                pthread_mutex_unlock(&pause_mutex);
                 snd_pcm_pause(pdata->sound_handle,0);
             }
             else{//device doesn't support pause(is this the norm?mine doesn't)
                 snd_pcm_close(pdata->sound_handle);
-                pthread_cond_wait(&pdata->pause_cond,&pmut);
-
+                pthread_mutex_lock(&pause_mutex);
+                pthread_cond_wait(&pdata->pause_cond,&pause_mutex);
+                pthread_mutex_unlock(&pause_mutex);
                 pdata->sound_handle=
                     OpenDev(pdata->args.device,
                             &pdata->args.channels,
@@ -73,7 +73,9 @@ void *CaptureSound(ProgData *pdata){
             }
 #else
             close(pdata->sound_handle);
-            pthread_cond_wait(&pdata->pause_cond,&pmut);
+            pthread_mutex_lock(&pause_mutex);
+            pthread_cond_wait(&pdata->pause_cond,&pause_mutex);
+            pthread_mutex_unlock(&pause_mutex);
             pdata->sound_handle=
                 OpenDev(pdata->args.device,
                         pdata->args.channels,
@@ -147,7 +149,9 @@ void *CaptureSound(ProgData *pdata){
 
 
         //signal that there are data to be proccessed
+        pthread_mutex_lock(&pdata->snd_buff_ready_mutex);
         pthread_cond_signal(&pdata->sound_data_read);
+        pthread_mutex_unlock(&pdata->snd_buff_ready_mutex);
     }
 #ifdef HAVE_LIBASOUND
     snd_pcm_close(pdata->sound_handle);

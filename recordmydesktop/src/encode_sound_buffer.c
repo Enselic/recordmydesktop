@@ -33,8 +33,6 @@ void *EncodeSoundBuffer(ProgData *pdata){
 #else
     int sampread=pdata->args.buffsize>>1;
 #endif
-    pthread_mutex_t smut;
-    pthread_mutex_init(&smut,NULL);
     pdata->v_encoding_clean=0;
     while((pdata->running)){
         float **vorbis_buffer;
@@ -42,14 +40,17 @@ void *EncodeSoundBuffer(ProgData *pdata){
         SndBuffer *buff;
 
         if(Paused){
-            pthread_mutex_t tmut;
-            pthread_mutex_init(&tmut,NULL);
-            pthread_cond_wait(&pdata->pause_cond,&tmut);
+            pthread_mutex_lock(&pause_mutex);
+            pthread_cond_wait(&pdata->pause_cond,&pause_mutex);
+            pthread_mutex_unlock(&pause_mutex);
         }
 
         if(pdata->sound_buffer==NULL){
             pdata->v_enc_thread_waiting=1;
-            pthread_cond_wait(&pdata->sound_data_read,&smut);
+            pthread_mutex_lock(&pdata->snd_buff_ready_mutex);
+            pthread_cond_wait(&pdata->sound_data_read,
+                              &pdata->snd_buff_ready_mutex);
+            pthread_mutex_unlock(&pdata->snd_buff_ready_mutex);
             pdata->v_enc_thread_waiting=0;
         }
         if(pdata->sound_buffer==NULL || !pdata->running)
@@ -93,7 +94,9 @@ void *EncodeSoundBuffer(ProgData *pdata){
     }
 
     pdata->v_encoding_clean=1;
+    pthread_mutex_lock(&pdata->vorbis_lib_mutex);
     pthread_cond_signal(&pdata->vorbis_lib_clean);
+    pthread_mutex_unlock(&pdata->vorbis_lib_mutex);
     pthread_exit(&errno);
 }
 

@@ -96,7 +96,9 @@ void rmdThreads(ProgData *pdata){
     //if no damage events have been received the thread will get stuck
     while(!pdata->th_enc_thread_waiting && !pdata->th_encoding_clean){
         usleep(10000);
+        pthread_mutex_lock(&pdata->img_buff_ready_mutex);
         pthread_cond_signal(&pdata->image_buffer_ready);
+        pthread_mutex_unlock(&pdata->img_buff_ready_mutex);
     }
 
     if(pdata->args.encOnTheFly){
@@ -110,7 +112,9 @@ void rmdThreads(ProgData *pdata){
         fprintf(stderr,".");
         while(!pdata->v_enc_thread_waiting && !pdata->v_encoding_clean){
             usleep(10000);
+            pthread_mutex_lock(&pdata->snd_buff_ready_mutex);
             pthread_cond_signal(&pdata->sound_data_read);
+            pthread_mutex_unlock(&pdata->snd_buff_ready_mutex);
         }
         if(pdata->args.encOnTheFly){
             pthread_join(sound_encode_t,NULL);

@@ -32,6 +32,7 @@ void SetExpired(int signum){
         if(capture_busy){
             frames_lost++;
         }
+        pthread_mutex_lock(&time_mutex);
         pthread_cond_broadcast(time_cond);  //sig handlers should
                                             //not call this func
                                             //could be a set_expired
@@ -39,6 +40,7 @@ void SetExpired(int signum){
                                             //doing a while(running)
                                             //if set_expired broadcast
                                             //else usleep(n)
+        pthread_mutex_unlock(&time_mutex);
     }
 }
 
@@ -46,19 +48,10 @@ void SetPaused(int signum){
     if(!Paused)
         Paused=1;
     else{
-//         pthread_cond_broadcast(pause_cond);//this should work,
-//         but it doesn't
-        int i;                      //this is a bug
-        Paused=0;                   //normally with the broadcast
-                                    //all the threads should restart,
-                                    //but sound capture thread
-        for(i=0;i<15;i++)           //remains dead. If a bunch of signals,
-            pthread_cond_signal(pause_cond);//restarts all threads,
-                                            //why can't a broadcast
-                                            //do the same?
-                                            //if you have any idea
-                                            //please contact me.
-                                            //(misses the signal?)
+        Paused=0;
+        pthread_mutex_lock(&pause_mutex);
+        pthread_cond_broadcast(pause_cond);
+        pthread_mutex_unlock(&pause_mutex);
     }
 }
 

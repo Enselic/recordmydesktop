@@ -31,7 +31,6 @@ void *GetFrame(ProgData *pdata){
     int tlist_sel=0;
     unsigned char *dtap=NULL;   //pointer switching among shared memory and
                                 //normal buffer
-    pthread_mutex_t pmut,tmut;
     uint msk_ret;
     WGeometry mouse_pos_abs,mouse_pos_rel,mouse_pos_temp;
     Window root_ret,child_ret;
@@ -42,8 +41,6 @@ void *GetFrame(ProgData *pdata){
     mouse_pos_abs.y=mouse_pos_temp.y=0;
     mouse_pos_abs.width=mouse_pos_temp.width=pdata->dummy_p_size;
     mouse_pos_abs.height=mouse_pos_temp.height=pdata->dummy_p_size;
-    pthread_mutex_init(&pmut,NULL);
-    pthread_mutex_init(&tmut,NULL);
 
     while(pdata->running){
 
@@ -51,14 +48,17 @@ void *GetFrame(ProgData *pdata){
         //also before actually pausing we must make sure the streams
         //are synced. sound stops so this should only happen quickly.
         if(pdata->avd>0){
-            pthread_cond_wait(&pdata->time_cond,&tmut);
+            pthread_mutex_lock(&time_mutex);
+            pthread_cond_wait(&pdata->time_cond,&time_mutex);
+            pthread_mutex_unlock(&time_mutex);
             if(Paused){
-                pthread_cond_wait(&pdata->pause_cond,&pmut);
+                pthread_mutex_lock(&pause_mutex);
+                pthread_cond_wait(&pdata->pause_cond,&pause_mutex);
+                pthread_mutex_unlock(&pause_mutex);
             }
         }
         capture_busy=1;
 
-        /*pthread_cond_wait(&pdata->pause_cond,&pdata->pause_cond_mutex);*/
         //mutexes and lists with changes are useless when full_shots is enabled
         if(!pdata->args.full_shots){
             tlist_sel=pdata->list_selector;
@@ -215,10 +215,14 @@ void *GetFrame(ProgData *pdata){
         if(encoder_busy){
             frames_lost++;
         }
+        pthread_mutex_lock(&pdata->img_buff_ready_mutex);
         pthread_cond_broadcast(&pdata->image_buffer_ready);
+        pthread_mutex_unlock(&pdata->img_buff_ready_mutex);
         capture_busy=0;
     }
+    pthread_mutex_lock(&pdata->img_buff_ready_mutex);
     pthread_cond_broadcast(&pdata->image_buffer_ready);
+    pthread_mutex_unlock(&pdata->img_buff_ready_mutex);
     pthread_exit(&errno);
 }
 
