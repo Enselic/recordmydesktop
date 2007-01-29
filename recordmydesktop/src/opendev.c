@@ -29,6 +29,7 @@
 
 #include <recordmydesktop.h>
 
+#ifdef HAVE_LIBASOUND
 
 snd_pcm_t *OpenDev( const char *pcm_dev,
                     unsigned int *channels,
@@ -114,4 +115,50 @@ snd_pcm_t *OpenDev( const char *pcm_dev,
     return mhandle;
 }
 
+#else
 
+int OpenDev( const char *pcm_dev,
+             unsigned int channels,
+             unsigned int frequency){
+    int fd ;
+    fd=open(pcm_dev,O_RDONLY);
+
+    if(fd!=-1){
+        unsigned int value;
+
+        if(ioctl(fd,SNDCTL_DSP_GETFMTS,&value)<0){
+            fprintf(stderr,"Couldn't get audio format list\n");
+            return -1;
+        }
+        if(value & AFMT_S16_LE){
+            value=AFMT_S16_LE;
+        }
+        else if(value & AFMT_S16_BE){
+            value=AFMT_S16_BE;
+        }
+        else{
+            fprintf(stderr,"Soundcard doesn't support signed 16-bit-data\n");
+            return -1;
+        }
+        if(ioctl(fd,SNDCTL_DSP_SETFMT,&value)<0){
+            fprintf(stderr,"Couldn't set audio format\n" );
+            return -1;
+        }
+        value = channels;
+        if(ioctl(fd,SNDCTL_DSP_CHANNELS,&value)<0){
+            fprintf(stderr,"Cannot set the number of channels\n" );
+            return -1;
+        }
+        value = frequency;
+        if(ioctl(fd,SNDCTL_DSP_SPEED,&value)<0){
+            fprintf(stderr,"Couldn't set audio frequency\n" );
+            return -1;
+        }
+        if(fcntl(fd,F_SETFL,fcntl(fd,F_GETFL) & ~O_NONBLOCK)<0){
+            fprintf(stderr,"Couldn't set audio blocking mode\n" );
+            return -1;
+        }
+    }
+    return fd;
+}
+#endif

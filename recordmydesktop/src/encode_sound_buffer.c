@@ -28,8 +28,11 @@
 #include <recordmydesktop.h>
 
 void *EncodeSoundBuffer(ProgData *pdata){
-
+#ifdef HAVE_LIBASOUND
     int sampread=pdata->periodsize;
+#else
+    int sampread=pdata->args.buffsize>>1;
+#endif
     pthread_mutex_t smut;
     pthread_mutex_init(&smut,NULL);
     pdata->v_encoding_clean=0;
@@ -97,7 +100,11 @@ void *EncodeSoundBuffer(ProgData *pdata){
 void SyncEncodeSoundBuffer(ProgData *pdata,signed char *buff){
     float **vorbis_buffer;
     int count=0,i,j;
+#ifdef HAVE_LIBASOUND
     int sampread=(buff!=NULL)?pdata->periodsize:0;
+#else
+    int sampread=(buff!=NULL)?(pdata->args.buffsize>>1):0;
+#endif
     vorbis_buffer=vorbis_analysis_buffer(&pdata->enc_data->m_vo_dsp,sampread);
     for(i=0;i<sampread;i++){
         for(j=0;j<pdata->args.channels;j++){

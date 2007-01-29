@@ -29,9 +29,11 @@
 
 void *CaptureSound(ProgData *pdata){
 
+#ifdef HAVE_LIBASOUND
     int frames=pdata->periodsize;
     int framesize=((snd_pcm_format_width(SND_PCM_FORMAT_S16_LE))/8)*
                   pdata->args.channels;
+#endif
     pthread_mutex_t pmut;
     pthread_mutex_init(&pmut,NULL);
 
@@ -42,6 +44,7 @@ void *CaptureSound(ProgData *pdata){
         int sret=0;
         SndBuffer *newbuf,*tmp;
         if(Paused){
+#ifdef HAVE_LIBASOUND
             if(!pdata->hard_pause){
                 snd_pcm_pause(pdata->sound_handle,1);
                 pthread_cond_wait(&pdata->pause_cond,&pmut);
@@ -68,14 +71,33 @@ void *CaptureSound(ProgData *pdata){
                     pthread_exit(&errno);
                 }
             }
+#else
+            close(pdata->sound_handle);
+            pthread_cond_wait(&pdata->pause_cond,&pmut);
+            pdata->sound_handle=
+                OpenDev(pdata->args.device,
+                        pdata->args.channels,
+                        pdata->args.frequency);
+            if(pdata->sound_handle<0){
+                fprintf(stderr,"Couldn't reopen sound device.Exiting\n");
+                pdata->running=0;
+                errno=3;
+                pthread_exit(&errno);
+            }
+#endif
         }
 
         //create new buffer
         newbuf=(SndBuffer *)malloc(sizeof(SndBuffer *));
+#ifdef HAVE_LIBASOUND
         newbuf->data=(signed char *)malloc(frames*framesize);
+#else
+        newbuf->data=(signed char *)malloc(pdata->args.buffsize);
+#endif
         newbuf->next=NULL;
 
         //read data into new buffer
+#ifdef HAVE_LIBASOUND
         while(sret<frames){
             int temp_sret=snd_pcm_readi(pdata->sound_handle,
                                 newbuf->data+framesize*sret,
@@ -94,7 +116,23 @@ void *CaptureSound(ProgData *pdata){
             else
                 sret+=temp_sret;
         }
-
+#else
+        sret=0;
+        //oss recording loop
+        do{
+            int temp_sret=read(pdata->sound_handle,
+                               &newbuf->data[sret],
+                               pdata->args.buffsize);
+            if(temp_sret<0){
+                fprintf(stderr,"An error occured while reading from soundcard"
+                               "%s\n"
+                               "Error description:\n"
+                               "%s\n",pdata->args.device,strerror(errno));
+            }
+            else
+                sret+=temp_sret;
+        }while(sret<pdata->args.buffsize);
+#endif
         //queue the new buffer
         pthread_mutex_lock(&pdata->sound_buffer_mutex);
         tmp=pdata->sound_buffer;
@@ -111,7 +149,11 @@ void *CaptureSound(ProgData *pdata){
         //signal that there are data to be proccessed
         pthread_cond_signal(&pdata->sound_data_read);
     }
+#ifdef HAVE_LIBASOUND
     snd_pcm_close(pdata->sound_handle);
+#else
+    close(pdata->sound_handle);
+#endif
     pthread_exit(&errno);
 }
 

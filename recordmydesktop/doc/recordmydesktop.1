@@ -141,7 +141,7 @@ The following error codes indicate the nature of the error:
 .br
 9 Cannot connect to Xserver.
 .br
-10 Color depth is not 24bpp.
+10 Color depth is not 32, 24 or 16bpp.
 .br
 11 Improper window specification.
 .br
@@ -262,12 +262,12 @@ Sound Options:
 .TP
 .B
     \-buffer\-size N(number>0)
-    A positive number denoting the desired sound buffer size(in frames).
+    A positive number denoting the desired sound buffer size(in frames for ALSA, bytes for OSS).
 .br
 .TP
 .B
     \-device SOUND_DEVICE
-    Sound device(default hw0:0).
+    Sound device(default hw0:0 or /dev/dsp, depending on whether ALSA or OSS is used).
 .br
 .TP
 .B

@@ -131,10 +131,14 @@ void *LoadCache(ProgData *pdata){
         blocknum_x=pdata->enc_data->yuv.y_width/Y_UNIT_WIDTH,
         blocknum_y=pdata->enc_data->yuv.y_height/Y_UNIT_WIDTH,
         blockszy=Y_UNIT_BYTES,//size of y plane block in bytes
-        blockszuv=UV_UNIT_BYTES,//size of u,v plane blocks in bytes
-        framesize=((snd_pcm_format_width(SND_PCM_FORMAT_S16_LE))/8)*
+        blockszuv=UV_UNIT_BYTES;//size of u,v plane blocks in bytes
+#ifdef HAVE_LIBASOUND
+    int framesize=((snd_pcm_format_width(SND_PCM_FORMAT_S16_LE))/8)*
                   pdata->args.channels;//audio frame size
     signed char *sound_data=(signed char *)malloc(pdata->periodsize*framesize);
+#else
+    signed char *sound_data=(signed char *)malloc(pdata->args.buffsize);
+#endif
     u_int32_t YBlocks[(yuv->y_width*yuv->y_height)/Y_UNIT_BYTES],
               UBlocks[(yuv->uv_width*yuv->uv_height)/UV_UNIT_BYTES],
               VBlocks[(yuv->uv_width*yuv->uv_height)/UV_UNIT_BYTES];
@@ -250,7 +254,11 @@ void *LoadCache(ProgData *pdata){
         //audio load and encoding
         else{
             if(!audio_end){
-                int nbytes=fread(sound_data,pdata->periodsize*framesize,1,afp);
+#ifdef HAVE_LIBASOUND
+                int nbytes=fread(sound_data,1,pdata->periodsize*framesize,afp);
+#else
+                int nbytes=fread(sound_data,1,pdata->args.buffsize,afp);
+#endif
                 if(nbytes<=0)
                     audio_end=1;
                 else

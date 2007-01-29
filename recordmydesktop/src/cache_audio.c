@@ -30,8 +30,10 @@ void *CacheSoundBuffer(ProgData *pdata){
 //It's sound is tiny compared to that of image, so
 //compressing would reducethe overall size by only an
 //insignificant fraction.
+#ifdef HAVE_LIBASOUND
     int framesize=((snd_pcm_format_width(SND_PCM_FORMAT_S16_LE))/8)*
                   pdata->args.channels;
+#endif
     pthread_mutex_t smut;
     pthread_mutex_init(&smut,NULL);
     while((pdata->running)){
@@ -55,10 +57,13 @@ void *CacheSoundBuffer(ProgData *pdata){
         //advance the list
         pdata->sound_buffer=pdata->sound_buffer->next;
         pthread_mutex_unlock(&pdata->sound_buffer_mutex);
-
-        fwrite(buff->data,pdata->periodsize*framesize,1,
+#ifdef HAVE_LIBASOUND
+        fwrite(buff->data,1,pdata->periodsize*framesize,
                pdata->cache_data->afp);
-
+#else
+        fwrite(buff->data,1,pdata->args.buffsize,
+               pdata->cache_data->afp);
+#endif
 
 
         pdata->avd-=pdata->periodtime;

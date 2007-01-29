@@ -60,7 +60,13 @@
 #include <vorbis/codec.h>
 #include <vorbis/vorbisenc.h>
 #include <ogg/ogg.h>
-#include <alsa/asoundlib.h>
+
+#ifdef HAVE_LIBASOUND
+    #include <alsa/asoundlib.h>
+#else
+    #include <sys/ioctl.h>
+    #include <sys/soundcard.h>
+#endif
 
 //this type exists only
 //for comparing the planes at caching.
@@ -137,7 +143,11 @@ typedef struct _ProgArgs{
     unsigned int frequency;     //desired frequency (default 22050)
     unsigned int channels;      //no of channels(default 2)
     char *device;               //default sound device
+#ifdef HAVE_LIBASOUND
     snd_pcm_uframes_t buffsize; //buffer size(in frames) for sound capturing
+#else
+    u_int32_t buffsize;
+#endif
     int nosound;        //do not record sound(default 0)
     int noshared;       //do not use shared memory extension(default 1)
     int nocondshared;   //do not use shared memory on large image aquititions
@@ -283,8 +293,13 @@ typedef struct _ProgData{
         v_encoding_clean;
     int v_enc_thread_waiting,   //these indicate a wait
         th_enc_thread_waiting;  //condition on the above cond vars
+#ifdef HAVE_LIBASOUND
     snd_pcm_t *sound_handle;
     snd_pcm_uframes_t periodsize;
+#else
+    int sound_handle;
+    u_int32_t periodsize;
+#endif
 }ProgData;
 
 

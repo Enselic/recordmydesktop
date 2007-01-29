@@ -20,7 +20,6 @@ If you got a release tarball, to compile the program you have to go through the 
 You will need the development headers(i.e. packages ending with -dev or -devel
 depending on the distribution you use) for the following:
 
-alsa (libasound)
 X
 libICE-dev
 libSM-dev
@@ -31,6 +30,13 @@ libogg
 libvorbis
 libtheora
 
+If you want to compile with ALSA support, you will also
+need the libasound headers.If they are not found, OSS
+will be used and you must have the sys/soundcard.h header.
+To use OSS regardless of whether or not you have the ALSA
+headers, you can use the --enable-oss switch during
+configuration.
+
 
 
 Last, you need the regular headers, plus the ones for pthreads
@@ -40,8 +46,4 @@ Of the above, the most likely to be missing are probably those of libXdamage and
 but any recent linux distribution should offer an easy way to get them.
 
 
-Compiling on *BSD or other *nix flavors is not going to work(because of the alsa dependency)
-but it shouldn't be too much of a hassle to change that(at least by disabling sound capture).
-Future versions might include support for OSS-based sound capture.
-If you are interested in this please let me know.
 

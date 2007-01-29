@@ -99,6 +99,11 @@
 #define Y_UNIT_BYTES    0x0100
 #define UV_UNIT_BYTES   0x0040
 
+#ifdef HAVE_LIBASOUND
+    #define DEFAULT_AUDIO_DEVICE "hw:0,0"
+#else
+    #define DEFAULT_AUDIO_DEVICE "/dev/dsp"
+#endif
 
 #define CLIP_EVENT_AREA(e,brwin,wgeom){\
     if(((e)->area.x<=(brwin)->rgeom.x)&&((e)->area.y<=(brwin)->rgeom.y)&&\
@@ -208,8 +213,8 @@
     (args)->shared_thres=75;\
     (args)->have_dummy_cursor=0;\
     (args)->xfixes_cursor=1;\
-    (args)->device=(char *)malloc(8);\
-    strcpy((args)->device,"hw:0,0");\
+    (args)->device=(char *)malloc(strlen(DEFAULT_AUDIO_DEVICE)+1);\
+    strcpy((args)->device,DEFAULT_AUDIO_DEVICE);\
     (args)->fps=15;\
     (args)->channels=1;\
     (args)->frequency=22050;\

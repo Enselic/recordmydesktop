@@ -283,9 +283,9 @@ void *CaptureSound(ProgData *pdata);
 * \param pdata ProgData struct containing all program data
 */
 void *EncodeSoundBuffer(ProgData *pdata);
-
+#ifdef HAVE_LIBASOUND
 /**
-* Try to open sound device, with the desired parameters,
+* Try to open (alsa) sound device, with the desired parameters,
 * and place the obtained ones on their place
 *
 * \param pcm_dev name of the device
@@ -314,6 +314,24 @@ snd_pcm_t *OpenDev( const char *pcm_dev,
                     snd_pcm_uframes_t *periodsize,
                     unsigned int *periodtime,
                     int *hardpause);
+#else
+/**
+* Try to open (OSS) sound device, with the desired parameters.
+*
+*
+* \param pcm_dev name of the device
+*
+* \param channels desired number of channels
+*
+* \param frequency desired frequency
+*
+*
+* \returns file descriptor of open device,-1 on failure
+*/
+int OpenDev( const char *pcm_dev,
+             unsigned int channels,
+             unsigned int frequency);
+#endif
 /**
 * Initialize theora,vorbis encoders, and their respective ogg streams.
 *

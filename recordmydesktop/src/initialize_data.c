@@ -119,6 +119,7 @@ int InitializeData(ProgData *pdata,
                      AllPlanes);
     }
     if(!pdata->args.nosound){
+#ifdef HAVE_LIBASOUND
         pdata->sound_handle=OpenDev( pdata->args.device,
                                     &pdata->args.channels,
                                     &pdata->args.frequency,
@@ -127,6 +128,14 @@ int InitializeData(ProgData *pdata,
                                     &pdata->periodtime,
                                     &pdata->hard_pause);
         if(pdata->sound_handle==NULL){
+#else
+        pdata->sound_handle=OpenDev(pdata->args.device,
+                                    pdata->args.channels,
+                                    pdata->args.frequency);
+        pdata->periodtime=(1000000*pdata->args.buffsize)/
+                          ((pdata->args.channels<<1)*pdata->args.frequency);
+        if(pdata->sound_handle<0){
+#endif
             fprintf(stderr,"Error while opening/configuring soundcard %s\n"
                            "Try running with the --no-sound or specify a "
                            "correct device.\n",

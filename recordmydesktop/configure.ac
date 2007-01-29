@@ -32,10 +32,17 @@ if test "x$x_includes" != "x" && test "x$x_includes" != xNONE ; then
     CFLAGS="-I$x_includes  $CFLAGS";
 fi
 
-
+AC_ARG_ENABLE(oss,
+     [  --enable-oss[=yes]    compile with OSS(don't check for ALSA))],
+     [case "${enableval}" in
+       yes) oss=true ;;
+       no)  oss=false ;;
+       *) AC_MSG_ERROR(bad value ${enableval} for --enable-oss) ;;
+     esac],[oss=false])
 
 AC_CHECK_HEADER([alsa/asoundlib.h])
-AC_CHECK_HEADERS([sys/time.h unistd.h vorbis/vorbisfile.h ])
+AC_CHECK_HEADER([sys/soundcard.h])
+AC_CHECK_HEADERS([sys/time.h unistd.h vorbis/vorbisfile.h fcntl.h])
 
 
 
@@ -52,16 +59,27 @@ AC_CHECK_LIB([SM],[SmcOpenConnection],,AC_MSG_ERROR([Can't find libSM]),)
 AC_CHECK_LIB([X11],[XOpenDisplay],,AC_MSG_ERROR([Can't find libX11]),
             -L$x_libraries $X_PRE_LIBS)
 AC_CHECK_LIB([Xext],[XShmQueryVersion],,AC_MSG_ERROR([Can't find libXext]))
-AC_CHECK_LIB([Xfixes], [XFixesQueryExtension],,AC_MSG_ERROR([Can't find libXfixes]))
-AC_CHECK_LIB([Xdamage], [XDamageQueryExtension],,AC_MSG_ERROR([Can't find libXdamage]))
-AC_CHECK_LIB([vorbis],[vorbis_info_clear],,AC_MSG_ERROR([Can't find libvorbis]))
-AC_CHECK_LIB([vorbisfile],[ov_open],,AC_MSG_ERROR([Can't find libvorbisfile]),-lvorbis)
-AC_CHECK_LIB([vorbisenc],[vorbis_encode_init],,AC_MSG_ERROR([Can't find libvorbisenc]),-lvorbis)
+AC_CHECK_LIB([Xfixes], [XFixesQueryExtension],,
+             AC_MSG_ERROR([Can't find libXfixes]))
+AC_CHECK_LIB([Xdamage], [XDamageQueryExtension],,
+             AC_MSG_ERROR([Can't find libXdamage]))
+AC_CHECK_LIB([vorbis],[vorbis_info_clear],,
+             AC_MSG_ERROR([Can't find libvorbis]))
+AC_CHECK_LIB([vorbisfile],[ov_open],,
+             AC_MSG_ERROR([Can't find libvorbisfile]),-lvorbis)
+AC_CHECK_LIB([vorbisenc],[vorbis_encode_init],,
+             AC_MSG_ERROR([Can't find libvorbisenc]),-lvorbis)
 AC_CHECK_LIB([ogg],[ogg_stream_init],,AC_MSG_ERROR([Can't find libogg]))
-AC_CHECK_LIB([theora],[theora_encode_YUVin],,AC_MSG_ERROR([Can't find libtheora]))
-AC_CHECK_LIB([pthread],[pthread_mutex_lock],,AC_MSG_ERROR([Can't find libpthread]))
-AC_CHECK_LIB([asound],[snd_pcm_drain],,AC_MSG_ERROR([Can't find libasound]))
-
+AC_CHECK_LIB([theora],[theora_encode_YUVin],,
+             AC_MSG_ERROR([Can't find libtheora]))
+AC_CHECK_LIB([pthread],[pthread_mutex_lock],,
+             AC_MSG_ERROR([Can't find libpthread]))
+if test x$oss = xfalse; then
+    AC_CHECK_LIB([asound],[snd_pcm_drain],,
+                audio_backend="OSS")
+else
+    audio_backend="OSS"
+fi
 
 
 # Checks for typedefs, structures, and compiler characteristics.
@@ -76,3 +94,18 @@ AC_CONFIG_FILES([Makefile
         doc/Makefile ])
 AC_OUTPUT
 
+echo ""
+echo ""
+echo ""
+echo ""
+echo "****************************************"
+echo ""
+if test x$audio_backend = xOSS; then
+    echo "Audio driver that will be used: OSS"
+else
+    echo "Audio driver that will be used: ALSA"
+fi
+echo ""
+echo "****************************************"
+echo ""
+echo ""

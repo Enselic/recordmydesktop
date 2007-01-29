@@ -81,7 +81,9 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
     "\t-buffer-size N\t\tA positive number denoting the desired"
     " sound buffer size(in frames)\n"
 
-    "\t-device SOUND_DEVICE\tSound device(default hw0:0).\n"
+    "\t-device SOUND_DEVICE\tSound device(default "
+    DEFAULT_AUDIO_DEVICE
+    ").\n"
     "\t--no-sound\t\tDo not record sound.\n\n"
 
     "Encoding Options\n"
