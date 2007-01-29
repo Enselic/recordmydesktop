@@ -65,8 +65,8 @@ int FlushBlock(unsigned char *buf,
                int flush){
     int j,i,
         bytes_written=0,
-        block_i=blockno/(width/blockwidth),//place on the grid
-        block_k=blockno%(width/blockwidth);
+        block_i=(!blockwidth)?0:(blockno/(width/blockwidth)),//place on the grid
+        block_k=(!blockwidth)?0:(blockno%(width/blockwidth));
     register unsigned char *buf_reg=(&buf[(block_i*
                                          width+
                                          block_k)*blockwidth]);

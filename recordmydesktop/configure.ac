@@ -41,6 +41,12 @@ AC_ARG_ENABLE(oss,
      esac],[oss=false])
 
 AC_CHECK_HEADER([alsa/asoundlib.h])
+AC_CHECK_HEADER([endian.h],default_endian=true)
+if test x$default_endian != xtrue; then
+AC_CHECK_HEADER([machine/endian.h],
+                AC_DEFINE([HAVE_MACHINE_ENDIAN_H],1,
+                            endian.h in $include_path/machine/ subdirectory))
+fi
 AC_CHECK_HEADER([sys/soundcard.h])
 AC_CHECK_HEADERS([sys/time.h unistd.h vorbis/vorbisfile.h fcntl.h])
 

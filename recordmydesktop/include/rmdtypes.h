@@ -43,7 +43,11 @@
 #include <signal.h>
 #include <sys/time.h>
 #include <sys/types.h>
-#include <endian.h>
+#ifdef HAVE_MACHINE_ENDIAN_H
+    #include <machine/endian.h>
+#else
+    #include <endian.h>
+#endif
 #include <limits.h>
 #include <sys/stat.h>
 #include <sys/ipc.h>
