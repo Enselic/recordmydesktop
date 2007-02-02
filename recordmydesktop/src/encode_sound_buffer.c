@@ -31,7 +31,7 @@ void *EncodeSoundBuffer(ProgData *pdata){
 #ifdef HAVE_LIBASOUND
     int sampread=pdata->periodsize;
 #else
-    int sampread=pdata->args.buffsize>>1;
+    int sampread=(pdata->args.buffsize>>1)/pdata->args.channels;
 #endif
     pdata->v_encoding_clean=0;
     while((pdata->running)){
@@ -106,7 +106,8 @@ void SyncEncodeSoundBuffer(ProgData *pdata,signed char *buff){
 #ifdef HAVE_LIBASOUND
     int sampread=(buff!=NULL)?pdata->periodsize:0;
 #else
-    int sampread=(buff!=NULL)?(pdata->args.buffsize>>1):0;
+    int sampread=(buff!=NULL)?((pdata->args.buffsize>>1)/
+                               pdata->args.channels):0;
 #endif
     vorbis_buffer=vorbis_analysis_buffer(&pdata->enc_data->m_vo_dsp,sampread);
     for(i=0;i<sampread;i++){

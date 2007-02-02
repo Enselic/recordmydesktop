@@ -124,7 +124,7 @@ void *CaptureSound(ProgData *pdata){
         do{
             int temp_sret=read(pdata->sound_handle,
                                &newbuf->data[sret],
-                               pdata->args.buffsize);
+                               pdata->args.buffsize-sret);
             if(temp_sret<0){
                 fprintf(stderr,"An error occured while reading from soundcard"
                                "%s\n"
