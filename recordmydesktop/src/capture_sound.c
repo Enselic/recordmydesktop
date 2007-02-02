@@ -94,7 +94,8 @@ void *CaptureSound(ProgData *pdata){
 #ifdef HAVE_LIBASOUND
         newbuf->data=(signed char *)malloc(frames*framesize);
 #else
-        newbuf->data=(signed char *)malloc(pdata->args.buffsize);
+        newbuf->data=(signed char *)malloc(((pdata->args.buffsize<<1)*
+                                            pdata->args.channels));
 #endif
         newbuf->next=NULL;
 
@@ -124,7 +125,8 @@ void *CaptureSound(ProgData *pdata){
         do{
             int temp_sret=read(pdata->sound_handle,
                                &newbuf->data[sret],
-                               pdata->args.buffsize-sret);
+                               ((pdata->args.buffsize<<1)*
+                                pdata->args.channels)-sret);
             if(temp_sret<0){
                 fprintf(stderr,"An error occured while reading from soundcard"
                                "%s\n"
@@ -133,7 +135,8 @@ void *CaptureSound(ProgData *pdata){
             }
             else
                 sret+=temp_sret;
-        }while(sret<pdata->args.buffsize);
+        }while(sret<((pdata->args.buffsize<<1)*
+                     pdata->args.channels));
 #endif
         //queue the new buffer
         pthread_mutex_lock(&pdata->sound_buffer_mutex);

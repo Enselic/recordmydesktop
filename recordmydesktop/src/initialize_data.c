@@ -139,6 +139,8 @@ int InitializeData(ProgData *pdata,
                                     pdata->args.frequency);
         pdata->periodtime=(1000000*pdata->args.buffsize)/
                           ((pdata->args.channels<<1)*pdata->args.frequency);
+        //when using OSS periodsize serves as an alias of buffsize
+        pdata->periodsize=pdata->args.buffsize;
         if(pdata->sound_handle<0){
 #endif
             fprintf(stderr,"Error while opening/configuring soundcard %s\n"

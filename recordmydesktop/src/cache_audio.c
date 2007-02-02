@@ -33,6 +33,8 @@ void *CacheSoundBuffer(ProgData *pdata){
 #ifdef HAVE_LIBASOUND
     int framesize=((snd_pcm_format_width(SND_PCM_FORMAT_S16_LE))/8)*
                   pdata->args.channels;
+#else
+    int framesize=pdata->args.channels<<1;//Always signed 16 bit data
 #endif
     while((pdata->running)){
         SndBuffer *buff;
@@ -58,15 +60,8 @@ void *CacheSoundBuffer(ProgData *pdata){
         //advance the list
         pdata->sound_buffer=pdata->sound_buffer->next;
         pthread_mutex_unlock(&pdata->sound_buffer_mutex);
-#ifdef HAVE_LIBASOUND
         fwrite(buff->data,1,pdata->periodsize*framesize,
                pdata->cache_data->afp);
-#else
-        fwrite(buff->data,1,pdata->args.buffsize,
-               pdata->cache_data->afp);
-#endif
-
-
         pdata->avd-=pdata->periodtime;
 
         free(buff->data);
