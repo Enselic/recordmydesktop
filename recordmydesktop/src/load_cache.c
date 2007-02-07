@@ -138,6 +138,11 @@ void *LoadCache(ProgData *pdata){
 #else
     int framesize=pdata->args.channels<<1;//Always signed 16 bit data
 #endif
+#ifdef HAVE_JACK_H
+    if(pdata->args.use_jack)
+        framesize=sizeof(jack_default_audio_sample_t)*
+                  pdata->jdata->nports;
+#endif
     signed char *sound_data=(signed char *)malloc(pdata->periodsize*framesize);
 
     u_int32_t YBlocks[(yuv->y_width*yuv->y_height)/Y_UNIT_BYTES],

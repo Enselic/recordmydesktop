@@ -27,6 +27,22 @@
 
 #include <recordmydesktop.h>
 
+#ifdef HAVE_LIBASOUND
+void FixBufferSize(snd_pcm_uframes_t *buffsize){
+    snd_pcm_uframes_t buffsize_t=*buffsize,
+#else
+void FixBufferSize(u_int32_t *buffsize){
+    u_int32_t buffsize_t=*buffsize,
+#endif
+                          buffsize_ret=1;
+    while(buffsize_t>1){
+        buffsize_t>>=1;
+        buffsize_ret<<=1;
+    }
+    fprintf(stderr,"Buffer size adjusted to %d from %d frames.\n",
+                   (int)buffsize_ret,(int)*buffsize);
+}
+
 int InitializeData(ProgData *pdata,
                    EncData *enc_data,
                    CacheData *cache_data){
@@ -124,30 +140,56 @@ int InitializeData(ProgData *pdata,
                      AllPlanes);
     }
     if(!pdata->args.nosound){
+        if(!pdata->args.use_jack){
+            FixBufferSize(&pdata->args.buffsize);
 #ifdef HAVE_LIBASOUND
-        pdata->sound_handle=OpenDev( pdata->args.device,
-                                    &pdata->args.channels,
-                                    &pdata->args.frequency,
-                                    &pdata->args.buffsize,
-                                    &pdata->periodsize,
-                                    &pdata->periodtime,
-                                    &pdata->hard_pause);
-        if(pdata->sound_handle==NULL){
+            pdata->sound_handle=OpenDev( pdata->args.device,
+                                        &pdata->args.channels,
+                                        &pdata->args.frequency,
+                                        &pdata->args.buffsize,
+                                        &pdata->periodsize,
+                                        &pdata->periodtime,
+                                        &pdata->hard_pause);
+            if(pdata->sound_handle==NULL){
 #else
-        pdata->sound_handle=OpenDev(pdata->args.device,
-                                    pdata->args.channels,
-                                    pdata->args.frequency);
-        pdata->periodtime=(1000000*pdata->args.buffsize)/
-                          ((pdata->args.channels<<1)*pdata->args.frequency);
-        //when using OSS periodsize serves as an alias of buffsize
-        pdata->periodsize=pdata->args.buffsize;
-        if(pdata->sound_handle<0){
+            pdata->sound_handle=OpenDev(pdata->args.device,
+                                        pdata->args.channels,
+                                        pdata->args.frequency);
+            pdata->periodtime=(1000000*pdata->args.buffsize)/
+                            ((pdata->args.channels<<1)*pdata->args.frequency);
+            //when using OSS periodsize serves as an alias of buffsize
+            pdata->periodsize=pdata->args.buffsize;
+            if(pdata->sound_handle<0){
 #endif
-            fprintf(stderr,"Error while opening/configuring soundcard %s\n"
-                           "Try running with the --no-sound or specify a "
-                           "correct device.\n",
-                           pdata->args.device);
-            return 3;
+                fprintf(stderr,"Error while opening/configuring soundcard %s\n"
+                            "Try running with the --no-sound or specify a "
+                            "correct device.\n",
+                            pdata->args.device);
+                return 3;
+            }
+        }
+        else{
+#ifdef HAVE_JACK_H
+            int jack_error=0;
+            pdata->jdata->port_names=pdata->args.jack_port_names;
+            pdata->jdata->nports=pdata->args.jack_nports;
+            pdata->jdata->snd_buff_ready_mutex=&pdata->snd_buff_ready_mutex;
+            pdata->jdata->sound_data_read=&pdata->sound_data_read;
+            pdata->jdata->capture_started=0;
+
+            if((jack_error=StartJackClient(pdata->jdata))!=0)
+                return jack_error;
+
+            pdata->args.buffsize=pdata->jdata->buffersize;
+            pdata->periodsize=pdata->args.buffsize;
+            pdata->args.frequency=pdata->jdata->frequency;
+            pdata->args.channels=pdata->jdata->nports;
+            pdata->periodtime=(1000000*pdata->args.buffsize)/
+                              pdata->args.frequency;
+#else
+            fprintf(stderr,"Should not be here!\n");
+            exit(-1);
+#endif
         }
     }
 
@@ -176,7 +218,6 @@ int InitializeData(ProgData *pdata,
             pdata->specs.depth);
 
     pdata->frametime=(1000000)/pdata->args.fps;
-
     return 0;
 
 }

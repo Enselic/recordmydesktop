@@ -65,10 +65,11 @@ void rmdThreads(ProgData *pdata){
                        (void *)pdata);
 
     if(!pdata->args.nosound){
-        pthread_create(&sound_capture_t,
-                       NULL,
-                       (void *)CaptureSound,
-                       (void *)pdata);
+        if(!pdata->args.use_jack)
+            pthread_create(&sound_capture_t,
+                        NULL,
+                        (void *)CaptureSound,
+                        (void *)pdata);
         if(pdata->args.encOnTheFly)
             pthread_create(&sound_encode_t,
                            NULL,
@@ -88,7 +89,11 @@ void rmdThreads(ProgData *pdata){
 
     RegisterCallbacks(&pdata->args);
     fprintf(stderr,"Capturing!\n");
-
+#ifdef HAVE_JACK_H
+    if(pdata->args.use_jack){
+        pdata->jdata->capture_started=1;
+    }
+#endif
     //wait all threads to finish
 
     pthread_join(image_capture_t,NULL);
@@ -108,9 +113,14 @@ void rmdThreads(ProgData *pdata){
         pthread_join(image_cache_t,NULL);
     fprintf(stderr,".");
     if(!pdata->args.nosound){
-        pthread_join(sound_capture_t,NULL);
+#ifdef HAVE_JACK_H
+        if(pdata->args.use_jack)
+            StopJackClient(pdata->jdata);
+#endif
+        if(!pdata->args.use_jack)
+            pthread_join(sound_capture_t,NULL);
         fprintf(stderr,".");
-        while(!pdata->v_enc_thread_waiting && !pdata->v_encoding_clean){
+        while(pdata->v_enc_thread_waiting || !pdata->v_encoding_clean){
             usleep(10000);
             pthread_mutex_lock(&pdata->snd_buff_ready_mutex);
             pthread_cond_signal(&pdata->sound_data_read);

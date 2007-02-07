@@ -27,7 +27,8 @@ recordmydesktop_SOURCES=	recordmydesktop.c\
 							wm_check.c\
 							encode_cache.c\
 							rmdthreads.c\
-							initialize_data.c
+							initialize_data.c\
+							rmd_jack.c
 
 INCLUDES= $(all_includes) -I../include
 

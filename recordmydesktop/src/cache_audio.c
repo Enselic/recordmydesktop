@@ -36,36 +36,66 @@ void *CacheSoundBuffer(ProgData *pdata){
 #else
     int framesize=pdata->args.channels<<1;//Always signed 16 bit data
 #endif
+#ifdef HAVE_JACK_H
+    void *jackbuf=NULL;
+    if(pdata->args.use_jack){
+        framesize=sizeof(jack_default_audio_sample_t)*
+                  pdata->jdata->nports;
+        jackbuf=malloc(framesize*pdata->jdata->buffersize);
+    }
+#endif
     while((pdata->running)){
-        SndBuffer *buff;
+        SndBuffer *buff=NULL;
 
         if(Paused){
             pthread_mutex_lock(&pause_mutex);
             pthread_cond_wait(&pdata->pause_cond,&pause_mutex);
             pthread_mutex_unlock(&pause_mutex);
         }
-        if(pdata->sound_buffer==NULL){
-            pdata->v_enc_thread_waiting=1;
-            pthread_mutex_lock(&pdata->snd_buff_ready_mutex);
-            pthread_cond_wait(&pdata->sound_data_read,
-                              &pdata->snd_buff_ready_mutex);
-            pthread_mutex_unlock(&pdata->snd_buff_ready_mutex);
-            pdata->v_enc_thread_waiting=0;
+        if(!pdata->args.use_jack){
+            if(pdata->sound_buffer==NULL){
+                pdata->v_enc_thread_waiting=1;
+                pthread_mutex_lock(&pdata->snd_buff_ready_mutex);
+                pthread_cond_wait(&pdata->sound_data_read,
+                                &pdata->snd_buff_ready_mutex);
+                pthread_mutex_unlock(&pdata->snd_buff_ready_mutex);
+                pdata->v_enc_thread_waiting=0;
+            }
+            if(pdata->sound_buffer==NULL || !pdata->running){
+                break;
+            }
+            pthread_mutex_lock(&pdata->sound_buffer_mutex);
+            buff=pdata->sound_buffer;
+            //advance the list
+            pdata->sound_buffer=pdata->sound_buffer->next;
+            pthread_mutex_unlock(&pdata->sound_buffer_mutex);
+            fwrite(buff->data,1,pdata->periodsize*framesize,
+                   pdata->cache_data->afp);
+            free(buff->data);
+            free(buff);
         }
-        if(pdata->sound_buffer==NULL || !pdata->running)
-            break;
-
-        pthread_mutex_lock(&pdata->sound_buffer_mutex);
-        buff=pdata->sound_buffer;
-        //advance the list
-        pdata->sound_buffer=pdata->sound_buffer->next;
-        pthread_mutex_unlock(&pdata->sound_buffer_mutex);
-        fwrite(buff->data,1,pdata->periodsize*framesize,
-               pdata->cache_data->afp);
+        else{
+#ifdef HAVE_JACK_H
+            if((*jack_ringbuffer_read_space_p)(pdata->jdata->sound_buffer)>=
+               (framesize*pdata->jdata->buffersize)){
+                (*jack_ringbuffer_read_p)(pdata->jdata->sound_buffer,
+                                          jackbuf,
+                                          (framesize*pdata->jdata->buffersize));
+                fwrite(jackbuf,1,(framesize*pdata->jdata->buffersize),
+                       pdata->cache_data->afp);
+            }
+            else{
+                pdata->v_enc_thread_waiting=1;
+                pthread_mutex_lock(&pdata->snd_buff_ready_mutex);
+                pthread_cond_wait(&pdata->sound_data_read,
+                                &pdata->snd_buff_ready_mutex);
+                pthread_mutex_unlock(&pdata->snd_buff_ready_mutex);
+                pdata->v_enc_thread_waiting=0;
+                continue;
+            }
+#endif
+        }
         pdata->avd-=pdata->periodtime;
-
-        free(buff->data);
-        free(buff);
     }
 
     fclose(pdata->cache_data->afp);

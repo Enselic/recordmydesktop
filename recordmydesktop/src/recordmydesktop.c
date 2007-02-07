@@ -30,6 +30,7 @@
 
 int main(int argc,char **argv){
     ProgData pdata;
+
     int exit_status=0;
     if(XInitThreads ()==0){
         fprintf(stderr,"Couldn't initialize thread support!\n");
@@ -52,7 +53,10 @@ int main(int argc,char **argv){
     else{
         EncData enc_data;
         CacheData cache_data;
-
+#ifdef HAVE_JACK_H
+        JackData jdata;
+        pdata.jdata=&jdata;
+#endif
         QUERY_DISPLAY_SPECS(pdata.dpy,&pdata.specs);
         if((pdata.specs.depth!=32)&&
            (pdata.specs.depth!=24)&&

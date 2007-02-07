@@ -149,6 +149,14 @@ The following error codes indicate the nature of the error:
 .br
 13 Cannot open file for writting.
 .br
+14 Cannot load the Jack library (dlopen/dlsym error on libjack.so).
+.br
+15 Cannot create new client.
+.br
+16 Cannot activate client.
+.br
+17 Port registration/connection failure.
+.br
 .br
 .SH OPTIONS
 .PP
@@ -164,6 +172,11 @@ Generic Options:
 .B
     \-\-version
     Print program version and exit.
+.br
+.TP
+.B
+    \-\-print\-config
+    Print info about options selected during compilation and exit.
 .br
 .PP
 .br
@@ -271,6 +284,15 @@ Sound Options:
 .br
 .TP
 .B
+    \-use\-jack port1 port2... portn
+    Record audio from the specified list of
+.B
+space-separated
+jack ports.
+    When using this option, all the rest audio related ones(except --no-sound) are not taken into account.
+.br
+.TP
+.B
     \-\-no\-sound
     Do not record sound.
 .br
@@ -356,7 +378,7 @@ If no other option is specified, filename can be given without the \-o switch.
 .TP
 .B        recordmydesktop
 .br
-[\-h| \-\-help| \-\-version| \-delay n[H|h|M|m]| \-windowid id_of_window|
+[\-h| \-\-help| \-\-version| \-\-print\-config| \-delay n[H|h|M|m]| \-windowid id_of_window|
 .br
 \-display DISPLAY| \-x X| \-y Y|\-width N| \-height N| \-fps N(number>0)| \-\-on\-the\-fly\-encoding|
 .br
@@ -364,7 +386,7 @@ If no other option is specified, filename can be given without the \-o switch.
 .br
 \-\-no\-cursor| \-freq N(number>0)| \-channels N(number>0)| \-buffer\-size N(number>0)| \-device SOUND_DEVICE|
 .br
-\-\-no\-sound| \-\-with\-shared| \-\-no\-cond\-shared| \-shared\-threshold n| \-\-full\-shots|
+\-use\-jack port1 port2... portn| \-\-no\-sound| \-\-with\-shared| \-\-no\-cond\-shared| \-shared\-threshold n| \-\-full\-shots|
 .br
 \-\-quick\-subsampling| \-workdir DIR| \-\-zero\-compression| \-\-no\-wm\-check| \-\-overwrite| \-o filename]^filename
 .br
@@ -441,4 +463,5 @@ John Varouhakis(johnvarouhakis@gmail.com)
 .br
 .BR ffmpeg2theora(1)
 .br
-
+.BR jack_lsp(1)
+.br

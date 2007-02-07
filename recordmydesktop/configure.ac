@@ -33,12 +33,20 @@ if test "x$x_includes" != "x" && test "x$x_includes" != xNONE ; then
 fi
 
 AC_ARG_ENABLE(oss,
-     [  --enable-oss[=yes]    compile with OSS(don't check for ALSA))],
+     [  --enable-oss[=yes]    compile with OSS(don't check for ALSA)],
      [case "${enableval}" in
        yes) oss=true ;;
        no)  oss=false ;;
        *) AC_MSG_ERROR(bad value ${enableval} for --enable-oss) ;;
      esac],[oss=false])
+
+AC_ARG_ENABLE(jack,
+     [  --enable-jack[=yes]    compile with Jack support],
+     [case "${enableval}" in
+       yes) jack=true ;;
+       no)  jack=false ;;
+       *) AC_MSG_ERROR(bad value ${enableval} for --enable-jack) ;;
+     esac],[jack=true])
 
 AC_CHECK_HEADER([alsa/asoundlib.h])
 AC_CHECK_HEADER([endian.h],default_endian=true)
@@ -47,7 +55,14 @@ AC_CHECK_HEADER([machine/endian.h],
                 AC_DEFINE([HAVE_MACHINE_ENDIAN_H],1,
                             endian.h in $include_path/machine/ subdirectory))
 fi
+
 AC_CHECK_HEADER([sys/soundcard.h])
+AC_CHECK_HEADER([dlfcn.h],[dlfcn_header=true])
+
+if test x$jack = xtrue && test x$dlfcn_header = xtrue; then
+AC_CHECK_HEADER([jack/jack.h],
+                jack_headers_present=true)
+fi
 AC_CHECK_HEADERS([sys/time.h unistd.h vorbis/vorbisfile.h fcntl.h])
 
 
@@ -80,11 +95,20 @@ AC_CHECK_LIB([theora],[theora_encode_YUVin],,
              AC_MSG_ERROR([Can't find libtheora]))
 AC_CHECK_LIB([pthread],[pthread_mutex_lock],,
              AC_MSG_ERROR([Can't find libpthread]))
+
 if test x$oss = xfalse; then
     AC_CHECK_LIB([asound],[snd_pcm_drain],,
                 audio_backend="OSS")
 else
     audio_backend="OSS"
+fi
+
+if test x$jack_headers_present = xtrue; then
+    AC_CHECK_LIB([dl],[dlopen],,libdl_np=true)
+    if test x$libdl_np != xtrue; then
+        AC_DEFINE([HAVE_JACK_H],1,
+                define to 1 if <jack/jack.h> exists)
+    fi
 fi
 
 
@@ -100,17 +124,21 @@ AC_CONFIG_FILES([Makefile
         doc/Makefile ])
 AC_OUTPUT
 
-echo ""
-echo ""
+if test x$audio_backend != xOSS; then
+    audio_backend="ALSA"
+fi
+if test x$jack_headers_present = xtrue && test x$libdl_np != xtrue; then
+    jack_support="Enabled"
+else
+    jack_support="Disabled"
+fi
 echo ""
 echo ""
 echo "****************************************"
 echo ""
-if test x$audio_backend = xOSS; then
-    echo "Audio driver that will be used: OSS"
-else
-    echo "Audio driver that will be used: ALSA"
-fi
+echo "Audio driver that will be used: $audio_backend"
+echo ""
+echo "Compile with Jack support: $jack_support"
 echo ""
 echo "****************************************"
 echo ""

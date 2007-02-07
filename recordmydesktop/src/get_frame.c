@@ -58,7 +58,6 @@ void *GetFrame(ProgData *pdata){
             }
         }
         capture_busy=1;
-
         //mutexes and lists with changes are useless when full_shots is enabled
         if(!pdata->args.full_shots){
             tlist_sel=pdata->list_selector;

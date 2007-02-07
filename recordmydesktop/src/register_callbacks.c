@@ -32,14 +32,16 @@ void SetExpired(int signum){
         if(capture_busy){
             frames_lost++;
         }
+/*FIXME */
+//This is not safe.
+//cond_var signaling must move away from signal handlers
+//alltogether (JackCapture, SetExpired, SetPaused).
+//Better would be a set of pipes for each of these.
+//The callback should write on the pipe and the main thread
+//should perform a select over the fd's, signaling afterwards the
+//appropriate cond_var.
         pthread_mutex_lock(&time_mutex);
-        pthread_cond_broadcast(time_cond);  //sig handlers should
-                                            //not call this func
-                                            //could be a set_expired
-                                            // and main thread
-                                            //doing a while(running)
-                                            //if set_expired broadcast
-                                            //else usleep(n)
+        pthread_cond_broadcast(time_cond);
         pthread_mutex_unlock(&time_mutex);
     }
 }
@@ -49,6 +51,14 @@ void SetPaused(int signum){
         Paused=1;
     else{
         Paused=0;
+/*FIXME */
+//This is not safe.
+//cond_var signaling must move away from signal handlers
+//alltogether (JackCapture, SetExpired, SetPaused).
+//Better would be a set of pipes for each of these.
+//The callback should write on the pipe and the main thread
+//should perform a select over the fd's, signaling afterwards the
+//appropriate cond_var.
         pthread_mutex_lock(&pause_mutex);
         pthread_cond_broadcast(pause_cond);
         pthread_mutex_unlock(&pause_mutex);

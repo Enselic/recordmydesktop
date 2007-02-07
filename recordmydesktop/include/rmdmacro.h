@@ -105,6 +105,11 @@
     #define DEFAULT_AUDIO_DEVICE "/dev/dsp"
 #endif
 
+#ifdef HAVE_JACK_H
+    #define BUFFERS_IN_RING 0x0020
+#endif
+
+
 #define CLIP_EVENT_AREA(e,brwin,wgeom){\
     if(((e)->area.x<=(brwin)->rgeom.x)&&((e)->area.y<=(brwin)->rgeom.y)&&\
         ((e)->area.width>=(brwin)->rgeom.width)&&\
@@ -204,7 +209,10 @@
     (args)->nowmcheck=\
     (args)->dropframes=\
     (args)->overwrite=\
+    (args)->use_jack=\
+    (args)->jack_nports=\
     (args)->nocondshared=0;\
+    (args)->jack_port_names=NULL;\
     (args)->no_quick_subsample=\
     (args)->noshared=1;\
     (args)->filename=(char *)malloc(8);\
@@ -251,13 +259,13 @@
     t3=*datapi_next;\
     t4=*(datapi_next+1);\
     t_val=((((t1&0xff000000) +(t2&0xff000000)+\
-    (t3&0xff000000)+(t4&0xff000000))/4)&0xff000000) \
-    +((((t1&0x00ff0000) +(t2&0x00ff0000)+\
-    (t3&0x00ff0000)+(t4&0x00ff0000))/4)&0x00ff0000)\
-    +((((t1&0x0000ff00) +(t2&0x0000ff00)+\
-    (t3&0x0000ff00)+(t4&0x0000ff00))/4)&0x0000ff00)\
-    +((((t1&0x000000ff) +(t2&0x000000ff)+\
-    (t3&0x000000ff)+(t4&0x000000ff))/4)&0x000000ff);\
+            (t3&0xff000000)+(t4&0xff000000))/4)&0xff000000)+\
+          ((((t1&0x00ff0000) +(t2&0x00ff0000)+\
+            (t3&0x00ff0000)+(t4&0x00ff0000))/4)&0x00ff0000)+\
+          ((((t1&0x0000ff00) +(t2&0x0000ff00)+\
+            (t3&0x0000ff00)+(t4&0x0000ff00))/4)&0x0000ff00)+\
+          ((((t1&0x000000ff) +(t2&0x000000ff)+\
+            (t3&0x000000ff)+(t4&0x000000ff))/4)&0x000000ff);\
 }
 
 #define CALC_TVAL_AVG_16(t_val,datapi,datapi_next){\
@@ -267,11 +275,11 @@
     t3=*datapi_next;\
     t4=*(datapi_next+1);\
     t_val=((((t1&__R16_MASK) +(t2&__R16_MASK)+\
-    (t3&__R16_MASK)+(t4&__R16_MASK))/4)&__R16_MASK) \
-    +((((t1&__G16_MASK) +(t2&__G16_MASK)+\
-    (t3&__G16_MASK)+(t4&__G16_MASK))/4)&__G16_MASK)\
-    +((((t1&__B16_MASK) +(t2&__B16_MASK)+\
-    (t3&__B16_MASK)+(t4&__B16_MASK))/4)&__B16_MASK);\
+             (t3&__R16_MASK)+(t4&__R16_MASK))/4)&__R16_MASK)+\
+          ((((t1&__G16_MASK) +(t2&__G16_MASK)+\
+             (t3&__G16_MASK)+(t4&__G16_MASK))/4)&__G16_MASK)+\
+          ((((t1&__B16_MASK) +(t2&__B16_MASK)+\
+             (t3&__B16_MASK)+(t4&__B16_MASK))/4)&__B16_MASK);\
 }
 
 #define UPDATE_Y_PLANE(data,\
@@ -494,8 +502,19 @@
     free((frame_t)->VData);\
 };
 
+#ifdef HAVE_JACK_H
 
+#define CHECK_DLERRORS_FATAL(__error_p)\
+    if((__error_p=dlerror())!=NULL){\
+        fprintf(stderr,"%s\n",__error_p);\
+        return 1;\
+    }
 
+#define DLSYM_AND_CHECK(lib_handle,__call_name__,__error_p)\
+    __call_name__##_p=dlsym(lib_handle,#__call_name__);\
+    CHECK_DLERRORS_FATAL(__error_p)
+
+#endif
 
 #endif
 

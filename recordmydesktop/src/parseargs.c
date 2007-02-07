@@ -27,11 +27,26 @@
 
 #include <recordmydesktop.h>
 
+void PrintConfig(void){
+    fprintf(stderr,"\nrecordMyDesktop was compiled with"
+                   " the following options:\n\n");
+#ifdef HAVE_JACK_H
+    fprintf(stdout,"Jack\t\t\t:Enabled\n");
+#else
+    fprintf(stdout,"Jack\t\t\t:Disabled\n");
+#endif
+#ifdef HAVE_LIBASOUND
+    fprintf(stdout,"Default Audio Backend\t:ALSA\n");
+#else
+    fprintf(stdout,"Default Audio Backend\t:OSS\n");
+#endif
+    fprintf(stderr,"\n\n");
+}
 
 int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
     int i;
     char *usage="\nUsage:\n"
-    "\trecordmydesktop [-h| --help| --version|"
+    "\trecordmydesktop [-h| --help| --version| --print-config|"
     " -delay n[H|h|M|m]| -windowid id_of_window|\n"
     "\t-display DISPLAY| -x X| -y Y|-width N| -height N|"
     " -fps N(number>0)| --on-the-fly-encoding|\n"
@@ -39,14 +54,17 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
     " -dummy-cursor color|\n"
     "\t --no-cursor| -freq N(number>0)| -channels N(number>0)|"
     " -buffer-size N(number>0)| -device SOUND_DEVICE|\n"
-    "\t --no-sound| --with-shared| --no-cond-shared| -shared-threshold n|"
+    "\t -use-jack port1 port2... portn| --no-sound| --with-shared|"
+    " --no-cond-shared| -shared-threshold n|"
     " --full-shots|\n"
     "\t --quick-subsampling| -workdir DIR| --zero-compression| --no-wm-check|"
     " --overwite| -o filename]^filename\n\n\n"
 
     "General Options:\n"
     "\t-h or --help\t\tPrint this help and exit.\n"
-    "\t--version\t\tPrint program version and exit.\n\n"
+    "\t--version\t\tPrint program version and exit.\n"
+    "\t--print-config\t\tPrint info about options "
+    "selected during compilation and exit.\n\n"
 
     "Image Options:\n"
     "\t-windowid id_of_window\tid of window to be recorded.\n"
@@ -74,17 +92,19 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
     "\t-fps N(number>0.0)\tA positive number denoting desired framerate.\n\n"
 
     "Sound Options:\n"
-    "\t-channels N\t\tA positive number denoting"
+    "\t-channels N\t\t\tA positive number denoting"
     " desired sound channels in recording.\n"
 
-    "\t-freq N\t\t\tA positive number denoting desired sound frequency.\n"
-    "\t-buffer-size N\t\tA positive number denoting the desired"
+    "\t-freq N\t\t\t\tA positive number denoting desired sound frequency.\n"
+    "\t-buffer-size N\t\t\tA positive number denoting the desired"
     " sound buffer size(in frames)\n"
 
-    "\t-device SOUND_DEVICE\tSound device(default "
+    "\t-device SOUND_DEVICE\t\tSound device(default "
     DEFAULT_AUDIO_DEVICE
     ").\n"
-    "\t--no-sound\t\tDo not record sound.\n\n"
+    "\t-use-jack port1 port2... portn\tRecord audio from the specified\n"
+    "\t\t\t\t\tlist of space-separated jack ports.\n"
+    "\t--no-sound\t\t\tDo not record sound.\n\n"
 
     "Encoding Options\n"
     "\t--on-the-fly-encoding\tEncode the audio-video data, while recording.\n"
@@ -446,6 +466,44 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
             }
             i++;
         }
+        else if(!strcmp(argv[i],"-use-jack")){
+            if(i+1<argc){
+#ifdef HAVE_JACK_H
+                int k=i+1;
+                arg_return->jack_nports=0;
+                while((k<argc)&&(argv[k][0]!='-')){
+                    arg_return->jack_nports++;
+                    k++;
+                }
+                if(arg_return->jack_nports>0){
+                    arg_return->jack_port_names=malloc(sizeof(char*)*
+                                                       arg_return->jack_nports);
+                    for(k=i+1;k<i+1+arg_return->jack_nports;k++){
+                        arg_return->jack_port_names[k-i-1]=
+                            malloc(strlen(argv[k])+1);
+                        strcpy(arg_return->jack_port_names[k-i-1],
+                               argv[k]);
+                    }
+                    i+=arg_return->jack_nports;
+                    arg_return->use_jack=1;
+                }
+                else{
+                    fprintf(stderr,"Argument Usage: -use-jack port1"
+                                   " port2... portn\n");
+                    return 1;
+                }
+#else
+                fprintf(stderr,"recordMyDesktop is not compiled"
+                               " with Jack support!\n");
+                return 1;
+#endif
+            }
+            else{
+                fprintf(stderr,"Argument Usage: -use-jack port1"
+                               " port2... portn\n");
+                return 1;
+            }
+        }
         else if(!strcmp(argv[i],"--no-sound"))
             arg_return->nosound=1;
         else if(!strcmp(argv[i],"--drop-frames"))
@@ -475,11 +533,15 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
         }
         else if(!strcmp(argv[i],"--help")||!strcmp(argv[i],"-h")){
             fprintf(stderr,"%s",usage);
-            return 1;
+            exit(0);
         }
         else if(!strcmp(argv[i],"--version")){
             fprintf(stderr,"recordMyDesktop v%s\n\n",VERSION);
-            return 1;
+            exit(0);
+        }
+        else if(!strcmp(argv[i],"--print-config")){
+            PrintConfig();
+            exit(0);
         }
         else{
             fprintf(stderr,"\n\tError parsing arguments.\n\t"

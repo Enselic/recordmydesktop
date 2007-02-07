@@ -72,6 +72,13 @@
     #include <sys/soundcard.h>
 #endif
 
+#ifdef HAVE_JACK_H
+    #include <jack/jack.h>
+    #include <jack/ringbuffer.h>
+    #include <dlfcn.h>
+#endif
+
+
 //this type exists only
 //for comparing the planes at caching.
 //u_int64_t mught not be available everywhere.
@@ -167,8 +174,10 @@ typedef struct _ProgArgs{
     int zerocompression;//image data are always flushed uncompressed
     int overwrite;      //overwite a previously existing file
                         //(do not add a .number postfix)
+    int use_jack;       //record audio with jack
+    unsigned int jack_nports;
+    char **jack_port_names;
 }ProgArgs;
-
 
 //this struct holds anything related to encoding AND
 //writting out to file.
@@ -231,6 +240,23 @@ typedef struct _SndBuffer{
     struct _SndBuffer *next;
 }SndBuffer;
 
+#ifdef HAVE_JACK_H
+typedef struct _JackData{
+    void *jack_lib_handle;      //handle for jack library (loaded with dlopen).
+    jack_client_t   *client;
+    unsigned int    buffersize, //buffer size for every port in frames.
+                    frequency,  //samplerate with which jack server was started.
+                    nports;     //number of ports.
+    char **port_names;          //names of ports(as specified in args).
+    jack_port_t **ports;        //connections to thes ports.
+    jack_default_audio_sample_t **portbuf;  //retrieval of audio buffers.
+    pthread_mutex_t *snd_buff_ready_mutex;  //mutex and cond_var
+    pthread_cond_t *sound_data_read;        //in the pdata struct
+    jack_ringbuffer_t *sound_buffer;        //data exchange happens through this
+    int capture_started;        //used to hold recording in the beginning
+}JackData;
+#endif
+
 //this structure holds any data related to the program
 //It's usage is mostly to be given as an argument to the
 //threads,so they will have access to the program data, avoiding
@@ -262,9 +288,12 @@ typedef struct _ProgData{
         damage_event,       //damage event base code
         damage_error,       //damage error base code
         running;
-    SndBuffer *sound_buffer;
-    EncData *enc_data;
-    CacheData *cache_data;
+    SndBuffer   *sound_buffer;
+    EncData     *enc_data;
+    CacheData   *cache_data;
+#ifdef HAVE_JACK_H
+    JackData    *jdata;
+#endif
     int hard_pause;         //if sound device doesn't support pause
                             //we have to close and reopen
     int avd;                //syncronization among audio and video

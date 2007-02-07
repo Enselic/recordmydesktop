@@ -521,5 +521,109 @@ int InitializeData(ProgData *pdata,
                    EncData *enc_data,
                    CacheData *cache_data);
 
+#ifdef HAVE_JACK_H
+/**
+*
+*   Global Fuction Pointers To Jack API Calls
+*
+*/
+jack_client_t *(*jack_client_new_p)(const char *client_name);
+jack_nframes_t (*jack_get_sample_rate_p)(jack_client_t * client);
+int (*jack_set_buffer_size_p)(jack_client_t *client, jack_nframes_t nframes);
+jack_nframes_t (*jack_get_buffer_size_p)(jack_client_t *client);
+int (*jack_set_process_callback_p)(jack_client_t *client,
+                                   JackProcessCallback process_callback,
+                                   void *arg);
+void (*jack_on_shutdown_p)(jack_client_t *client,
+                           void(*function)(void *arg),
+                           void *arg);
+int (*jack_activate_p)(jack_client_t *client);
+int (*jack_client_close_p)(jack_client_t *client);
+void *(*jack_port_get_buffer_p)(jack_port_t *port,jack_nframes_t);
+jack_port_t *(*jack_port_register_p)(jack_client_t *client,
+                                     const char *port_name,
+                                     const char *port_type,
+                                     unsigned long flags,
+                                     unsigned long buffer_size);
+int (*jack_connect_p)(jack_client_t *client,
+                      const char *source_port,
+                      const char *destination_port);
+const char *(*jack_port_name_p)(const jack_port_t *port);
+int (*jack_port_name_size_p)(void);
+jack_ringbuffer_t *(*jack_ringbuffer_create_p)(size_t sz);
+void (*jack_ringbuffer_free_p)(jack_ringbuffer_t *rb);
+size_t (*jack_ringbuffer_read_p)(jack_ringbuffer_t *rb,
+                                 char *dest, size_t cnt);
+size_t (*jack_ringbuffer_read_space_p)(const jack_ringbuffer_t *rb);
+size_t (*jack_ringbuffer_write_p)(jack_ringbuffer_t *rb,
+                                  const char *src,
+                                  size_t cnt);
+/**
+*   End Of Function Pointers
+*/
+
+/**
+*   Callback for capture through jack
+*
+*   \param  nframes Number of frames captured
+*
+*   \param jdata_t  Pointer to JackData struct containing port
+*                   and client information
+*
+*   \returns Zero always
+*/
+int JackCapture(jack_nframes_t nframes,void *jdata_t);
+
+/**
+*   Callback for jack server shutdown
+*
+*   \param jdata_t  Pointer to JackData struct containing port
+*                   and client information
+*/
+void JackShutdown(void *jdata_t);
+
+/**
+*   Register and Activate specified ports
+*
+*   \param jdata_t  Pointer to JackData struct containing port
+*                   and client information
+*
+*   \returns 0 on Success, 1 on failure
+*/
+int SetupPorts(JackData *jdata);
+
+/**
+*   dlopen libjack and dlsym all needed functions
+*
+*   \param jack_lib_handle  Pointer to handle for jack library
+*
+*   \returns 0 on Success, 1 on failure
+*/
+int LoadJackLib(void *jack_lib_handle);
+
+/**
+*   Load libjack, create and activate client,register ports
+*
+*   \param jdata_t  Pointer to JackData struct containing port
+*                   and client information
+*
+*   \returns 0 on Success, error code on failure
+*            (depending on where the error occured)
+*/
+int StartJackClient(JackData *jdata);
+
+/**
+*   Close Jack Client
+*
+*   \param jdata_t  Pointer to JackData struct containing port
+*                   and client information
+*
+*   \returns 0 on Success, 1 on failure
+*/
+int StopJackClient(JackData *jdata);
+
+#endif
+
+
 #endif
 
