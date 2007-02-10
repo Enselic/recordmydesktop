@@ -82,6 +82,10 @@ class trayIcon(object):
         11*256:_('Improper window specification.'),
         12*256:_('Cannot attach shared memory to proccess.'),
         13*256:_('Cannot open file for writting.'),
+        14*256:_('Cannot load the Jack library (dlopen/dlsym error on libjack.so).'),
+        15*256:_('Cannot create new client.'),
+        16*256:_('Cannot activate client.'),
+        17*256:_('Port registration/connection failure.'),
         11:_('Segmentation Fault')
         }
 
@@ -194,8 +198,9 @@ class trayIcon(object):
         self.execargs.append('%d'%self.parent.values[7])
         self.execargs.append('-freq')
         self.execargs.append('%d'%self.parent.values[8])
-        self.execargs.append('-device')
-        self.execargs.append('%s'%self.parent.values[9])
+        if self.parent.values[9]!='DEFAULT':
+            self.execargs.append('-device')
+            self.execargs.append('%s'%self.parent.values[9])
         self.execargs.append('-v_quality')
         self.execargs.append('%d'%self.parent.values[10])
         self.execargs.append('-s_quality')
@@ -217,6 +222,10 @@ class trayIcon(object):
             self.execargs.append('--zero-compression')
         if self.parent.values[20] == True:
             self.execargs.append('--overwrite')
+        if self.parent.values[22] == True:
+            self.execargs.append('-use-jack')
+            for i in self.parent.values[23]:
+                self.execargs.append(i)
         #print execargs
 
 

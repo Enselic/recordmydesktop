@@ -43,7 +43,8 @@ class prefsWidget(object):
                     _('Frames Per Second'),_('Encode On the Fly'),_('Zero Compression'),
                     _('Quick Subsampling'),_('Shared Threshold'),_('Full shots at every frame'),
                     _('Channels'),_('Frequency'),_('Device'),_('Display'),_('Mouse Cursor'),
-                    _('MIT-Shm extension'),_('Video Quality'),_('Sound Quality'),
+                    _('MIT-Shm extension'),_('Include Window Decorations'),_('Tooltips'),
+                    _('Video Quality'),_('Sound Quality'),
                     _('Drop Frames(encoder)'),_('Startup Delay(secs)'),]
     mouseStrings=[_('Normal'),_('White'),_('Black'),_('None')]
     stateStrings=[_('Enabled'),_('Disabled')]#0,1
@@ -62,12 +63,14 @@ class prefsWidget(object):
                     _('Connection to the Xserver.'),
                     _('The mouse cursor that will be drawn.\nNormal is for the real cursor that you see while recording,\nwhile black and white are fake cursors, drawn by the program.\nYou can also disable cursor drawing.'),
                     _('Use the MIT-Shared memory extension, whenever appropriate,\n depending on the rest of the program settings.\nDisabling this option is not recommended,\nas it may severely slow down the program.'),
-                    ]
+                    _('When selecting a window via the "Select Window" button,\ninclude that window\'s decorations in the recording area.'),
+                    _('Enable or disable tooltips, like this one.\n(Requires restart)')]
+    jacktip=_("Enable this option to record audio through\nJACK. The Jack server must be running in order to\nobtain the ports that will be recorded.\nThe audio recorded from each one\nwill be written on a channel of its own.\nrecordMyDesktop must be compiled with JACK\nsupport for this option to work.")
     def __tooltips__(self):
         self.tooltips=gtk.Tooltips()
-        for i in range(14):
+        for i in range(16):
             self.tooltips.set_tip(self.eboxes[i],self.tooltipLabels[i])
-
+        self.tooltips.set_tip(self.jack_ebox,self.jacktip)
 
     def destroy(self,Event=None):
         self.values[0]=self.fpsSpinButton.get_value_as_int()
@@ -84,7 +87,10 @@ class prefsWidget(object):
         self.values[18]=self.onTheFlyComboBox.get_active()
         self.values[19]=self.zeroCmpComboBox.get_active()
         self.values[20]=self.overwriteFilesButton.get_active()
-
+        self.values[21]=self.winDecoComboBox.get_active()
+        self.values[22]=self.jack_button.get_active()
+        self.__getSelectedPorts__()
+        self.values[24]=self.tooltipsComboBox.get_active()
         self.window.destroy()
         self.optionsOpen[0]=0
 
@@ -94,7 +100,14 @@ class prefsWidget(object):
         self.optionsOpen[0]=0
         self.window.destroy()
 
-
+    def __getSelectedPorts__(self):
+        iters_t=[]
+        self.values[23]=[]
+        sel_rows=self.jack_lsp_listview.get_selection().get_selected_rows()
+        for i in sel_rows[1]:
+            iters_t.append(self.jack_lsp_listview.get_model().get_iter(i))
+        for i in iters_t:
+            self.values[23].append(self.jack_lsp_listview.get_model().get_value(i,0))
 
     def __subWidgets__(self):
         self.labels={}
@@ -187,6 +200,46 @@ class prefsWidget(object):
             self.eboxes[i].add(self.boxes[i])
             self.labelbox[2].pack_start(self.eboxes[i],expand=False,fill=False)
 
+        self.jack_button= gtk.CheckButton(_("Use Jack for audio capture."))
+        self.jack_lsp_label=gtk.Label(_("Select the ports you want to record from\n"
+                                        "(hold Ctrl to select multiple entries):"))
+
+        self.jack_lsp_liststore=gtk.ListStore(str)
+
+        self.jack_lsp_listview=gtk.TreeView(self.jack_lsp_liststore)
+        self.jack_lsp_tvc = gtk.TreeViewColumn(_("Available Ports"))
+        self.jack_lsp_listview.append_column(self.jack_lsp_tvc)
+        self.cell = gtk.CellRendererText()
+        self.jack_lsp_tvc.pack_start(self.cell, True)
+        self.jack_lsp_tvc.add_attribute(self.cell, 'text', 0)
+        self.jack_lsp_listview.set_search_column(0)
+        self.jack_lsp_listview.set_reorderable(True)
+        self.jack_lsp_listview.get_selection().set_mode(gtk.SELECTION_MULTIPLE)
+
+        self.jack_lsp_refresh=gtk.Button(None,gtk.STOCK_REFRESH)
+        self.jack_box=gtk.VBox(homogeneous=False, spacing=10)
+        self.jack_box.pack_start(self.jack_button,expand=False,fill=False)
+        self.jack_box.pack_start(self.jack_lsp_label,expand=False,fill=False)
+        self.jack_box.pack_start(self.jack_lsp_listview,expand=False,fill=False)
+        self.jack_box.pack_start(self.jack_lsp_refresh,expand=False,fill=False)
+
+        self.jack_button.set_active(self.values[22])
+        self.jack_button.show()
+        self.jack_lsp_label.show()
+        self.jack_lsp_listview.show()
+        self.jack_lsp_refresh.show()
+
+        self.jack_ebox=gtk.EventBox()
+        self.jack_ebox.add(self.jack_box)
+        self.jack_box.show()
+
+        sep1=gtk.HSeparator()
+
+        self.labelbox[2].pack_start(sep1,expand=False,fill=False)
+        self.labelbox[2].pack_start(self.jack_ebox,expand=False,fill=False)
+        sep1.show()
+        self.jack_ebox.show()
+
 
         self.channelsAdjustment=gtk.Adjustment(value=self.values[7], lower=1,upper=2, step_incr=1, page_incr=1, page_size=1)
         self.channelsSpinButton= gtk.SpinButton(self.channelsAdjustment, climb_rate=0.5, digits=0)
@@ -206,7 +259,7 @@ class prefsWidget(object):
         self.boxes[10].pack_end(self.deviceEntry,expand=False,fill=False)
 
 #misc page
-        for i in xrange(11,14):
+        for i in xrange(11,16):
             self.labels[i]=gtk.Label(self.labelStrings[i])
             self.labels[i].set_justify(gtk.JUSTIFY_LEFT)
             self.boxes[i]=gtk.HBox(homogeneous=False, spacing=0)
@@ -237,7 +290,21 @@ class prefsWidget(object):
         self.sharedComboBox.show()
         self.boxes[13].pack_end(self.sharedComboBox,expand=False,fill=False)
 
-        for i in range(14):
+        self.winDecoComboBox = gtk.combo_box_new_text()
+        for i in range(2):
+            self.winDecoComboBox.append_text(self.stateStrings[i])
+        self.winDecoComboBox.set_active(self.values[21])
+        self.winDecoComboBox.show()
+        self.boxes[14].pack_end(self.winDecoComboBox,expand=False,fill=False)
+
+        self.tooltipsComboBox = gtk.combo_box_new_text()
+        for i in range(2):
+            self.tooltipsComboBox.append_text(self.stateStrings[i])
+        self.tooltipsComboBox.set_active(self.values[24])
+        self.tooltipsComboBox.show()
+        self.boxes[15].pack_end(self.tooltipsComboBox,expand=False,fill=False)
+
+        for i in range(16):
             self.boxes[i].show()
             self.eboxes[i].show()
 
@@ -248,17 +315,65 @@ class prefsWidget(object):
         for i in range(4):
             self.labelbox[i].show()
         self.notebook.show()
+    def __runJackLSP__(self,button=None):
+        if button!=None:
+            self.__getSelectedPorts__()
+        self.ports=[]
+        failed=0
+        (stdin,stdout,stderr)=os.popen3(['jack_lsp'],'t')
+        ports=stdout.readlines()
+        stdin.close()
+        stdout.close()
+        stderr.close()
+        self.jack_lsp_liststore.clear()
+        self.jack_lsp_listview.get_selection().unselect_all()
+        if ports!=[]:
+            for i in ports:
+                self.ports.append(i.replace('\n',""))
+            self.jack_lsp_listview.get_selection().set_mode(gtk.SELECTION_MULTIPLE)
+        else:
+            failed=1
+            self.ports.append(_("jack_lsp returned no ports."))
+            self.ports.append(_("Make sure that jackd is running."))
+            self.jack_lsp_listview.get_selection().set_mode(gtk.SELECTION_NONE)
+            self.values[23]=[]
+        k=0
+        for i in self.values[23]:
+            self.jack_lsp_liststore.append([i])
+            self.jack_lsp_listview.get_selection().select_path((k,))
+            k+=1
+        for i in self.ports:
+            if i not in self.values[23]:
+                self.jack_lsp_liststore.append([i])
+        #we are selecting the first one to prevent messing the args
+        if (not failed) and self.values[23]==[]:
+            self.jack_lsp_listview.get_selection().select_path((0,))
+            #print self.jack_lsp_listview.get_selection().get_selected_rows()
+    def __makeCons__(self):
+        self.jack_button.connect("clicked",self.__jack_enabled_check__)
+        self.jack_lsp_refresh.connect("clicked",self.__runJackLSP__)
 
+    def __jack_enabled_check__(self,widget):
+        self.channelsSpinButton.set_sensitive(not widget.get_active())
+        self.freqSpinButton.set_sensitive(not widget.get_active())
+        self.deviceEntry.set_sensitive(not widget.get_active())
+        self.jack_lsp_listview.set_sensitive(widget.get_active())
+        self.jack_lsp_refresh.set_sensitive(widget.get_active())
 
     def __init__(self,values,optionsOpen):
         self.values=values
+        self.ports=[]
         self.optionsOpen=optionsOpen
         self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
         self.window.connect("destroy", self.destroy)
         self.window.set_border_width(10)
         self.window.set_title("recordMyDesktop")
         self.__subWidgets__()
-        self.__tooltips__()
+        self.__makeCons__()
+        self.__runJackLSP__()
+        self.__jack_enabled_check__(self.jack_button)
+        if self.values[24]==0:
+            self.__tooltips__()
         self.window.show()
 
     def main(self):

@@ -15,7 +15,7 @@ default_values=[15,     #framerate
                 0,          #delay ,unused on 0.3
                 1,          #no of channels
                 22050,      #frequency
-                'hw:0,0',   #device
+                'DEFAULT',  #device
                 63,         #video quality
                 10,         #audio quality
                 "$DISPLAY", #display, this is not interpreted as an env variable
@@ -27,5 +27,9 @@ default_values=[15,     #framerate
                 "/tmp",     #working directory
                 1,          #on the fly encoding,0 on 1 off
                 1,          #zero compression,0 on 1 off
-                False       #overwrite existing files
+                False,      #overwrite existing files
+                0,          #include window decorations, 0 on 1 off
+                False,      #Use jack
+                [],         #jack ports
+                0,          #tooltips,0 on 1 off
                 ]

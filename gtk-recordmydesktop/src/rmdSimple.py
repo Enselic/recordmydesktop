@@ -184,6 +184,13 @@ class simpleWidget(object):
     def show(self,Event=None):
         self.window.show()
         self.hidden[0]=0
+    def __swap_visibility__(self,widget=None,event=None):
+        if event.changed_mask==gtk.gdk.WINDOW_STATE_ICONIFIED:
+            if self.minimized==0:
+                self.hidden[0]=self.minimized=1
+            else:
+                self.hidden[0]=self.minimized=0
+
     def advanced(self,button=None):
         if self.optionsOpen[0] ==0:
             self.optionsOpen[0]=1
@@ -213,7 +220,10 @@ class simpleWidget(object):
         self.fileSel.set_filename(self.values[4])
         self.fileSel.show()
     def __select_window__(self,button):
-        (stdin,stdout,stderr)=os.popen3(['xwininfo','-frame'],'t')
+        xwininfo_com=['xwininfo','-frame']
+        if self.values[21]==1:
+            xwininfo_com=['xwininfo']
+        (stdin,stdout,stderr)=os.popen3(xwininfo_com,'t')
         wid=stdout.readlines()
         stdin.close()
         stdout.close()
@@ -249,6 +259,7 @@ class simpleWidget(object):
         self.start_button.connect("clicked",self.trayIcon.record_ext)
         self.s_button.connect("clicked",self.__sound_check__)
         self.win_button.connect("clicked",self.__select_window__)
+        self.window.connect("window-state-event",self.__swap_visibility__)
     def __sound_check__(self,widget):
         self.s_quality.set_sensitive(widget.get_active())
         self.values[2]=widget.get_active()
@@ -300,6 +311,31 @@ class simpleWidget(object):
                 self.values.append(int(savefile.readline()))
             savefile.readline()
             self.values.append(int(savefile.readline())==1)
+            #new options for 0.3.3
+            p=savefile.readline()
+            if p=='':
+                self.values.append(rmdConfig.default_values[21])
+            else:
+                self.values.append(int(savefile.readline()))
+            p=savefile.readline()
+            if p=='':
+                self.values.append(rmdConfig.default_values[22])
+                self.values.append(rmdConfig.default_values[23])
+            else:
+                self.values.append(int(savefile.readline())==1)
+            p=savefile.readline()
+            if p=='':
+                self.values.append(rmdConfig.default_values[23])
+            else:
+                ports_t=savefile.readline().split(' ')
+                #get rid of the trailing \n
+                ports_t.pop()
+                self.values.append(ports_t)
+            p=savefile.readline()
+            if p=='':
+                self.values.append(rmdConfig.default_values[24])
+            else:
+                self.values.append(int(savefile.readline()))
             return True
         except:
             return False
@@ -349,7 +385,16 @@ class simpleWidget(object):
             savefile.write("%d\n"%self.values[19])
             savefile.write("#overwrite existing files,0 disabled 1 enabled\n")
             savefile.write("%d\n"%self.values[20])
-
+            savefile.write("#Include window decorations,1 disabled 0 enabled\n")
+            savefile.write("%d\n"%self.values[21])
+            savefile.write("#Use jack\n")
+            savefile.write("%d\n"%self.values[22])
+            savefile.write("#last used jack ports\n")
+            for i in self.values[23]:
+                savefile.write("%s "%i)
+            savefile.write("\n")
+            savefile.write("#Tooltips,1 disabled 0 enabled\n")
+            savefile.write("%d\n"%self.values[24])
             savefile.flush()
             savefile.close()
             return True
@@ -360,6 +405,7 @@ class simpleWidget(object):
         if self.load_prefs()==False:
             self.values= rmdConfig.default_values
         self.optionsOpen=[0]
+        self.minimized=0
         self.exited=0
         self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
         self.window.connect("destroy", self.__exit__)
@@ -375,7 +421,8 @@ class simpleWidget(object):
 
         self.trayIcon=trayIcon(self)
         self.__makeCons__()
-        self.__tooltips__()
+        if self.values[24]==0:
+            self.__tooltips__()
         self.s_quality.set_sensitive(self.values[2])
         self.s_button.set_active(self.values[2])
         self.window.show()
