@@ -1,3 +1,10 @@
+/*VERSION 0.3.3*/
+(version bumped to match recordMyDesktop)
+*Added options related to Jack support, in sound tab.
+*Added option to enable/disable tooltips.
+*Added option to include decorations when selecting a window.
+*Fixed preview widget, to not update itself, while the app is minimized.
+
 /*VERSION 0.3.1.1*/
 *Updated Portuguese translation by Joel Ramos and Sergio Santos
 (fixed charset)
