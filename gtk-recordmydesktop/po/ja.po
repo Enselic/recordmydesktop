@@ -1,7 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: recordmydesktop\n"
-"POT-Creation-Date: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-02-10 23:57+0200\n"
 "PO-Revision-Date: 2006-12-07 23:36-0000\n"
 "Last-Translator: Paul D <freethenewt@yahoo.co.uk>\n"
 "Language-Team: \n"
@@ -12,81 +13,20 @@ msgstr ""
 "X-Poedit-Country: JAPAN\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: src/rmdSimple.py:48
-#: src/rmdPrefsWidget.py:46
-msgid "Video Quality"
-msgstr "ビデオ質"
-
-#: src/rmdSimple.py:48
-#: src/rmdPrefsWidget.py:46
-msgid "Sound Quality"
-msgstr "音質"
-
-#: src/rmdSimple.py:49
-msgid "Advanced"
-msgstr "設定"
-
-#: src/rmdSimple.py:49
-msgid "Select Window"
-msgstr "ウィンドー選択"
-
-#: src/rmdSimple.py:50
-msgid "Click here to select a window to record"
-msgstr "ウィンドー登録する為に、ここにクリックして下さい"
-
-#: src/rmdSimple.py:51
+#: src/rmdMonitor.py:14
 msgid ""
-"Click to start the recording.\n"
-"This window will hide itself."
-msgstr "クリックすると登録は始めるこのウィンドーは自動的に隠れる"
-
-#: src/rmdSimple.py:52
-msgid ""
-"Click to choose a filename and location.\n"
-"Default is out.ogg in your home folder.\n"
-"If the file already exists, the new one\n"
-"will have a number attached on its name\n"
-"(this behavior can be changed )"
-msgstr "ファイル名や場所はクリックして下さい。既定値はホームフォルダーでのｏｕｔ．ｏｇｇです。ファイルはもうある場合は、新しいのは番号をファイル名に加える事がある。（この動作は変化できる）。"
-
-#: src/rmdSimple.py:53
-msgid "Click to exit the program."
-msgstr "クリックして終了"
-
-#: src/rmdSimple.py:54
-msgid ""
-"Select the video quality of your recording.\n"
-"(Lower quality will require more proccessing power,\n"
-"so it's recommended, when encoding on the fly,\n"
-"to leave at 100)"
+"Please wait while your recording is being encoded\n"
+"WARNING!!!\n"
+"If you press Cancel or close this window,\n"
+"this proccess cannot be resumed!"
 msgstr ""
-"ビデオ登録の質を選択してください。\n"
-"質は低ければ低いほど負荷は高くなるので\n"
-"エンコードする時、１００度に設定して勧めです。"
+"エンコードしている間、お待ちください。\n"
+"ご注意！\n"
+"キャンセルされる場合、進み直せない。"
 
-#: src/rmdSimple.py:55
-msgid "Enable/Disable sound recording."
-msgstr "音の録音を有・無"
-
-#: src/rmdSimple.py:56
-msgid "Select the audio quality of your recording."
-msgstr "音の録音質の選択"
-
-#: src/rmdSimple.py:57
-msgid "Click here to access more options."
-msgstr "クリックして他の設定"
-
-#: src/rmdSimple.py:58
-msgid ""
-"\n"
-"Left click and drag, on the preview image,\n"
-"to select an area for recording.\n"
-"Right click on it, to reset the area."
-msgstr ""
-"\n"
-"登録したい区域は下見画像\n"
-"（プレービュー）に左クリックアンドドラッグして下さい。\n"
-"リセットするために、下見画像に右クリックして下さい。"
+#: src/rmdMonitor.py:38 src/rmdMonitor.py:59
+msgid "complete"
+msgstr "完了"
 
 #: src/rmdPrefsWidget.py:42
 msgid "Overwite Existing Files"
@@ -96,8 +36,7 @@ msgstr "ファイルを上書きする"
 msgid "Working Directory"
 msgstr "現在のフォルダー"
 
-#: src/rmdPrefsWidget.py:43
-#: src/rmdPrefsWidget.py:53
+#: src/rmdPrefsWidget.py:43 src/rmdPrefsWidget.py:54
 msgid "Frames Per Second"
 msgstr "フレーム率"
 
@@ -145,76 +84,94 @@ msgstr "マウスカーサー"
 msgid "MIT-Shm extension"
 msgstr "MIT-Shmエクステンション"
 
-#: src/rmdPrefsWidget.py:47
+#: src/rmdPrefsWidget.py:46
+msgid "Include Window Decorations"
+msgstr ""
+
+#: src/rmdPrefsWidget.py:46
+msgid "Tooltips"
+msgstr ""
+
+#: src/rmdPrefsWidget.py:47 src/rmdSimple.py:48
+msgid "Video Quality"
+msgstr "ビデオ質"
+
+#: src/rmdPrefsWidget.py:47 src/rmdSimple.py:48
+msgid "Sound Quality"
+msgstr "音質"
+
+#: src/rmdPrefsWidget.py:48
 msgid "Drop Frames(encoder)"
 msgstr "エンコーダーはドロップフレーム"
 
-#: src/rmdPrefsWidget.py:47
+#: src/rmdPrefsWidget.py:48
 msgid "Startup Delay(secs)"
 msgstr "始めの遅れ（秒）"
 
-#: src/rmdPrefsWidget.py:48
+#: src/rmdPrefsWidget.py:49
 msgid "Normal"
 msgstr "普通"
 
-#: src/rmdPrefsWidget.py:48
+#: src/rmdPrefsWidget.py:49
 msgid "White"
 msgstr "白"
 
-#: src/rmdPrefsWidget.py:48
+#: src/rmdPrefsWidget.py:49
 msgid "Black"
 msgstr "黒"
 
-#: src/rmdPrefsWidget.py:48
+#: src/rmdPrefsWidget.py:49
 msgid "None"
 msgstr "なし"
 
-#: src/rmdPrefsWidget.py:49
+#: src/rmdPrefsWidget.py:50
 msgid "Enabled"
 msgstr "使用可能"
 
-#: src/rmdPrefsWidget.py:49
+#: src/rmdPrefsWidget.py:50
 msgid "Disabled"
 msgstr "使用禁止"
 
-#: src/rmdPrefsWidget.py:50
+#: src/rmdPrefsWidget.py:51
 msgid "Files"
 msgstr "ファイル"
 
-#: src/rmdPrefsWidget.py:50
+#: src/rmdPrefsWidget.py:51
 msgid "Performance"
 msgstr "性能"
 
-#: src/rmdPrefsWidget.py:50
+#: src/rmdPrefsWidget.py:51
 msgid "Sound"
 msgstr "音"
 
-#: src/rmdPrefsWidget.py:50
+#: src/rmdPrefsWidget.py:51
 msgid "Misc"
 msgstr "他"
 
-#: src/rmdPrefsWidget.py:51
+#: src/rmdPrefsWidget.py:52
 msgid ""
 "By default, if you try to save under a filename that already\n"
 "exists, the new file will be renamed\n"
-"(for example if you try to save as out.ogg and that file exists, your file will be named out.ogg.1).\n"
-"By checking this box, this behavior is disabled and the old file is overwritten.\n"
+"(for example if you try to save as out.ogg and that file exists, your file "
+"will be named out.ogg.1).\n"
+"By checking this box, this behavior is disabled and the old file is "
+"overwritten.\n"
 msgstr ""
 "ファイルはもうある場合では新しいファイル名は自動的に変化される\n"
 "例えば、ｏｕｔ．ｏｇｇはある場合、新しいのはｏｕｔ．ｏｇｇ．１になる。\n"
 "この設定は選択されている場合、古いファイルは上書きされる。\n"
 
-#: src/rmdPrefsWidget.py:52
+#: src/rmdPrefsWidget.py:53
 msgid "Directory where temporary files will be saved."
 msgstr "仮ファイル保存ダイレクトリ"
 
-#: src/rmdPrefsWidget.py:54
+#: src/rmdPrefsWidget.py:55
 msgid ""
 "Encode simultaneously with the recording.\n"
 "This will require a lot more processing power.\n"
 msgstr "登録すると同時にエンコードする（より負荷）\n"
 
-#: src/rmdPrefsWidget.py:55
+#: src/rmdPrefsWidget.py:56
 msgid ""
 "Do not apply compression on the temporary files.\n"
 "If enabled, the program will need less processing power,\n"
@@ -225,13 +182,13 @@ msgstr ""
 "負荷は低くなってディスク領域はより使われてしまう。\n"
 "オンザフライ録音は無効ならばこの選択は有効"
 
-#: src/rmdPrefsWidget.py:56
+#: src/rmdPrefsWidget.py:57
 msgid ""
 "This option, if enabled, will cause the program to require less\n"
 "processing power, but it might make the colors look a bit more blurry."
 msgstr "このオプションは使用可能場合、負荷は低くなるが色は滲む可能性ある。"
 
-#: src/rmdPrefsWidget.py:57
+#: src/rmdPrefsWidget.py:58
 msgid ""
 "Amount of screen change, within a frame that triggers retrieval\n"
 "of the screenshot through the MIT-Shared memory extension.\n"
@@ -242,7 +199,7 @@ msgstr ""
 "フルサイズ画面録音(フルショット）使用可能になる場合、\n"
 "このオプションは作用なし。\n"
 
-#: src/rmdPrefsWidget.py:58
+#: src/rmdPrefsWidget.py:59
 msgid ""
 "This option should be enabled when recording 3d windows.\n"
 "It is also auto-enabled when recording a\n"
@@ -254,23 +211,23 @@ msgstr ""
 "自動的に使用可能される。\n"
 "　"
 
-#: src/rmdPrefsWidget.py:59
+#: src/rmdPrefsWidget.py:60
 msgid "Number of audio channels."
 msgstr "音線数"
 
-#: src/rmdPrefsWidget.py:60
+#: src/rmdPrefsWidget.py:61
 msgid "Sound frequency."
 msgstr "音周波数（オーディオ･サンプル･レート）"
 
-#: src/rmdPrefsWidget.py:61
+#: src/rmdPrefsWidget.py:62
 msgid "ALSA sound device, that is used for sound recording."
 msgstr "ALSA音録音する為のデバイス"
 
-#: src/rmdPrefsWidget.py:62
+#: src/rmdPrefsWidget.py:63
 msgid "Connection to the Xserver."
 msgstr "X-サーバーへの繋がり"
 
-#: src/rmdPrefsWidget.py:63
+#: src/rmdPrefsWidget.py:64
 msgid ""
 "The mouse cursor that will be drawn.\n"
 "Normal is for the real cursor that you see while recording,\n"
@@ -282,7 +239,7 @@ msgstr ""
 "白や黒はプログラムに表示される偽物デザイン\n"
 "ポインタ表示は禁止できる。"
 
-#: src/rmdPrefsWidget.py:64
+#: src/rmdPrefsWidget.py:65
 msgid ""
 "Use the MIT-Shared memory extension, whenever appropriate,\n"
 " depending on the rest of the program settings.\n"
@@ -293,31 +250,119 @@ msgstr ""
 "このオプションを使用禁止するのは勧めない。\n"
 "プロセスは非常に遅くなる可能性ある。"
 
-#: src/rmdTrayPopup.py:70
-msgid "gtk-recordMyDesktop"
-msgstr "ｇｔｋ－マイデスクトップ登録"
-
-#: src/rmdTrayPopup.py:72
-msgid "a graphical frontend for recordMyDesktop"
-msgstr "マイデスクトップ登録の為のグラフィカルハンドル（フロントエンド）"
-
-#: src/rmdTrayPopup.py:73
+#: src/rmdPrefsWidget.py:66
 msgid ""
-"Copyright (C) John Varouhakis\n"
-"Portions Copyright (C) 2005-6 Zaheer Abbas Merali, John N. Laliberte\n"
-"Portions Copyright (C) Fluendo S.L."
+"When selecting a window via the \"Select Window\" button,\n"
+"include that window's decorations in the recording area."
 msgstr ""
-"著作権所有者はJohn Varouhakis\n"
-"他の部分の著作権所有者は(C) 2005-6 Zaheer Abbas Merali, John N. Laliberte\n"
-"他の部分の著作権所有者は(C) Fluendo S.L."
 
-#: src/rmdTrayPopup.py:77
-msgid "Translator Credits And Information(Replace with your info)"
-msgstr "日本語訳はポールによる"
+#: src/rmdPrefsWidget.py:67
+msgid ""
+"Enable or disable tooltips, like this one.\n"
+"(Requires restart)"
+msgstr ""
 
-#: src/rmdTrayPopup.py:82
-msgid "_Select Area On Screen"
-msgstr "画面範囲を選択して"
+#: src/rmdPrefsWidget.py:68
+msgid ""
+"Enable this option to record audio through\n"
+"JACK. The Jack server must be running in order to\n"
+"obtain the ports that will be recorded.\n"
+"The audio recorded from each one\n"
+"will be written on a channel of its own.\n"
+"recordMyDesktop must be compiled with JACK\n"
+"support for this option to work."
+msgstr ""
+
+#: src/rmdPrefsWidget.py:203
+msgid "Use Jack for audio capture."
+msgstr ""
+
+#: src/rmdPrefsWidget.py:204
+msgid ""
+"Select the ports you want to record from\n"
+"(hold Ctrl to select multiple entries):"
+msgstr ""
+
+#: src/rmdPrefsWidget.py:210
+msgid "Available Ports"
+msgstr ""
+
+#: src/rmdPrefsWidget.py:336
+msgid "jack_lsp returned no ports."
+msgstr ""
+
+#: src/rmdPrefsWidget.py:337
+msgid "Make sure that jackd is running."
+msgstr ""
+
+#: src/rmdSimple.py:49
+msgid "Advanced"
+msgstr "設定"
+
+#: src/rmdSimple.py:49
+msgid "Select Window"
+msgstr "ウィンドー選択"
+
+#: src/rmdSimple.py:50
+msgid "Click here to select a window to record"
+msgstr "ウィンドー登録する為に、ここにクリックして下さい"
+
+#: src/rmdSimple.py:51
+msgid ""
+"Click to start the recording.\n"
+"This window will hide itself."
+msgstr "クリックすると登録は始めるこのウィンドーは自動的に隠れる"
+
+#: src/rmdSimple.py:52
+msgid ""
+"Click to choose a filename and location.\n"
+"Default is out.ogg in your home folder.\n"
+"If the file already exists, the new one\n"
+"will have a number attached on its name\n"
+"(this behavior can be changed )"
+msgstr ""
+"ファイル名や場所はクリックして下さい。既定値はホームフォルダーでのｏｕｔ．ｏ"
+"ｇｇです。ファイルはもうある場合は、新しいのは番号をファイル名に加える事があ"
+"る。（この動作は変化できる）。"
+
+#: src/rmdSimple.py:53
+msgid "Click to exit the program."
+msgstr "クリックして終了"
+
+#: src/rmdSimple.py:54
+msgid ""
+"Select the video quality of your recording.\n"
+"(Lower quality will require more proccessing power,\n"
+"so it's recommended, when encoding on the fly,\n"
+"to leave at 100)"
+msgstr ""
+"ビデオ登録の質を選択してください。\n"
+"質は低ければ低いほど負荷は高くなるので\n"
+"エンコードする時、１００度に設定して勧めです。"
+
+#: src/rmdSimple.py:55
+msgid "Enable/Disable sound recording."
+msgstr "音の録音を有・無"
+
+#: src/rmdSimple.py:56
+msgid "Select the audio quality of your recording."
+msgstr "音の録音質の選択"
+
+#: src/rmdSimple.py:57
+msgid "Click here to access more options."
+msgstr "クリックして他の設定"
+
+#: src/rmdSimple.py:58
+msgid ""
+"\n"
+"Left click and drag, on the preview image,\n"
+"to select an area for recording.\n"
+"Right click on it, to reset the area."
+msgstr ""
+"\n"
+"登録したい区域は下見画像\n"
+"（プレービュー）に左クリックアンドドラッグして下さい。\n"
+"リセットするために、下見画像に右クリックして下さい。"
 
 #: src/rmdTrayIcon.py:71
 msgid "Success"
@@ -376,10 +421,26 @@ msgid "Cannot open file for writting."
 msgstr "ファイル書き込みする為に開けなかった"
 
 #: src/rmdTrayIcon.py:85
+msgid "Cannot load the Jack library (dlopen/dlsym error on libjack.so)."
+msgstr ""
+
+#: src/rmdTrayIcon.py:86
+msgid "Cannot create new client."
+msgstr ""
+
+#: src/rmdTrayIcon.py:87
+msgid "Cannot activate client."
+msgstr ""
+
+#: src/rmdTrayIcon.py:88
+msgid "Port registration/connection failure."
+msgstr ""
+
+#: src/rmdTrayIcon.py:89
 msgid "Segmentation Fault"
 msgstr "エラー"
 
-#: src/rmdTrayIcon.py:233
+#: src/rmdTrayIcon.py:259
 msgid ""
 "Recording is finished.\n"
 "recordMyDesktop has exited with status"
@@ -387,11 +448,11 @@ msgstr ""
 "登録完了\n"
 "マイデスクトップ登録の終了コードは"
 
-#: src/rmdTrayIcon.py:234
+#: src/rmdTrayIcon.py:260
 msgid "Description"
 msgstr "詳細"
 
-#: src/rmdTrayIcon.py:236
+#: src/rmdTrayIcon.py:262
 msgid ""
 "Recording is finished.\n"
 "recordMyDesktop has exited with uknown\n"
@@ -400,19 +461,28 @@ msgstr ""
 "登録完了\n"
 "マイデスクトップ登録の終了コードは不明"
 
-#: src/rmdMonitor.py:14
+#: src/rmdTrayPopup.py:73
+msgid "gtk-recordMyDesktop"
+msgstr "ｇｔｋ－マイデスクトップ登録"
+
+#: src/rmdTrayPopup.py:75
+msgid "a graphical frontend for recordMyDesktop"
+msgstr "マイデスクトップ登録の為のグラフィカルハンドル（フロントエンド）"
+
+#: src/rmdTrayPopup.py:76
 msgid ""
-"Please wait while your recording is being encoded\n"
-"WARNING!!!\n"
-"If you press Cancel or close this window,\n"
-"this proccess cannot be resumed!"
+"Copyright (C) John Varouhakis\n"
+"Portions Copyright (C) 2005-6 Zaheer Abbas Merali, John N. Laliberte\n"
+"Portions Copyright (C) Fluendo S.L."
 msgstr ""
-"エンコードしている間、お待ちください。\n"
-"ご注意！\n"
-"キャンセルされる場合、進み直せない。"
+"著作権所有者はJohn Varouhakis\n"
+"他の部分の著作権所有者は(C) 2005-6 Zaheer Abbas Merali, John N. Laliberte\n"
+"他の部分の著作権所有者は(C) Fluendo S.L."
 
-#: src/rmdMonitor.py:38
-#: src/rmdMonitor.py:59
-msgid "complete"
-msgstr "完了"
+#: src/rmdTrayPopup.py:80
+msgid "Translator Credits And Information(Replace with your info)"
+msgstr "日本語訳はポールによる"
 
+#: src/rmdTrayPopup.py:86
+msgid "_Select Area On Screen"
+msgstr "画面範囲を選択して"

@@ -3,13 +3,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
-# John Varouhakis <johnvarouhakis@gmail.com>, 2006.
+# John Varouhakis <johnvarouhakis@gmail.com>, 2006, 2007.
 msgid ""
 msgstr ""
 "Project-Id-Version: el\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-11-19 03:41+0200\n"
-"PO-Revision-Date: 2006-11-19 03:53+0200\n"
+"POT-Creation-Date: 2007-02-10 23:57+0200\n"
+"PO-Revision-Date: 2007-02-11 16:37+0200\n"
 "Last-Translator: John Varouhakis <johnvarouhakis@gmail.com>\n"
 "Language-Team:  <el@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -17,13 +17,309 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
 
-#: src/rmdSimple.py:48 src/rmdPrefsWidget.py:46
+#: src/rmdMonitor.py:14
+msgid ""
+"Please wait while your recording is being encoded\n"
+"WARNING!!!\n"
+"If you press Cancel or close this window,\n"
+"this proccess cannot be resumed!"
+msgstr ""
+"Παρακαλώ περιμένετε να τελειώσει η κωδικοποίηση. \n"
+"ΠΡΟΣΟΧΗ!!! \n"
+"Εάν ακυρώσετε αυτήν την διαδικασία ή κλείσετε \n"
+"το παράθυρο, δεν είναι δυνατή η συνέχιση."
+
+#: src/rmdMonitor.py:38 src/rmdMonitor.py:59
+msgid "complete"
+msgstr "ολοκληρώθηκε"
+
+#: src/rmdPrefsWidget.py:42
+msgid "Overwite Existing Files"
+msgstr "Διαγραφή υπαρχόντων αρχείων."
+
+#: src/rmdPrefsWidget.py:42
+msgid "Working Directory"
+msgstr "Φάκελος προσωρινών αρχείων."
+
+#: src/rmdPrefsWidget.py:43 src/rmdPrefsWidget.py:54
+msgid "Frames Per Second"
+msgstr "Στιγμιότυπα ανά δευτερολεπτο. "
+
+#: src/rmdPrefsWidget.py:43
+msgid "Encode On the Fly"
+msgstr "Ταυτόχρονη κωδικοποίηση."
+
+#: src/rmdPrefsWidget.py:43
+msgid "Zero Compression"
+msgstr "Μηδενική συμπίεση."
+
+#: src/rmdPrefsWidget.py:44
+msgid "Quick Subsampling"
+msgstr "Γρήγορη υποδειγματοληψία "
+
+#: src/rmdPrefsWidget.py:44
+msgid "Shared Threshold"
+msgstr "Κατώφλι χρήσης κοινής μνήμης"
+
+#: src/rmdPrefsWidget.py:44
+msgid "Full shots at every frame"
+msgstr "Πλήρεις λήψεις σε κάθε στιγμιότυπο"
+
+#: src/rmdPrefsWidget.py:45
+msgid "Channels"
+msgstr "Κανάλια"
+
+#: src/rmdPrefsWidget.py:45
+msgid "Frequency"
+msgstr "Συχνότητα"
+
+#: src/rmdPrefsWidget.py:45
+msgid "Device"
+msgstr "Συσκευή"
+
+#: src/rmdPrefsWidget.py:45
+msgid "Display"
+msgstr "Display"
+
+#: src/rmdPrefsWidget.py:45
+msgid "Mouse Cursor"
+msgstr "Δείκτης ποντικιού"
+
+#: src/rmdPrefsWidget.py:46
+msgid "MIT-Shm extension"
+msgstr "Επέκταση MIT-Shm"
+
+#: src/rmdPrefsWidget.py:46
+msgid "Include Window Decorations"
+msgstr "Μαζί με τις διακοσμήσεις παραθύρου."
+
+#: src/rmdPrefsWidget.py:46
+msgid "Tooltips"
+msgstr "Βοηθήματα."
+
+#: src/rmdPrefsWidget.py:47 src/rmdSimple.py:48
 msgid "Video Quality"
 msgstr "Ποιότητα Εικόνας"
 
-#: src/rmdSimple.py:48 src/rmdPrefsWidget.py:46
+#: src/rmdPrefsWidget.py:47 src/rmdSimple.py:48
 msgid "Sound Quality"
 msgstr "Ποιότητα Ήχου"
+
+#: src/rmdPrefsWidget.py:48
+msgid "Drop Frames(encoder)"
+msgstr "Αποβολή στιγμιοτύπων (κωδικοποιητής)"
+
+#: src/rmdPrefsWidget.py:48
+msgid "Startup Delay(secs)"
+msgstr "Καθυστέρυση έναρξης"
+
+#: src/rmdPrefsWidget.py:49
+msgid "Normal"
+msgstr "Κανονικό"
+
+#: src/rmdPrefsWidget.py:49
+msgid "White"
+msgstr "Λευκό"
+
+#: src/rmdPrefsWidget.py:49
+msgid "Black"
+msgstr "Μαύρο"
+
+#: src/rmdPrefsWidget.py:49
+msgid "None"
+msgstr "Κανένα"
+
+#: src/rmdPrefsWidget.py:50
+msgid "Enabled"
+msgstr "Ενεργό"
+
+#: src/rmdPrefsWidget.py:50
+msgid "Disabled"
+msgstr "Ανενεργό"
+
+#: src/rmdPrefsWidget.py:51
+msgid "Files"
+msgstr "Αρχεία"
+
+#: src/rmdPrefsWidget.py:51
+msgid "Performance"
+msgstr "Απόδοση"
+
+#: src/rmdPrefsWidget.py:51
+msgid "Sound"
+msgstr "Ήχος"
+
+#: src/rmdPrefsWidget.py:51
+msgid "Misc"
+msgstr "Διάφορα"
+
+#: src/rmdPrefsWidget.py:52
+msgid ""
+"By default, if you try to save under a filename that already\n"
+"exists, the new file will be renamed\n"
+"(for example if you try to save as out.ogg and that file exists, your file "
+"will be named out.ogg.1).\n"
+"By checking this box, this behavior is disabled and the old file is "
+"overwritten.\n"
+msgstr ""
+"Εκ προεπιλογής, εάν προσπαθήσετε να σώσετε υπό ένα όνομα αρχείου, το οποίο "
+"υπάρχει ήδη, το νέο θα μετονομαστεί (Για παράδειγμα, εάν προσπαθήσετε να "
+"σώσετε ως out.ogg και αυτό το αρχείο υπάρχει, το νέο αρχείο θα ονομαστεί out."
+"ogg.1) Ενεργοποιώντας αυτήν την επιλογή, η προαναφερθείς συμπεριφορά "
+"απενεργοποιείται και το παλιό αρχείο απλά διαγράφεται.\n"
+
+#: src/rmdPrefsWidget.py:53
+msgid "Directory where temporary files will be saved."
+msgstr "Φάκελος όπου θα αποθηκευτούν τα προσωρινά αρχεία."
+
+#: src/rmdPrefsWidget.py:55
+msgid ""
+"Encode simultaneously with the recording.\n"
+"This will require a lot more processing power.\n"
+msgstr ""
+"Η κωδικοποίηση να γίνεται ταυτόχρονα με την εγγραφή. Εάν ενεργοποιηθεί αυτή "
+"η επιλογή, το πρόγραμμα θα απαιτεί περισσότερη επεξεργαστική ισχύ.\n"
+
+#: src/rmdPrefsWidget.py:56
+msgid ""
+"Do not apply compression on the temporary files.\n"
+"If enabled, the program will need less processing power,\n"
+"in the expense of hard disk space.\n"
+"This option is valid only when encoding on the fly is disabled."
+msgstr ""
+"Απενεργοποίηση συμπίεσης στα προσωρινά αρχεία. Εάν ενεργοποιηθεί αυτή η "
+"επιλογή, το πρόγραμμα θα απαιτεί λιγότερη επεξεργαστική ισχύ, αλλά "
+"περισσότερο χώρο στον δίσκο. Η επιλογή αυτή έχει νόημα, μόνο εάν η "
+"ταυτόχρονη κωδικοποίηση είναι ανενεργή."
+
+#: src/rmdPrefsWidget.py:57
+msgid ""
+"This option, if enabled, will cause the program to require less\n"
+"processing power, but it might make the colors look a bit more blurry."
+msgstr ""
+"Εάν ενεργοποιηθεί αυτή η επιλογή, το πρόγραμμα θα απαιτεί λιγότερη "
+"επεξεργαστική ισχύ, αλλά μπορεί να κάνει τα χρώματα να εμφανίζονται πιο θολά."
+
+#: src/rmdPrefsWidget.py:58
+msgid ""
+"Amount of screen change, within a frame that triggers retrieval\n"
+"of the screenshot through the MIT-Shared memory extension.\n"
+"This option has no effect when using the full shots option.\n"
+msgstr ""
+"Ποσοστό αλλαγής στην οθόνη, εντός ενός στιγμιότυπου, το οποίο πυροδοτεί την "
+"λήψη της εικόνας μέσω της επέκτασης κοινής μνήμης (MIT-Shm). Αυτή η επιλογή "
+"δεν έχει σημασία όταν έχει ενεργοποιηθεί η πλήρης λήψη σε κάθε στιγμιότυπο.\n"
+
+#: src/rmdPrefsWidget.py:59
+msgid ""
+"This option should be enabled when recording 3d windows.\n"
+"It is also auto-enabled when recording a\n"
+"known 3d compositing window manager.\n"
+" "
+msgstr ""
+"Αυτή η επιλογή θα πρέπει να ενεργοποιείται όταν καταγράφονται παράθυρα με "
+"τρισδιάστατο περιεχόμενο. Επίσης, αυτή η επιλογή ενεργοποιείται αυτόματα, "
+"όταν καταγράφεται ένας γνωστός τρισδιάστατος διαχειριστής παραθύρων."
+
+#: src/rmdPrefsWidget.py:60
+msgid "Number of audio channels."
+msgstr "Αριθμός καναλιών ήχου."
+
+#: src/rmdPrefsWidget.py:61
+msgid "Sound frequency."
+msgstr "Συχνότητα ήχου."
+
+#: src/rmdPrefsWidget.py:62
+msgid "ALSA sound device, that is used for sound recording."
+msgstr "Συσκευή ήχου ALSA, η οποία χρησιμοποιείται για την εγγραφή."
+
+#: src/rmdPrefsWidget.py:63
+msgid "Connection to the Xserver."
+msgstr "Σύνδεση με τον διακομιστή X."
+
+#: src/rmdPrefsWidget.py:64
+msgid ""
+"The mouse cursor that will be drawn.\n"
+"Normal is for the real cursor that you see while recording,\n"
+"while black and white are fake cursors, drawn by the program.\n"
+"You can also disable cursor drawing."
+msgstr ""
+"Ο δείκτης του ποντικιού που θα εγγραφεί. Η επιλογή \"κανονικός\" είναι για "
+"τον πραγματικό δείκτη, που εμφανίζεται κατά την εγγραφή. Οι επιλογές \"λευκός"
+"\" και \"μαύρος\", είναι ψεύτικοι δείκτες, που ζωγραφίζονται από το ίδιο το "
+"πρόγραμμα. Μπορείτε, επίσης, να απενεργοποιήσετε εντελώς την καταγραφή του "
+"δείκτη."
+
+#: src/rmdPrefsWidget.py:65
+msgid ""
+"Use the MIT-Shared memory extension, whenever appropriate,\n"
+" depending on the rest of the program settings.\n"
+"Disabling this option is not recommended,\n"
+"as it may severely slow down the program."
+msgstr ""
+"Χρήση της επέκτασης κοινής μνήμης, όποτε χρειάζεται, ανάλογα με τις "
+"υπόλοιπες επιλογές του προγράμματος. Η απενεργοποίηση αυτής της επιλογής δεν "
+"συνίσταται, καθώς μπορεί να επιβραδύνει το πρόγραμμα σημαντικά."
+
+#: src/rmdPrefsWidget.py:66
+msgid ""
+"When selecting a window via the \"Select Window\" button,\n"
+"include that window's decorations in the recording area."
+msgstr ""
+"Όταν επιλέγετε ένα παράθυρο μέσω του κουμπιού \"Επιλογή Παραθύρου\",\n"
+"να συμπεριλαμβάνονται οι διακοσμήσεις στην περιοχή εγγραφής."
+
+#: src/rmdPrefsWidget.py:67
+msgid ""
+"Enable or disable tooltips, like this one.\n"
+"(Requires restart)"
+msgstr ""
+"Ενεργοποίηση ή απενεργοποίηση των βοηθημάτων,\n"
+"όπως είναι αυτό.\n"
+"(Απαιτεί επανεκίνηση)"
+
+#: src/rmdPrefsWidget.py:68
+msgid ""
+"Enable this option to record audio through\n"
+"JACK. The Jack server must be running in order to\n"
+"obtain the ports that will be recorded.\n"
+"The audio recorded from each one\n"
+"will be written on a channel of its own.\n"
+"recordMyDesktop must be compiled with JACK\n"
+"support for this option to work."
+msgstr ""
+"Ενεργοποιήστε αυτήν την επιλογή για να\n"
+"γίνει η εγγραφή του ήχου μέσω του JACK.\n"
+"Ο JACK πρέπει να τρέχει, για να ληφθούν οι\n"
+"υποψήφιες, για εγγραφή, θύρες. Ο ήχος που θα\n"
+"ληφθεί από την καθεμία, θα εγγράφεταισε ένα\n"
+"ξεχωριστό κανάλι. Το recordMyDesktop πρέπει\n"
+"να εχει μεταγλωτιστεί με υποστήριξη για τον\n"
+"JACK, για να λειτουργήσει αυτή η επιλογή."
+
+#: src/rmdPrefsWidget.py:203
+msgid "Use Jack for audio capture."
+msgstr "Χρήση του JACK για την εγγραφή του ήχου."
+
+#: src/rmdPrefsWidget.py:204
+msgid ""
+"Select the ports you want to record from\n"
+"(hold Ctrl to select multiple entries):"
+msgstr ""
+"Επιλέξατε τις θύρες οι οποίες θέλετε να εγγραφούν\n"
+"(κρατήστε το Ctrl για να επιλέξετε περισσοτερες απο μία):"
+
+#: src/rmdPrefsWidget.py:210
+msgid "Available Ports"
+msgstr "Διαθέσιμες θύρες"
+
+#: src/rmdPrefsWidget.py:336
+msgid "jack_lsp returned no ports."
+msgstr "Το πρόγραμμα jack_lsp δεν επέστρεψε θύρες."
+
+#: src/rmdPrefsWidget.py:337
+msgid "Make sure that jackd is running."
+msgstr "Βεβαιωθείτε ότι ο jackd τρέχει."
 
 #: src/rmdSimple.py:49
 msgid "Advanced"
@@ -95,245 +391,6 @@ msgstr ""
 "για να επιλέξετε περιοχή εγγραφής.\n"
 "Κάνετε δεξί κλικ για να επαναφέρετε την προεπιλογή."
 
-#: src/rmdPrefsWidget.py:42
-msgid "Overwite Existing Files"
-msgstr "Διαγραφή υπαρχόντων αρχείων."
-
-#: src/rmdPrefsWidget.py:42
-msgid "Working Directory"
-msgstr "Φάκελος προσωρινών αρχείων."
-
-#: src/rmdPrefsWidget.py:43 src/rmdPrefsWidget.py:53
-msgid "Frames Per Second"
-msgstr "Στιγμιότυπα ανά δευτερολεπτο. "
-
-#: src/rmdPrefsWidget.py:43
-msgid "Encode On the Fly"
-msgstr "Ταυτόχρονη κωδικοποίηση."
-
-#: src/rmdPrefsWidget.py:43
-msgid "Zero Compression"
-msgstr "Μηδενική συμπίεση."
-
-#: src/rmdPrefsWidget.py:44
-msgid "Quick Subsampling"
-msgstr "Γρήγορη υποδειγματοληψία "
-
-#: src/rmdPrefsWidget.py:44
-msgid "Shared Threshold"
-msgstr "Κατώφλι χρήσης κοινής μνήμης"
-
-#: src/rmdPrefsWidget.py:44
-msgid "Full shots at every frame"
-msgstr "Πλήρεις λήψεις σε κάθε στιγμιότυπο"
-
-#: src/rmdPrefsWidget.py:45
-msgid "Channels"
-msgstr "Κανάλια"
-
-#: src/rmdPrefsWidget.py:45
-msgid "Frequency"
-msgstr "Συχνότητα"
-
-#: src/rmdPrefsWidget.py:45
-msgid "Device"
-msgstr "Συσκευή"
-
-#: src/rmdPrefsWidget.py:45
-msgid "Display"
-msgstr "Display"
-
-#: src/rmdPrefsWidget.py:45
-msgid "Mouse Cursor"
-msgstr "Δείκτης ποντικιού"
-
-#: src/rmdPrefsWidget.py:46
-msgid "MIT-Shm extension"
-msgstr "Επέκταση MIT-Shm"
-
-#: src/rmdPrefsWidget.py:47
-msgid "Drop Frames(encoder)"
-msgstr "Αποβολή στιγμιοτύπων (κωδικοποιητής)"
-
-#: src/rmdPrefsWidget.py:47
-msgid "Startup Delay(secs)"
-msgstr "Καθυστέρυση έναρξης"
-
-#: src/rmdPrefsWidget.py:48
-msgid "Normal"
-msgstr "Κανονικό"
-
-#: src/rmdPrefsWidget.py:48
-msgid "White"
-msgstr "Λευκό"
-
-#: src/rmdPrefsWidget.py:48
-msgid "Black"
-msgstr "Μαύρο"
-
-#: src/rmdPrefsWidget.py:48
-msgid "None"
-msgstr "Κανένα"
-
-#: src/rmdPrefsWidget.py:49
-msgid "Enabled"
-msgstr "Ενεργό"
-
-#: src/rmdPrefsWidget.py:49
-msgid "Disabled"
-msgstr "Ανενεργό"
-
-#: src/rmdPrefsWidget.py:50
-msgid "Files"
-msgstr "Αρχεία"
-
-#: src/rmdPrefsWidget.py:50
-msgid "Performance"
-msgstr "Απόδοση"
-
-#: src/rmdPrefsWidget.py:50
-msgid "Sound"
-msgstr "Ήχος"
-
-#: src/rmdPrefsWidget.py:50
-msgid "Misc"
-msgstr "Διάφορα"
-
-#: src/rmdPrefsWidget.py:51
-msgid ""
-"By default, if you try to save under a filename that already\n"
-"exists, the new file will be renamed\n"
-"(for example if you try to save as out.ogg and that file exists, your file "
-"will be named out.ogg.1).\n"
-"By checking this box, this behavior is disabled and the old file is "
-"overwritten.\n"
-msgstr ""
-"Εκ προεπιλογής, εάν προσπαθήσετε να σώσετε υπό ένα όνομα αρχείου, το οποίο "
-"υπάρχει ήδη, το νέο θα μετονομαστεί (Για παράδειγμα, εάν προσπαθήσετε να "
-"σώσετε ως out.ogg και αυτό το αρχείο υπάρχει, το νέο αρχείο θα ονομαστεί out."
-"ogg.1) Ενεργοποιώντας αυτήν την επιλογή, η προαναφερθείς συμπεριφορά "
-"απενεργοποιείται και το παλιό αρχείο απλά διαγράφεται.\n"
-
-#: src/rmdPrefsWidget.py:52
-msgid "Directory where temporary files will be saved."
-msgstr "Φάκελος όπου θα αποθηκευτούν τα προσωρινά αρχεία."
-
-#: src/rmdPrefsWidget.py:54
-msgid ""
-"Encode simultaneously with the recording.\n"
-"This will require a lot more processing power.\n"
-msgstr ""
-"Η κωδικοποίηση να γίνεται ταυτόχρονα με την εγγραφή. Εάν ενεργοποιηθεί αυτή "
-"η επιλογή, το πρόγραμμα θα απαιτεί περισσότερη επεξεργαστική ισχύ.\n"
-
-#: src/rmdPrefsWidget.py:55
-msgid ""
-"Do not apply compression on the temporary files.\n"
-"If enabled, the program will need less processing power,\n"
-"in the expense of hard disk space.\n"
-"This option is valid only when encoding on the fly is disabled."
-msgstr ""
-"Απενεργοποίηση συμπίεσης στα προσωρινά αρχεία. Εάν ενεργοποιηθεί αυτή η "
-"επιλογή, το πρόγραμμα θα απαιτεί λιγότερη επεξεργαστική ισχύ, αλλά "
-"περισσότερο χώρο στον δίσκο. Η επιλογή αυτή έχει νόημα, μόνο εάν η "
-"ταυτόχρονη κωδικοποίηση είναι ανενεργή."
-
-#: src/rmdPrefsWidget.py:56
-msgid ""
-"This option, if enabled, will cause the program to require less\n"
-"processing power, but it might make the colors look a bit more blurry."
-msgstr ""
-"Εάν ενεργοποιηθεί αυτή η επιλογή, το πρόγραμμα θα απαιτεί λιγότερη "
-"επεξεργαστική ισχύ, αλλά μπορεί να κάνει τα χρώματα να εμφανίζονται πιο θολά."
-
-#: src/rmdPrefsWidget.py:57
-msgid ""
-"Amount of screen change, within a frame that triggers retrieval\n"
-"of the screenshot through the MIT-Shared memory extension.\n"
-"This option has no effect when using the full shots option.\n"
-msgstr ""
-"Ποσοστό αλλαγής στην οθόνη, εντός ενός στιγμιότυπου, το οποίο πυροδοτεί την "
-"λήψη της εικόνας μέσω της επέκτασης κοινής μνήμης (MIT-Shm). Αυτή η επιλογή "
-"δεν έχει σημασία όταν έχει ενεργοποιηθεί η πλήρης λήψη σε κάθε στιγμιότυπο.\n"
-
-#: src/rmdPrefsWidget.py:58
-msgid ""
-"This option should be enabled when recording 3d windows.\n"
-"It is also auto-enabled when recording a\n"
-"known 3d compositing window manager.\n"
-" "
-msgstr ""
-"Αυτή η επιλογή θα πρέπει να ενεργοποιείται όταν καταγράφονται παράθυρα με "
-"τρισδιάστατο περιεχόμενο. Επίσης, αυτή η επιλογή ενεργοποιείται αυτόματα, "
-"όταν καταγράφεται ένας γνωστός τρισδιάστατος διαχειριστής παραθύρων."
-
-#: src/rmdPrefsWidget.py:59
-msgid "Number of audio channels."
-msgstr "Αριθμός καναλιών ήχου."
-
-#: src/rmdPrefsWidget.py:60
-msgid "Sound frequency."
-msgstr "Συχνότητα ήχου."
-
-#: src/rmdPrefsWidget.py:61
-msgid "ALSA sound device, that is used for sound recording."
-msgstr "Συσκευή ήχου ALSA, η οποία χρησιμοποιείται για την εγγραφή."
-
-#: src/rmdPrefsWidget.py:62
-msgid "Connection to the Xserver."
-msgstr "Σύνδεση με τον διακομιστή X."
-
-#: src/rmdPrefsWidget.py:63
-msgid ""
-"The mouse cursor that will be drawn.\n"
-"Normal is for the real cursor that you see while recording,\n"
-"while black and white are fake cursors, drawn by the program.\n"
-"You can also disable cursor drawing."
-msgstr ""
-"Ο δείκτης του ποντικιού που θα εγγραφεί. Η επιλογή \"κανονικός\" είναι για "
-"τον πραγματικό δείκτη, που εμφανίζεται κατά την εγγραφή. Οι επιλογές \"λευκός"
-"\" και \"μαύρος\", είναι ψεύτικοι δείκτες, που ζωγραφίζονται από το ίδιο το "
-"πρόγραμμα. Μπορείτε, επίσης, να απενεργοποιήσετε εντελώς την καταγραφή του "
-"δείκτη."
-
-#: src/rmdPrefsWidget.py:64
-msgid ""
-"Use the MIT-Shared memory extension, whenever appropriate,\n"
-" depending on the rest of the program settings.\n"
-"Disabling this option is not recommended,\n"
-"as it may severely slow down the program."
-msgstr ""
-"Χρήση της επέκτασης κοινής μνήμης, όποτε χρειάζεται, ανάλογα με τις "
-"υπόλοιπες επιλογές του προγράμματος. Η απενεργοποίηση αυτής της επιλογής δεν "
-"συνίσταται, καθώς μπορεί να επιβραδύνει το πρόγραμμα σημαντικά."
-
-#: src/rmdTrayPopup.py:70
-msgid "gtk-recordMyDesktop"
-msgstr "gtk-recordMyDesktop"
-
-#: src/rmdTrayPopup.py:72
-msgid "a graphical frontend for recordMyDesktop"
-msgstr "Ένα γραφικό περιβάλλον για το recordMyDesktop"
-
-#: src/rmdTrayPopup.py:73
-msgid ""
-"Copyright (C) John Varouhakis\n"
-"Portions Copyright (C) 2005-6 Zaheer Abbas Merali, John N. Laliberte\n"
-"Portions Copyright (C) Fluendo S.L."
-msgstr ""
-"Πνευματικά Δικαιώματα (C) Γιάννης Βαρουχάκης\n"
-"Πνευματικά Δικαιώματα ορισμένων τμημάτων (C) 2005-6 Zaheer Abbas Merali, "
-"John N. Laliberte\n"
-"Πνευματικά Δικαιώματα ορισμένων τμημάτων (C) Fluendo S.L."
-
-#: src/rmdTrayPopup.py:77
-msgid "Translator Credits And Information(Replace with your info)"
-msgstr "Γιάννης Βαρουχάκης \t<johnvarouhakis@gmail.com>"
-
-#: src/rmdTrayPopup.py:82
-msgid "_Select Area On Screen"
-msgstr "_Επιλογή Περιοχής στην οθόνη"
-
 #: src/rmdTrayIcon.py:71
 msgid "Success"
 msgstr "Επιτυχία"
@@ -393,39 +450,74 @@ msgid "Cannot open file for writting."
 msgstr "Αδυναμία ανοίγματος του αρχείου για εγγραφή."
 
 #: src/rmdTrayIcon.py:85
+msgid "Cannot load the Jack library (dlopen/dlsym error on libjack.so)."
+msgstr ""
+"Αδυναμία φόρτωσης της βιβλιοθήκης του Jack\n"
+"(σφάλμα κατά την κλήση των dlopen/dlsym στην\n"
+"libjack.so)."
+
+#: src/rmdTrayIcon.py:86
+msgid "Cannot create new client."
+msgstr "Αδυναμια δημιουργίας νέου πελάτη."
+
+#: src/rmdTrayIcon.py:87
+msgid "Cannot activate client."
+msgstr "Αδυναμια ενεργοποίησης του πελάτη."
+
+#: src/rmdTrayIcon.py:88
+msgid "Port registration/connection failure."
+msgstr "Σφάλμα κατά την δημιουργία/σύνδεση των θυρών."
+
+#: src/rmdTrayIcon.py:89
 msgid "Segmentation Fault"
 msgstr "Σφάλμα κατάτμησης."
 
-#: src/rmdTrayIcon.py:233
+#: src/rmdTrayIcon.py:259
 msgid ""
 "Recording is finished.\n"
 "recordMyDesktop has exited with status"
-msgstr "Η εγγραφή τελείωσε. Το πρόγραμμα επέστρεψε με κατάσταση "
+msgstr ""
+"Η εγγραφή τελείωσε.\n"
+"Το πρόγραμμα επέστρεψε με κατάσταση "
 
-#: src/rmdTrayIcon.py:234
+#: src/rmdTrayIcon.py:260
 msgid "Description"
 msgstr "Περιγραφή "
 
-#: src/rmdTrayIcon.py:236
+#: src/rmdTrayIcon.py:262
 msgid ""
 "Recording is finished.\n"
 "recordMyDesktop has exited with uknown\n"
 "error code"
-msgstr "Η εγγραφή τελείωσε. Το πρόγραμμα επέστρεψε με άγνωστη κατάσταση "
-
-#: src/rmdMonitor.py:14
-msgid ""
-"Please wait while your recording is being encoded\n"
-"WARNING!!!\n"
-"If you press Cancel or close this window,\n"
-"this proccess cannot be resumed!"
 msgstr ""
-"Παρακαλώ περιμένετε να τελειώσει η κωδικοποίηση. \n"
-"ΠΡΟΣΟΧΗ!!! \n"
-"Εάν ακυρώσετε αυτήν την διαδικασία ή κλείσετε \n"
-"το παράθυρο, δεν είναι δυνατή η συνέχιση."
+"Η εγγραφή τελείωσε.\n"
+"Το πρόγραμμα επέστρεψε με άγνωστη\n"
+"κατάσταση "
 
-#: src/rmdMonitor.py:38 src/rmdMonitor.py:59
-msgid "complete"
-msgstr "ολοκληρώθηκε"
+#: src/rmdTrayPopup.py:73
+msgid "gtk-recordMyDesktop"
+msgstr "gtk-recordMyDesktop"
+
+#: src/rmdTrayPopup.py:75
+msgid "a graphical frontend for recordMyDesktop"
+msgstr "Ένα γραφικό περιβάλλον για το recordMyDesktop"
+
+#: src/rmdTrayPopup.py:76
+msgid ""
+"Copyright (C) John Varouhakis\n"
+"Portions Copyright (C) 2005-6 Zaheer Abbas Merali, John N. Laliberte\n"
+"Portions Copyright (C) Fluendo S.L."
+msgstr ""
+"Πνευματικά Δικαιώματα (C) Γιάννης Βαρουχάκης\n"
+"Πνευματικά Δικαιώματα ορισμένων τμημάτων (C) 2005-6 Zaheer Abbas Merali, "
+"John N. Laliberte\n"
+"Πνευματικά Δικαιώματα ορισμένων τμημάτων (C) Fluendo S.L."
+
+#: src/rmdTrayPopup.py:80
+msgid "Translator Credits And Information(Replace with your info)"
+msgstr "Γιάννης Βαρουχάκης \t<johnvarouhakis@gmail.com>"
+
+#: src/rmdTrayPopup.py:86
+msgid "_Select Area On Screen"
+msgstr "_Επιλογή Περιοχής στην οθόνη"
 
