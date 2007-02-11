@@ -1,3 +1,11 @@
+/*VERSION 0.3.3*/
+*Improved cache format. Blocks are now cached at 16x16 for y plane
+and 8x8 for u,v planes.
+*Added support for compiltion with OSS instead of alsa.
+(Minor other changes to make compilation on FreeBSD possible)
+*Added support for recording audio through Jack.
+*Many other bugfixes.
+
 /*VERSION 0.3.2*/
 *Added support for displays with 16bpp color depth.
 *A bug has been fixed, that caused the Xfixes cursor to appear
