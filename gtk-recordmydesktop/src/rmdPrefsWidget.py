@@ -222,7 +222,7 @@ class prefsWidget(object):
         self.jack_box=gtk.VBox(homogeneous=False, spacing=10)
         self.jack_box.pack_start(self.jack_button,expand=False,fill=False)
         self.jack_box.pack_start(self.jack_lsp_label,expand=False,fill=False)
-        self.jack_box.pack_start(self.jack_scroll,expand=False,fill=False)
+        self.jack_box.pack_start(self.jack_scroll,expand=True,fill=True)
         self.jack_box.pack_start(self.jack_lsp_refresh,expand=False,fill=False)
 
 
@@ -242,7 +242,7 @@ class prefsWidget(object):
         sep1=gtk.HSeparator()
 
         self.labelbox[2].pack_start(sep1,expand=False,fill=False)
-        self.labelbox[2].pack_start(self.jack_ebox,expand=False,fill=False)
+        self.labelbox[2].pack_start(self.jack_ebox,expand=True,fill=True)
         sep1.show()
         self.jack_ebox.show()
 
