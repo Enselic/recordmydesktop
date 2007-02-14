@@ -215,18 +215,24 @@ class prefsWidget(object):
         self.jack_lsp_listview.set_search_column(0)
         self.jack_lsp_listview.set_reorderable(True)
         self.jack_lsp_listview.get_selection().set_mode(gtk.SELECTION_MULTIPLE)
+        self.jack_scroll=gtk.ScrolledWindow(hadjustment=None, vadjustment=None)
+        self.jack_scroll.add_with_viewport(self.jack_lsp_listview)
 
         self.jack_lsp_refresh=gtk.Button(None,gtk.STOCK_REFRESH)
         self.jack_box=gtk.VBox(homogeneous=False, spacing=10)
         self.jack_box.pack_start(self.jack_button,expand=False,fill=False)
         self.jack_box.pack_start(self.jack_lsp_label,expand=False,fill=False)
-        self.jack_box.pack_start(self.jack_lsp_listview,expand=False,fill=False)
+        self.jack_box.pack_start(self.jack_scroll,expand=False,fill=False)
         self.jack_box.pack_start(self.jack_lsp_refresh,expand=False,fill=False)
+
+
 
         self.jack_button.set_active(self.values[22])
         self.jack_button.show()
         self.jack_lsp_label.show()
         self.jack_lsp_listview.show()
+        self.jack_scroll.set_size_request(-1,200)
+        self.jack_scroll.show()
         self.jack_lsp_refresh.show()
 
         self.jack_ebox=gtk.EventBox()
