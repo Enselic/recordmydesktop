@@ -126,7 +126,7 @@ int InitializeData(ProgData *pdata,
                                      pdata->shimage->height,
                                      IPC_CREAT|0777);
         pdata->shminfo.shmaddr=pdata->shimage->data=shmat(pdata->shminfo.shmid,
-                                                          0,0);
+                                                          NULL,0);
         pdata->shminfo.readOnly = False;
         if(!XShmAttach(pdata->dpy,&pdata->shminfo)){
             fprintf(stderr,"Failed to attach shared memory to proccess.\n");
