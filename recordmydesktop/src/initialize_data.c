@@ -121,10 +121,14 @@ int InitializeData(ProgData *pdata,
                                        &pdata->shminfo,
                                        pdata->brwin.rgeom.width,
                                        pdata->brwin.rgeom.height);
-        pdata->shminfo.shmid=shmget (IPC_PRIVATE,
-                                     pdata->shimage->bytes_per_line*
-                                     pdata->shimage->height,
-                                     IPC_CREAT|0777);
+        pdata->shminfo.shmid=shmget(IPC_PRIVATE,
+                                    pdata->shimage->bytes_per_line*
+                                    pdata->shimage->height,
+                                    IPC_CREAT|0777);
+        if(shminfo->shmid==-1){
+            fprintf(stderr,"Failed to obtain Shared Memory segment!\n");
+            return 12;
+        }
         pdata->shminfo.shmaddr=pdata->shimage->data=shmat(pdata->shminfo.shmid,
                                                           NULL,0);
         pdata->shminfo.readOnly = False;
