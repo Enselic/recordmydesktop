@@ -125,7 +125,7 @@ int InitializeData(ProgData *pdata,
                                     pdata->shimage->bytes_per_line*
                                     pdata->shimage->height,
                                     IPC_CREAT|0777);
-        if(shminfo->shmid==-1){
+        if(pdata->shminfo.shmid==-1){
             fprintf(stderr,"Failed to obtain Shared Memory segment!\n");
             return 12;
         }
@@ -177,6 +177,7 @@ int InitializeData(ProgData *pdata,
             int jack_error=0;
             pdata->jdata->port_names=pdata->args.jack_port_names;
             pdata->jdata->nports=pdata->args.jack_nports;
+            pdata->jdata->ringbuffer_secs=pdata->args.jack_ringbuffer_secs;
             pdata->jdata->snd_buff_ready_mutex=&pdata->snd_buff_ready_mutex;
             pdata->jdata->sound_data_read=&pdata->sound_data_read;
             pdata->jdata->capture_started=0;

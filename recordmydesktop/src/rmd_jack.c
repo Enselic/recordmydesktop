@@ -136,6 +136,7 @@ void JackShutdown(void *jdata_t){
 }
 
 int StartJackClient(JackData *jdata){
+    float ring_buffer_size=0.0;
 
     if(LoadJackLib(jdata->jack_lib_handle)){
         fprintf (stderr,"Couldn't load the Jack library (libjack.so)!\n");
@@ -161,11 +162,12 @@ int StartJackClient(JackData *jdata){
 //and any recording up to that point will be encoded and saved.
     jdata->frequency=jack_get_sample_rate_p(jdata->client);
     jdata->buffersize=jack_get_buffer_size_p(jdata->client);
+    ring_buffer_size=(jdata->ringbuffer_secs*
+                      jdata->frequency*
+                      sizeof(jack_default_audio_sample_t)*
+                      jdata->nports);
     jdata->sound_buffer=
-        (*jack_ringbuffer_create_p)(jdata->nports*
-                                    sizeof(jack_default_audio_sample_t)*
-                                    jdata->buffersize*
-                                    BUFFERS_IN_RING);
+        (*jack_ringbuffer_create_p)((int)(ring_buffer_size+0.5));//round up
     jack_set_process_callback_p(jdata->client,JackCapture,jdata);
     jack_on_shutdown_p(jdata->client,JackShutdown,jdata);
 

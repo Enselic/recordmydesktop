@@ -46,19 +46,7 @@ void PrintConfig(void){
 int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
     int i;
     char *usage="\nUsage:\n"
-    "\trecordmydesktop [-h| --help| --version| --print-config|"
-    " -delay n[H|h|M|m]| -windowid id_of_window|\n"
-    "\t-display DISPLAY| -x X| -y Y|-width N| -height N|"
-    " -fps N(number>0)| --on-the-fly-encoding|\n"
-    "\t -v_quality n| -s_quality n| -v_bitrate n| --no-framedrop|"
-    " -dummy-cursor color|\n"
-    "\t --no-cursor| -freq N(number>0)| -channels N(number>0)|"
-    " -buffer-size N(number>0)| -device SOUND_DEVICE|\n"
-    "\t -use-jack port1 port2... portn| --no-sound| --with-shared|"
-    " --no-cond-shared| -shared-threshold n|"
-    " --full-shots|\n"
-    "\t --quick-subsampling| -workdir DIR| --zero-compression| --no-wm-check|"
-    " --overwite| -o filename]^filename\n\n\n"
+    "\trecordmydesktop [OPTIONS]^filename\n\n\n"
 
     "General Options:\n"
     "\t-h or --help\t\tPrint this help and exit.\n"
@@ -97,7 +85,9 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
 
     "\t-freq N\t\t\t\tA positive number denoting desired sound frequency.\n"
     "\t-buffer-size N\t\t\tA positive number denoting the desired"
-    " sound buffer size(in frames)\n"
+    " sound buffer size (in frames,when using ALSA or OSS)\n"
+    "\t-ring-buffer-size N\t\tA float number denoting the desired"
+    " ring buffer size (in seconds,when using JACK only).\n"
 
     "\t-device SOUND_DEVICE\t\tSound device(default "
     DEFAULT_AUDIO_DEVICE
@@ -503,6 +493,24 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
                                " port2... portn\n");
                 return 1;
             }
+        }
+        else if(!strcmp(argv[i],"-ring-buffer-size")){
+            if(i+1<argc){
+                float num=atof(argv[i+1]);
+                if(num>0.0)
+                    arg_return->jack_ringbuffer_secs=num;
+                else{
+                    fprintf(stderr,"Argument Usage: --ring-buffer-size"
+                                   " N(floating point number>0.0)\n");
+                    return 1;
+                }
+            }
+            else{
+                fprintf(stderr,"Argument Usage: --ring-buffer-size"
+                                " N(floating point number>0.0)\n");
+                return 1;
+            }
+            i++;
         }
         else if(!strcmp(argv[i],"--no-sound"))
             arg_return->nosound=1;

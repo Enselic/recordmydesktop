@@ -105,9 +105,6 @@
     #define DEFAULT_AUDIO_DEVICE "/dev/dsp"
 #endif
 
-#ifdef HAVE_JACK_H
-    #define BUFFERS_IN_RING 0x0020
-#endif
 
 
 #define CLIP_EVENT_AREA(e,brwin,wgeom){\
@@ -212,6 +209,7 @@
     (args)->use_jack=\
     (args)->jack_nports=\
     (args)->nocondshared=0;\
+    (args)->jack_ringbuffer_secs=3.0;\
     (args)->jack_port_names=NULL;\
     (args)->no_quick_subsample=\
     (args)->noshared=1;\

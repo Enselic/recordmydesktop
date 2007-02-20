@@ -177,6 +177,7 @@ typedef struct _ProgArgs{
     int use_jack;       //record audio with jack
     unsigned int jack_nports;
     char **jack_port_names;
+    float jack_ringbuffer_secs;
 }ProgArgs;
 
 //this struct holds anything related to encoding AND
@@ -247,6 +248,7 @@ typedef struct _JackData{
     unsigned int    buffersize, //buffer size for every port in frames.
                     frequency,  //samplerate with which jack server was started.
                     nports;     //number of ports.
+    float           ringbuffer_secs;
     char **port_names;          //names of ports(as specified in args).
     jack_port_t **ports;        //connections to thes ports.
     jack_default_audio_sample_t **portbuf;  //retrieval of audio buffers.
