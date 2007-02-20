@@ -1,3 +1,8 @@
+/*VERSION 0.3.3.1*/
+*Fixed ring buffer size, to be independant of the
+size that jack uses internally
+(small buffer sizes could create sound distrortion problems).
+
 /*VERSION 0.3.3*/
 *Improved cache format. Blocks are now cached at 16x16 for y plane
 and 8x8 for u,v planes.

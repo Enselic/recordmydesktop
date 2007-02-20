@@ -3,7 +3,7 @@
 
 AC_PREREQ(2.59)
 AC_INIT(src/recordmydesktop.c)
-AM_INIT_AUTOMAKE(recordmydesktop,0.3.3,)
+AM_INIT_AUTOMAKE(recordmydesktop,0.3.3.1,)
 
 AC_CONFIG_SRCDIR([src/recordmydesktop.c])
 AM_CONFIG_HEADER(config.h)
