@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-02-10 23:57+0200\n"
-"PO-Revision-Date: 2006-11-21 12:43+0100\n"
+"PO-Revision-Date: 2007-02-20 19:30+0100\n"
 "Last-Translator: Giovanni Scafora <linuxmania@gmail.com>\n"
 "Language-Team: Italian <linuxmania@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -91,11 +91,11 @@ msgstr "Estensione MIT-Shm"
 
 #: src/rmdPrefsWidget.py:46
 msgid "Include Window Decorations"
-msgstr ""
+msgstr "Includi le decorazioni della finestra"
 
 #: src/rmdPrefsWidget.py:46
 msgid "Tooltips"
-msgstr ""
+msgstr "Tooltips"
 
 #: src/rmdPrefsWidget.py:47 src/rmdSimple.py:48
 msgid "Video Quality"
@@ -111,7 +111,7 @@ msgstr "Scarta fotogrammi(encoder)"
 
 #: src/rmdPrefsWidget.py:48
 msgid "Startup Delay(secs)"
-msgstr "Ritardo all'avvio( in secondi)"
+msgstr "Ritardo all'avvio(in secondi)"
 
 #: src/rmdPrefsWidget.py:49
 msgid "Normal"
@@ -273,13 +273,15 @@ msgstr ""
 msgid ""
 "When selecting a window via the \"Select Window\" button,\n"
 "include that window's decorations in the recording area."
-msgstr ""
+msgstr "Nel selezionare una finestra tramite il pulsante \"Seleziona finestra\",\n"
+"includere queste decorazioni della finestra nell'area di registrazione."
 
 #: src/rmdPrefsWidget.py:67
 msgid ""
 "Enable or disable tooltips, like this one.\n"
 "(Requires restart)"
-msgstr ""
+msgstr "Abilita o disabilita i tooltips.\n"
+"(Richiede un riavvio)"
 
 #: src/rmdPrefsWidget.py:68
 msgid ""
@@ -291,28 +293,36 @@ msgid ""
 "recordMyDesktop must be compiled with JACK\n"
 "support for this option to work."
 msgstr ""
+"Abilita questa opzione per registrare l'audio tramite\n"
+"JACK. Il server Jack deve essere in funzione per\n"
+"ottenere le porte che saranno registrate.\n"
+"L'audio registrato da ciascuna di queste\n"
+"sarà scritto sul relativo canale.\n"
+"recordMyDesktop deve essere compilato con il\n"
+"supporto a JACK per funzionare correttamente."
 
 #: src/rmdPrefsWidget.py:203
 msgid "Use Jack for audio capture."
-msgstr ""
+msgstr "Usa Jack per la cattura dell'audio"
 
 #: src/rmdPrefsWidget.py:204
 msgid ""
 "Select the ports you want to record from\n"
 "(hold Ctrl to select multiple entries):"
-msgstr ""
+msgstr "Selezionare le porte da cui si desidera registrare\n"
+"(Premere Ctrl per selezionare scelte multiple):"
 
 #: src/rmdPrefsWidget.py:210
 msgid "Available Ports"
-msgstr ""
+msgstr "Porte disponibili"
 
 #: src/rmdPrefsWidget.py:336
 msgid "jack_lsp returned no ports."
-msgstr ""
+msgstr "jack_lsp non ha trovato porte disponibili."
 
 #: src/rmdPrefsWidget.py:337
 msgid "Make sure that jackd is running."
-msgstr ""
+msgstr "Assicurarsi che jackd sia in funzione."
 
 #: src/rmdSimple.py:49
 msgid "Advanced"
@@ -452,19 +462,19 @@ msgstr "Non è stato possibile aprire un file per la scrittura."
 
 #: src/rmdTrayIcon.py:85
 msgid "Cannot load the Jack library (dlopen/dlsym error on libjack.so)."
-msgstr ""
+msgstr "Impossibile caricare la libreria di Jack (errore su libjack.so)."
 
 #: src/rmdTrayIcon.py:86
 msgid "Cannot create new client."
-msgstr ""
+msgstr "Impossibile creare un nuovo client."
 
 #: src/rmdTrayIcon.py:87
 msgid "Cannot activate client."
-msgstr ""
+msgstr "Impossibile attivare il client."
 
 #: src/rmdTrayIcon.py:88
 msgid "Port registration/connection failure."
-msgstr ""
+msgstr "Impossibile registrare/connettersi."
 
 #: src/rmdTrayIcon.py:89
 msgid "Segmentation Fault"

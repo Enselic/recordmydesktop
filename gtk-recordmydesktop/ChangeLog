@@ -1,6 +1,7 @@
 /*VERSION 0.3.3.1*/
 *Fixed jack ports woindow, in sound tab, to be a scrollable window
 (many ports could make the window huge and unfunctional).
+*Updated Italian translation by Giovanni Scafora
 
 /*VERSION 0.3.3*/
 (version bumped to match recordMyDesktop)
