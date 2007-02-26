@@ -3,7 +3,7 @@
 
 AC_PREREQ(2.59)
 AC_INIT(src/recordmydesktop.c)
-AM_INIT_AUTOMAKE(recordmydesktop,0.3.3.1,)
+AM_INIT_AUTOMAKE(recordmydesktop,0.3.3.2-cvs,)
 
 AC_CONFIG_SRCDIR([src/recordmydesktop.c])
 AM_CONFIG_HEADER(config.h)
@@ -74,7 +74,7 @@ AC_CHECK_TYPES([u_int64_t],,)
 # Checks for libraries.
 
 AC_CHECK_LIB([m],[isnan],,)
-AC_CHECK_LIB([z],[deflate],,)
+AC_CHECK_LIB([z],[deflate],,AC_MSG_ERROR([Can't find zlib]))
 AC_CHECK_LIB([ICE],[IceOpenConnection],,AC_MSG_ERROR([Can't find libICE]),)
 AC_CHECK_LIB([SM],[SmcOpenConnection],,AC_MSG_ERROR([Can't find libSM]),)
 AC_CHECK_LIB([X11],[XOpenDisplay],,AC_MSG_ERROR([Can't find libX11]),
