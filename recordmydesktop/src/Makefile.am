@@ -30,7 +30,7 @@ recordmydesktop_SOURCES=	recordmydesktop.c\
 							initialize_data.c\
 							rmd_jack.c
 
-INCLUDES= $(all_includes) -I../include
+INCLUDES= $(all_includes) -I$(top_srcdir)/include
 
 recordmydesktop_LDFLAGS = @X_LIBS@ @X_EXTRA_LIBS@ @X_PRE_LIBS@
 recordmydesktop_CFLAGS = -D_THREAD_SAFE -pthread -Wall
