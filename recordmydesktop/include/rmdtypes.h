@@ -60,6 +60,7 @@
 #include <X11/extensions/Xfixes.h>
 #include <X11/extensions/Xdamage.h>
 #include <X11/extensions/XShm.h>
+#include <X11/extensions/shmstr.h>
 #include <theora/theora.h>
 #include <vorbis/codec.h>
 #include <vorbis/vorbisenc.h>
@@ -93,11 +94,6 @@ typedef u_int64_t cmp_int_t;
 typedef u_int32_t cmp_int_t;
 #endif
 
-//how we obtained the image we are converting to yuv
-enum{
-    __X_SHARED, //through MIT/Shm
-    __X_IPC     //through the regular X IPC mechanism
-};
 //type of pixel proccessing for the Cb,Cr planes
 //when converting from full rgb to 4:2:2 Ycbcr
 enum{
@@ -144,7 +140,6 @@ typedef struct _ProgArgs{
     char *display;      //display to connect(default :0)
     int x,y;            //x,y offset(default 0,0)
     int width,height;   //defaults to window width and height
-    int quietmode;      //no messages to stderr,stdout
     char *filename;     //output file(default out.[ogg|*])
     int cursor_color;   //black or white=>1 or 0
     int have_dummy_cursor;  //disable/enable drawing of the dummy cursor
@@ -160,15 +155,12 @@ typedef struct _ProgArgs{
     u_int32_t buffsize;
 #endif
     int nosound;        //do not record sound(default 0)
-    int noshared;       //do not use shared memory extension(default 1)
-    int nocondshared;   //do not use shared memory on large image aquititions
+    int noshared;       //do not use shared memory extension(default 0)
     int nowmcheck;      //do not check if there's a 3d comp window manager
                         //(which changes full-shots and with-shared to 1)
-    int shared_thres;   //threshold to use shared memory
     int full_shots;     //do not poll damage, take full screenshots
     int no_quick_subsample;             //average pixels in chroma planes
     int v_bitrate,v_quality,s_quality;  //video bitrate,video-sound quality
-    int dropframes;     //option for theora encoder
     int encOnTheFly;    //encode while recording, no caching(default 0)
     char *workdir;      //directory to be used for cache files(default $HOME)
     int zerocompression;//image data are always flushed uncompressed
@@ -264,43 +256,23 @@ typedef struct _JackData{
 //threads,so they will have access to the program data, avoiding
 //at the same time usage of any globals.
 typedef struct _ProgData{
+/**recordMyDesktop specific structs*/
     ProgArgs args;          //the program arguments
     DisplaySpecs specs;     //Display specific information
     BRWindow brwin;         //recording window
-    Display *dpy;           //curtrent display
-    char *window_manager;   //name of the window manager at program launch
-    XImage *image;          //the image that holds the current full screenshot
-    XImage *shimage;        //the image that holds the current
-                            //full screenshot(shared memory)
-    XShmSegmentInfo shminfo;//info structure for the image above.
-    unsigned char *dummy_pointer;   //a dummy pointer to be drawn
-                                    //in every frame
-                                    //data is casted to unsigned for
-                                    //later use in YUV buffer
-    int dummy_p_size;       //initially 16x16,always square
-    unsigned char npxl;     //this is the no pixel convention
-                            //when drawing the dummy pointer
-    char    *datamain,      //the data of  image
-            *datash,        //the data of shimage
-            *datatemp;      //buffer for the temporary image,which will be
-                            //preallocated in case shared memory is not used.
     RectArea *rect_root[2]; //the interchanging list roots for storing
                             //the changed regions
-    int list_selector,      //selector for the above
-        damage_event,       //damage event base code
-        damage_error,       //damage error base code
-        running;
     SndBuffer   *sound_buffer;
     EncData     *enc_data;
     CacheData   *cache_data;
 #ifdef HAVE_JACK_H
     JackData    *jdata;
 #endif
-    int hard_pause;         //if sound device doesn't support pause
-                            //we have to close and reopen
-    int avd;                //syncronization among audio and video
-    unsigned int periodtime,
-                frametime;
+/**X related info*/
+    Display *dpy;           //curtrent display
+    XImage *image;          //the image that holds the current full screenshot
+    XShmSegmentInfo shminfo;//info structure for the image above.
+/** Mutexes*/
     pthread_mutex_t list_mutex[2],  //mutexes for concurrency
                                     //protection of the lists
                     sound_buffer_mutex,
@@ -317,6 +289,7 @@ typedef struct _ProgData{
                                 //to avoid wrong coloring to render
                                 //Currently this mutex only prevents
                                 //the cursor from flickering
+/**Condition Variables*/
     pthread_cond_t  time_cond,  //this gets a broadcast by the handler
                                 //whenever it's time to get a screenshot
                     pause_cond, //this is blocks execution,
@@ -328,10 +301,30 @@ typedef struct _ProgData{
                                         //procceed to creating last
                     vorbis_lib_clean;   //packages until these two libs
                                         //are no longer used, by other threads
-    int th_encoding_clean,
-        v_encoding_clean;
-    int v_enc_thread_waiting,   //these indicate a wait
-        th_enc_thread_waiting;  //condition on the above cond vars
+/**Buffers,Flags and other vars*/
+    unsigned char *dummy_pointer,   //a dummy pointer to be drawn
+                                    //in every frame
+                                    //data is casted to unsigned for
+                                    //later use in YUV buffer
+                  npxl;     //this is the no pixel convention
+                            //when drawing the dummy pointer
+    unsigned int periodtime,//time that a sound buffer lasts (microsecs)
+                frametime;  //time that a frame lasts (microsecs)
+    char    *pxl_data,      //the data of  image
+            *window_manager;   //name of the window manager at program launch
+    int list_selector,      //selector for the rect_roots
+        damage_event,       //damage event base code
+        damage_error,       //damage error base code
+        shm_opcode,         //MIT-Shm opcode
+        running,            //1 while the program is capturing/paused/encoding
+        dummy_p_size,       //dummy pointer size,initially 16x16,always square
+        th_encoding_clean,      //thread exit inidcator
+        v_encoding_clean,       //  >>  >>
+        v_enc_thread_waiting,   //these indicate a wait
+        th_enc_thread_waiting,  //condition on the cond vars.
+        hard_pause,         //if sound device doesn't support pause
+                            //we have to close and reopen
+        avd;                //syncronization among audio and video
 #ifdef HAVE_LIBASOUND
     snd_pcm_t *sound_handle;
     snd_pcm_uframes_t periodsize;
@@ -371,12 +364,12 @@ typedef struct _FrameHeader{
 
 typedef struct _CachedFrame{
     FrameHeader *header;
-    u_int32_t     *YBlocks;     //identifying number on the grid,
-    u_int32_t     *UBlocks;     //starting at top left
-    u_int32_t     *VBlocks;     //       >>      >>
-    unsigned char *YData;   //pointer to data for the blocks that have changed,
-    unsigned char *UData;   //which have to be remapped
-    unsigned char *VData;   //on the buffer when reading
+    u_int32_t     *YBlocks,     //identifying number on the grid,
+                  *UBlocks,     //starting at top left
+                  *VBlocks;     //       >>      >>
+    unsigned char *YData,   //pointer to data for the blocks that have changed,
+                  *UData,   //which have to be remapped
+                  *VData;   //on the buffer when reading
 }CachedFrame;
 
 #endif

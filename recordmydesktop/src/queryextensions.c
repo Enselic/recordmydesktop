@@ -30,22 +30,28 @@
 void QueryExtensions(Display *dpy,
                      ProgArgs *args,
                      int *damage_event,
-                     int *damage_error){
+                     int *damage_error,
+                     int *shm_opcode){
     int xf_event_basep,
-        xf_error_basep;
+        xf_error_basep,
+        shm_event_base,
+        shm_error_base;
 
     if(!XDamageQueryExtension( dpy, damage_event, damage_error)){
         fprintf(stderr,"XDamage extension not found!!!\n");
         exit(4);
     }
-    if((!args->noshared)&&(XShmQueryExtension(dpy)==False)){
+    if((!args->noshared)&&(!XQueryExtension(dpy,
+                                           "MIT-SHM",
+                                           shm_opcode,
+                                           &shm_event_base,
+                                           &shm_error_base))){
         args->noshared=1;
         fprintf(stderr,"Shared Memory extension not present!\n"
-                       "Try again removing the --with-shared option"
-                       "(if you used it)\nand add the"
-                       " --no-cond-shared option.\n");
+                       "Try again using the --no-shared option\n");
         exit(5);
     }
+
     if((args->xfixes_cursor)&&
        (XFixesQueryExtension(dpy,&xf_event_basep,&xf_error_basep)==False)){
         args->xfixes_cursor=0;

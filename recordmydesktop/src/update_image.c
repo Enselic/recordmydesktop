@@ -36,6 +36,8 @@ void UpdateImage(Display * dpy,
                 EncData *enc,
                 char *datatemp,
                 int noshmem,
+                XShmSegmentInfo *shminfo,
+                int shm_opcode,
                 int no_quick_subsample){
     RectArea *temp;
     unsigned char *dtap=(unsigned char*)datatemp;
@@ -52,12 +54,22 @@ void UpdateImage(Display * dpy,
                             temp->geom.width,
                             temp->geom.height);
             }
+            else{
+                GetZPixmapSHM(dpy,
+                              specs->root,
+                              shminfo,
+                              shm_opcode,
+                              datatemp,temp->geom.x,
+                              temp->geom.y,
+                              temp->geom.width,
+                              temp->geom.height);
+            }
             pthread_mutex_lock(yuv_mutex);
             UPDATE_YUV_BUFFER(yuv,dtap,
                                 (temp->geom.x-brwin->rgeom.x+enc->x_offset),
                                 (temp->geom.y-brwin->rgeom.y+enc->y_offset),
                                 (temp->geom.width),(temp->geom.height),
-                                noshmem,no_quick_subsample,
+                                no_quick_subsample,
                                 specs->depth);
             pthread_mutex_unlock(yuv_mutex);
             temp=temp->next;

@@ -161,6 +161,8 @@ void UpdateImage(Display * dpy,
                 EncData *enc,
                 char *datatemp,
                 int noshmem,
+                XShmSegmentInfo *shminfo,
+                int shm_opcode,
                 int no_quick_subsample);
 
 /**
@@ -182,8 +184,6 @@ void UpdateImage(Display * dpy,
 *
 * \param height height position of the screenshot
 *
-* \param x x position of the screenshot
-*
 * \returns 0 on Success 1 on Failure
 */
 int GetZPixmap(Display *dpy,
@@ -193,6 +193,41 @@ int GetZPixmap(Display *dpy,
                int y,
                int width,
                int height);
+
+/**
+* Rerieve pixmap data from xserver through the MIT-Shm extension
+*
+* \param dpy Connection to the server
+*
+* \param root root window of the display
+*
+* \param shminfo Info for the shared memory segment
+*
+* \param shm_opcode Opcode of Shm extension
+*
+* \param data (preallocated)buffer to place the data
+*
+* \param x x position of the screenshot
+*
+* \param y y position of the screenshot
+*
+* \param x x position of the screenshot
+*
+* \param width width of the screenshot
+*
+* \param height height position of the screenshot
+*
+* \returns 0 on Success 1 on Failure
+*/
+int GetZPixmapSHM(Display *dpy,
+                  Window root,
+                  XShmSegmentInfo *shminfo,
+                  int shm_opcode,
+                  char *data,
+                  int x,
+                  int y,
+                  int width,
+                  int height);
 
 /**
 * Fill ProgArgs struct with arguments entered at execution
@@ -223,7 +258,8 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return);
 void QueryExtensions(Display *dpy,
                      ProgArgs *args,
                      int *damage_event,
-                     int *damage_error);
+                     int *damage_error,
+                     int *shm_opcode);
 
 /**
 * Check and align window size

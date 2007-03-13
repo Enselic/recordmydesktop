@@ -29,13 +29,7 @@ and update the frame. This behavior can be changed (option
 .br
 or capture windows that do not generate events on change(windows with accelerated 3d context)
 .br
-but this will notably increase the workload. In this case, enabling the
-.B
-\-\-with\-shared
-option is recommended
-.br
-(by default this option is switched on or off at every frame, according to the size of the area to be aquired).
-.br
+but this will notably increase the workload.
 .br
 recordMyDesktop doesn't have a commandline interface.
 .br
@@ -229,18 +223,11 @@ Image Options:
 .br
 .TP
 .B
-    \-\-with\-shared
-    Enable usage of MIT\-shared memory extension at all times.
-.br
-.TP
+    \-\-no\-shared
+    Disable usage of MIT\-shared memory extension
 .B
-    \-\-no\-cond\-shared
-    Do not use the MIT\-shared memory extension when aquiring large areas.
-.br
-.TP
-.B
-     \-shared\-threshold n
-     Threshold over which shared memory is used(default 75).
+(Not Recommended).
+
 .br
 .TP
 .B
@@ -326,11 +313,6 @@ Encoding Options:
 .br
 .TP
 .B
-    \-\-drop\-frames
-    Allow theora encoder to drop frames(this can significantly lower proccessing times).
-.br
-.TP
-.B
     \-s_quality n
     Desired audio quality(\-1 to 10).
 .br
@@ -343,7 +325,7 @@ Misc Options:
 .B
     \-\-no\-wm\-check
     When a 3d compositing window manager is detected the program will function as if the
-    \-\-full\-shots and \-\-with\-shared options have been specified. This option disables that
+    \-\-full\-shots option has been specified. This option disables that
     behavior alltogether.
 .br
 .TP

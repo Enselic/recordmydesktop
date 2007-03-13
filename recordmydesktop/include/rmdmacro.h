@@ -198,25 +198,21 @@
     (args)->y=\
     (args)->width=\
     (args)->height=\
-    (args)->quietmode=\
     (args)->nosound=\
     (args)->full_shots=\
     (args)->encOnTheFly=\
     (args)->zerocompression=\
     (args)->nowmcheck=\
-    (args)->dropframes=\
     (args)->overwrite=\
     (args)->use_jack=\
-    (args)->jack_nports=\
-    (args)->nocondshared=0;\
+    (args)->noshared=\
+    (args)->jack_nports=0;\
     (args)->jack_ringbuffer_secs=3.0;\
     (args)->jack_port_names=NULL;\
-    (args)->no_quick_subsample=\
-    (args)->noshared=1;\
+    (args)->no_quick_subsample=1;\
     (args)->filename=(char *)malloc(8);\
     strcpy((args)->filename,"out.ogg");\
     (args)->cursor_color=1;\
-    (args)->shared_thres=75;\
     (args)->have_dummy_cursor=0;\
     (args)->xfixes_cursor=1;\
     (args)->device=(char *)malloc(strlen(DEFAULT_AUDIO_DEVICE)+1);\
@@ -286,15 +282,12 @@
                        height_tm,\
                        width_tm,\
                        yuv,\
-                       __copy_type,\
                        __bit_depth__){ \
     int k,i;\
     register u_int##__bit_depth__##_t t_val;\
     register unsigned char  *yuv_y=yuv->y+x_tm+y_tm*yuv->y_width,\
                             *_yr=Yr,*_yg=Yg,*_yb=Yb;\
-    register u_int##__bit_depth__##_t *datapi=(u_int##__bit_depth__##_t *)data\
-                                              +((__copy_type==__X_SHARED)?\
-                                              (x_tm+y_tm*yuv->y_width):0);\
+    register u_int##__bit_depth__##_t *datapi=(u_int##__bit_depth__##_t *)data;\
     for(k=0;k<height_tm;k++){\
         for(i=0;i<width_tm;i++){\
             t_val=*datapi;\
@@ -305,8 +298,6 @@
             yuv_y++;\
         }\
         yuv_y+=yuv->y_width-width_tm;\
-        if(__copy_type==__X_SHARED)\
-            datapi+=yuv->y_width-width_tm;\
     }\
 }
 
@@ -316,7 +307,6 @@
                          height_tm,\
                          width_tm,\
                          yuv,\
-                         __copy_type,\
                          __sampling_type,\
                          __bit_depth__){  \
     int k,i;\
@@ -325,13 +315,10 @@
                             *yuv_v=yuv->v+x_tm/2+(y_tm*yuv->uv_width)/2,\
                             *_ur=Ur,*_ug=Ug,*_ub=Ub,\
                             *_vr=Vr,*_vg=Vg,*_vb=Vb;\
-    register u_int##__bit_depth__##_t *datapi=(u_int##__bit_depth__##_t *)data\
-                                               +((__copy_type==__X_SHARED)?\
-                                                (x_tm+y_tm*yuv->y_width):0),\
+    register u_int##__bit_depth__##_t *datapi=(u_int##__bit_depth__##_t *)data,\
                                       *datapi_next=NULL;\
     if(__sampling_type==__PXL_AVERAGE){\
-        datapi_next=datapi+\
-        ((__copy_type==__X_SHARED)?(yuv->y_width):(width_tm));\
+        datapi_next=datapi+width_tm;\
     }\
     for(k=0;k<height_tm;k+=2){\
         for(i=0;i<width_tm;i+=2){\
@@ -356,11 +343,9 @@
         }\
         yuv_u+=(yuv->y_width-width_tm)/2;\
         yuv_v+=(yuv->y_width-width_tm)/2;\
-        datapi+=((__copy_type==__X_SHARED)?\
-                 (2*yuv->y_width-width_tm):width_tm);\
+        datapi+=width_tm;\
         if(__sampling_type==__PXL_AVERAGE)\
-            datapi_next+=((__copy_type==__X_SHARED)?\
-                          (2*yuv->y_width-width_tm):width_tm);\
+            datapi_next+=width_tm;\
     }\
 }
 
@@ -370,18 +355,17 @@
                           y_tm,\
                           width_tm,\
                           height_tm,\
-                          __copy_type,\
                           __sampling_type,\
                           __color_depth){\
     if((__color_depth==24)||(__color_depth==32)){\
-        UPDATE_Y_PLANE(data,x_tm,y_tm,height_tm,width_tm,yuv,__copy_type,32)\
+        UPDATE_Y_PLANE(data,x_tm,y_tm,height_tm,width_tm,yuv,32)\
         UPDATE_UV_PLANES(data,x_tm,y_tm,height_tm,width_tm,\
-                         yuv,__copy_type,__sampling_type,32)\
+                         yuv,__sampling_type,32)\
     }\
     else if(__color_depth==16){\
-        UPDATE_Y_PLANE(data,x_tm,y_tm,height_tm,width_tm,yuv,__copy_type,16)\
+        UPDATE_Y_PLANE(data,x_tm,y_tm,height_tm,width_tm,yuv,16)\
         UPDATE_UV_PLANES(data,x_tm,y_tm,height_tm,width_tm,\
-                         yuv,__copy_type,__sampling_type,16)\
+                         yuv,__sampling_type,16)\
     }\
 }
 

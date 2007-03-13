@@ -35,22 +35,22 @@ unsigned char *MakeDummyPointer(DisplaySpecs *specs,
     unsigned long   b=(color)?'w':'b',
                     w=(color)?'b':'w';
     char pmask[1][16][16]={{
-        {w,w,w,w,w,w,o,o,o,o,o,o,o,o,o,o},
-        {w,b,b,w,w,w,w,o,o,o,o,o,o,o,o,o},
-        {w,b,b,b,w,w,w,w,o,o,o,o,o,o,o,o},
-        {w,b,b,b,b,w,w,w,w,o,o,o,o,o,o,o},
+        {w,w,o,o,o,o,o,o,o,o,o,o,o,o,o,o},
+        {w,b,w,o,o,o,o,o,o,o,o,o,o,o,o,o},
+        {w,b,b,w,o,o,o,o,o,o,o,o,o,o,o,o},
+        {w,b,b,b,w,o,o,o,o,o,o,o,o,o,o,o},
+        {w,b,b,b,b,w,o,o,o,o,o,o,o,o,o,o},
+        {w,b,b,b,b,b,w,o,o,o,o,o,o,o,o,o},
+        {w,b,b,b,b,b,b,w,o,o,o,o,o,o,o,o},
+        {w,b,b,b,b,b,b,b,w,o,o,o,o,o,o,o},
+        {w,b,b,b,b,b,b,b,b,w,o,o,o,o,o,o},
         {w,b,b,b,b,b,w,w,w,w,o,o,o,o,o,o},
-        {w,b,b,b,b,b,b,w,w,w,w,o,o,o,o,o},
-        {w,b,b,b,b,b,b,b,w,w,w,w,o,o,o,o},
-        {w,b,b,b,b,b,b,b,b,w,w,w,w,o,o,o},
-        {w,b,b,b,b,b,b,b,b,b,w,w,w,w,o,o},
-        {w,b,b,b,b,b,b,b,b,b,b,w,w,w,w,o},
-        {w,b,b,b,b,b,b,b,b,w,w,w,w,o,o,o},
-        {w,b,b,b,b,b,b,b,b,w,w,w,w,o,o,o},
-        {w,w,w,w,w,b,b,b,b,b,w,w,w,o,o,o},
-        {w,w,w,w,w,w,b,b,b,b,w,w,w,o,o,o},
-        {o,o,o,o,o,w,w,b,b,b,w,w,w,o,o,o},
-        {o,o,o,o,o,o,w,w,w,w,w,w,w,o,o,o}}
+        {w,b,b,b,b,b,w,o,o,o,o,o,o,o,o,o},
+        {w,b,b,w,w,b,b,w,o,o,o,o,o,o,o,o},
+        {w,b,w,o,w,b,b,w,o,o,o,o,o,o,o,o},
+        {w,w,o,o,o,w,b,b,w,o,o,o,o,o,o,o},
+        {o,o,o,o,o,w,b,b,w,o,o,o,o,o,o,o},
+        {o,o,o,o,o,o,w,w,o,o,o,o,o,o,o,o}}
     };
     unsigned char *ret=malloc(size*sizeof(char[size*4]));
     unsigned char wp[4]={

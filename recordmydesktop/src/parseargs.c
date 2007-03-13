@@ -64,14 +64,8 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
 
     "\t-dummy-cursor color\tColor of the dummy cursor [black|white]\n"
     "\t--no-cursor\t\tDisable drawing of the cursor.\n"
-    "\t--with-shared\t\tEnable usage of"
-    " MIT-shared memory extension at all times.\n"
-
-    "\t--no-cond-shared\tDo not use"
-    " the MIT-shared memory extension when aquiring large areas.\n"
-
-    "\t-shared-threshold n\tThreshold over"
-    " which shared memory is used(default 75).\n"
+    "\t--no-shared\t\tDisable usage of"
+    " MIT-shared memory extension(Not Recommended!).\n"
 
     "\t--full-shots\t\tTake full screenshot at every frame(Not recomended!).\n"
     "\t--quick-subsampling\tDo subsampling"
@@ -104,7 +98,6 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
     "\t-v_bitrate n\t\tA number from 45000 to 2000000"
     " for desired encoded video bitrate(default 45000).\n"
 
-    "\t--drop-frames\t\tAllow theora encoder to drop frames.\n"
     "\t-s_quality n\t\tDesired audio quality(-1 to 10).\n\n"
 
     "Misc Options:\n"
@@ -397,24 +390,6 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
             }
             i++;
         }
-        else if(!strcmp(argv[i],"-shared-threshold")){
-            if(i+1<argc){
-                int num=atoi(argv[i+1]);
-                if((num>0)&&(num<100))
-                    arg_return->shared_thres=num;
-                else{
-                    fprintf(stderr,"Argument Usage:"
-                                   " -shared-threshold N(0<number<100)\n");
-                    return 1;
-                }
-            }
-            else{
-                fprintf(stderr,"Argument Usage:"
-                               " -shared-threshold N(0<number<100)\n");
-                return 1;
-            }
-            i++;
-        }
         else if(!strcmp(argv[i],"-device")){
             if(i+1<argc){
                 free(arg_return->device);
@@ -514,17 +489,11 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
         }
         else if(!strcmp(argv[i],"--no-sound"))
             arg_return->nosound=1;
-        else if(!strcmp(argv[i],"--drop-frames"))
-            arg_return->dropframes=1;
-        else if(!strcmp(argv[i],"--with-shared")){
-            arg_return->noshared=0;
-            arg_return->nocondshared=1;
+        else if(!strcmp(argv[i],"--no-shared")){
+            arg_return->noshared=1;
         }
-        else if(!strcmp(argv[i],"--no-cond-shared"))
-            arg_return->nocondshared=1;
         else if(!strcmp(argv[i],"--full-shots")){
             arg_return->full_shots=1;
-            arg_return->nocondshared=1;
         }
         else if(!strcmp(argv[i],"--quick-subsampling")){
             arg_return->no_quick_subsample=0;

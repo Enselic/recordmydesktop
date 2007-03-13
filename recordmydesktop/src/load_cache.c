@@ -150,7 +150,7 @@ void *LoadCache(ProgData *pdata){
               VBlocks[(yuv->uv_width*yuv->uv_height)/UV_UNIT_BYTES];
     //we allocate the frame that we will use
     INIT_FRAME(&frame,&fheader,yuv,
-                YBlocks,UBlocks,VBlocks)
+                YBlocks,UBlocks,VBlocks);
     //and the we open our files
     if(!pdata->args.zerocompression){
         ifp=gzopen(pdata->cache_data->imgdata,"rb");

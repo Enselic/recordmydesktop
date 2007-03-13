@@ -90,13 +90,13 @@ int main(int argc,char **argv){
                            "probably produce faulty results).\n\n");
             pdata.args.full_shots=1;
             pdata.args.noshared=0;
-            pdata.args.nocondshared=1;
         }
 
         QueryExtensions(pdata.dpy,
                         &pdata.args,
                         &pdata.damage_event,
-                        &pdata.damage_error);
+                        &pdata.damage_error,
+                        &pdata.shm_opcode);
 
 
         if((exit_status=InitializeData(&pdata,&enc_data,&cache_data))!=0)
@@ -106,7 +106,7 @@ int main(int argc,char **argv){
         rmdThreads(&pdata);
 
         fprintf(stderr,".");
-        if((!pdata.args.noshared)||(!pdata.args.nocondshared)){
+        if(!pdata.args.noshared){
             XShmDetach (pdata.dpy, &pdata.shminfo);
             shmdt (&pdata.shminfo.shmaddr);
             shmctl (pdata.shminfo.shmid, IPC_RMID, 0);

@@ -47,9 +47,6 @@ int InitializeData(ProgData *pdata,
                    EncData *enc_data,
                    CacheData *cache_data){
     int i;
-    unsigned char *dtap=NULL;   //pointer switching among shared memory and
-                                //normal buffer
-
     //these are globals, look for them at the header
     frames_total=frames_lost=encoder_busy=capture_busy=0;
 
@@ -63,10 +60,8 @@ int InitializeData(ProgData *pdata,
     }
 
     if((pdata->args.noshared))
-        pdata->datamain=(char *)malloc(pdata->brwin.nbytes);
+        pdata->pxl_data=(char *)malloc(pdata->brwin.nbytes);
 
-    if(pdata->args.noshared)
-        pdata->datatemp=(char *)malloc(pdata->brwin.nbytes);
     pdata->rect_root[0]=pdata->rect_root[1]=NULL;
     pthread_mutex_init(&pdata->list_mutex[0],NULL);
     pthread_mutex_init(&pdata->list_mutex[1],NULL);
@@ -100,7 +95,7 @@ int InitializeData(ProgData *pdata,
                                   pdata->specs.depth,
                                   ZPixmap,
                                   0,
-                                  pdata->datamain,
+                                  pdata->pxl_data,
                                   pdata->brwin.rgeom.width,
                                   pdata->brwin.rgeom.height,
                                   8,
@@ -113,24 +108,25 @@ int InitializeData(ProgData *pdata,
                    pdata->brwin.rgeom.width,
                    pdata->brwin.rgeom.height);
     }
-    if((!pdata->args.noshared)||(!pdata->args.nocondshared)){
-        pdata->shimage=XShmCreateImage(pdata->dpy,
-                                       pdata->specs.visual,
-                                       pdata->specs.depth,
-                                       ZPixmap,pdata->datash,
-                                       &pdata->shminfo,
-                                       pdata->brwin.rgeom.width,
-                                       pdata->brwin.rgeom.height);
+    if((!pdata->args.noshared)){
+        pdata->image=XShmCreateImage(pdata->dpy,
+                                     pdata->specs.visual,
+                                     pdata->specs.depth,
+                                     ZPixmap,
+                                     pdata->pxl_data,
+                                     &pdata->shminfo,
+                                     pdata->brwin.rgeom.width,
+                                     pdata->brwin.rgeom.height);
         pdata->shminfo.shmid=shmget(IPC_PRIVATE,
-                                    pdata->shimage->bytes_per_line*
-                                    pdata->shimage->height,
+                                    pdata->image->bytes_per_line*
+                                    pdata->image->height,
                                     IPC_CREAT|0777);
         if(pdata->shminfo.shmid==-1){
             fprintf(stderr,"Failed to obtain Shared Memory segment!\n");
             return 12;
         }
-        pdata->shminfo.shmaddr=pdata->shimage->data=shmat(pdata->shminfo.shmid,
-                                                          NULL,0);
+        pdata->shminfo.shmaddr=pdata->image->data=shmat(pdata->shminfo.shmid,
+                                                        NULL,0);
         pdata->shminfo.readOnly = False;
         if(!XShmAttach(pdata->dpy,&pdata->shminfo)){
             fprintf(stderr,"Failed to attach shared memory to proccess.\n");
@@ -138,7 +134,7 @@ int InitializeData(ProgData *pdata,
         }
         XShmGetImage(pdata->dpy,
                      pdata->specs.root,
-                     pdata->shimage,
+                     pdata->image,
                      pdata->brwin.rgeom.x,
                      pdata->brwin.rgeom.y,
                      AllPlanes);
@@ -211,15 +207,11 @@ int InitializeData(ProgData *pdata,
         pdata->enc_data->yuv.v[i]=pdata->enc_data->yuv.u[i]=127;
     }
 
-    dtap=(((pdata->args.nocondshared)&&(!pdata->args.noshared))?
-         ((unsigned char*)pdata->shimage->data):
-         ((unsigned char*)pdata->image->data));
-
-
-    UPDATE_YUV_BUFFER((&pdata->enc_data->yuv),dtap,
+    UPDATE_YUV_BUFFER((&pdata->enc_data->yuv),
+            ((unsigned char*)pdata->image->data),
             (pdata->enc_data->x_offset),(pdata->enc_data->y_offset),
             (pdata->brwin.rgeom.width),(pdata->brwin.rgeom.height),
-            __X_IPC,(pdata->args.no_quick_subsample),
+            (pdata->args.no_quick_subsample),
             pdata->specs.depth);
 
     pdata->frametime=(1000000)/pdata->args.fps;

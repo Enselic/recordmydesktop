@@ -29,12 +29,9 @@
 
 void *GetFrame(ProgData *pdata){
     int tlist_sel=0;
-    unsigned char *dtap=NULL;   //pointer switching among shared memory and
-                                //normal buffer
     uint msk_ret;
     WGeometry mouse_pos_abs,mouse_pos_rel,mouse_pos_temp;
     Window root_ret,child_ret;
-    int pixel_total=pdata->brwin.rgeom.width*pdata->brwin.rgeom.height;
     XFixesCursorImage *xcim=NULL;
 
     mouse_pos_abs.x=mouse_pos_temp.x=0;
@@ -63,21 +60,6 @@ void *GetFrame(ProgData *pdata){
             tlist_sel=pdata->list_selector;
             pdata->list_selector=((pdata->list_selector+1)%2);
             pthread_mutex_lock(&pdata->list_mutex[tlist_sel]);
-        }
-        //here we measure the list and decide which way we will go
-        if(!pdata->args.nocondshared){
-            int level=0;
-            RectArea *temp=pdata->rect_root[tlist_sel];
-
-            if(temp!=NULL){
-                do{
-                    level+=temp->geom.width*temp->geom.height;
-                    temp=temp->next;
-                }while(temp!=NULL);
-                level*=100;
-                level/=pixel_total;
-                pdata->args.noshared=(level<pdata->args.shared_thres);
-            }
         }
         if(pdata->args.xfixes_cursor){
         //xfixes pointer sequence
@@ -118,10 +100,6 @@ void *GetFrame(ProgData *pdata){
                             &mouse_pos_abs.x,&mouse_pos_abs.y,
                             &mouse_pos_rel.x,&mouse_pos_rel.y,&msk_ret);
         }
-        if(!pdata->args.noshared)
-            XShmGetImage(pdata->dpy,pdata->specs.root,pdata->shimage,
-                         (pdata->brwin.rgeom.x),
-                         (pdata->brwin.rgeom.y),AllPlanes);
         if(!pdata->args.full_shots)
             UpdateImage(pdata->dpy,
                         &pdata->enc_data->yuv,
@@ -130,16 +108,16 @@ void *GetFrame(ProgData *pdata){
                         &pdata->rect_root[tlist_sel],
                         &pdata->brwin,
                         pdata->enc_data,
-                        ((pdata->args.noshared)?
-                         (pdata->datatemp):
-                         (pdata->shimage->data)),
+                        pdata->image->data,
                         pdata->args.noshared,
+                        &pdata->shminfo,
+                        pdata->shm_opcode,
                         pdata->args.no_quick_subsample);
         else{
-
-            dtap=(((pdata->args.nocondshared)&&(!pdata->args.noshared))?
-                 ((unsigned char*)pdata->shimage->data):
-                 ((unsigned char*)pdata->image->data));
+            if(!pdata->args.noshared)
+                XShmGetImage(pdata->dpy,pdata->specs.root,pdata->image,
+                            (pdata->brwin.rgeom.x),
+                            (pdata->brwin.rgeom.y),AllPlanes);
             if(pdata->args.noshared){
                 GetZPixmap( pdata->dpy,
                             pdata->specs.root,
@@ -150,14 +128,14 @@ void *GetFrame(ProgData *pdata){
                             pdata->brwin.rgeom.height);
             }
             pthread_mutex_lock(&pdata->yuv_mutex);
-            UPDATE_YUV_BUFFER((&pdata->enc_data->yuv),dtap,
-                                (pdata->enc_data->x_offset),
-                                (pdata->enc_data->y_offset),
-                                (pdata->brwin.rgeom.width),
-                                (pdata->brwin.rgeom.height),
-                                pdata->args.noshared,
-                                pdata->args.no_quick_subsample,
-                                pdata->specs.depth);
+            UPDATE_YUV_BUFFER((&pdata->enc_data->yuv),
+                              ((unsigned char*)pdata->image->data),
+                              (pdata->enc_data->x_offset),
+                              (pdata->enc_data->y_offset),
+                              (pdata->brwin.rgeom.width),
+                              (pdata->brwin.rgeom.height),
+                              pdata->args.no_quick_subsample,
+                              pdata->specs.depth);
             pthread_mutex_unlock(&pdata->yuv_mutex);
         }
         if(pdata->args.xfixes_cursor){
