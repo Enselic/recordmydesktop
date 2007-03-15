@@ -173,11 +173,8 @@ class trayIcon(object):
 
         if self.parent.values[3] == 0:
             self.execargs.append("--full-shots")
-            if self.parent.values[13] == 0:
-                self.execargs.append("--with-shared")
-        if self.parent.values[3] == 1 and self.parent.values[13] == 1 :
-           self.execargs.append("--no-cond-shared")
-
+        if self.parent.values[13] == 1:
+            self.execargs.append("--no-shared")
         if self.parent.values[5][0]>0  :
             self.execargs.append('-x')
             self.execargs.append('%d'%self.parent.values[5][0])
@@ -208,10 +205,6 @@ class trayIcon(object):
         if self.parent.values[12] != "$DISPLAY":
             self.execargs.append('-display')
             self.execargs.append('%s'%self.parent.values[12])
-        if self.parent.values[14] == 0:
-            self.execargs.append('--drop-frames')
-        self.execargs.append('-shared-threshold')
-        self.execargs.append('%d'%self.parent.values[15])
         if self.parent.values[16] == 0:
             self.execargs.append('--quick-subsampling')
         self.execargs.append('-workdir')

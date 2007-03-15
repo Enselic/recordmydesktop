@@ -4,12 +4,11 @@
 #
 # Giovanni 'voidnull' Scafora <linuxmania@gmail.com>, 2007.
 #
-
 msgid ""
 msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-10 23:57+0200\n"
+"POT-Creation-Date: 2007-03-15 22:46+0200\n"
 "PO-Revision-Date: 2007-02-25 15:00+0100\n"
 "Last-Translator: Giovanni Scafora <linuxmania@gmail.com>\n"
 "Language-Team: Arch Linux Italian Team <linuxmania@gmail.com>\n"
@@ -58,10 +57,6 @@ msgstr "Compressione zero"
 #: src/rmdPrefsWidget.py:44
 msgid "Quick Subsampling"
 msgstr "Subsampling veloce"
-
-#: src/rmdPrefsWidget.py:44
-msgid "Shared Threshold"
-msgstr "Soglia condivisa"
 
 #: src/rmdPrefsWidget.py:44
 msgid "Full shots at every frame"
@@ -208,17 +203,6 @@ msgstr ""
 
 #: src/rmdPrefsWidget.py:58
 msgid ""
-"Amount of screen change, within a frame that triggers retrieval\n"
-"of the screenshot through the MIT-Shared memory extension.\n"
-"This option has no effect when using the full shots option.\n"
-msgstr ""
-"Numero dei cambi di schermo in un frame che effettua\n"
-"screenshots tramite l'estensione MIT-Shared memory.\n"
-"Questa opzione non ha effetto quando si abilita l'opzione\n"
-"a schermo intero.\n"
-
-#: src/rmdPrefsWidget.py:59
-msgid ""
 "This option should be enabled when recording 3d windows.\n"
 "It is also auto-enabled when recording a\n"
 "known 3d compositing window manager.\n"
@@ -229,23 +213,24 @@ msgstr ""
 "Sarà automaticamente abilitata, quando si registra\n"
 "un 3d window manager compositing conosciuto\n"
 " "
-#: src/rmdPrefsWidget.py:60
+
+#: src/rmdPrefsWidget.py:59
 msgid "Number of audio channels."
 msgstr "Numero dei canali audio."
 
-#: src/rmdPrefsWidget.py:61
+#: src/rmdPrefsWidget.py:60
 msgid "Sound frequency."
 msgstr "Frequenza audio."
 
-#: src/rmdPrefsWidget.py:62
+#: src/rmdPrefsWidget.py:61
 msgid "ALSA sound device, that is used for sound recording."
 msgstr "Dispositivo audio ALSA utilizzato per la registrazione dell'audio."
 
-#: src/rmdPrefsWidget.py:63
+#: src/rmdPrefsWidget.py:62
 msgid "Connection to the Xserver."
 msgstr "Connessione al server X."
 
-#: src/rmdPrefsWidget.py:64
+#: src/rmdPrefsWidget.py:63
 msgid ""
 "The mouse cursor that will be drawn.\n"
 "Normal is for the real cursor that you see while recording,\n"
@@ -258,7 +243,7 @@ msgstr ""
 "cursori, creati dal programma.\n"
 "È possibile, inoltre, disabilitare la visualizzazione del cursore."
 
-#: src/rmdPrefsWidget.py:65
+#: src/rmdPrefsWidget.py:64
 msgid ""
 "Use the MIT-Shared memory extension, whenever appropriate,\n"
 " depending on the rest of the program settings.\n"
@@ -270,21 +255,24 @@ msgstr ""
 "programma. Non è consigliabile disabilitare questa\n"
 "opzione, in quanto può rallentare molto il programma."
 
-#: src/rmdPrefsWidget.py:66
+#: src/rmdPrefsWidget.py:65
 msgid ""
 "When selecting a window via the \"Select Window\" button,\n"
 "include that window's decorations in the recording area."
-msgstr "Quando si seleziona una finestra tramite il pulsante \"Seleziona finestra\",\n"
+msgstr ""
+"Quando si seleziona una finestra tramite il pulsante \"Seleziona finestra"
+"\",\n"
 "nell'area di registrazione verranno incluse queste decorazioni."
 
-#: src/rmdPrefsWidget.py:67
+#: src/rmdPrefsWidget.py:66
 msgid ""
 "Enable or disable tooltips, like this one.\n"
 "(Requires restart)"
-msgstr "Abilitare o disabilitare i suggerimenti.\n"
+msgstr ""
+"Abilitare o disabilitare i suggerimenti.\n"
 "(Richiede il riavvio del programma)"
 
-#: src/rmdPrefsWidget.py:68
+#: src/rmdPrefsWidget.py:67
 msgid ""
 "Enable this option to record audio through\n"
 "JACK. The Jack server must be running in order to\n"
@@ -302,18 +290,19 @@ msgstr ""
 "recordMyDesktop deve essere compilato con il supporto\n"
 "a JACK, affinché questa opzione funzioni correttamente."
 
-#: src/rmdPrefsWidget.py:203
+#: src/rmdPrefsWidget.py:197
 msgid "Use Jack for audio capture."
 msgstr "Usare Jack per la cattura dell'audio"
 
-#: src/rmdPrefsWidget.py:204
+#: src/rmdPrefsWidget.py:198
 msgid ""
 "Select the ports you want to record from\n"
 "(hold Ctrl to select multiple entries):"
-msgstr "Selezionare le porte dalle quali si desidera registrare\n"
+msgstr ""
+"Selezionare le porte dalle quali si desidera registrare\n"
 "(Premere Ctrl per selezionare scelte multiple):"
 
-#: src/rmdPrefsWidget.py:210
+#: src/rmdPrefsWidget.py:204
 msgid "Available Ports"
 msgstr "Porte disponibili"
 
@@ -479,7 +468,7 @@ msgstr "Impossibile registrare e/o connettersi."
 msgid "Segmentation Fault"
 msgstr "Segmentation Fault"
 
-#: src/rmdTrayIcon.py:259
+#: src/rmdTrayIcon.py:252
 msgid ""
 "Recording is finished.\n"
 "recordMyDesktop has exited with status"
@@ -487,11 +476,11 @@ msgstr ""
 "La registrazione è terminata.\n"
 "recordMyDesktop è uscito con lo stato"
 
-#: src/rmdTrayIcon.py:260
+#: src/rmdTrayIcon.py:253
 msgid "Description"
 msgstr "Descrizione"
 
-#: src/rmdTrayIcon.py:262
+#: src/rmdTrayIcon.py:255
 msgid ""
 "Recording is finished.\n"
 "recordMyDesktop has exited with uknown\n"
@@ -526,3 +515,16 @@ msgstr "Giovanni Scafora \t<linuxmania@gmail.com>"
 #: src/rmdTrayPopup.py:86
 msgid "_Select Area On Screen"
 msgstr "_Selezionare un'area sullo schermo"
+
+#~ msgid "Shared Threshold"
+#~ msgstr "Soglia condivisa"
+
+#~ msgid ""
+#~ "Amount of screen change, within a frame that triggers retrieval\n"
+#~ "of the screenshot through the MIT-Shared memory extension.\n"
+#~ "This option has no effect when using the full shots option.\n"
+#~ msgstr ""
+#~ "Numero dei cambi di schermo in un frame che effettua\n"
+#~ "screenshots tramite l'estensione MIT-Shared memory.\n"
+#~ "Questa opzione non ha effetto quando si abilita l'opzione\n"
+#~ "a schermo intero.\n"

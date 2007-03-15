@@ -371,9 +371,10 @@ class simpleWidget(object):
             savefile.write("%s\n"%self.values[12])
             savefile.write("#Shared memory,1 disabled 0 enabled\n")
             savefile.write("%d\n"%self.values[13])
-            savefile.write("#Drop frames(encoder option),1 disabled 0 enabled\n")
+            savefile.write("#Drop frames(encoder option),1 disabled 0 enabled.Unused at 0.3.0, removed at 0.3.4, preserved for compatibility of prefs file.\n")
             savefile.write("%d\n"%self.values[14])
-            savefile.write("#Shared memory threshold,0-100\n")
+            savefile.write("#Shared memory threshold,0-100. Removed at 0.3.4,"
+                           " preserved for compatibility of prefs file\n")
             savefile.write("%d\n"%self.values[15])
             savefile.write("#Quick subsampling,1 disabled 0 enabled\n")
             savefile.write("%d\n"%self.values[16])

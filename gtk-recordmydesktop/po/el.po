@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: el\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-10 23:57+0200\n"
+"POT-Creation-Date: 2007-03-15 22:46+0200\n"
 "PO-Revision-Date: 2007-02-11 16:37+0200\n"
 "Last-Translator: John Varouhakis <johnvarouhakis@gmail.com>\n"
 "Language-Team:  <el@li.org>\n"
@@ -56,10 +56,6 @@ msgstr "Μηδενική συμπίεση."
 #: src/rmdPrefsWidget.py:44
 msgid "Quick Subsampling"
 msgstr "Γρήγορη υποδειγματοληψία "
-
-#: src/rmdPrefsWidget.py:44
-msgid "Shared Threshold"
-msgstr "Κατώφλι χρήσης κοινής μνήμης"
 
 #: src/rmdPrefsWidget.py:44
 msgid "Full shots at every frame"
@@ -202,16 +198,6 @@ msgstr ""
 
 #: src/rmdPrefsWidget.py:58
 msgid ""
-"Amount of screen change, within a frame that triggers retrieval\n"
-"of the screenshot through the MIT-Shared memory extension.\n"
-"This option has no effect when using the full shots option.\n"
-msgstr ""
-"Ποσοστό αλλαγής στην οθόνη, εντός ενός στιγμιότυπου, το οποίο πυροδοτεί την "
-"λήψη της εικόνας μέσω της επέκτασης κοινής μνήμης (MIT-Shm). Αυτή η επιλογή "
-"δεν έχει σημασία όταν έχει ενεργοποιηθεί η πλήρης λήψη σε κάθε στιγμιότυπο.\n"
-
-#: src/rmdPrefsWidget.py:59
-msgid ""
 "This option should be enabled when recording 3d windows.\n"
 "It is also auto-enabled when recording a\n"
 "known 3d compositing window manager.\n"
@@ -221,23 +207,23 @@ msgstr ""
 "τρισδιάστατο περιεχόμενο. Επίσης, αυτή η επιλογή ενεργοποιείται αυτόματα, "
 "όταν καταγράφεται ένας γνωστός τρισδιάστατος διαχειριστής παραθύρων."
 
-#: src/rmdPrefsWidget.py:60
+#: src/rmdPrefsWidget.py:59
 msgid "Number of audio channels."
 msgstr "Αριθμός καναλιών ήχου."
 
-#: src/rmdPrefsWidget.py:61
+#: src/rmdPrefsWidget.py:60
 msgid "Sound frequency."
 msgstr "Συχνότητα ήχου."
 
-#: src/rmdPrefsWidget.py:62
+#: src/rmdPrefsWidget.py:61
 msgid "ALSA sound device, that is used for sound recording."
 msgstr "Συσκευή ήχου ALSA, η οποία χρησιμοποιείται για την εγγραφή."
 
-#: src/rmdPrefsWidget.py:63
+#: src/rmdPrefsWidget.py:62
 msgid "Connection to the Xserver."
 msgstr "Σύνδεση με τον διακομιστή X."
 
-#: src/rmdPrefsWidget.py:64
+#: src/rmdPrefsWidget.py:63
 msgid ""
 "The mouse cursor that will be drawn.\n"
 "Normal is for the real cursor that you see while recording,\n"
@@ -250,7 +236,7 @@ msgstr ""
 "πρόγραμμα. Μπορείτε, επίσης, να απενεργοποιήσετε εντελώς την καταγραφή του "
 "δείκτη."
 
-#: src/rmdPrefsWidget.py:65
+#: src/rmdPrefsWidget.py:64
 msgid ""
 "Use the MIT-Shared memory extension, whenever appropriate,\n"
 " depending on the rest of the program settings.\n"
@@ -261,7 +247,7 @@ msgstr ""
 "υπόλοιπες επιλογές του προγράμματος. Η απενεργοποίηση αυτής της επιλογής δεν "
 "συνίσταται, καθώς μπορεί να επιβραδύνει το πρόγραμμα σημαντικά."
 
-#: src/rmdPrefsWidget.py:66
+#: src/rmdPrefsWidget.py:65
 msgid ""
 "When selecting a window via the \"Select Window\" button,\n"
 "include that window's decorations in the recording area."
@@ -269,7 +255,7 @@ msgstr ""
 "Όταν επιλέγετε ένα παράθυρο μέσω του κουμπιού \"Επιλογή Παραθύρου\",\n"
 "να συμπεριλαμβάνονται οι διακοσμήσεις στην περιοχή εγγραφής."
 
-#: src/rmdPrefsWidget.py:67
+#: src/rmdPrefsWidget.py:66
 msgid ""
 "Enable or disable tooltips, like this one.\n"
 "(Requires restart)"
@@ -278,7 +264,7 @@ msgstr ""
 "όπως είναι αυτό.\n"
 "(Απαιτεί επανεκίνηση)"
 
-#: src/rmdPrefsWidget.py:68
+#: src/rmdPrefsWidget.py:67
 msgid ""
 "Enable this option to record audio through\n"
 "JACK. The Jack server must be running in order to\n"
@@ -297,11 +283,11 @@ msgstr ""
 "να εχει μεταγλωτιστεί με υποστήριξη για τον\n"
 "JACK, για να λειτουργήσει αυτή η επιλογή."
 
-#: src/rmdPrefsWidget.py:203
+#: src/rmdPrefsWidget.py:197
 msgid "Use Jack for audio capture."
 msgstr "Χρήση του JACK για την εγγραφή του ήχου."
 
-#: src/rmdPrefsWidget.py:204
+#: src/rmdPrefsWidget.py:198
 msgid ""
 "Select the ports you want to record from\n"
 "(hold Ctrl to select multiple entries):"
@@ -309,7 +295,7 @@ msgstr ""
 "Επιλέξατε τις θύρες οι οποίες θέλετε να εγγραφούν\n"
 "(κρατήστε το Ctrl για να επιλέξετε περισσοτερες απο μία):"
 
-#: src/rmdPrefsWidget.py:210
+#: src/rmdPrefsWidget.py:204
 msgid "Available Ports"
 msgstr "Διαθέσιμες θύρες"
 
@@ -472,7 +458,7 @@ msgstr "Σφάλμα κατά την δημιουργία/σύνδεση των 
 msgid "Segmentation Fault"
 msgstr "Σφάλμα κατάτμησης."
 
-#: src/rmdTrayIcon.py:259
+#: src/rmdTrayIcon.py:252
 msgid ""
 "Recording is finished.\n"
 "recordMyDesktop has exited with status"
@@ -480,11 +466,11 @@ msgstr ""
 "Η εγγραφή τελείωσε.\n"
 "Το πρόγραμμα επέστρεψε με κατάσταση "
 
-#: src/rmdTrayIcon.py:260
+#: src/rmdTrayIcon.py:253
 msgid "Description"
 msgstr "Περιγραφή "
 
-#: src/rmdTrayIcon.py:262
+#: src/rmdTrayIcon.py:255
 msgid ""
 "Recording is finished.\n"
 "recordMyDesktop has exited with uknown\n"
@@ -521,3 +507,15 @@ msgstr "Γιάννης Βαρουχάκης \t<johnvarouhakis@gmail.com>"
 msgid "_Select Area On Screen"
 msgstr "_Επιλογή Περιοχής στην οθόνη"
 
+#~ msgid "Shared Threshold"
+#~ msgstr "Κατώφλι χρήσης κοινής μνήμης"
+
+#~ msgid ""
+#~ "Amount of screen change, within a frame that triggers retrieval\n"
+#~ "of the screenshot through the MIT-Shared memory extension.\n"
+#~ "This option has no effect when using the full shots option.\n"
+#~ msgstr ""
+#~ "Ποσοστό αλλαγής στην οθόνη, εντός ενός στιγμιότυπου, το οποίο πυροδοτεί "
+#~ "την λήψη της εικόνας μέσω της επέκτασης κοινής μνήμης (MIT-Shm). Αυτή η "
+#~ "επιλογή δεν έχει σημασία όταν έχει ενεργοποιηθεί η πλήρης λήψη σε κάθε "
+#~ "στιγμιότυπο.\n"

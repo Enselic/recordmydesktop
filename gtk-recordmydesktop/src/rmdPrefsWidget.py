@@ -41,7 +41,7 @@ import os
 class prefsWidget(object):
     labelStrings=[_('Overwite Existing Files'),_('Working Directory'),
                     _('Frames Per Second'),_('Encode On the Fly'),_('Zero Compression'),
-                    _('Quick Subsampling'),_('Shared Threshold'),_('Full shots at every frame'),
+                    _('Quick Subsampling'),_('Full shots at every frame'),
                     _('Channels'),_('Frequency'),_('Device'),_('Display'),_('Mouse Cursor'),
                     _('MIT-Shm extension'),_('Include Window Decorations'),_('Tooltips'),
                     _('Video Quality'),_('Sound Quality'),
@@ -55,7 +55,6 @@ class prefsWidget(object):
                     _('Encode simultaneously with the recording.\nThis will require a lot more processing power.\n'),
                     _('Do not apply compression on the temporary files.\nIf enabled, the program will need less processing power,\nin the expense of hard disk space.\nThis option is valid only when encoding on the fly is disabled.'),
                     _('This option, if enabled, will cause the program to require less\nprocessing power, but it might make the colors look a bit more blurry.'),
-                    _('Amount of screen change, within a frame that triggers retrieval\nof the screenshot through the MIT-Shared memory extension.\nThis option has no effect when using the full shots option.\n'),
                     _('This option should be enabled when recording 3d windows.\nIt is also auto-enabled when recording a\nknown 3d compositing window manager.\n '),
                     _('Number of audio channels.'),
                     _('Sound frequency.'),
@@ -68,7 +67,7 @@ class prefsWidget(object):
     jacktip=_("Enable this option to record audio through\nJACK. The Jack server must be running in order to\nobtain the ports that will be recorded.\nThe audio recorded from each one\nwill be written on a channel of its own.\nrecordMyDesktop must be compiled with JACK\nsupport for this option to work.")
     def __tooltips__(self):
         self.tooltips=gtk.Tooltips()
-        for i in range(16):
+        for i in range(15):
             self.tooltips.set_tip(self.eboxes[i],self.tooltipLabels[i])
         self.tooltips.set_tip(self.jack_ebox,self.jacktip)
 
@@ -81,7 +80,7 @@ class prefsWidget(object):
         self.values[9]=self.deviceEntry.get_text().replace(' ','')
         self.values[12]=self.displayEntry.get_text().replace(' ','')
         self.values[13]=self.sharedComboBox.get_active()
-        self.values[15]=self.thresSpinButton.get_value_as_int()
+#        self.values[15]=self.thresSpinButton.get_value_as_int()
         self.values[16]=self.quickComboBox.get_active()
         self.values[17]=self.workdirEntry.get_text()
         self.values[18]=self.onTheFlyComboBox.get_active()
@@ -140,7 +139,7 @@ class prefsWidget(object):
         self.boxes[1].pack_end(self.workdirEntry,expand=True,fill=True)
 
 #Performance page
-        for i in xrange(2,8):
+        for i in xrange(2,7):
             self.labels[i]=gtk.Label(self.labelStrings[i])
             self.labels[i].set_justify(gtk.JUSTIFY_LEFT)
             self.boxes[i]=gtk.HBox(homogeneous=False, spacing=40)
@@ -176,21 +175,16 @@ class prefsWidget(object):
         self.quickComboBox.show()
         self.boxes[5].pack_end(self.quickComboBox,expand=False,fill=False)
 
-        self.thresAdjustment=gtk.Adjustment(value=self.values[15], lower=0,upper=100, step_incr=1, page_incr=5, page_size=1)
-        self.thresSpinButton= gtk.SpinButton(self.thresAdjustment, climb_rate=0.5, digits=0)
-        self.thresSpinButton.show()
-        self.boxes[6].pack_end(self.thresSpinButton,expand=False,fill=False)
-
         self.fullComboBox = gtk.combo_box_new_text()
         for i in range(2):
             self.fullComboBox.append_text(self.stateStrings[i])
         self.fullComboBox.set_active(self.values[3])
         self.fullComboBox.show()
-        self.boxes[7].pack_end(self.fullComboBox,expand=False,fill=False)
+        self.boxes[6].pack_end(self.fullComboBox,expand=False,fill=False)
 
 
 #sound page
-        for i in xrange(8,11):
+        for i in xrange(7,10):
             self.labels[i]=gtk.Label(self.labelStrings[i])
             self.labels[i].set_justify(gtk.JUSTIFY_LEFT)
             self.boxes[i]=gtk.HBox(homogeneous=False, spacing=0)
@@ -250,22 +244,22 @@ class prefsWidget(object):
         self.channelsAdjustment=gtk.Adjustment(value=self.values[7], lower=1,upper=2, step_incr=1, page_incr=1, page_size=1)
         self.channelsSpinButton= gtk.SpinButton(self.channelsAdjustment, climb_rate=0.5, digits=0)
         self.channelsSpinButton.show()
-        self.boxes[8].pack_end(self.channelsSpinButton,expand=False,fill=False)
+        self.boxes[7].pack_end(self.channelsSpinButton,expand=False,fill=False)
 
 
         self.freqAdjustment=gtk.Adjustment(value=self.values[8], lower=0,upper=44100, step_incr=1, page_incr=100, page_size=0)
         self.freqSpinButton= gtk.SpinButton(self.freqAdjustment, climb_rate=0.5, digits=0)
         self.freqSpinButton.show()
-        self.boxes[9].pack_end(self.freqSpinButton,expand=False,fill=False)
+        self.boxes[8].pack_end(self.freqSpinButton,expand=False,fill=False)
 
 
         self.deviceEntry= gtk.Entry(max=0)
         self.deviceEntry.set_text(self.values[9])
         self.deviceEntry.show()
-        self.boxes[10].pack_end(self.deviceEntry,expand=False,fill=False)
+        self.boxes[9].pack_end(self.deviceEntry,expand=False,fill=False)
 
 #misc page
-        for i in xrange(11,16):
+        for i in xrange(10,15):
             self.labels[i]=gtk.Label(self.labelStrings[i])
             self.labels[i].set_justify(gtk.JUSTIFY_LEFT)
             self.boxes[i]=gtk.HBox(homogeneous=False, spacing=0)
@@ -278,7 +272,7 @@ class prefsWidget(object):
         self.displayEntry= gtk.Entry(max=0)
         self.displayEntry.set_text(self.values[12])
         self.displayEntry.show()
-        self.boxes[11].pack_end(self.displayEntry,expand=False,fill=False)
+        self.boxes[10].pack_end(self.displayEntry,expand=False,fill=False)
 
 
         self.mouseComboBox = gtk.combo_box_new_text()
@@ -286,7 +280,7 @@ class prefsWidget(object):
             self.mouseComboBox.append_text(self.mouseStrings[i])
         self.mouseComboBox.set_active(self.values[1])
         self.mouseComboBox.show()
-        self.boxes[12].pack_end(self.mouseComboBox,expand=False,fill=False)
+        self.boxes[11].pack_end(self.mouseComboBox,expand=False,fill=False)
 
 
         self.sharedComboBox = gtk.combo_box_new_text()
@@ -294,23 +288,23 @@ class prefsWidget(object):
             self.sharedComboBox.append_text(self.stateStrings[i])
         self.sharedComboBox.set_active(self.values[13])
         self.sharedComboBox.show()
-        self.boxes[13].pack_end(self.sharedComboBox,expand=False,fill=False)
+        self.boxes[12].pack_end(self.sharedComboBox,expand=False,fill=False)
 
         self.winDecoComboBox = gtk.combo_box_new_text()
         for i in range(2):
             self.winDecoComboBox.append_text(self.stateStrings[i])
         self.winDecoComboBox.set_active(self.values[21])
         self.winDecoComboBox.show()
-        self.boxes[14].pack_end(self.winDecoComboBox,expand=False,fill=False)
+        self.boxes[13].pack_end(self.winDecoComboBox,expand=False,fill=False)
 
         self.tooltipsComboBox = gtk.combo_box_new_text()
         for i in range(2):
             self.tooltipsComboBox.append_text(self.stateStrings[i])
         self.tooltipsComboBox.set_active(self.values[24])
         self.tooltipsComboBox.show()
-        self.boxes[15].pack_end(self.tooltipsComboBox,expand=False,fill=False)
+        self.boxes[14].pack_end(self.tooltipsComboBox,expand=False,fill=False)
 
-        for i in range(16):
+        for i in range(15):
             self.boxes[i].show()
             self.eboxes[i].show()
 

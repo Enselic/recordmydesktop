@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-10 23:57+0200\n"
+"POT-Creation-Date: 2007-03-15 22:46+0200\n"
 "PO-Revision-Date: 2006-11-29 12:36+0100\n"
 "Last-Translator: \n"
 "Language-Team:  <es@li.org>\n"
@@ -55,10 +55,6 @@ msgstr "Sin compresión"
 #: src/rmdPrefsWidget.py:44
 msgid "Quick Subsampling"
 msgstr "Submuestreo rápido"
-
-#: src/rmdPrefsWidget.py:44
-msgid "Shared Threshold"
-msgstr "Umbral compartido"
 
 #: src/rmdPrefsWidget.py:44
 msgid "Full shots at every frame"
@@ -202,17 +198,6 @@ msgstr ""
 
 #: src/rmdPrefsWidget.py:58
 msgid ""
-"Amount of screen change, within a frame that triggers retrieval\n"
-"of the screenshot through the MIT-Shared memory extension.\n"
-"This option has no effect when using the full shots option.\n"
-msgstr ""
-"Cantidad de cambios en la pantalla, dentro de un cuadro, que dispara\n"
-"la captura del pantallazo mediante la extensión de memoria MIT_Shared.\n"
-"Esta opción no tiene efecto si se está usando la opción de capturas "
-"completas.\n"
-
-#: src/rmdPrefsWidget.py:59
-msgid ""
 "This option should be enabled when recording 3d windows.\n"
 "It is also auto-enabled when recording a\n"
 "known 3d compositing window manager.\n"
@@ -223,23 +208,23 @@ msgstr ""
 "gestor de ventanas 3d conocido.\n"
 "."
 
-#: src/rmdPrefsWidget.py:60
+#: src/rmdPrefsWidget.py:59
 msgid "Number of audio channels."
 msgstr "Número de canales de audio."
 
-#: src/rmdPrefsWidget.py:61
+#: src/rmdPrefsWidget.py:60
 msgid "Sound frequency."
 msgstr "Frecuencia de sonido."
 
-#: src/rmdPrefsWidget.py:62
+#: src/rmdPrefsWidget.py:61
 msgid "ALSA sound device, that is used for sound recording."
 msgstr "Dispositivo de sonido ALSA usado para grabar el sonido."
 
-#: src/rmdPrefsWidget.py:63
+#: src/rmdPrefsWidget.py:62
 msgid "Connection to the Xserver."
 msgstr "Conexión al servidor X."
 
-#: src/rmdPrefsWidget.py:64
+#: src/rmdPrefsWidget.py:63
 msgid ""
 "The mouse cursor that will be drawn.\n"
 "Normal is for the real cursor that you see while recording,\n"
@@ -251,7 +236,7 @@ msgstr ""
 "mientras que blanco y negro son cursores falsos, dibujados por el programa.\n"
 "También puedes dehabilitar el dibujo del cursor."
 
-#: src/rmdPrefsWidget.py:65
+#: src/rmdPrefsWidget.py:64
 msgid ""
 "Use the MIT-Shared memory extension, whenever appropriate,\n"
 " depending on the rest of the program settings.\n"
@@ -263,19 +248,19 @@ msgstr ""
 "No se recomienda deshabilitar esta opción,\n"
 "porque puede hacer mucho más lento el programa."
 
-#: src/rmdPrefsWidget.py:66
+#: src/rmdPrefsWidget.py:65
 msgid ""
 "When selecting a window via the \"Select Window\" button,\n"
 "include that window's decorations in the recording area."
 msgstr ""
 
-#: src/rmdPrefsWidget.py:67
+#: src/rmdPrefsWidget.py:66
 msgid ""
 "Enable or disable tooltips, like this one.\n"
 "(Requires restart)"
 msgstr ""
 
-#: src/rmdPrefsWidget.py:68
+#: src/rmdPrefsWidget.py:67
 msgid ""
 "Enable this option to record audio through\n"
 "JACK. The Jack server must be running in order to\n"
@@ -286,17 +271,17 @@ msgid ""
 "support for this option to work."
 msgstr ""
 
-#: src/rmdPrefsWidget.py:203
+#: src/rmdPrefsWidget.py:197
 msgid "Use Jack for audio capture."
 msgstr ""
 
-#: src/rmdPrefsWidget.py:204
+#: src/rmdPrefsWidget.py:198
 msgid ""
 "Select the ports you want to record from\n"
 "(hold Ctrl to select multiple entries):"
 msgstr ""
 
-#: src/rmdPrefsWidget.py:210
+#: src/rmdPrefsWidget.py:204
 msgid "Available Ports"
 msgstr ""
 
@@ -463,7 +448,7 @@ msgstr ""
 msgid "Segmentation Fault"
 msgstr "Fallo de segmento."
 
-#: src/rmdTrayIcon.py:259
+#: src/rmdTrayIcon.py:252
 msgid ""
 "Recording is finished.\n"
 "recordMyDesktop has exited with status"
@@ -471,11 +456,11 @@ msgstr ""
 "La grabación ha terminado.\n"
 "recordMyDesktop ha salido con estado"
 
-#: src/rmdTrayIcon.py:260
+#: src/rmdTrayIcon.py:253
 msgid "Description"
 msgstr "Descripción"
 
-#: src/rmdTrayIcon.py:262
+#: src/rmdTrayIcon.py:255
 msgid ""
 "Recording is finished.\n"
 "recordMyDesktop has exited with uknown\n"
@@ -510,3 +495,16 @@ msgstr "Traducción español: José L. Redrejo Rodríguez"
 #: src/rmdTrayPopup.py:86
 msgid "_Select Area On Screen"
 msgstr "_Elige un área en la pantalla"
+
+#~ msgid "Shared Threshold"
+#~ msgstr "Umbral compartido"
+
+#~ msgid ""
+#~ "Amount of screen change, within a frame that triggers retrieval\n"
+#~ "of the screenshot through the MIT-Shared memory extension.\n"
+#~ "This option has no effect when using the full shots option.\n"
+#~ msgstr ""
+#~ "Cantidad de cambios en la pantalla, dentro de un cuadro, que dispara\n"
+#~ "la captura del pantallazo mediante la extensión de memoria MIT_Shared.\n"
+#~ "Esta opción no tiene efecto si se está usando la opción de capturas "
+#~ "completas.\n"
