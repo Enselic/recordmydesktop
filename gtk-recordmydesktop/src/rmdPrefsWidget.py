@@ -44,6 +44,7 @@ class prefsWidget(object):
                     _('Quick Subsampling'),_('Full shots at every frame'),
                     _('Channels'),_('Frequency'),_('Device'),_('Display'),_('Mouse Cursor'),
                     _('MIT-Shm extension'),_('Include Window Decorations'),_('Tooltips'),
+                    _('Outline Capture Area On Screen'),
                     _('Video Quality'),_('Sound Quality'),
                     _('Drop Frames(encoder)'),_('Startup Delay(secs)'),]
     mouseStrings=[_('Normal'),_('White'),_('Black'),_('None')]
@@ -63,11 +64,12 @@ class prefsWidget(object):
                     _('The mouse cursor that will be drawn.\nNormal is for the real cursor that you see while recording,\nwhile black and white are fake cursors, drawn by the program.\nYou can also disable cursor drawing.'),
                     _('Use the MIT-Shared memory extension, whenever appropriate,\n depending on the rest of the program settings.\nDisabling this option is not recommended,\nas it may severely slow down the program.'),
                     _('When selecting a window via the "Select Window" button,\ninclude that window\'s decorations in the recording area.'),
-                    _('Enable or disable tooltips, like this one.\n(Requires restart)')]
+                    _('Enable or disable tooltips, like this one.\n(Requires restart)'),
+                    _('Draw a frame on the screen, around the area\nthat will get captured.\n(This frame will remain throughout the recording.)')]
     jacktip=_("Enable this option to record audio through\nJACK. The Jack server must be running in order to\nobtain the ports that will be recorded.\nThe audio recorded from each one\nwill be written on a channel of its own.\nrecordMyDesktop must be compiled with JACK\nsupport for this option to work.")
     def __tooltips__(self):
         self.tooltips=gtk.Tooltips()
-        for i in range(15):
+        for i in range(16):
             self.tooltips.set_tip(self.eboxes[i],self.tooltipLabels[i])
         self.tooltips.set_tip(self.jack_ebox,self.jacktip)
 
@@ -90,6 +92,7 @@ class prefsWidget(object):
         self.values[22]=self.jack_button.get_active()
         self.__getSelectedPorts__()
         self.values[24]=self.tooltipsComboBox.get_active()
+        self.values[25]=self.rFrameComboBox.get_active()
         self.window.destroy()
         self.optionsOpen[0]=0
 
@@ -259,7 +262,7 @@ class prefsWidget(object):
         self.boxes[9].pack_end(self.deviceEntry,expand=False,fill=False)
 
 #misc page
-        for i in xrange(10,15):
+        for i in xrange(10,16):
             self.labels[i]=gtk.Label(self.labelStrings[i])
             self.labels[i].set_justify(gtk.JUSTIFY_LEFT)
             self.boxes[i]=gtk.HBox(homogeneous=False, spacing=0)
@@ -304,7 +307,15 @@ class prefsWidget(object):
         self.tooltipsComboBox.show()
         self.boxes[14].pack_end(self.tooltipsComboBox,expand=False,fill=False)
 
-        for i in range(15):
+
+        self.rFrameComboBox = gtk.combo_box_new_text()
+        for i in range(2):
+            self.rFrameComboBox.append_text(self.stateStrings[i])
+        self.rFrameComboBox.set_active(self.values[25])
+        self.rFrameComboBox.show()
+        self.boxes[15].pack_end(self.rFrameComboBox,expand=False,fill=False)
+
+        for i in range(16):
             self.boxes[i].show()
             self.eboxes[i].show()
 

@@ -32,4 +32,5 @@ default_values=[15,     #framerate
                 False,      #Use jack
                 [],         #jack ports
                 0,          #tooltips,0 on 1 off
+                0,          #draw an on-screen frame, surrounding the capture area,0 on 1 off
                 ]

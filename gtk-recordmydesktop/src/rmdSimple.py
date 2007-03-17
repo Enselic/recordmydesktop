@@ -94,7 +94,7 @@ class simpleWidget(object):
         while twidth>320 or self.factor<4:
           twidth/=2
           self.factor*=2
-        self.image=sT.GtkThumbSelector(self.values[5],self.hidden,2000)
+        self.image=sT.GtkThumbSelector(self,self.values[5],self.hidden,2000)
         self.image.show()
 
         self.NWBox.pack_start(self.image,False,False)
@@ -336,6 +336,11 @@ class simpleWidget(object):
                 self.values.append(rmdConfig.default_values[24])
             else:
                 self.values.append(int(savefile.readline()))
+            p=savefile.readline()
+            if p=='':
+                self.values.append(rmdConfig.default_values[25])
+            else:
+                self.values.append(int(savefile.readline()))
             return True
         except:
             return False
@@ -396,6 +401,8 @@ class simpleWidget(object):
             savefile.write("\n")
             savefile.write("#Tooltips,1 disabled 0 enabled\n")
             savefile.write("%d\n"%self.values[24])
+            savefile.write("#draw an on-screen frame, surrounding the capture area\n")
+            savefile.write("%d\n"%self.values[25])
             savefile.flush()
             savefile.close()
             return True
