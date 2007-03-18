@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-03-15 22:46+0200\n"
+"POT-Creation-Date: 2007-03-18 17:54+0200\n"
 "PO-Revision-Date: 2006-11-27 20:59+0100\n"
 "Last-Translator: David Valot <ptitdav69@gmail.com>\n"
 "Language-Team: LANGUAGE <fr@li.org>\n"
@@ -39,7 +39,7 @@ msgstr "Ecraser les fichiers existants"
 msgid "Working Directory"
 msgstr "Répertoire de travail"
 
-#: src/rmdPrefsWidget.py:43 src/rmdPrefsWidget.py:54
+#: src/rmdPrefsWidget.py:43 src/rmdPrefsWidget.py:55
 msgid "Frames Per Second"
 msgstr "Images par seconde"
 
@@ -91,63 +91,67 @@ msgstr ""
 msgid "Tooltips"
 msgstr ""
 
-#: src/rmdPrefsWidget.py:47 src/rmdSimple.py:48
+#: src/rmdPrefsWidget.py:47
+msgid "Outline Capture Area On Screen"
+msgstr ""
+
+#: src/rmdPrefsWidget.py:48 src/rmdSimple.py:48
 msgid "Video Quality"
 msgstr "Qualité vidéo"
 
-#: src/rmdPrefsWidget.py:47 src/rmdSimple.py:48
+#: src/rmdPrefsWidget.py:48 src/rmdSimple.py:48
 msgid "Sound Quality"
 msgstr "Qualité du son"
 
-#: src/rmdPrefsWidget.py:48
+#: src/rmdPrefsWidget.py:49
 msgid "Drop Frames(encoder)"
 msgstr "Sauter images (encodeur)"
 
-#: src/rmdPrefsWidget.py:48
+#: src/rmdPrefsWidget.py:49
 msgid "Startup Delay(secs)"
 msgstr "Délai de démarrage (secs)"
 
-#: src/rmdPrefsWidget.py:49
+#: src/rmdPrefsWidget.py:50
 msgid "Normal"
 msgstr "Normal"
 
-#: src/rmdPrefsWidget.py:49
+#: src/rmdPrefsWidget.py:50
 msgid "White"
 msgstr "Blanc"
 
-#: src/rmdPrefsWidget.py:49
+#: src/rmdPrefsWidget.py:50
 msgid "Black"
 msgstr "Noir"
 
-#: src/rmdPrefsWidget.py:49
+#: src/rmdPrefsWidget.py:50
 msgid "None"
 msgstr "Aucun"
 
-#: src/rmdPrefsWidget.py:50
+#: src/rmdPrefsWidget.py:51
 msgid "Enabled"
 msgstr "Activé"
 
-#: src/rmdPrefsWidget.py:50
+#: src/rmdPrefsWidget.py:51
 msgid "Disabled"
 msgstr "Désactivé"
 
-#: src/rmdPrefsWidget.py:51
+#: src/rmdPrefsWidget.py:52
 msgid "Files"
 msgstr "Fichiers"
 
-#: src/rmdPrefsWidget.py:51
+#: src/rmdPrefsWidget.py:52
 msgid "Performance"
 msgstr "Performance"
 
-#: src/rmdPrefsWidget.py:51
+#: src/rmdPrefsWidget.py:52
 msgid "Sound"
 msgstr "Son"
 
-#: src/rmdPrefsWidget.py:51
+#: src/rmdPrefsWidget.py:52
 msgid "Misc"
 msgstr "Divers"
 
-#: src/rmdPrefsWidget.py:52
+#: src/rmdPrefsWidget.py:53
 msgid ""
 "By default, if you try to save under a filename that already\n"
 "exists, the new file will be renamed\n"
@@ -163,11 +167,11 @@ msgstr ""
 "En activant ce choix, ce comportement sera désactivé et l'ancien fichier "
 "écrasé.\n"
 
-#: src/rmdPrefsWidget.py:53
+#: src/rmdPrefsWidget.py:54
 msgid "Directory where temporary files will be saved."
 msgstr "Répertoire où seront sauvegardés les fichiers temporaires."
 
-#: src/rmdPrefsWidget.py:55
+#: src/rmdPrefsWidget.py:56
 msgid ""
 "Encode simultaneously with the recording.\n"
 "This will require a lot more processing power.\n"
@@ -175,7 +179,7 @@ msgstr ""
 "Encoder en même temps que l'enregistrement.\n"
 "Ceci requerra un peu plus de puissance processeur.\n"
 
-#: src/rmdPrefsWidget.py:56
+#: src/rmdPrefsWidget.py:57
 msgid ""
 "Do not apply compression on the temporary files.\n"
 "If enabled, the program will need less processing power,\n"
@@ -188,7 +192,7 @@ msgstr ""
 "Cette option est uniquement valable lorsque l'encodage à la volée est "
 "désactivé."
 
-#: src/rmdPrefsWidget.py:57
+#: src/rmdPrefsWidget.py:58
 msgid ""
 "This option, if enabled, will cause the program to require less\n"
 "processing power, but it might make the colors look a bit more blurry."
@@ -197,7 +201,7 @@ msgstr ""
 "de puissance processeur, mais elle pourrait rendre le rendu des couleurs un "
 "peu plus trouble."
 
-#: src/rmdPrefsWidget.py:58
+#: src/rmdPrefsWidget.py:59
 msgid ""
 "This option should be enabled when recording 3d windows.\n"
 "It is also auto-enabled when recording a\n"
@@ -208,23 +212,23 @@ msgstr ""
 "Elle est aussi automatiquement activée lors d'enregistrement\n"
 "avec un gestionnaire de fenêtres 3D connu."
 
-#: src/rmdPrefsWidget.py:59
+#: src/rmdPrefsWidget.py:60
 msgid "Number of audio channels."
 msgstr "Nombre de canaux audio."
 
-#: src/rmdPrefsWidget.py:60
+#: src/rmdPrefsWidget.py:61
 msgid "Sound frequency."
 msgstr "Fréquence sonore."
 
-#: src/rmdPrefsWidget.py:61
+#: src/rmdPrefsWidget.py:62
 msgid "ALSA sound device, that is used for sound recording."
 msgstr "Périphérique de son ALSA qui est utilisé pour l'enregistrement du son."
 
-#: src/rmdPrefsWidget.py:62
+#: src/rmdPrefsWidget.py:63
 msgid "Connection to the Xserver."
 msgstr "Connexion au serveur X."
 
-#: src/rmdPrefsWidget.py:63
+#: src/rmdPrefsWidget.py:64
 msgid ""
 "The mouse cursor that will be drawn.\n"
 "Normal is for the real cursor that you see while recording,\n"
@@ -236,7 +240,7 @@ msgstr ""
 "tandis que noir et blanc sont des faux curseurs, dessinés par le programme.\n"
 "Vous pouvez également désactiver l'affichage du curseur."
 
-#: src/rmdPrefsWidget.py:64
+#: src/rmdPrefsWidget.py:65
 msgid ""
 "Use the MIT-Shared memory extension, whenever appropriate,\n"
 " depending on the rest of the program settings.\n"
@@ -248,19 +252,26 @@ msgstr ""
 "Désactiver cette option n'est pas recommandé,\n"
 "car elle peut sévèrement ralentir le programme."
 
-#: src/rmdPrefsWidget.py:65
+#: src/rmdPrefsWidget.py:66
 msgid ""
 "When selecting a window via the \"Select Window\" button,\n"
 "include that window's decorations in the recording area."
 msgstr ""
 
-#: src/rmdPrefsWidget.py:66
+#: src/rmdPrefsWidget.py:67
 msgid ""
 "Enable or disable tooltips, like this one.\n"
 "(Requires restart)"
 msgstr ""
 
-#: src/rmdPrefsWidget.py:67
+#: src/rmdPrefsWidget.py:68
+msgid ""
+"Draw a frame on the screen, around the area\n"
+"that will get captured.\n"
+"(This frame will remain throughout the recording.)"
+msgstr ""
+
+#: src/rmdPrefsWidget.py:69
 msgid ""
 "Enable this option to record audio through\n"
 "JACK. The Jack server must be running in order to\n"
@@ -271,25 +282,25 @@ msgid ""
 "support for this option to work."
 msgstr ""
 
-#: src/rmdPrefsWidget.py:197
+#: src/rmdPrefsWidget.py:200
 msgid "Use Jack for audio capture."
 msgstr ""
 
-#: src/rmdPrefsWidget.py:198
+#: src/rmdPrefsWidget.py:201
 msgid ""
 "Select the ports you want to record from\n"
 "(hold Ctrl to select multiple entries):"
 msgstr ""
 
-#: src/rmdPrefsWidget.py:204
+#: src/rmdPrefsWidget.py:207
 msgid "Available Ports"
 msgstr ""
 
-#: src/rmdPrefsWidget.py:336
+#: src/rmdPrefsWidget.py:347
 msgid "jack_lsp returned no ports."
 msgstr ""
 
-#: src/rmdPrefsWidget.py:337
+#: src/rmdPrefsWidget.py:348
 msgid "Make sure that jackd is running."
 msgstr ""
 
