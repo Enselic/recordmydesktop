@@ -1,8 +1,8 @@
 /*VERSION 0.3.4*/
-Synced to version 0.3.4 of recordMyDesktop.
-Added an optional persistent frame around the capture area.
-updated Spanish translation by Rolando Espinoza La Fuente.
-updated Italian translation by Giovanni Scafora.
+*Synced to version 0.3.4 of recordMyDesktop.
+*Added an optional persistent frame around the capture area.
+*Updated Spanish translation by Rolando Espinoza La Fuente.
+*Updated Italian translation by Giovanni Scafora.
 
 /*VERSION 0.3.3.1*/
 *Fixed jack ports window, in sound tab, to be a scrollable window
