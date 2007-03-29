@@ -1,3 +1,13 @@
+/*VERSION 0.3.4*/
+*Fixed configure script to exit when zlib is not found.
+*Fixed behavior of the program when using both the MIT-Shm and Xdamage extensions.
+As a result, less memory is now required and all options related to conditional usage of
+shared memory are gone. Shared memory is now on by default and the --with-shared
+option is substituted by --no-shared.
+*The --drop-frames option has been removed.
+*The dummy cursor has been updated to look better.
+
+
 /*VERSION 0.3.3.1*/
 *Fixed ring buffer size, to be independant of the
 size that jack uses internally
