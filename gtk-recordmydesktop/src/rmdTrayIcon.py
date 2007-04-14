@@ -217,8 +217,11 @@ class trayIcon(object):
             self.execargs.append('--overwrite')
         if self.parent.values[22] == True:
             self.execargs.append('-use-jack')
+            portstring=""
             for i in self.parent.values[23]:
-                self.execargs.append(i)
+                portstring+=i+","
+            portstring=portstring.rstrip(",")
+            self.execargs.append(portstring)
         #print execargs
 
 
