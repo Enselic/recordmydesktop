@@ -45,8 +45,8 @@ int Paused,*Running,Aborted;
 pthread_cond_t  *time_cond,*pause_cond;
 pthread_mutex_t pause_mutex,time_mutex;
 unsigned char   Yr[256],Yg[256],Yb[256],
-                Ur[256],Ug[256],Ub[256],
-                Vr[256],Vg[256],Vb[256];
+                Ur[256],Ug[256],UbVr[256],
+                Vg[256],Vb[256];
 //the following values are of no effect
 //but they might be usefull later for profiling
 unsigned int    frames_total,   //frames calculated by total time expirations

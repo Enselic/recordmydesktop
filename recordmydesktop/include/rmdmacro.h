@@ -313,8 +313,8 @@
     register u_int##__bit_depth__##_t t_val;\
     register unsigned char  *yuv_u=yuv->u+x_tm/2+(y_tm*yuv->uv_width)/2,\
                             *yuv_v=yuv->v+x_tm/2+(y_tm*yuv->uv_width)/2,\
-                            *_ur=Ur,*_ug=Ug,*_ub=Ub,\
-                            *_vr=Vr,*_vg=Vg,*_vb=Vb;\
+                            *_ur=Ur,*_ug=Ug,*_ubvr=UbVr,\
+                            *_vg=Vg,*_vb=Vb;\
     register u_int##__bit_depth__##_t *datapi=(u_int##__bit_depth__##_t *)data,\
                                       *datapi_next=NULL;\
     if(__sampling_type==__PXL_AVERAGE){\
@@ -330,9 +330,9 @@
             *yuv_u=\
             _ur[__RVALUE_##__bit_depth__(t_val)] +\
             _ug[__GVALUE_##__bit_depth__(t_val)] +\
-            _ub[__BVALUE_##__bit_depth__(t_val)];\
+            _ubvr[__BVALUE_##__bit_depth__(t_val)];\
             *yuv_v=\
-            _vr[__RVALUE_##__bit_depth__(t_val)] +\
+            _ubvr[__RVALUE_##__bit_depth__(t_val)] +\
             _vg[__GVALUE_##__bit_depth__(t_val)] +\
             _vb[__BVALUE_##__bit_depth__(t_val)];\
             datapi+=2;\
@@ -405,10 +405,10 @@
                                       k,i,__BBYTE);\
                     yuv->u[x_2+i/2+(k/2+y_2)*yuv->uv_width]=\
                     (yuv->u[x_2+i/2+(k/2+y_2)*yuv->uv_width]*(UCHAR_MAX-avg3)+\
-                    (Ur[avg2] + Ug[avg1] +Ub[avg0])*avg3)/UCHAR_MAX;\
+                    (Ur[avg2] + Ug[avg1] +UbVr[avg0])*avg3)/UCHAR_MAX;\
                     yuv->v[x_2+i/2+(k/2+y_2)*yuv->uv_width]=\
                     (yuv->v[x_2+i/2+(k/2+y_2)*yuv->uv_width]*(UCHAR_MAX-avg3)+\
-                    (Vr[avg2] + Vg[avg1] +Vb[avg0])*avg3)/UCHAR_MAX;\
+                    (UbVr[avg2] + Vg[avg1] +Vb[avg0])*avg3)/UCHAR_MAX;\
                 }\
             j++;\
         }\
@@ -436,9 +436,9 @@
                     yuv->u[x_2+i/2+(k/2+y_2)*y_width_2]=\
                         Ur[data_tm[(k*width_tm+i)*4+__RBYTE]] +\
                         Ug[data_tm[(k*width_tm+i)*4+__GBYTE]] +\
-                        Ub[data_tm[(k*width_tm+i)*4+__BBYTE]];\
+                        UbVr[data_tm[(k*width_tm+i)*4+__BBYTE]];\
                     yuv->v[x_2+i/2+(k/2+y_2)*y_width_2]=\
-                        Vr[data_tm[(k*width_tm+i)*4+__RBYTE]] +\
+                        UbVr[data_tm[(k*width_tm+i)*4+__RBYTE]] +\
                         Vg[data_tm[(k*width_tm+i)*4+__GBYTE]] +\
                         Vb[data_tm[(k*width_tm+i)*4+__BBYTE]] ;\
                 }\
