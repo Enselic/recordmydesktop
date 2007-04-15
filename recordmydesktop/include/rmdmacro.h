@@ -246,15 +246,16 @@
     data_array[(k_tm*width_img+i_tm-1)*RMD_ULONG_SIZE_T+offset]+\
     data_array[((k_tm-1)*width_img+i_tm-1)*RMD_ULONG_SIZE_T+offset])/4)
 
+
+//the 4 most significant bytes represent the A component which
+//does not need to be added on t_val, as it is always unused
 #define CALC_TVAL_AVG_32(t_val,datapi,datapi_next){\
     register unsigned int t1,t2,t3,t4;\
     t1=*datapi;\
     t2=*(datapi+1);\
     t3=*datapi_next;\
     t4=*(datapi_next+1);\
-    t_val=((((t1&0xff000000) +(t2&0xff000000)+\
-            (t3&0xff000000)+(t4&0xff000000))/4)&0xff000000)+\
-          ((((t1&0x00ff0000) +(t2&0x00ff0000)+\
+    t_val=((((t1&0x00ff0000) +(t2&0x00ff0000)+\
             (t3&0x00ff0000)+(t4&0x00ff0000))/4)&0x00ff0000)+\
           ((((t1&0x0000ff00) +(t2&0x0000ff00)+\
             (t3&0x0000ff00)+(t4&0x0000ff00))/4)&0x0000ff00)+\
@@ -262,6 +263,13 @@
             (t3&0x000000ff)+(t4&0x000000ff))/4)&0x000000ff);\
 }
 
+//when adding the r values, we go beyond
+//the (16 bit)range of the t_val variable, but we are performing
+//32 bit arithmetics, so there's no problem.
+//(This note is useless, I'm just adding because
+//the addition of the A components in CALC_TVAL_AVG_32,
+//now removed as uneeded, produced an overflow which would have caused
+//color distrtion, where it one of the R,G or B components)
 #define CALC_TVAL_AVG_16(t_val,datapi,datapi_next){\
     register u_int16_t t1,t2,t3,t4;\
     t1=*datapi;\
