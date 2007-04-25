@@ -201,7 +201,6 @@
     (args)->nosound=\
     (args)->full_shots=\
     (args)->encOnTheFly=\
-    (args)->zerocompression=\
     (args)->nowmcheck=\
     (args)->overwrite=\
     (args)->use_jack=\
@@ -209,6 +208,7 @@
     (args)->jack_nports=0;\
     (args)->jack_ringbuffer_secs=3.0;\
     (args)->jack_port_names=NULL;\
+    (args)->zerocompression=\
     (args)->no_quick_subsample=1;\
     (args)->filename=(char *)malloc(8);\
     strcpy((args)->filename,"out.ogg");\
