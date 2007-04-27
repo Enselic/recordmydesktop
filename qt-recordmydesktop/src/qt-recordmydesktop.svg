@@ -16,8 +16,11 @@
    id="svg2"
    sodipodi:version="0.32"
    inkscape:version="0.44.1"
-   sodipodi:docname="rmddb1.png.svg"
-   sodipodi:docbase="/home/iovar/workspace/recordMyDesktop/NO_CVS">
+   sodipodi:docname="qt-recordmydesktop.svg"
+   sodipodi:docbase="/home/iovar/workspace/recordMyDesktop/qt-recordmydesktop/src"
+   inkscape:export-filename="/home/iovar/workspace/recordMyDesktop/qt-recordmydesktop/src/qt-recordmydesktop.png"
+   inkscape:export-xdpi="9.8500004"
+   inkscape:export-ydpi="9.8500004">
   <defs
      id="defs13">
     <linearGradient
@@ -28,10 +31,10 @@
          id="stop2776" />
       <stop
          id="stop2769"
-         offset="0.53846157"
-         style="stop-color:#7d001f;stop-opacity:1;" />
+         offset="0.54000002"
+         style="stop-color:#4579e8;stop-opacity:1;" />
       <stop
-         style="stop-color:#210019;stop-opacity:1;"
+         style="stop-color:#292681;stop-opacity:1;"
          offset="1"
          id="stop2768" />
     </linearGradient>
@@ -59,7 +62,7 @@
        gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
-     inkscape:window-height="579"
+     inkscape:window-height="583"
      inkscape:window-width="931"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
@@ -72,7 +75,7 @@
      id="base"
      inkscape:zoom="0.64786325"
      inkscape:cx="292.5"
-     inkscape:cy="290.95646"
+     inkscape:cy="290.18469"
      inkscape:window-x="0"
      inkscape:window-y="25"
      inkscape:current-layer="svg2" />
