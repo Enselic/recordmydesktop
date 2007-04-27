@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: gtk-recordMyDesktop 0.3.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-03-18 17:54+0200\n"
-"PO-Revision-Date: 2007-04-25 16:00-0300\n"
+"PO-Revision-Date: 2007-04-27 13:09-0300\n"
 "Last-Translator: Caio Alonso <lancelotz.skywalker@gmail.com>\n"
 "Language-Team: Portuguese/Brazil <gnome-l10n-br@listas.cipsga.org.br>\n"
 "MIME-Version: 1.0\n"
@@ -91,7 +91,7 @@ msgstr "Dicas"
 
 #: src/rmdPrefsWidget.py:47
 msgid "Outline Capture Area On Screen"
-msgstr ""
+msgstr "Contorno na Área de Captura na Tela"
 
 #: src/rmdPrefsWidget.py:48 src/rmdSimple.py:48
 msgid "Video Quality"
