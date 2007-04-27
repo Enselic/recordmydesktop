@@ -301,11 +301,11 @@ class trayIcon(object):
             return False
     def __get_icon_location__(self,name):
         if name=="start":
-            return "icons/rec1.png"
+            return os.path.join(rmdConfig.pixmapdir,"qt-recordmydesktop_record.png")
         elif name=="stop":
-            return "icons/stop1.png"
+            return os.path.join(rmdConfig.pixmapdir,"qt-recordmydesktop_stop.png")
         elif name=="pause":
-            return "icons/pause1.png"
+            return os.path.join(rmdConfig.pixmapdir,"qt-recordmydesktop_pause.png")
 
     def __init__(self,parent):
         self.parent=parent
