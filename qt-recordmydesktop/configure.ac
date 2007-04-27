@@ -38,21 +38,21 @@ AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [The gettext package name
 AM_GLIB_GNU_GETTEXT
 
 dnl check for pyqt
-PKG_CHECK_MODULES(PYQT4, QtCore>= $QT4_REQ,,AC_MSG_ERROR(You need libQt4 >=4.2 and the appropriate development headers to proceed))
-
+PKG_CHECK_MODULES(QtCore, [QtCore >= $QT4_REQ],,AC_MSG_ERROR(You need libQt4 >=4.2 and the appropriate development headers to proceed))
+PKG_CHECK_MODULES(QtGui, [QtGui >= $QT4_REQ],,AC_MSG_ERROR(You need libQt4 >=4.2 and the appropriate development headers to proceed))
 
 export PYTHONPATH=$PYTHONPATH
 
 export PYQT4_VERSION=`python -c 'import PyQt4; from PyQt4 import QtCore; print QtCore.PYQT_VERSION_STR'  2>>/dev/null `
-
 if test x$PYQT4_VERSION == x; then
     AC_MSG_ERROR(You need PyQt4>=4.1 installed to procceed);
 fi
-
 b=$(echo "$PYQT4_VERSION" | awk 'BEGIN{ FS="." } { print $1 "\n" $2 "\n" $3 }')
 c=($b)
-PYQT4_MAJOR=${c[0]}
-PYQT4_MINOR=${c[1]}
+
+
+export PYQT4_MAJOR=${c[[0]]}
+export PYQT4_MINOR=${c[[1]]}
 
 if test $PYQT4_MAJOR != 4; then
     AC_MSG_ERROR(PyQt4 Major version number not 4!!!);
