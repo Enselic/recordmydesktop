@@ -14,8 +14,8 @@
    id="svg1872"
    sodipodi:version="0.32"
    inkscape:version="0.44.1"
-   sodipodi:docbase="/home/iovar/workspace/recordMyDesktop/qt-recordmydesktop/data"
-   sodipodi:docname="rec1.svg"
+   sodipodi:docbase="/home/iovar/workspace/recordMyDesktop/qt-recordmydesktop/src"
+   sodipodi:docname="qt-recordmydesktop_record.svg"
    inkscape:export-filename="/home/iovar/workspace/recordMyDesktop/qt-recordmydesktop/data/rec.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
@@ -120,7 +120,7 @@
      inkscape:pageshadow="2"
      inkscape:zoom="14.481547"
      inkscape:cx="16"
-     inkscape:cy="16"
+     inkscape:cy="15.965473"
      inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:grid-bbox="true"
@@ -163,7 +163,7 @@
        d="M 31.97056 16.014721 A 15.940628 15.98528 0 1 1  0.08930397,16.014721 A 15.940628 15.98528 0 1 1  31.97056 16.014721 z"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"
-       transform="matrix(0.945051,0,0,0.945051,0.78619,0.972177)" />
+       transform="matrix(0.74614,0,0,0.750691,3.933367,3.977899)" />
     <path
        sodipodi:type="arc"
        style="fill:url(#radialGradient2790);fill-opacity:1;fill-rule:nonzero"
@@ -173,7 +173,7 @@
        sodipodi:rx="15.940628"
        sodipodi:ry="15.98528"
        d="M 31.97056 16.014721 A 15.940628 15.98528 0 1 1  0.08930397,16.014721 A 15.940628 15.98528 0 1 1  31.97056 16.014721 z"
-       transform="matrix(0.474286,0,0,0.227705,8.30425,24.59176)" />
+       transform="matrix(0.361814,0,0,0.173707,9.967689,22.44138)" />
     <path
        sodipodi:type="arc"
        style="fill:url(#radialGradient2812);fill-opacity:1;fill-rule:nonzero"
@@ -183,18 +183,6 @@
        sodipodi:rx="15.940628"
        sodipodi:ry="15.98528"
        d="M 31.97056 16.014721 A 15.940628 15.98528 0 1 1  0.08930397,16.014721 A 15.940628 15.98528 0 1 1  31.97056 16.014721 z"
-       transform="matrix(0.817262,0,0,0.561641,2.603307,1.900693)" />
-    <path
-       sodipodi:type="arc"
-       style="opacity:1;fill:#ffc2bf;fill-opacity:0.32704404;fill-rule:nonzero"
-       id="path2847"
-       sodipodi:cx="16.029932"
-       sodipodi:cy="16.014721"
-       sodipodi:rx="15.940628"
-       sodipodi:ry="15.98528"
-       d="M 31.97056 16.014721 A 15.940628 15.98528 0 1 1  0.08930397,16.014721 A 15.940628 15.98528 0 1 1  31.97056 16.014721 z"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90"
-       transform="matrix(0.945051,0,0,0.945051,0.78619,0.972177)" />
+       transform="matrix(0.587671,0,0,0.403861,6.211829,3.98811)" />
   </g>
 </svg>
