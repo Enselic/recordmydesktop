@@ -6,12 +6,12 @@ msgstr ""
 "Project-Id-Version: gtk-recordMyDesktop 0.3.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-03-18 17:54+0200\n"
-"PO-Revision-Date: 2006-12-24 10:48-0200\n"
+"PO-Revision-Date: 2007-04-25 16:00-0300\n"
 "Last-Translator: Caio Alonso <lancelotz.skywalker@gmail.com>\n"
 "Language-Team: Portuguese/Brazil <gnome-l10n-br@listas.cipsga.org.br>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: 8bit"
 
 #: src/rmdMonitor.py:14
 msgid ""
@@ -22,8 +22,8 @@ msgid ""
 msgstr ""
 "Por favor espere enquanto a sua gravação é codificada\n"
 "AVISO!!\n"
-"Se primir cancelar ou fechar esta janela,\n"
-"o processo não pode ser continuado!"
+"Se pressionar cancelar ou fechar esta janela,\n"
+"o processo não poderá ser continuado!"
 
 #: src/rmdMonitor.py:38 src/rmdMonitor.py:59
 msgid "complete"
@@ -31,15 +31,15 @@ msgstr "completo"
 
 #: src/rmdPrefsWidget.py:42
 msgid "Overwite Existing Files"
-msgstr "Sobrepor Arquivos Existentes"
+msgstr "Sobreescrever Arquivos Existentes"
 
 #: src/rmdPrefsWidget.py:42
 msgid "Working Directory"
-msgstr "Diretório de trabalho"
+msgstr "Diretório de Trabalho"
 
 #: src/rmdPrefsWidget.py:43 src/rmdPrefsWidget.py:55
 msgid "Frames Per Second"
-msgstr "Quadros por segundo"
+msgstr "Quadros Por Segundo"
 
 #: src/rmdPrefsWidget.py:43
 msgid "Encode On the Fly"
@@ -47,7 +47,7 @@ msgstr "Encode On the Fly"
 
 #: src/rmdPrefsWidget.py:43
 msgid "Zero Compression"
-msgstr "Compressão zero"
+msgstr "Compressão Zero"
 
 #: src/rmdPrefsWidget.py:44
 msgid "Quick Subsampling"
@@ -71,11 +71,11 @@ msgstr "Dispositivo de Som"
 
 #: src/rmdPrefsWidget.py:45
 msgid "Display"
-msgstr "Dispositivo"
+msgstr "Exibição"
 
 #: src/rmdPrefsWidget.py:45
 msgid "Mouse Cursor"
-msgstr "Cursor do mouse"
+msgstr "Cursor do Mouse"
 
 #: src/rmdPrefsWidget.py:46
 msgid "MIT-Shm extension"
@@ -83,11 +83,11 @@ msgstr "Extensão MIT-Shm"
 
 #: src/rmdPrefsWidget.py:46
 msgid "Include Window Decorations"
-msgstr ""
+msgstr "Incluir Decorações de Janelas"
 
 #: src/rmdPrefsWidget.py:46
 msgid "Tooltips"
-msgstr ""
+msgstr "Dicas"
 
 #: src/rmdPrefsWidget.py:47
 msgid "Outline Capture Area On Screen"
@@ -95,15 +95,15 @@ msgstr ""
 
 #: src/rmdPrefsWidget.py:48 src/rmdSimple.py:48
 msgid "Video Quality"
-msgstr "Qualidade de Vídeo"
+msgstr "Qualidade do Vídeo"
 
 #: src/rmdPrefsWidget.py:48 src/rmdSimple.py:48
 msgid "Sound Quality"
-msgstr "Qualidade de Som"
+msgstr "Qualidade do Som"
 
 #: src/rmdPrefsWidget.py:49
 msgid "Drop Frames(encoder)"
-msgstr "Perder quadros(codificador)"
+msgstr "Descartar quadros(codificador)"
 
 #: src/rmdPrefsWidget.py:49
 msgid "Startup Delay(secs)"
@@ -147,7 +147,7 @@ msgstr "Som"
 
 #: src/rmdPrefsWidget.py:52
 msgid "Misc"
-msgstr "Variado"
+msgstr "Variados"
 
 #: src/rmdPrefsWidget.py:53
 msgid ""
@@ -161,7 +161,7 @@ msgstr ""
 "Por padrão, se tentar salvar sobre um arquivo que já\n"
 "existe, o novo arquivo irá ser renomeado\n"
 "(por exemplo, se tentar salvar como out.ogg e esse arquivo existir, passará "
-"a chamar-se out.ogg.1).\n"
+"a se chamar out.ogg.1).\n"
 "Ao ativar esta opção, o arquivo antigo será substituido.\n"
 
 #: src/rmdPrefsWidget.py:54
@@ -174,7 +174,7 @@ msgid ""
 "This will require a lot more processing power.\n"
 msgstr ""
 "Codificar simultâneamente enquanto grava.\n"
-"Isso irá requerir um maior poder de processamento.\n"
+"Isso irá requerer um maior poder de processamento.\n"
 
 #: src/rmdPrefsWidget.py:57
 msgid ""
@@ -184,7 +184,7 @@ msgid ""
 "This option is valid only when encoding on the fly is disabled."
 msgstr ""
 "Não aplicar compressão nos arquivos temporários.\n"
-"Se estiver ativo, o programa irá requerir um menor poder de\n"
+"Se estiver ativo, o programa irá requerer um menor poder de\n"
 "processamento, em troca de mais espaço no disco.\n"
 "Esta opção é válida somente quando encoding-on-the-fly está\n"
 "desativado."
@@ -222,7 +222,7 @@ msgstr "Dispositivo de som ALSA, usado para gravar som"
 
 #: src/rmdPrefsWidget.py:63
 msgid "Connection to the Xserver."
-msgstr "Conexão ao Xserver"
+msgstr "Conexão ao servidor X"
 
 #: src/rmdPrefsWidget.py:64
 msgid ""
@@ -243,29 +243,34 @@ msgid ""
 "Disabling this option is not recommended,\n"
 "as it may severely slow down the program."
 msgstr ""
-"Usar a memória MIT compartilhada, sempre que aproriado,\n"
+"Usar a memória MIT compartilhada sempre que aproriado,\n"
 "dependendo do resto das opções do programa.\n"
 "Desativar esta opção não é recomendado,\n"
-"pois o deixar o programa mais lento."
+"pois pode deixar o programa mais lento."
 
 #: src/rmdPrefsWidget.py:66
 msgid ""
 "When selecting a window via the \"Select Window\" button,\n"
 "include that window's decorations in the recording area."
 msgstr ""
+"Quando selecionando uma janela pelo botão \"Selecionar Janela\",\n"
+"incluir a decoração dessa janela ná área de gravação."
 
 #: src/rmdPrefsWidget.py:67
 msgid ""
 "Enable or disable tooltips, like this one.\n"
 "(Requires restart)"
-msgstr ""
+msgstr "Ativar ou desativar dicas, como esta.\n"
+"(Requer reinicialização)"
 
 #: src/rmdPrefsWidget.py:68
 msgid ""
 "Draw a frame on the screen, around the area\n"
 "that will get captured.\n"
 "(This frame will remain throughout the recording.)"
-msgstr ""
+msgstr "Desenhar um quadro na tela, em volta da área\n"
+"que será capturada.\n"
+"(Esse quadro irá permanecer durante toda a gravação.)"
 
 #: src/rmdPrefsWidget.py:69
 msgid ""
@@ -277,28 +282,37 @@ msgid ""
 "recordMyDesktop must be compiled with JACK\n"
 "support for this option to work."
 msgstr ""
+"Ative esta opção para gravar o áudio pelo\n"
+"JACK. O servidor Jack precisa estar rodando para\n"
+"obter as portas que serão gravadas.\n"
+"O áudio gravado de cada um será\n"
+"colocado em seu respectivo canal.\n"
+"o recordMyDesktop precisa ser compilado com\n"
+"suporte ao JACK para essa opção funcionar."
 
 #: src/rmdPrefsWidget.py:200
 msgid "Use Jack for audio capture."
-msgstr ""
+msgstr "Usar JACK para a captura de áudio."
 
 #: src/rmdPrefsWidget.py:201
 msgid ""
 "Select the ports you want to record from\n"
 "(hold Ctrl to select multiple entries):"
 msgstr ""
+"Selecione as portas que você quer gravar\n"
+"(segure Ctrl para selecionar mais de uma):"
 
 #: src/rmdPrefsWidget.py:207
 msgid "Available Ports"
-msgstr ""
+msgstr "Portas Disponíveis"
 
 #: src/rmdPrefsWidget.py:347
 msgid "jack_lsp returned no ports."
-msgstr ""
+msgstr "jack_lsp não retornou nenhuma porta."
 
 #: src/rmdPrefsWidget.py:348
 msgid "Make sure that jackd is running."
-msgstr ""
+msgstr "Certifique-se que jackd está rodando."
 
 #: src/rmdSimple.py:49
 msgid "Advanced"
@@ -332,7 +346,7 @@ msgstr ""
 "arquivo e a sua localização.\n"
 "O padrão é out.ogg na pasta home.\n"
 "Se o arquivo já existir, será criado\n"
-"um novo com um numero no nome\n"
+"um novo com um número no nome\n"
 "(este comportamento pode ser mudado )"
 
 #: src/rmdSimple.py:53
@@ -372,7 +386,7 @@ msgid ""
 msgstr ""
 "\n"
 "Clique com o botão esquerdo e arraste\n"
-" na imagem de pré-visualização,\n"
+"na imagem de pré-visualização,\n"
 "para selecionar uma área para gravar.\n"
 "Clique com o botão direito para limpar a área."
 
@@ -382,7 +396,7 @@ msgstr "Sucesso"
 
 #: src/rmdTrayIcon.py:72
 msgid "Error while parsing the arguments."
-msgstr "Erro enquanto analisava os argumentos"
+msgstr "Erro analisando os argumentos"
 
 #: src/rmdTrayIcon.py:73
 msgid "Initializing the encoder failed(either vorbis or theora)"
@@ -406,7 +420,7 @@ msgstr "Extensão Xfixes inexistente"
 
 #: src/rmdTrayIcon.py:78
 msgid "XInitThreads failed."
-msgstr "XInitThreads falhou"
+msgstr "XInitThreads falhou."
 
 #: src/rmdTrayIcon.py:79
 msgid "No $DISPLAY environment variable and none specified as argument."
@@ -414,7 +428,7 @@ msgstr "Sem a variável ambiente $DISPLAY e sem argumentos especificados."
 
 #: src/rmdTrayIcon.py:80
 msgid "Cannot connect to Xserver."
-msgstr "Impossível conectar ao Xserver"
+msgstr "Impossível conectar ao Xserver."
 
 #: src/rmdTrayIcon.py:81
 msgid "Color depth is not 24bpp."
@@ -434,19 +448,19 @@ msgstr "Impossível abrir o arquivo para escrever"
 
 #: src/rmdTrayIcon.py:85
 msgid "Cannot load the Jack library (dlopen/dlsym error on libjack.so)."
-msgstr ""
+msgstr "Não foi possível carregar a Jack library (dlopen/dlsym error on libjack.so)."
 
 #: src/rmdTrayIcon.py:86
 msgid "Cannot create new client."
-msgstr ""
+msgstr "Não foi possível criar um novo cliente."
 
 #: src/rmdTrayIcon.py:87
 msgid "Cannot activate client."
-msgstr ""
+msgstr "Não foi possível ativar o cliente."
 
 #: src/rmdTrayIcon.py:88
 msgid "Port registration/connection failure."
-msgstr ""
+msgstr "Falha no registro de portas/conexão."
 
 #: src/rmdTrayIcon.py:89
 msgid "Segmentation Fault"
