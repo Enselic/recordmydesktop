@@ -1,0 +1,35 @@
+NOTICE:
+qt-recordMyDesktop is ONLY A FRONTEND to recordMyDesktop. You have to obtain and
+install that first.
+If you don't have it look here:
+http://recordmydesktop.sourceforge.net
+
+DEPENDENCIES:
+
+GNU automake >=1.5
+Python >= 2.4
+Qt>=4.2
+PyQt4>=4.1
+recordMyDesktop 0.3.4
+
+To compile the program you have to go through the regular drill:
+
+~$ gzip -d qt-recordmydesktop-x.y.z.tar.gz
+~$ tar -xvf qt-recordmydesktop-x.y.z.tar
+~$ cd qt-recordmydesktop-x.y.z
+~$ ./configure --prefix=/usr/
+~$ make
+~$ sudo make install
+
+The --prefix=/usr/ option might not be necessary, but it
+will prevent some problems when running the program
+(if you get messages about module recordMyDesktop not found,
+you have to use it).
+
+
+After this you should get a menu entry under multimedia.
+If you don't get one even after a logout/login from your WM
+you can launch the program from a terminal like this:
+
+~$ qt-recordMyDesktop
+
