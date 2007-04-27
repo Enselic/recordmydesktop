@@ -2,7 +2,7 @@ include $(top_srcdir)/m4/python.mk
 
 bin_SCRIPTS=qt-recordMyDesktop
 
-qt_recordMyDesktopdir=$(pythondir)/qt-recordMyDesktop
+qt_recordMyDesktopdir=$(pythondir)/qt_recordMyDesktop
 
 qt_recordMyDesktop_PYTHON = \
 							rmdSelect.py\
