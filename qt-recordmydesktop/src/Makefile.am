@@ -21,9 +21,23 @@ desktopdir = $(datadir)/applications
 desktop_DATA =qt-recordmydesktop.desktop
 
 pixmapdir = $(datadir)/pixmaps
-pixmap_DATA = qt-recordmydesktop.png
+pixmap_DATA = 	qt-recordmydesktop.png\
+				qt-recordmydesktop_pause.png\
+				qt-recordmydesktop_stop.png\
+				qt-recordmydesktop_record.png
 
-EXTRA_DIST=qt-recordMyDesktop qt-recordmydesktop.desktop qt-recordmydesktop.png qt-recordmydesktop.svg
+
+
+EXTRA_DIST=	qt-recordMyDesktop\
+			qt-recordmydesktop.desktop\
+		    qt-recordmydesktop.png\
+			qt-recordmydesktop.svg\
+			qt-recordmydesktop_pause.png\
+			qt-recordmydesktop_stop.png\
+			qt-recordmydesktop_record.png\
+			qt-recordmydesktop_record.svg\
+			qt-recordmydesktop_pause.svg\
+			qt-recordmydesktop_stop.svg
 
 clean-local:
 	rm -rf *.pyc *.pyo

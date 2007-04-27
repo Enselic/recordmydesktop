@@ -1,6 +1,7 @@
 import os
 VERSION='@VERSION@'
 PREFIX='@PREFIX@'
+pixmapdir=os.path.join('@DATADIR@'.replace("${prefix}",PREFIX), 'pixmaps')
 locale_install_dir=os.path.join('@DATADIR@'.replace("${prefix}",PREFIX), 'locale')
 
 #binary values expressed with 1 and zero instead of True and False
