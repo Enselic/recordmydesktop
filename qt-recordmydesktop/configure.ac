@@ -1,5 +1,5 @@
 AC_PREREQ(2.59)
-AC_INIT(src/qt-recordMyDesktop)
+AC_INIT(src/rmdSimple.py)
 
 AM_INIT_AUTOMAKE(qt-recordmydesktop, 0.1)
 
@@ -67,6 +67,7 @@ fi
 AC_CONFIG_FILES([Makefile
         src/Makefile
         src/rmdConfig.py
+        src/qt-recordMyDesktop
         po/Makefile.in
         m4/Makefile])
 AC_OUTPUT
