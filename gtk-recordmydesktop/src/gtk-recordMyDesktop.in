@@ -27,6 +27,13 @@
 #*    For further information contact me at johnvarouhakis@gmail.com              *
 #**********************************************************************************/
 
+import sys
+
+#this is the installation direcotry,
+#which is determined during configuration
+#default /usr/local/lib/python<version>/site-packages
+PYTHONDIR='@PYTHONDIR@'
+sys.path.append(PYTHONDIR)
 from recordMyDesktop import rmdSimple
 
 def main():

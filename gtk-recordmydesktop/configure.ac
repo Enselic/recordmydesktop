@@ -1,5 +1,5 @@
 AC_PREREQ(2.59)
-AC_INIT(src/gtk-recordMyDesktop)
+AC_INIT(src/rmdSimple.py)
 
 AM_INIT_AUTOMAKE(gtk-recordmydesktop, 0.3.5-cvs)
 
@@ -74,6 +74,7 @@ export PYTHONPATH=$PYGST_DIR:$PYTHONPATH
 AC_CONFIG_FILES([Makefile
         src/Makefile
         src/rmdConfig.py
+        src/gtk-recordMyDesktop
         po/Makefile.in
         m4/Makefile])
 AC_OUTPUT
