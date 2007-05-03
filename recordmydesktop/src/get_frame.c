@@ -75,8 +75,8 @@ void *GetFrame(ProgData *pdata){
                     RectInsert(&pdata->rect_root[tlist_sel],&mouse_pos_temp);
             }
             xcim=XFixesGetCursorImage(pdata->dpy);
-            mouse_pos_abs.x=xcim->x;
-            mouse_pos_abs.y=xcim->y;
+            mouse_pos_abs.x=xcim->x-xcim->xhot;
+            mouse_pos_abs.y=xcim->y-xcim->yhot;
             mouse_pos_abs.width=xcim->width;
             mouse_pos_abs.height=xcim->height;
         }
