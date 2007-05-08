@@ -27,13 +27,120 @@
 
 #include <recordmydesktop.h>
 
+int FirstFrame(ProgData *pdata,XImage **image,XShmSegmentInfo *shminfo,
+               char **pxl_data){
+
+    if((pdata->args.noshared)){
+        (*image)=XCreateImage(pdata->dpy,
+                            pdata->specs.visual,
+                            pdata->specs.depth,
+                            ZPixmap,
+                            0,
+                            *pxl_data,
+                            pdata->brwin.rgeom.width,
+                            pdata->brwin.rgeom.height,
+                            8,
+                            0);
+        XInitImage((*image));
+        GetZPixmap(pdata->dpy,pdata->specs.root,
+                   (*image)->data,
+                   pdata->brwin.rgeom.x,
+                   pdata->brwin.rgeom.y,
+                   pdata->brwin.rgeom.width,
+                   pdata->brwin.rgeom.height);
+        *pxl_data=(char *)malloc(pdata->brwin.nbytes);
+    }
+    else{
+        (*image)=XShmCreateImage(pdata->dpy,
+                                     pdata->specs.visual,
+                                     pdata->specs.depth,
+                                     ZPixmap,
+                                     *pxl_data,
+                                     shminfo,
+                                     pdata->brwin.rgeom.width,
+                                     pdata->brwin.rgeom.height);
+        (*shminfo).shmid=shmget(IPC_PRIVATE,
+                                    (*image)->bytes_per_line*
+                                    (*image)->height,
+                                    IPC_CREAT|0777);
+        if((*shminfo).shmid==-1){
+            fprintf(stderr,"Failed to obtain Shared Memory segment!\n");
+            return 12;
+        }
+        (*shminfo).shmaddr=(*image)->data=shmat((*shminfo).shmid,
+                                                        NULL,0);
+        (*shminfo).readOnly = False;
+        if(!XShmAttach(pdata->dpy,shminfo)){
+            fprintf(stderr,"Failed to attach shared memory to proccess.\n");
+            return 12;
+        }
+        XShmGetImage(pdata->dpy,
+                     pdata->specs.root,
+                     (*image),
+                     pdata->brwin.rgeom.x,
+                     pdata->brwin.rgeom.y,
+                     AllPlanes);
+    }
+
+    UPDATE_YUV_BUFFER((&pdata->enc_data->yuv),
+            ((unsigned char*)((*image))->data),NULL,
+            (pdata->enc_data->x_offset),(pdata->enc_data->y_offset),
+            (pdata->brwin.rgeom.width),(pdata->brwin.rgeom.height),
+            (pdata->args.no_quick_subsample),
+            pdata->specs.depth);
+
+    return 0;
+}
+
 void *GetFrame(ProgData *pdata){
     int tlist_sel=0;
     uint msk_ret;
     WGeometry mouse_pos_abs,mouse_pos_rel,mouse_pos_temp;
     Window root_ret,child_ret;
     XFixesCursorImage *xcim=NULL;
+    XImage *image=NULL,*image_back=NULL;          //the image that holds
+                                        //the current full screenshot
+    XShmSegmentInfo shminfo,shminfo_back;//info structure for the image above.
+    int init_img1=0,init_img2=0,
+        d_buff=pdata->args.full_shots,
+        img_sel=1;
+    char *pxl_data=NULL,*pxl_data_back=NULL;
+    if((init_img1=FirstFrame(pdata,&image,&shminfo,&pxl_data)!=0)){
+        if(pdata->args.encOnTheFly){
+            if(remove(pdata->args.filename)){
+                perror("Error while removing file:\n");
+            }
+            else{
+                fprintf(stderr,"SIGABRT received,file %s removed\n",
+                                pdata->args.filename);
+            }
+        }
+        else{
+            PurgeCache(pdata->cache_data,!pdata->args.nosound);
+        }
+        exit(init_img1);
+    }
+    if(d_buff){
+        if((init_img2=FirstFrame(pdata,&image_back,&shminfo_back,
+                                 &pxl_data_back)!=0)){
+            if(pdata->args.encOnTheFly){
+                if(remove(pdata->args.filename)){
+                    perror("Error while removing file:\n");
+                }
+                else{
+                    fprintf(stderr,"SIGABRT received,file %s removed\n",
+                                    pdata->args.filename);
+                }
+            }
+            else{
+                PurgeCache(pdata->cache_data,!pdata->args.nosound);
+            }
+            exit(init_img2);
+        }
 
+    }
+
+    if (image_back==NULL)fprintf(stderr,"heres %d\n",init_img2);fflush(stderr);
     mouse_pos_abs.x=mouse_pos_temp.x=0;
     mouse_pos_abs.y=mouse_pos_temp.y=0;
     mouse_pos_abs.width=mouse_pos_temp.width=pdata->dummy_p_size;
@@ -54,6 +161,8 @@ void *GetFrame(ProgData *pdata){
                 pthread_mutex_unlock(&pause_mutex);
             }
         }
+        if(d_buff)
+            img_sel=(img_sel)?0:1;
         capture_busy=1;
         //mutexes and lists with changes are useless when full_shots is enabled
         if(!pdata->args.full_shots){
@@ -108,20 +217,28 @@ void *GetFrame(ProgData *pdata){
                         &pdata->rect_root[tlist_sel],
                         &pdata->brwin,
                         pdata->enc_data,
-                        pdata->image->data,
+                        image->data,
                         pdata->args.noshared,
-                        &pdata->shminfo,
+                        &shminfo,
                         pdata->shm_opcode,
                         pdata->args.no_quick_subsample);
         else{
+            unsigned char *front_buff=(!img_sel)?((unsigned char*)image->data):
+                                      ((unsigned char*)image_back->data);
+            unsigned char *back_buff=(!d_buff)?NULL:((img_sel)?
+                                        ((unsigned char*)image->data):
+                                        ((unsigned char*)image_back->data));
+
             if(!pdata->args.noshared)
-                XShmGetImage(pdata->dpy,pdata->specs.root,pdata->image,
+                XShmGetImage(pdata->dpy,pdata->specs.root,
+                            ((!img_sel)?image:image_back),
                             (pdata->brwin.rgeom.x),
                             (pdata->brwin.rgeom.y),AllPlanes);
+
             if(pdata->args.noshared){
                 GetZPixmap( pdata->dpy,
                             pdata->specs.root,
-                            pdata->image->data,
+                            image->data,
                             pdata->brwin.rgeom.x,
                             pdata->brwin.rgeom.y,
                             pdata->brwin.rgeom.width,
@@ -129,7 +246,7 @@ void *GetFrame(ProgData *pdata){
             }
             pthread_mutex_lock(&pdata->yuv_mutex);
             UPDATE_YUV_BUFFER((&pdata->enc_data->yuv),
-                              ((unsigned char*)pdata->image->data),
+                              front_buff,back_buff,
                               (pdata->enc_data->x_offset),
                               (pdata->enc_data->y_offset),
                               (pdata->brwin.rgeom.width),
@@ -200,6 +317,11 @@ void *GetFrame(ProgData *pdata){
     pthread_mutex_lock(&pdata->img_buff_ready_mutex);
     pthread_cond_broadcast(&pdata->image_buffer_ready);
     pthread_mutex_unlock(&pdata->img_buff_ready_mutex);
+    if(!pdata->args.noshared){
+        XShmDetach (pdata->dpy, &shminfo);
+        shmdt (shminfo.shmaddr);
+        shmctl (shminfo.shmid, IPC_RMID, 0);
+    }
     pthread_exit(&errno);
 }
 

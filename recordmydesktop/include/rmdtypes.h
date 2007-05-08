@@ -270,8 +270,6 @@ typedef struct _ProgData{
 #endif
 /**X related info*/
     Display *dpy;           //curtrent display
-    XImage *image;          //the image that holds the current full screenshot
-    XShmSegmentInfo shminfo;//info structure for the image above.
 /** Mutexes*/
     pthread_mutex_t list_mutex[2],  //mutexes for concurrency
                                     //protection of the lists
@@ -310,8 +308,7 @@ typedef struct _ProgData{
                             //when drawing the dummy pointer
     unsigned int periodtime,//time that a sound buffer lasts (microsecs)
                 frametime;  //time that a frame lasts (microsecs)
-    char    *pxl_data,      //the data of  image
-            *window_manager;   //name of the window manager at program launch
+    char    *window_manager;   //name of the window manager at program launch
     int list_selector,      //selector for the rect_roots
         damage_event,       //damage event base code
         damage_error,       //damage error base code

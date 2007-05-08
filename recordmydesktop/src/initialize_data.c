@@ -59,8 +59,7 @@ int InitializeData(ProgData *pdata,
         pdata->dummy_p_size=16;
     }
 
-    if((pdata->args.noshared))
-        pdata->pxl_data=(char *)malloc(pdata->brwin.nbytes);
+
 
     pdata->rect_root[0]=pdata->rect_root[1]=NULL;
     pthread_mutex_init(&pdata->list_mutex[0],NULL);
@@ -89,56 +88,6 @@ int InitializeData(ProgData *pdata,
     pause_cond=&pdata->pause_cond;
     Running=&pdata->running;
 
-    if((pdata->args.noshared)){
-        pdata->image=XCreateImage(pdata->dpy,
-                                  pdata->specs.visual,
-                                  pdata->specs.depth,
-                                  ZPixmap,
-                                  0,
-                                  pdata->pxl_data,
-                                  pdata->brwin.rgeom.width,
-                                  pdata->brwin.rgeom.height,
-                                  8,
-                                  0);
-        XInitImage(pdata->image);
-        GetZPixmap(pdata->dpy,pdata->specs.root,
-                   pdata->image->data,
-                   pdata->brwin.rgeom.x,
-                   pdata->brwin.rgeom.y,
-                   pdata->brwin.rgeom.width,
-                   pdata->brwin.rgeom.height);
-    }
-    if((!pdata->args.noshared)){
-        pdata->image=XShmCreateImage(pdata->dpy,
-                                     pdata->specs.visual,
-                                     pdata->specs.depth,
-                                     ZPixmap,
-                                     pdata->pxl_data,
-                                     &pdata->shminfo,
-                                     pdata->brwin.rgeom.width,
-                                     pdata->brwin.rgeom.height);
-        pdata->shminfo.shmid=shmget(IPC_PRIVATE,
-                                    pdata->image->bytes_per_line*
-                                    pdata->image->height,
-                                    IPC_CREAT|0777);
-        if(pdata->shminfo.shmid==-1){
-            fprintf(stderr,"Failed to obtain Shared Memory segment!\n");
-            return 12;
-        }
-        pdata->shminfo.shmaddr=pdata->image->data=shmat(pdata->shminfo.shmid,
-                                                        NULL,0);
-        pdata->shminfo.readOnly = False;
-        if(!XShmAttach(pdata->dpy,&pdata->shminfo)){
-            fprintf(stderr,"Failed to attach shared memory to proccess.\n");
-            return 12;
-        }
-        XShmGetImage(pdata->dpy,
-                     pdata->specs.root,
-                     pdata->image,
-                     pdata->brwin.rgeom.x,
-                     pdata->brwin.rgeom.y,
-                     AllPlanes);
-    }
     if(!pdata->args.nosound){
         if(!pdata->args.use_jack){
             FixBufferSize(&pdata->args.buffsize);
@@ -207,12 +156,7 @@ int InitializeData(ProgData *pdata,
         pdata->enc_data->yuv.v[i]=pdata->enc_data->yuv.u[i]=127;
     }
 
-    UPDATE_YUV_BUFFER((&pdata->enc_data->yuv),
-            ((unsigned char*)pdata->image->data),
-            (pdata->enc_data->x_offset),(pdata->enc_data->y_offset),
-            (pdata->brwin.rgeom.width),(pdata->brwin.rgeom.height),
-            (pdata->args.no_quick_subsample),
-            pdata->specs.depth);
+
 
     pdata->frametime=(1000000)/pdata->args.fps;
     return 0;

@@ -309,6 +309,59 @@
     }\
 }
 
+#define UPDATE_Y_PLANE_DBUF(data,\
+                            data_back,\
+                            x_tm,\
+                            y_tm,\
+                            height_tm,\
+                            width_tm,\
+                            yuv,\
+                            __bit_depth__){ \
+    int k,i;\
+    register u_int##__bit_depth__##_t t_val;\
+    register unsigned char  *yuv_y=yuv->y+x_tm+y_tm*yuv->y_width,\
+                            *_yr=Yr,*_yg=Yg,*_yb=Yb;\
+    register u_int##__bit_depth__##_t *datapi=(u_int##__bit_depth__##_t *)data,\
+                            *datapi_back=(u_int##__bit_depth__##_t *)data_back;\
+    for(k=0;k<height_tm;k++){\
+        for(i=0;i<width_tm;i++){\
+            if(*datapi!=*datapi_back){\
+                t_val=*datapi;\
+                *yuv_y=_yr[__RVALUE_##__bit_depth__(t_val)] +\
+                    _yg[__GVALUE_##__bit_depth__(t_val)] +\
+                    _yb[__BVALUE_##__bit_depth__(t_val)] ;\
+            }\
+            datapi++;\
+            datapi_back++;\
+            yuv_y++;\
+        }\
+        yuv_y+=yuv->y_width-width_tm;\
+    }\
+}
+
+#define UPDATE_A_UV_PIXEL(yuv_u,\
+                          yuv_v,\
+                          t_val,\
+                          datapi,\
+                          datapi_next,\
+                          _ur,_ug,_ubvr,_vg,_vb,\
+                          __sampling_type,\
+                          __bit_depth__)\
+            if(__sampling_type==__PXL_AVERAGE){\
+                CALC_TVAL_AVG_##__bit_depth__(t_val,datapi,datapi_next)\
+            }\
+            else\
+                t_val=*datapi;\
+            *yuv_u=\
+            _ur[__RVALUE_##__bit_depth__(t_val)] +\
+            _ug[__GVALUE_##__bit_depth__(t_val)] +\
+            _ubvr[__BVALUE_##__bit_depth__(t_val)];\
+            *yuv_v=\
+            _ubvr[__RVALUE_##__bit_depth__(t_val)] +\
+            _vg[__GVALUE_##__bit_depth__(t_val)] +\
+            _vb[__BVALUE_##__bit_depth__(t_val)];\
+
+
 #define UPDATE_UV_PLANES(data,\
                          x_tm,\
                          y_tm,\
@@ -330,19 +383,14 @@
     }\
     for(k=0;k<height_tm;k+=2){\
         for(i=0;i<width_tm;i+=2){\
-            if(__sampling_type==__PXL_AVERAGE){\
-                CALC_TVAL_AVG_##__bit_depth__(t_val,datapi,datapi_next)\
-            }\
-            else\
-                t_val=*datapi;\
-            *yuv_u=\
-            _ur[__RVALUE_##__bit_depth__(t_val)] +\
-            _ug[__GVALUE_##__bit_depth__(t_val)] +\
-            _ubvr[__BVALUE_##__bit_depth__(t_val)];\
-            *yuv_v=\
-            _ubvr[__RVALUE_##__bit_depth__(t_val)] +\
-            _vg[__GVALUE_##__bit_depth__(t_val)] +\
-            _vb[__BVALUE_##__bit_depth__(t_val)];\
+            UPDATE_A_UV_PIXEL(  yuv_u,\
+                                yuv_v,\
+                                t_val,\
+                                datapi,\
+                                datapi_next,\
+                                _ur,_ug,_ubvr,_vg,_vb,\
+                                __sampling_type,\
+                                __bit_depth__)\
             datapi+=2;\
             if(__sampling_type==__PXL_AVERAGE)\
                 datapi_next+=2;\
@@ -357,23 +405,130 @@
     }\
 }
 
+#define UPDATE_UV_PLANES_DBUF(  data,\
+                                data_back,\
+                                x_tm,\
+                                y_tm,\
+                                height_tm,\
+                                width_tm,\
+                                yuv,\
+                                __sampling_type,\
+                                __bit_depth__){  \
+    int k,i;\
+    register u_int##__bit_depth__##_t t_val;\
+    register unsigned char  *yuv_u=yuv->u+x_tm/2+(y_tm*yuv->uv_width)/2,\
+                            *yuv_v=yuv->v+x_tm/2+(y_tm*yuv->uv_width)/2,\
+                            *_ur=Ur,*_ug=Ug,*_ubvr=UbVr,\
+                            *_vg=Vg,*_vb=Vb;\
+    register u_int##__bit_depth__##_t *datapi=(u_int##__bit_depth__##_t *)data,\
+                                      *datapi_next=NULL,\
+                            *datapi_back=(u_int##__bit_depth__##_t *)data_back,\
+                            *datapi_back_next=NULL;\
+    if(__sampling_type==__PXL_AVERAGE){\
+        datapi_next=datapi+width_tm;\
+        datapi_back_next=datapi_back+width_tm;\
+        for(k=0;k<height_tm;k+=2){\
+            for(i=0;i<width_tm;i+=2){\
+                if(( (*datapi!=*datapi_back) ||\
+                    (*(datapi+1)!=*(datapi_back+1)) ||\
+                    (*datapi_next!=*datapi_back_next) ||\
+                    (*(datapi_next+1)!=*(datapi_back_next+1)))){\
+                    UPDATE_A_UV_PIXEL(  yuv_u,\
+                                        yuv_v,\
+                                        t_val,\
+                                        datapi,\
+                                        datapi_next,\
+                                        _ur,_ug,_ubvr,_vg,_vb,\
+                                        __sampling_type,\
+                                        __bit_depth__)\
+                }\
+                datapi+=2;\
+                datapi_back+=2;\
+                if(__sampling_type==__PXL_AVERAGE){\
+                    datapi_next+=2;\
+                    datapi_back_next+=2;\
+                }\
+                yuv_u++;\
+                yuv_v++;\
+            }\
+            yuv_u+=(yuv->y_width-width_tm)/2;\
+            yuv_v+=(yuv->y_width-width_tm)/2;\
+            datapi+=width_tm;\
+            datapi_back+=width_tm;\
+            if(__sampling_type==__PXL_AVERAGE){\
+                datapi_next+=width_tm;\
+                datapi_back_next+=width_tm;\
+            }\
+        }\
+    }\
+    else{\
+        for(k=0;k<height_tm;k+=2){\
+            for(i=0;i<width_tm;i+=2){\
+                if ((*datapi!=*datapi_back)){\
+                    UPDATE_A_UV_PIXEL(  yuv_u,\
+                                        yuv_v,\
+                                        t_val,\
+                                        datapi,\
+                                        datapi_next,\
+                                        _ur,_ug,_ubvr,_vg,_vb,\
+                                        __sampling_type,\
+                                        __bit_depth__)\
+                }\
+                datapi+=2;\
+                datapi_back+=2;\
+                if(__sampling_type==__PXL_AVERAGE){\
+                    datapi_next+=2;\
+                    datapi_back_next+=2;\
+                }\
+                yuv_u++;\
+                yuv_v++;\
+            }\
+            yuv_u+=(yuv->y_width-width_tm)/2;\
+            yuv_v+=(yuv->y_width-width_tm)/2;\
+            datapi+=width_tm;\
+            datapi_back+=width_tm;\
+            if(__sampling_type==__PXL_AVERAGE){\
+                datapi_next+=width_tm;\
+                datapi_back_next+=width_tm;\
+            }\
+        }\
+    }\
+}
+
 #define UPDATE_YUV_BUFFER(yuv,\
                           data,\
+                          data_back,\
                           x_tm,\
                           y_tm,\
                           width_tm,\
                           height_tm,\
                           __sampling_type,\
                           __color_depth){\
-    if((__color_depth==24)||(__color_depth==32)){\
-        UPDATE_Y_PLANE(data,x_tm,y_tm,height_tm,width_tm,yuv,32)\
-        UPDATE_UV_PLANES(data,x_tm,y_tm,height_tm,width_tm,\
-                         yuv,__sampling_type,32)\
+    if(data_back==NULL){\
+        if((__color_depth==24)||(__color_depth==32)){\
+            UPDATE_Y_PLANE(data,x_tm,y_tm,height_tm,width_tm,yuv,32)\
+            UPDATE_UV_PLANES(data,x_tm,y_tm,height_tm,width_tm,\
+                             yuv,__sampling_type,32)\
+        }\
+        else if(__color_depth==16){\
+            UPDATE_Y_PLANE(data,x_tm,y_tm,height_tm,width_tm,yuv,16)\
+            UPDATE_UV_PLANES(data,x_tm,y_tm,height_tm,width_tm,\
+                            yuv,__sampling_type,16)\
+        }\
     }\
-    else if(__color_depth==16){\
-        UPDATE_Y_PLANE(data,x_tm,y_tm,height_tm,width_tm,yuv,16)\
-        UPDATE_UV_PLANES(data,x_tm,y_tm,height_tm,width_tm,\
-                         yuv,__sampling_type,16)\
+    else{\
+        if((__color_depth==24)||(__color_depth==32)){\
+            UPDATE_Y_PLANE_DBUF(data,data_back,x_tm,y_tm,\
+                                height_tm,width_tm,yuv,32)\
+            UPDATE_UV_PLANES_DBUF(data,data_back,x_tm,y_tm,height_tm,width_tm,\
+                                  yuv,__sampling_type,32)\
+        }\
+        else if(__color_depth==16){\
+            UPDATE_Y_PLANE_DBUF(data,data_back,x_tm,y_tm,\
+                                height_tm,width_tm,yuv,16)\
+            UPDATE_UV_PLANES_DBUF(data,data_back,x_tm,y_tm,height_tm,width_tm,\
+                                  yuv,__sampling_type,16)\
+        }\
     }\
 }
 

@@ -65,7 +65,7 @@ void UpdateImage(Display * dpy,
                               temp->geom.height);
             }
             pthread_mutex_lock(yuv_mutex);
-            UPDATE_YUV_BUFFER(yuv,dtap,
+            UPDATE_YUV_BUFFER(yuv,dtap,NULL,
                                 (temp->geom.x-brwin->rgeom.x+enc->x_offset),
                                 (temp->geom.y-brwin->rgeom.y+enc->y_offset),
                                 (temp->geom.width),(temp->geom.height),

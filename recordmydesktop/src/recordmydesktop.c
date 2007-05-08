@@ -31,7 +31,7 @@
 int main(int argc,char **argv){
     ProgData pdata;
 
-    int exit_status=0;
+    exit_status=0;
     if(XInitThreads ()==0){
         fprintf(stderr,"Couldn't initialize thread support!\n");
         exit(7);
@@ -106,11 +106,7 @@ int main(int argc,char **argv){
         rmdThreads(&pdata);
 
         fprintf(stderr,".");
-        if(!pdata.args.noshared){
-            XShmDetach (pdata.dpy, &pdata.shminfo);
-            shmdt (&pdata.shminfo.shmaddr);
-            shmctl (pdata.shminfo.shmid, IPC_RMID, 0);
-        }
+
         fprintf(stderr,"\n");
 
         //encode and then cleanup cache

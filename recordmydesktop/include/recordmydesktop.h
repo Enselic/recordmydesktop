@@ -56,7 +56,7 @@ unsigned int    frames_total,   //frames calculated by total time expirations
 int capture_busy,
     encoder_busy;
 
-
+int exit_status;
 
 #endif
 
