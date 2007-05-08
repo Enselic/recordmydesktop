@@ -104,7 +104,7 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
     "\t--no-wm-check\t\tDo not try to detect"
     " the window manager(and set options according to it)\n"
 
-    "\t--zero-compression\tImage data are always cached uncompressed.\n"
+    "\t--compress-cache\tImage data are cached with light compression.\n"
     "\t-workdir DIR\t\tLocation where a temporary directory"
     " will be created to hold project files(default $HOME).\n"
 
@@ -505,8 +505,8 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
             arg_return->overwrite=1;
         else if(!strcmp(argv[i],"--no-wm-check"))
             arg_return->nowmcheck=1;
-        else if(!strcmp(argv[i],"--zero-compression")){
-            arg_return->zerocompression=1;
+        else if(!strcmp(argv[i],"--compress-cache")){
+            arg_return->zerocompression=0;
         }
         else if(!strcmp(argv[i],"--help")||!strcmp(argv[i],"-h")){
             fprintf(stderr,"%s",usage);
