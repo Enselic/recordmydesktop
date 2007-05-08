@@ -140,7 +140,7 @@ void *GetFrame(ProgData *pdata){
 
     }
 
-    if (image_back==NULL)fprintf(stderr,"heres %d\n",init_img2);fflush(stderr);
+
     mouse_pos_abs.x=mouse_pos_temp.x=0;
     mouse_pos_abs.y=mouse_pos_temp.y=0;
     mouse_pos_abs.width=mouse_pos_temp.width=pdata->dummy_p_size;
