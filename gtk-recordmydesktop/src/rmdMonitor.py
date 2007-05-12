@@ -9,9 +9,10 @@ gettext.textdomain('gtk-recordMyDesktop')
 gettext.bindtextdomain('gtk-recordMyDesktop',rmdConfig.locale_install_dir)
 import popen2
 import os,fcntl,signal
+from rmdStrings import *
 
 class rmdMonitor(object):
-    labeString=_("Please wait while your recording is being encoded\nWARNING!!!\nIf you press Cancel or close this window,\nthis proccess cannot be resumed!")
+    labeString=monStrings['PleaseWait']
     counter_fraction=0.0
 
     def destroy_and_kill(self,Event=None):
@@ -35,7 +36,7 @@ class rmdMonitor(object):
             if percentage>1.0:
                 percentage=1.0
             self.progressbar.set_fraction(percentage)
-            self.progressbar.set_text("%.2f%% "%(self.counter_fraction)+_("complete"))
+            self.progressbar.set_text("%.2f%% "%(self.counter_fraction)+monStrings['complete'])
         except:
             self.counter_fraction=0.0
 
@@ -56,7 +57,7 @@ class rmdMonitor(object):
         self.label.show()
         self.progressbar=gtk.ProgressBar(adjustment=None)
         self.progressbar.set_fraction(self.counter_fraction)
-        self.progressbar.set_text("0% "+_("complete"))
+        self.progressbar.set_text("0% "+monStrings['complete'])
         self.progressbar.show()
         self.stopbutton=gtk.Button(None,gtk.STOCK_CANCEL)
         self.stopbutton.connect("clicked",self.stop_encoding)

@@ -35,9 +35,10 @@ gettext.textdomain('qt-recordMyDesktop')
 gettext.bindtextdomain('qt-recordMyDesktop',rmdConfig.locale_install_dir)
 import popen2
 import os,fcntl,signal
+from rmdStrings import *
 
 class rmdMonitor(object):
-    labeString=_("Please wait while your recording is being encoded\nWARNING!!!\nIf you press Cancel or close this window,\nthis proccess cannot be resumed!")
+    labeString=monStrings['PleaseWait']
 
     counter_fraction=0.0
 
@@ -91,7 +92,7 @@ class rmdMonitor(object):
         self.progressbar=QtGui.QProgressBar()
         self.counter_fraction=0
         self.progressbar.setValue(self.counter_fraction)
-        self.stopbutton=QtGui.QPushButton("Cancel",self.window)
+        self.stopbutton=QtGui.QPushButton(monStrings['Cancel'],self.window)
         self.stopbutton.connect(self.stopbutton,QtCore.SIGNAL("clicked()"),
                                 self.stop_encoding)
         self.box=QtGui.QVBoxLayout()

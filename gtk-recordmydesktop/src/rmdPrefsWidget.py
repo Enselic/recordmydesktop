@@ -34,44 +34,17 @@ _ = gettext.gettext
 gettext.textdomain('gtk-recordMyDesktop')
 gettext.bindtextdomain('gtk-recordMyDesktop',rmdConfig.locale_install_dir)
 import os
+from rmdStrings import *
 
 
 
 
 class prefsWidget(object):
-    labelStrings=[_('Overwite Existing Files'),_('Working Directory'),
-                    _('Frames Per Second'),_('Encode On the Fly'),_('Zero Compression'),
-                    _('Quick Subsampling'),_('Full shots at every frame'),
-                    _('Channels'),_('Frequency'),_('Device'),_('Display'),_('Mouse Cursor'),
-                    _('MIT-Shm extension'),_('Include Window Decorations'),_('Tooltips'),
-                    _('Outline Capture Area On Screen'),
-                    _('Video Quality'),_('Sound Quality'),
-                    _('Drop Frames(encoder)'),_('Startup Delay(secs)'),]
-    mouseStrings=[_('Normal'),_('White'),_('Black'),_('None')]
-    stateStrings=[_('Enabled'),_('Disabled')]#0,1
-    tabStrings=[_('Files'),_('Performance'),_('Sound'),_('Misc')]
-    tooltipLabels=[_('By default, if you try to save under a filename that already\nexists, the new file will be renamed\n(for example if you try to save as out.ogg and that file exists, your file will be named out.ogg.1).\nBy checking this box, this behavior is disabled and the old file is overwritten.\n'),
-                    _('Directory where temporary files will be saved.'),
-                    _('Frames Per Second'),
-                    _('Encode simultaneously with the recording.\nThis will require a lot more processing power.\n'),
-                    _('Do not apply compression on the temporary files.\nIf enabled, the program will need less processing power,\nin the expense of hard disk space.\nThis option is valid only when encoding on the fly is disabled.'),
-                    _('This option, if enabled, will cause the program to require less\nprocessing power, but it might make the colors look a bit more blurry.'),
-                    _('This option should be enabled when recording 3d windows.\nIt is also auto-enabled when recording a\nknown 3d compositing window manager.\n '),
-                    _('Number of audio channels.'),
-                    _('Sound frequency.'),
-                    _('ALSA sound device, that is used for sound recording.'),
-                    _('Connection to the Xserver.'),
-                    _('The mouse cursor that will be drawn.\nNormal is for the real cursor that you see while recording,\nwhile black and white are fake cursors, drawn by the program.\nYou can also disable cursor drawing.'),
-                    _('Use the MIT-Shared memory extension, whenever appropriate,\n depending on the rest of the program settings.\nDisabling this option is not recommended,\nas it may severely slow down the program.'),
-                    _('When selecting a window via the "Select Window" button,\ninclude that window\'s decorations in the recording area.'),
-                    _('Enable or disable tooltips, like this one.\n(Requires restart)'),
-                    _('Draw a frame on the screen, around the area\nthat will get captured.\n(This frame will remain throughout the recording.)')]
-    jacktip=_("Enable this option to record audio through\nJACK. The Jack server must be running in order to\nobtain the ports that will be recorded.\nThe audio recorded from each one\nwill be written on a channel of its own.\nrecordMyDesktop must be compiled with JACK\nsupport for this option to work.")
     def __tooltips__(self):
         self.tooltips=gtk.Tooltips()
         for i in range(16):
-            self.tooltips.set_tip(self.eboxes[i],self.tooltipLabels[i])
-        self.tooltips.set_tip(self.jack_ebox,self.jacktip)
+            self.tooltips.set_tip(self.eboxes[i],prefTooltipLabels[i])
+        self.tooltips.set_tip(self.jack_ebox,prefJacktip)
 
     def destroy(self,Event=None):
         self.values[0]=self.fpsSpinButton.get_value_as_int()
@@ -122,7 +95,7 @@ class prefsWidget(object):
 
 #Files page
         for i in range(2):
-            self.labels[i]=gtk.Label(self.labelStrings[i])
+            self.labels[i]=gtk.Label(prefLabelStrings[i])
             self.labels[i].set_justify(gtk.JUSTIFY_LEFT)
             self.boxes[i]=gtk.HBox(homogeneous=False, spacing=40)
             self.boxes[i].pack_start(self.labels[i],expand=False,fill=False)
@@ -143,7 +116,7 @@ class prefsWidget(object):
 
 #Performance page
         for i in xrange(2,7):
-            self.labels[i]=gtk.Label(self.labelStrings[i])
+            self.labels[i]=gtk.Label(prefLabelStrings[i])
             self.labels[i].set_justify(gtk.JUSTIFY_LEFT)
             self.boxes[i]=gtk.HBox(homogeneous=False, spacing=40)
             self.boxes[i].pack_start(self.labels[i],expand=False,fill=False)
@@ -159,28 +132,28 @@ class prefsWidget(object):
 
         self.onTheFlyComboBox = gtk.combo_box_new_text()
         for i in range(2):
-            self.onTheFlyComboBox.append_text(self.stateStrings[i])
+            self.onTheFlyComboBox.append_text(prefStateStrings[i])
         self.onTheFlyComboBox.set_active(self.values[18])
         self.onTheFlyComboBox.show()
         self.boxes[3].pack_end(self.onTheFlyComboBox,expand=False,fill=False)
 
         self.zeroCmpComboBox = gtk.combo_box_new_text()
         for i in range(2):
-            self.zeroCmpComboBox.append_text(self.stateStrings[i])
+            self.zeroCmpComboBox.append_text(prefStateStrings[i])
         self.zeroCmpComboBox.set_active(self.values[19])
         self.zeroCmpComboBox.show()
         self.boxes[4].pack_end(self.zeroCmpComboBox,expand=False,fill=False)
 
         self.quickComboBox = gtk.combo_box_new_text()
         for i in range(2):
-            self.quickComboBox.append_text(self.stateStrings[i])
+            self.quickComboBox.append_text(prefStateStrings[i])
         self.quickComboBox.set_active(self.values[16])
         self.quickComboBox.show()
         self.boxes[5].pack_end(self.quickComboBox,expand=False,fill=False)
 
         self.fullComboBox = gtk.combo_box_new_text()
         for i in range(2):
-            self.fullComboBox.append_text(self.stateStrings[i])
+            self.fullComboBox.append_text(prefStateStrings[i])
         self.fullComboBox.set_active(self.values[3])
         self.fullComboBox.show()
         self.boxes[6].pack_end(self.fullComboBox,expand=False,fill=False)
@@ -188,7 +161,7 @@ class prefsWidget(object):
 
 #sound page
         for i in xrange(7,10):
-            self.labels[i]=gtk.Label(self.labelStrings[i])
+            self.labels[i]=gtk.Label(prefLabelStrings[i])
             self.labels[i].set_justify(gtk.JUSTIFY_LEFT)
             self.boxes[i]=gtk.HBox(homogeneous=False, spacing=0)
             self.boxes[i].pack_start(self.labels[i],expand=False,fill=False)
@@ -197,14 +170,13 @@ class prefsWidget(object):
             self.eboxes[i].add(self.boxes[i])
             self.labelbox[2].pack_start(self.eboxes[i],expand=False,fill=False)
 
-        self.jack_button= gtk.CheckButton(_("Use Jack for audio capture."))
-        self.jack_lsp_label=gtk.Label(_("Select the ports you want to record from\n"
-                                        "(hold Ctrl to select multiple entries):"))
+        self.jack_button= gtk.CheckButton(prefStrings['UseJack'])
+        self.jack_lsp_label=gtk.Label(prefStrings['SelectPorts'])
 
         self.jack_lsp_liststore=gtk.ListStore(str)
 
         self.jack_lsp_listview=gtk.TreeView(self.jack_lsp_liststore)
-        self.jack_lsp_tvc = gtk.TreeViewColumn(_("Available Ports"))
+        self.jack_lsp_tvc = gtk.TreeViewColumn(prefStrings['AvailablePorts'])
         self.jack_lsp_listview.append_column(self.jack_lsp_tvc)
         self.cell = gtk.CellRendererText()
         self.jack_lsp_tvc.pack_start(self.cell, True)
@@ -263,7 +235,7 @@ class prefsWidget(object):
 
 #misc page
         for i in xrange(10,16):
-            self.labels[i]=gtk.Label(self.labelStrings[i])
+            self.labels[i]=gtk.Label(prefLabelStrings[i])
             self.labels[i].set_justify(gtk.JUSTIFY_LEFT)
             self.boxes[i]=gtk.HBox(homogeneous=False, spacing=0)
             self.boxes[i].pack_start(self.labels[i],expand=False,fill=False)
@@ -280,7 +252,7 @@ class prefsWidget(object):
 
         self.mouseComboBox = gtk.combo_box_new_text()
         for i in range(4):
-            self.mouseComboBox.append_text(self.mouseStrings[i])
+            self.mouseComboBox.append_text(prefMouseStrings[i])
         self.mouseComboBox.set_active(self.values[1])
         self.mouseComboBox.show()
         self.boxes[11].pack_end(self.mouseComboBox,expand=False,fill=False)
@@ -288,21 +260,21 @@ class prefsWidget(object):
 
         self.sharedComboBox = gtk.combo_box_new_text()
         for i in range(2):
-            self.sharedComboBox.append_text(self.stateStrings[i])
+            self.sharedComboBox.append_text(prefStateStrings[i])
         self.sharedComboBox.set_active(self.values[13])
         self.sharedComboBox.show()
         self.boxes[12].pack_end(self.sharedComboBox,expand=False,fill=False)
 
         self.winDecoComboBox = gtk.combo_box_new_text()
         for i in range(2):
-            self.winDecoComboBox.append_text(self.stateStrings[i])
+            self.winDecoComboBox.append_text(prefStateStrings[i])
         self.winDecoComboBox.set_active(self.values[21])
         self.winDecoComboBox.show()
         self.boxes[13].pack_end(self.winDecoComboBox,expand=False,fill=False)
 
         self.tooltipsComboBox = gtk.combo_box_new_text()
         for i in range(2):
-            self.tooltipsComboBox.append_text(self.stateStrings[i])
+            self.tooltipsComboBox.append_text(prefStateStrings[i])
         self.tooltipsComboBox.set_active(self.values[24])
         self.tooltipsComboBox.show()
         self.boxes[14].pack_end(self.tooltipsComboBox,expand=False,fill=False)
@@ -310,7 +282,7 @@ class prefsWidget(object):
 
         self.rFrameComboBox = gtk.combo_box_new_text()
         for i in range(2):
-            self.rFrameComboBox.append_text(self.stateStrings[i])
+            self.rFrameComboBox.append_text(prefStateStrings[i])
         self.rFrameComboBox.set_active(self.values[25])
         self.rFrameComboBox.show()
         self.boxes[15].pack_end(self.rFrameComboBox,expand=False,fill=False)
@@ -321,7 +293,7 @@ class prefsWidget(object):
 
 #append and show
         for i in range(4):
-            self.notebook.append_page(self.labelbox[i],gtk.Label(self.tabStrings[i]))
+            self.notebook.append_page(self.labelbox[i],gtk.Label(prefTabStrings[i]))
         self.window.add(self.notebook)
         for i in range(4):
             self.labelbox[i].show()
@@ -344,8 +316,8 @@ class prefsWidget(object):
             self.jack_lsp_listview.get_selection().set_mode(gtk.SELECTION_MULTIPLE)
         else:
             failed=1
-            self.ports.append(_("jack_lsp returned no ports."))
-            self.ports.append(_("Make sure that jackd is running."))
+            self.ports.append(prefStrings['JackLspS1'])
+            self.ports.append(prefStrings['JackLspS2'])
             self.jack_lsp_listview.get_selection().set_mode(gtk.SELECTION_NONE)
             self.values[23]=[]
         k=0

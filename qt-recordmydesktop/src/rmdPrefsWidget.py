@@ -35,47 +35,20 @@ def htmlize(s):
 gettext.textdomain('qt-recordMyDesktop')
 gettext.bindtextdomain('qt-recordMyDesktop',rmdConfig.locale_install_dir)
 import os
+from rmdStrings import *
 
 
 
 
 class prefsWidget(object):
-    labelStrings=[_('Overwite Existing Files'),_('Working Directory'),
-                    _('Frames Per Second'),_('Encode On the Fly'),_('Zero Compression'),
-                    _('Quick Subsampling'),_('Full shots at every frame'),
-                    _('Channels'),_('Frequency'),_('Device'),_('Display'),_('Mouse Cursor'),
-                    _('MIT-Shm extension'),_('Include Window Decorations'),_('Tooltips'),
-                    _('Outline Capture Area On Screen'),
-                    _('Video Quality'),_('Sound Quality'),
-                    _('Drop Frames(encoder)'),_('Startup Delay(secs)'),]
-    mouseStrings=[_('Normal'),_('White'),_('Black'),_('None')]
-    stateStrings=[_('Enabled'),_('Disabled')]#0,1
-    tabStrings=[_('Files'),_('Performance'),_('Sound'),_('Misc')]
-    tooltipLabels=[_('By default, if you try to save under a filename that already\nexists, the new file will be renamed\n(for example if you try to save as out.ogg and that file exists, your file will be named out.ogg.1).\nBy checking this box, this behavior is disabled and the old file is overwritten.\n'),
-                    _('Directory where temporary files will be saved.'),
-                    _('Frames Per Second'),
-                    _('Encode simultaneously with the recording.\nThis will require a lot more processing power.\n'),
-                    _('Do not apply compression on the temporary files.\nIf enabled, the program will need less processing power,\nin the expense of hard disk space.\nThis option is valid only when encoding on the fly is disabled.'),
-                    _('This option, if enabled, will cause the program to require less\nprocessing power, but it might make the colors look a bit more blurry.'),
-                    _('This option should be enabled when recording 3d windows.\nIt is also auto-enabled when recording a\nknown 3d compositing window manager.\n '),
-                    _('Number of audio channels.'),
-                    _('Sound frequency.'),
-                    _('ALSA sound device, that is used for sound recording.'),
-                    _('Connection to the Xserver.'),
-                    _('The mouse cursor that will be drawn.\nNormal is for the real cursor that you see while recording,\nwhile black and white are fake cursors, drawn by the program.\nYou can also disable cursor drawing.'),
-                    _('Use the MIT-Shared memory extension, whenever appropriate,\n depending on the rest of the program settings.\nDisabling this option is not recommended,\nas it may severely slow down the program.'),
-                    _('When selecting a window via the "Select Window" button,\ninclude that window\'s decorations in the recording area.'),
-                    _('Enable or disable tooltips, like this one.\n(Requires restart)'),
-                    _('Draw a frame on the screen, around the area\nthat will get captured.\n(This frame will remain throughout the recording.)')]
-    jacktip=_("Enable this option to record audio through\nJACK. The Jack server must be running in order to\nobtain the ports that will be recorded.\nThe audio recorded from each one\nwill be written on a channel of its own.\nrecordMyDesktop must be compiled with JACK\nsupport for this option to work.")
     def __tooltips__(self):
         for i in range(16):
-            self.labels[i].setToolTip(htmlize(self.tooltipLabels[i]))
-        self.jack_button.setToolTip(htmlize(self.jacktip))
-        self.jack_lsp_label.setToolTip(htmlize(self.jacktip))
-        self.jack_lss_label.setToolTip(htmlize(self.jacktip))
-        self.jack_lsp_liststore.setToolTip(htmlize(self.jacktip))
-        self.jack_lsp_listSave.setToolTip(htmlize(self.jacktip))
+            self.labels[i].setToolTip(htmlize(prefTooltipLabels[i]))
+        self.jack_button.setToolTip(htmlize(prefJacktip))
+        self.jack_lsp_label.setToolTip(htmlize(prefJacktip))
+        self.jack_lss_label.setToolTip(htmlize(prefJacktip))
+        self.jack_lsp_liststore.setToolTip(htmlize(prefJacktip))
+        self.jack_lsp_listSave.setToolTip(htmlize(prefJacktip))
 
     def destroy(self,Event=None):
         self.values[0]=self.fpsSpinButton.value()
@@ -124,10 +97,11 @@ class prefsWidget(object):
             self.tabWidgets[i]=QtGui.QWidget()
 #Files page
         for i in range(2):
-            self.labels[i]=QtGui.QLabel(self.labelStrings[i],self.tabWidgets[0])
+            self.labels[i]=QtGui.QLabel(prefLabelStrings[i],self.tabWidgets[0])
             self.labels[i].setAlignment(QtCore.Qt.AlignLeft)
             self.boxes[i]=QtGui.QHBoxLayout()
             self.boxes[i].insertWidget(-1,self.labels[i])
+            self.boxes[i].insertStretch(-1,0)
             self.labelbox[0].insertLayout(-1,self.boxes[i])
             self.labelbox[0].insertSpacing(-1,20)
         self.labelbox[0].setSizeConstraint(QtGui.QLayout.SetMaximumSize)
@@ -144,10 +118,11 @@ class prefsWidget(object):
 
 #Performance page
         for i in xrange(2,7):
-            self.labels[i]=QtGui.QLabel(self.labelStrings[i],self.tabWidgets[1])
+            self.labels[i]=QtGui.QLabel(prefLabelStrings[i],self.tabWidgets[1])
             self.labels[i].setAlignment(QtCore.Qt.AlignLeft)
             self.boxes[i]=QtGui.QHBoxLayout()
             self.boxes[i].insertWidget(-1,self.labels[i])
+            self.boxes[i].insertStretch(-1,0)
             self.labelbox[1].insertLayout(-1,self.boxes[i])
             self.labelbox[1].insertSpacing(-1,20)
         self.labelbox[1].setSizeConstraint(QtGui.QLayout.SetMaximumSize)
@@ -159,49 +134,50 @@ class prefsWidget(object):
 
         self.onTheFlyComboBox = QtGui.QComboBox(self.tabWidgets[1])
         for i in range(2):
-            self.onTheFlyComboBox.addItem(self.stateStrings[i])
+            self.onTheFlyComboBox.addItem(prefStateStrings[i])
         self.onTheFlyComboBox.setCurrentIndex(self.values[18])
         self.boxes[3].insertWidget(-1,self.onTheFlyComboBox)
 
         self.zeroCmpComboBox = QtGui.QComboBox(self.tabWidgets[1])
         for i in range(2):
-            self.zeroCmpComboBox.addItem(self.stateStrings[i])
+            self.zeroCmpComboBox.addItem(prefStateStrings[i])
         self.zeroCmpComboBox.setCurrentIndex(self.values[19])
         self.boxes[4].insertWidget(-1,self.zeroCmpComboBox)
 
         self.quickComboBox = QtGui.QComboBox(self.tabWidgets[1])
         for i in range(2):
-            self.quickComboBox.addItem(self.stateStrings[i])
+            self.quickComboBox.addItem(prefStateStrings[i])
         self.quickComboBox.setCurrentIndex(self.values[16])
         self.boxes[5].insertWidget(-1,self.quickComboBox)
 
         self.fullComboBox = QtGui.QComboBox(self.tabWidgets[1])
         for i in range(2):
-            self.fullComboBox.addItem(self.stateStrings[i])
+            self.fullComboBox.addItem(prefStateStrings[i])
         self.fullComboBox.setCurrentIndex(self.values[3])
         self.boxes[6].insertWidget(-1,self.fullComboBox)
 
 #sound page
         for i in xrange(7,10):
-            self.labels[i]=QtGui.QLabel(self.labelStrings[i],self.tabWidgets[2])
+            self.labels[i]=QtGui.QLabel(prefLabelStrings[i],self.tabWidgets[2])
             self.labels[i].setAlignment(QtCore.Qt.AlignLeft)
             self.boxes[i]=QtGui.QHBoxLayout()
             self.boxes[i].insertWidget(-1,self.labels[i])
+            self.boxes[i].insertStretch(-1,0)
             self.labelbox[2].insertLayout(-1,self.boxes[i])
             self.labelbox[2].insertSpacing(-1,20)
         self.labelbox[2].setSizeConstraint(QtGui.QLayout.SetMaximumSize)
 
         self.labelbox[2].insertSpacing(-1,15)
-        self.jack_button= QtGui.QCheckBox(_("Use Jack for audio capture."),self.tabWidgets[2])
-        self.jack_lsp_label=QtGui.QLabel(_("Available ports (double click to add):"),self.tabWidgets[2])
-        self.jack_lss_label=QtGui.QLabel(_("Selected ports (double click to remove):"),self.tabWidgets[2])
+        self.jack_button= QtGui.QCheckBox(prefStrings['UseJack'],self.tabWidgets[2])
+        self.jack_lsp_label=QtGui.QLabel(prefStrings['AvailablePortsAdd'],self.tabWidgets[2])
+        self.jack_lss_label=QtGui.QLabel(prefStrings['SelectedPortsRemove'],self.tabWidgets[2])
         self.jack_lsp_liststore=QtGui.QListWidget(self.tabWidgets[2])
         self.jack_lsp_liststore.setFixedHeight(100)
         self.jack_lsp_listSave=QtGui.QListWidget(self.tabWidgets[2])
         self.jack_lsp_listSave.setFixedHeight(100)
 
 
-        self.jack_lsp_refresh=QtGui.QPushButton(_("Refresh"),self.tabWidgets[2])
+        self.jack_lsp_refresh=QtGui.QPushButton(prefStrings['Refresh'],self.tabWidgets[2])
         self.jack_box=QtGui.QVBoxLayout()
         self.jack_box.insertWidget(-1,self.jack_button)
         self.jack_box.insertWidget(-1,self.jack_lsp_label)
@@ -234,10 +210,11 @@ class prefsWidget(object):
 
 #misc page
         for i in xrange(10,16):
-            self.labels[i]=QtGui.QLabel(self.labelStrings[i],self.tabWidgets[3])
+            self.labels[i]=QtGui.QLabel(prefLabelStrings[i],self.tabWidgets[3])
             self.labels[i].setAlignment(QtCore.Qt.AlignLeft)
             self.boxes[i]=QtGui.QHBoxLayout()
             self.boxes[i].insertWidget(-1,self.labels[i])
+            self.boxes[i].insertStretch(-1,0)
             self.labelbox[3].insertLayout(-1,self.boxes[i])
             self.labelbox[3].insertSpacing(-1,20)
         self.labelbox[3].setSizeConstraint(QtGui.QLayout.SetMaximumSize)
@@ -247,40 +224,40 @@ class prefsWidget(object):
 
         self.mouseComboBox = QtGui.QComboBox(self.tabWidgets[3])
         for i in range(4):
-            self.mouseComboBox.addItem(self.mouseStrings[i])
+            self.mouseComboBox.addItem(prefMouseStrings[i])
         self.mouseComboBox.setCurrentIndex(self.values[1])
         self.boxes[11].insertWidget(-1,self.mouseComboBox)
 
 
         self.sharedComboBox = QtGui.QComboBox(self.tabWidgets[3])
         for i in range(2):
-            self.sharedComboBox.addItem(self.stateStrings[i])
+            self.sharedComboBox.addItem(prefStateStrings[i])
         self.sharedComboBox.setCurrentIndex(self.values[13])
         self.boxes[12].insertWidget(-1,self.sharedComboBox)
 
         self.winDecoComboBox = QtGui.QComboBox(self.tabWidgets[3])
         for i in range(2):
-            self.winDecoComboBox.addItem(self.stateStrings[i])
+            self.winDecoComboBox.addItem(prefStateStrings[i])
         self.winDecoComboBox.setCurrentIndex(self.values[21])
         self.boxes[13].insertWidget(-1,self.winDecoComboBox)
 
         self.tooltipsComboBox = QtGui.QComboBox(self.tabWidgets[3])
         for i in range(2):
-            self.tooltipsComboBox.addItem(self.stateStrings[i])
+            self.tooltipsComboBox.addItem(prefStateStrings[i])
         self.tooltipsComboBox.setCurrentIndex(self.values[24])
         self.boxes[14].insertWidget(-1,self.tooltipsComboBox)
 
 
         self.rFrameComboBox = QtGui.QComboBox(self.tabWidgets[3])
         for i in range(2):
-            self.rFrameComboBox.addItem(self.stateStrings[i])
+            self.rFrameComboBox.addItem(prefStateStrings[i])
         self.rFrameComboBox.setCurrentIndex(self.values[25])
         self.boxes[15].insertWidget(-1,self.rFrameComboBox)
 
 
         for i in range(4):
             self.tabWidgets[i].setLayout(self.labelbox[i])
-            self.notebook.insertTab(-1,self.tabWidgets[i],self.tabStrings[i])
+            self.notebook.insertTab(-1,self.tabWidgets[i],prefTabStrings[i])
         self.notebook.show()
         return
 
@@ -305,8 +282,8 @@ class prefsWidget(object):
             self.jack_lsp_liststore.setEnabled(True)
         else:
             failed=1
-            self.ports.append(_("jack_lsp returned no ports."))
-            self.ports.append(_("Make sure that jackd is running."))
+            self.ports.append(prefStrings['JackLspS1'])
+            self.ports.append(prefStrings['JackLspS2'])
             self.jack_lsp_liststore.setEnabled(False)
             self.jack_lsp_listSave.setEnabled(False)
             self.values[23]=[]

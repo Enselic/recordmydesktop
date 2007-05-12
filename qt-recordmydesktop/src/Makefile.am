@@ -14,6 +14,7 @@ qt_recordMyDesktop_PYTHON = \
 							rmdConfig.py\
 							rmdMonitor.py\
 							rmdFrame.py\
+							rmdStrings.py\
 							__init__.py
 
 desktopdir = $(datadir)/applications

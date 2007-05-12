@@ -31,6 +31,7 @@ gettext.textdomain('gtk-recordMyDesktop')
 gettext.bindtextdomain('gtk-recordMyDesktop',rmdConfig.locale_install_dir)
 import rmdSelect as iSel
 import rmdPrefsWidget as pW
+from rmdStrings import *
 
 class TrayPopupMenu:
     options=None
@@ -59,7 +60,7 @@ class TrayPopupMenu:
             self.optionsOpen[0]=0
     def _setup_prefs_widget(self):
         self.popupmenu_prefs_widget = gtk.ImageMenuItem(
-               gtk.STOCK_PREFERENCES)
+               TpmStr['ShowHide'])
         self.popupmenu_prefs_widget.connect('activate', self._prefs_widget)
         self.popupmenu.add(self.popupmenu_prefs_widget)
 
@@ -70,20 +71,20 @@ class TrayPopupMenu:
 
     def _about(self, button):
         aboutdialog = gtk.AboutDialog()
-        aboutdialog.set_name(_('gtk-recordMyDesktop'))
+        aboutdialog.set_name('gtk-recordMyDesktop')
         aboutdialog.set_version(rmdConfig.VERSION)
-        aboutdialog.set_comments(_('a graphical frontend for recordMyDesktop'))
-        aboutdialog.set_copyright(_('Copyright (C) John Varouhakis\nPortions Copyright (C) 2005-6 Zaheer Abbas Merali, John N. Laliberte\nPortions Copyright (C) Fluendo S.L.'))
+        aboutdialog.set_comments(TpmStr['ProgDesc'])
+        aboutdialog.set_copyright(TpmStr['Copyright'])
         aboutdialog.set_authors(['recordMyDesktop and gtk-recordMyDesktop\nis written by John Varouhakis','Portions of gtk-recordMyDesktop\nare taken from Istanbul\n(http://live.gnome.org/Istanbul)\nwritten by\nZaheer Abbas Merali and John N. Laliberte'])
         aboutdialog.set_website('http://recordmydesktop.sourceforge.net')
         aboutdialog.set_license('GPL-2')
-        aboutdialog.set_translator_credits(_('Translator Credits And Information(Replace with your info)'))
+        aboutdialog.set_translator_credits(TpmStr['TranslatorCredits'])
         aboutdialog.connect('response', lambda widget, response: widget.destroy())
         aboutdialog.show_all()
 
     def _setup_select_area(self):
         self.popupmenu_selectarea = gtk.ImageMenuItem(
-            _("_Select Area On Screen"))
+            TpmStr['SelectOnScreen'])
         self.popupmenu.add(self.popupmenu_selectarea)
         self.popupmenu_selectarea.connect("activate", self._select_area_cb)
 

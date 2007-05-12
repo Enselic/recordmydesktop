@@ -26,7 +26,7 @@ default_values=[15,     #framerate
                 1,          #quick subsampling,0 on 1 off
                 "/tmp",     #working directory
                 1,          #on the fly encoding,0 on 1 off
-                1,          #zero compression,0 on 1 off
+                0,          #zero compression,0 on 1 off
                 False,      #overwrite existing files
                 0,          #include window decorations, 0 on 1 off
                 False,      #Use jack

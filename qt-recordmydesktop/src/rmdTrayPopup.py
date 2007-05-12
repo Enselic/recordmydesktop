@@ -33,6 +33,7 @@ gettext.textdomain('qt-recordMyDesktop')
 gettext.bindtextdomain('qt-recordMyDesktop',rmdConfig.locale_install_dir)
 
 import rmdSelect as iSel
+from rmdStrings import *
 import sys
 #import rmdPrefsWidget as pW
 
@@ -46,9 +47,9 @@ class TrayPopupMenu:
         self.selector = None
     def _setup_popup_menu(self):
         self.popupmenu = QtGui.QMenu()
-        self.popupmenu.addAction(_("Preferences"),self._prefs_widget)
-        self.popupmenu.addAction(_("_Select Area On Screen").replace("_",""),self._select_area_cb)
-        self.popupmenu.addAction(_("Quit"),self.parent.window.close)
+        self.popupmenu.addAction(TpmStr['ShowHide'],self._prefs_widget)
+        self.popupmenu.addAction(TpmStr['SelectOnScreen'].replace("_",""),self._select_area_cb)
+        self.popupmenu.addAction(TpmStr['Quit'],self.parent.window.close)
 
     def _prefs_widget(self):
         if self.optionsOpen[0] ==0:

@@ -42,21 +42,10 @@ import gc
 import re
 import rmdPrefsWidget as pW
 import rmdSelectThumb as sT
+from rmdStrings import *
 
 class simpleWidget(object):
     hidden=[0]
-    labelStrings=[_('Video Quality'),_('Sound Quality')]
-    buttonStrings=[_('Advanced'),_('Select Window')]
-    tooltipLabels=[_('Click here to select a window to record'),
-                   _('Click to start the recording.\nThis window will hide itself.'),
-                   _('Click to choose a filename and location.\nDefault is out.ogg in your home folder.\nIf the file already exists, the new one\nwill have a number attached on its name\n(this behavior can be changed )'),
-                   _('Click to exit the program.'),
-                   _('Select the video quality of your recording.\n(Lower quality will require more proccessing power,\nso it\'s recommended, when encoding on the fly,\nto leave at 100)'),
-                   _('Enable/Disable sound recording.'),
-                   _('Select the audio quality of your recording.'),
-                   _('Click here to access more options.')]
-    tipLabelStrings=[_('\nLeft click and drag, on the preview image,\nto select an area for recording.\nRight click on it, to reset the area.')]
-
     options=None
     optionsOpen=[0]
     def __subWidgets__(self):
@@ -109,11 +98,11 @@ class simpleWidget(object):
         self.s_quality=gtk.HScale(self.s_adj)
         self.s_quality.set_value_pos(gtk.POS_LEFT)
         self.s_quality.set_digits(0)
-        self.v_label=gtk.Label("         "+self.labelStrings[0])
-        self.s_label=gtk.Label(self.labelStrings[1])
+        self.v_label=gtk.Label("         "+smplLabelStrings[0])
+        self.s_label=gtk.Label(smplLabelStrings[1])
 
-        self.advanced_button=gtk.Button(self.buttonStrings[0])
-        self.tipLabel=gtk.Label(self.tipLabelStrings[0])
+        self.advanced_button=gtk.Button(smplButtonStrings[0])
+        self.tipLabel=gtk.Label(smplTipLabelStrings[0])
         self.NEVQBox.pack_start(self.v_label,expand=False,fill=False)
         self.NEVQBox.pack_start(self.v_quality,expand=True,fill=True)
         self.NESQBox.pack_start(self.s_button,expand=False,fill=False)
@@ -122,7 +111,7 @@ class simpleWidget(object):
         self.NETABox.pack_start(self.advanced_button,expand=False,fill=False)
         self.NETABox.pack_start(self.tipLabel,expand=False,fill=False)
 
-        self.win_button=gtk.Button(self.buttonStrings[1])
+        self.win_button=gtk.Button(smplButtonStrings[1])
         self.start_button=gtk.Button(None,gtk.STOCK_MEDIA_RECORD)
         self.file_button=gtk.Button(None,gtk.STOCK_SAVE_AS)
         self.quit_button=gtk.Button(None,gtk.STOCK_QUIT)
@@ -157,16 +146,16 @@ class simpleWidget(object):
         self.window.add(self.labelbox)
     def __tooltips__(self):
         self.tooltips=gtk.Tooltips()
-        self.tooltips.set_tip(self.win_button,self.tooltipLabels[0])
-        self.tooltips.set_tip(self.start_button,self.tooltipLabels[1])
-        self.tooltips.set_tip(self.file_button,self.tooltipLabels[2])
-        self.tooltips.set_tip(self.quit_button,self.tooltipLabels[3])
-        self.tooltips.set_tip(self.v_quality,self.tooltipLabels[4])
-        self.tooltips.set_tip(self.v_label,self.tooltipLabels[4])
-        self.tooltips.set_tip(self.s_button,self.tooltipLabels[5])
-        self.tooltips.set_tip(self.s_quality,self.tooltipLabels[6])
-        self.tooltips.set_tip(self.s_label,self.tooltipLabels[6])
-        self.tooltips.set_tip(self.advanced_button,self.tooltipLabels[7])
+        self.tooltips.set_tip(self.win_button,smplTooltipLabels[0])
+        self.tooltips.set_tip(self.start_button,smplTooltipLabels[1])
+        self.tooltips.set_tip(self.file_button,smplTooltipLabels[2])
+        self.tooltips.set_tip(self.quit_button,smplTooltipLabels[3])
+        self.tooltips.set_tip(self.v_quality,smplTooltipLabels[4])
+        self.tooltips.set_tip(self.v_label,smplTooltipLabels[4])
+        self.tooltips.set_tip(self.s_button,smplTooltipLabels[5])
+        self.tooltips.set_tip(self.s_quality,smplTooltipLabels[6])
+        self.tooltips.set_tip(self.s_label,smplTooltipLabels[6])
+        self.tooltips.set_tip(self.advanced_button,smplTooltipLabels[7])
 
     def __exit__(self,Event=None):
         if self.exited==0:

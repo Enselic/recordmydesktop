@@ -36,7 +36,7 @@ gettext.bindtextdomain('qt-recordMyDesktop',rmdConfig.locale_install_dir)
 import rmdTrayPopup as iTP
 import rmdMonitor as imon
 import os,signal,popen2,fcntl
-
+from rmdStrings import *
 #values struct:
 
 #0   fps
@@ -61,29 +61,6 @@ import os,signal,popen2,fcntl
 class trayIcon(object):
     #values=[15,0,0,1,os.path.join(os.getenv('HOME'),'out.ogg'),[-1,-1,-1,-1],0,
             #1,22050,'hw:0,0',63,10,"$DISPLAY",0,1,75,1]
-    exit_status={
-        0:_('Success'),
-        1*256:_('Error while parsing the arguments.'),
-        2*256:_('Initializing the encoder failed(either vorbis or theora)'),
-        3*256:_('Could not open/configure sound card.'),
-        4*256:_('Xdamage extension not present.'),
-        5*256:_('Shared memory extension not present.'),
-        6*256:_('Xfixes extension not present.'),
-        7*256:_('XInitThreads failed.'),
-        8*256:_('No $DISPLAY environment variable and none specified as argument.'),
-        9*256:_('Cannot connect to Xserver.'),
-        10*256:_('Color depth is not 24bpp.'),
-        11*256:_('Improper window specification.'),
-        12*256:_('Cannot attach shared memory to proccess.'),
-        13*256:_('Cannot open file for writting.'),
-        14*256:_('Cannot load the Jack library (dlopen/dlsym error on libjack.so).'),
-        15*256:_('Cannot create new client.'),
-        16*256:_('Cannot activate client.'),
-        17*256:_('Port registration/connection failure.'),
-        11:_('Segmentation Fault')
-        }
-
-
     state=0#0 stopped,1 recording,2 paused
     rmdPid=None
     optionsOpen=[1]
@@ -198,8 +175,8 @@ class trayIcon(object):
         self.execargs.append('%s'%self.parent.values[17])
         if self.parent.values[18] == 0:
             self.execargs.append('--on-the-fly-encoding')
-        if self.parent.values[19] == 0:
-            self.execargs.append('--zero-compression')
+        if self.parent.values[19] == 1:
+            self.execargs.append('--compress-cache')
         if self.parent.values[20] == True:
             self.execargs.append('--overwrite')
         if self.parent.values[22] == True:
@@ -238,10 +215,10 @@ class trayIcon(object):
         self.dialog = QtGui.QWidget()
         self.label1=None
         try:
-            self.label1 = QtGui.QLabel("\t\t"+_("Recording is finished.\nrecordMyDesktop has exited with status")+
-            ": %d\n"%(status)+_("Description")+":%s\n"%(self.exit_status[int(status)]))
+            self.label1 = QtGui.QLabel("\t\t"+TrayIconStr['RecFinishedKnown']+
+            ": %d\n"%(status)+TrayIconStr['ErrDesc']+":%s\n"%(rmdErrStr[int(status)]))
         except:
-            self.label1 = QtGui.QLabel("\t\t"+_("Recording is finished.\nrecordMyDesktop has exited with uknown\nerror code")+": %d \n"%(status))
+            self.label1 = QtGui.QLabel("\t\t"+TrayIconStr['RecFinishedUnknown']+": %d \n"%(status))
         self.label1.setAlignment(QtCore.Qt.AlignHCenter)
         self.dialogbutton = QtGui.QPushButton("Ok",self.dialog)
         self.dialogbutton.connect(self.dialogbutton,QtCore.SIGNAL("clicked()"),self.dialog.close )

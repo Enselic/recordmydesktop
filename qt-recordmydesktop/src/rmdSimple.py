@@ -39,20 +39,10 @@ import os,sys
 from rmdTrayIcon import *
 import rmdPrefsWidget as pW
 import rmdSelectThumb as sT
+from rmdStrings import *
 
 class simpleWidget(object):
     hidden=[0]
-    labelStrings=[_('Video Quality'),_('Sound Quality')]
-    buttonStrings=[_('Advanced'),_('Select Window')]
-    tooltipLabels=[_('Click here to select a window to record'),
-                   _('Click to start the recording.\nThis window will hide itself.'),
-                   _('Click to choose a filename and location.\nDefault is out.ogg in your home folder.\nIf the file already exists, the new one\nwill have a number attached on its name\n(this behavior can be changed )'),
-                   _('Click to exit the program.'),
-                   _('Select the video quality of your recording.\n(Lower quality will require more proccessing power,\nso it\'s recommended, when encoding on the fly,\nto leave at 100)'),
-                   _('Enable/Disable sound recording.'),
-                   _('Select the audio quality of your recording.'),
-                   _('Click here to access more options.')]
-    tipLabelStrings=[_('\nLeft click and drag, on the preview image,\nto select an area for recording.\nRight click on it, to reset the area.')]
 
     options=None
     optionsOpen=[0]
@@ -112,11 +102,11 @@ class simpleWidget(object):
         self.s_quality.setOrientation(QtCore.Qt.Horizontal)
         self.s_quality.setEnabled(self.values[2])
 
-        self.v_label=QtGui.QLabel("         "+self.labelStrings[0],self.window)
-        self.s_label=QtGui.QLabel(self.labelStrings[1],self.window)
+        self.v_label=QtGui.QLabel("         "+smplLabelStrings[0],self.window)
+        self.s_label=QtGui.QLabel(smplLabelStrings[1],self.window)
 
-        self.advanced_button=QtGui.QPushButton(self.buttonStrings[0],self.window)
-        self.tipLabel=QtGui.QLabel(self.tipLabelStrings[0],self.window)
+        self.advanced_button=QtGui.QPushButton(smplButtonStrings[0],self.window)
+        self.tipLabel=QtGui.QLabel(smplTipLabelStrings[0],self.window)
 
         self.NEVQBox.insertWidget(-1,self.v_label)
         self.NEVQBox.insertWidget(-1,self.v_quality)
@@ -128,10 +118,10 @@ class simpleWidget(object):
         style=QtGui.QApplication.style()
         icon_rec_pxm=QtGui.QPixmap(os.path.join(rmdConfig.pixmapdir,"qt-recordmydesktop_record.png"))
 
-        self.win_button=QtGui.QPushButton(self.buttonStrings[1],self.window)
-        self.start_button=QtGui.QPushButton(QtGui.QIcon(icon_rec_pxm),_("Record"),self.window)
-        self.file_button=QtGui.QPushButton(QtGui.QIcon(style.standardPixmap(QtGui.QStyle.SP_DialogSaveButton)),_("Save As"),self.window)
-        self.quit_button=QtGui.QPushButton(QtGui.QIcon(style.standardPixmap(QtGui.QStyle.SP_DialogCloseButton)),_("Quit"),self.window)
+        self.win_button=QtGui.QPushButton(smplButtonStrings[1],self.window)
+        self.start_button=QtGui.QPushButton(QtGui.QIcon(icon_rec_pxm),smplStrings['Record'],self.window)
+        self.file_button=QtGui.QPushButton(QtGui.QIcon(style.standardPixmap(QtGui.QStyle.SP_DialogSaveButton)),smplStrings['SaveAs'],self.window)
+        self.quit_button=QtGui.QPushButton(QtGui.QIcon(style.standardPixmap(QtGui.QStyle.SP_DialogCloseButton)),smplStrings['Quit'],self.window)
         self.SWBox.insertWidget(-1,self.win_button)
         self.SWBox.insertWidget(-1,self.start_button)
         self.SEBox.insertWidget(-1,self.file_button)
@@ -153,16 +143,16 @@ class simpleWidget(object):
 
         self.window.setLayout(self.labelbox)
     def __tooltips__(self):
-        self.win_button.setToolTip(htmlize(self.tooltipLabels[0]))
-        self.start_button.setToolTip(htmlize(self.tooltipLabels[1]))
-        self.file_button.setToolTip(htmlize(self.tooltipLabels[2]))
-        self.quit_button.setToolTip(htmlize(self.tooltipLabels[3]))
-        self.v_quality.setToolTip(htmlize(self.tooltipLabels[4]))
-        self.v_label.setToolTip(htmlize(self.tooltipLabels[4]))
-        self.s_button.setToolTip(htmlize(self.tooltipLabels[5]))
-        self.s_quality.setToolTip(htmlize(self.tooltipLabels[6]))
-        self.s_label.setToolTip(htmlize(self.tooltipLabels[6]))
-        self.advanced_button.setToolTip(htmlize(self.tooltipLabels[7]))
+        self.win_button.setToolTip(htmlize(smplTooltipLabels[0]))
+        self.start_button.setToolTip(htmlize(smplTooltipLabels[1]))
+        self.file_button.setToolTip(htmlize(smplTooltipLabels[2]))
+        self.quit_button.setToolTip(htmlize(smplTooltipLabels[3]))
+        self.v_quality.setToolTip(htmlize(smplTooltipLabels[4]))
+        self.v_label.setToolTip(htmlize(smplTooltipLabels[4]))
+        self.s_button.setToolTip(htmlize(smplTooltipLabels[5]))
+        self.s_quality.setToolTip(htmlize(smplTooltipLabels[6]))
+        self.s_label.setToolTip(htmlize(smplTooltipLabels[6]))
+        self.advanced_button.setToolTip(htmlize(smplTooltipLabels[7]))
 
     def __exit__(self,Event=None):
         if self.exited==0:
