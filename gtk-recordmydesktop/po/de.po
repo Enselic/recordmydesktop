@@ -244,9 +244,8 @@ msgid "Save As"
 msgstr ""
 
 #: src/rmdStrings.py:63
-#, fuzzy
 msgid "Cancel"
-msgstr "Kanäle"
+msgstr ""
 
 #: src/rmdStrings.py:64
 msgid ""
