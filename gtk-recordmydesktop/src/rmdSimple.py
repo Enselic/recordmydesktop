@@ -412,8 +412,9 @@ class simpleWidget(object):
 
         #self.timed_id=gobject.timeout_add(2000,self.__update_image__)
         #if resolution is low let it decide size on it's own
-        if self.wwidth>640:
-            self.window.set_size_request(int(self.wwidth/self.factor*2.3),-1)
+
+        #if self.wwidth>640:
+            #self.window.set_size_request(int(self.wwidth/self.factor*2.3),-1)
         #self.window.set_resizable(False)
 
         self.trayIcon=trayIcon(self)
