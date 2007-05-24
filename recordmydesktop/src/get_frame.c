@@ -102,8 +102,9 @@ void *GetFrame(ProgData *pdata){
                                         //the current full screenshot
     XShmSegmentInfo shminfo,shminfo_back;//info structure for the image above.
     int init_img1=0,init_img2=0,
-        d_buff=pdata->args.full_shots,
-        img_sel=1;
+        img_sel,d_buff;
+    img_sel=d_buff=0/*pdata->args.full_shots*/;
+
     char *pxl_data=NULL,*pxl_data_back=NULL;
     if((init_img1=FirstFrame(pdata,&image,&shminfo,&pxl_data)!=0)){
         if(pdata->args.encOnTheFly){
