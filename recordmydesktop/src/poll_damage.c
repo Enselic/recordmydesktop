@@ -72,7 +72,7 @@ void *PollDamage(ProgData *pdata){
         }
     }
     XFree(children);
-    XDamageCreate(pdata->dpy,pdata->brwin.windowid,XDamageReportRawRectangles);
+    XDamageCreate(pdata->dpy,pdata->specs.root,XDamageReportRawRectangles);
 
 
     while(pdata->running){
