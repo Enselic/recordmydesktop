@@ -151,7 +151,7 @@ int SetBRWindow(Display *dpy,
                               &transl_x,
                               &transl_y,
                               &wchid);
-        brwin->windowid=specs->root;
+
         brwin->geom.x=attribs.x-transl_x;
         brwin->geom.y=attribs.y-transl_y;
         brwin->geom.width=attribs.width;
