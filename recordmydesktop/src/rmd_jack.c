@@ -139,7 +139,7 @@ int StartJackClient(JackData *jdata){
     float ring_buffer_size=0.0;
     int pid;
     char pidbuf[8];
-    char rmd_client_name[22];
+    char rmd_client_name[32];
 
     //construct the jack client name
     //which is recordMyDesktop-pid
