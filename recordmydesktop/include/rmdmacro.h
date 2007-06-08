@@ -540,14 +540,17 @@
                               y_tm,\
                               width_tm,\
                               height_tm,\
+                              x_offset,\
+                              y_offset,\
                               column_discard_stride){\
     int i,k,j=0;\
     unsigned char avg0,avg1,avg2,avg3;\
     int x_2=x_tm/2,y_2=y_tm/2;\
-    for(k=0;k<height_tm;k++){\
-        for(i=0;i<width_tm;i++){\
-                yuv->y[x_tm+i+(k+y_tm)*yuv->y_width]=\
-                    (yuv->y[x_tm+i+(k+y_tm)*yuv->y_width]*\
+    for(k=y_offset;k<y_offset+height_tm;k++){\
+        for(i=x_offset;i<x_offset+width_tm;i++){\
+                j=k*(width_tm+column_discard_stride)+i;\
+                yuv->y[x_tm+(i-x_offset)+(k+y_tm-y_offset)*yuv->y_width]=\
+                    (yuv->y[x_tm+(i-x_offset)+(k-y_offset+y_tm)*yuv->y_width]*\
                     (UCHAR_MAX-data[(j*RMD_ULONG_SIZE_T)+__ABYTE])+\
                     (Yr[data[(j*RMD_ULONG_SIZE_T)+__RBYTE]]+\
                     Yg[data[(j*RMD_ULONG_SIZE_T)+__GBYTE]] +\
@@ -566,16 +569,20 @@
                     avg0=AVG_4_PIXELS(data,\
                                       (width_tm+column_discard_stride),\
                                       k,i,__BBYTE);\
-                    yuv->u[x_2+i/2+(k/2+y_2)*yuv->uv_width]=\
-                    (yuv->u[x_2+i/2+(k/2+y_2)*yuv->uv_width]*(UCHAR_MAX-avg3)+\
+                    yuv->u[x_2+(i-x_offset)/2+((k-y_offset)/2+y_2)*\
+                           yuv->uv_width]=\
+                    (yuv->u[x_2+(i-x_offset)/2+((k-y_offset)/2+y_2)*\
+                            yuv->uv_width]*\
+                    (UCHAR_MAX-avg3)+\
                     (Ur[avg2] + Ug[avg1] +UbVr[avg0])*avg3)/UCHAR_MAX;\
-                    yuv->v[x_2+i/2+(k/2+y_2)*yuv->uv_width]=\
-                    (yuv->v[x_2+i/2+(k/2+y_2)*yuv->uv_width]*(UCHAR_MAX-avg3)+\
+                    yuv->v[x_2+(i-x_offset)/2+((k-y_offset)/2+y_2)*\
+                           yuv->uv_width]=\
+                    (yuv->v[x_2+(i-x_offset)/2+((k-y_offset)/2+y_2)*\
+                            yuv->uv_width]*\
+                    (UCHAR_MAX-avg3)+\
                     (UbVr[avg2] + Vg[avg1] +Vb[avg0])*avg3)/UCHAR_MAX;\
                 }\
-            j++;\
         }\
-        j+=column_discard_stride;\
     }\
 }
 
@@ -585,30 +592,31 @@
                              y_tm,\
                              width_tm,\
                              height_tm,\
+                             x_offset,\
+                             y_offset,\
                              no_pixel){\
     int i,k,j=0;\
     int x_2=x_tm/2,y_2=y_tm/2,y_width_2=(yuv)->y_width/2;\
-    for(k=0;k<height_tm;k++){\
-        for(i=0;i<width_tm;i++){\
+    for(k=y_offset;k<y_offset+height_tm;k++){\
+        for(i=x_offset;i<x_offset+width_tm;i++){\
+            j=k*16+i;\
             if(data_tm[(j*4)]!=(no_pixel)){\
-                (yuv)->y[x_tm+i+(k+y_tm)*(yuv)->y_width]=\
+                (yuv)->y[x_tm+(i-x_offset)+((k-y_offset)+y_tm)*(yuv)->y_width]=\
                     Yr[data_tm[(j*4)+__RBYTE]] +\
                     Yg[data_tm[(j*4)+__GBYTE]] +\
                     Yb[data_tm[(j*4)+__BBYTE]];\
                 if((k%2)&&(i%2)){\
-                    yuv->u[x_2+i/2+(k/2+y_2)*y_width_2]=\
+                    yuv->u[x_2+(i-x_offset)/2+((k-y_offset)/2+y_2)*y_width_2]=\
                         Ur[data_tm[(k*width_tm+i)*4+__RBYTE]] +\
                         Ug[data_tm[(k*width_tm+i)*4+__GBYTE]] +\
                         UbVr[data_tm[(k*width_tm+i)*4+__BBYTE]];\
-                    yuv->v[x_2+i/2+(k/2+y_2)*y_width_2]=\
+                    yuv->v[x_2+(i-x_offset)/2+((k-y_offset)/2+y_2)*y_width_2]=\
                         UbVr[data_tm[(k*width_tm+i)*4+__RBYTE]] +\
                         Vg[data_tm[(k*width_tm+i)*4+__GBYTE]] +\
                         Vb[data_tm[(k*width_tm+i)*4+__BBYTE]] ;\
                 }\
             }\
-            j++;\
         }\
-        j+=16-width_tm;\
     }\
 }
 
