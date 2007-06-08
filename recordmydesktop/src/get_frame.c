@@ -280,9 +280,18 @@ void *GetFrame(ProgData *pdata){
             pthread_mutex_unlock(&pdata->yuv_mutex);
         }
         if(pdata->args.xfixes_cursor){
+            int mouse_xoffset,
+                mouse_yoffset;
         //avoid segfaults
             CLIP_DUMMY_POINTER_AREA(mouse_pos_abs,&pdata->brwin,
                                     &mouse_pos_temp);
+            mouse_xoffset=mouse_pos_temp.x-mouse_pos_abs.x;
+            mouse_yoffset=mouse_pos_temp.y-mouse_pos_abs.y;
+            if((mouse_xoffset<0) || (mouse_xoffset>mouse_pos_abs.width))
+                mouse_xoffset=0;
+            if((mouse_yoffset<0) || (mouse_yoffset>mouse_pos_abs.height))
+                mouse_yoffset=0;
+
         //draw the cursor
             if((mouse_pos_temp.x>=0)&&
                (mouse_pos_temp.y>=0)&&
@@ -298,6 +307,8 @@ void *GetFrame(ProgData *pdata){
                                        pdata->enc_data->y_offset),
                                       mouse_pos_temp.width,
                                       mouse_pos_temp.height,
+                                      mouse_xoffset,
+                                      mouse_yoffset,
                                       (xcim->width-mouse_pos_temp.width));
             }
             XFree(xcim);
@@ -305,9 +316,17 @@ void *GetFrame(ProgData *pdata){
         }
 
         if(pdata->args.have_dummy_cursor){
+            int mouse_xoffset,
+                mouse_yoffset;
         //avoid segfaults
             CLIP_DUMMY_POINTER_AREA(mouse_pos_abs,&pdata->brwin,
                                     &mouse_pos_temp);
+            mouse_xoffset=mouse_pos_temp.x-mouse_pos_abs.x;
+            mouse_yoffset=mouse_pos_temp.y-mouse_pos_abs.y;
+            if((mouse_xoffset<0) || (mouse_xoffset>mouse_pos_abs.width))
+                mouse_xoffset=0;
+            if((mouse_yoffset<0) || (mouse_yoffset>mouse_pos_abs.height))
+                mouse_yoffset=0;
         //draw the cursor
             if((mouse_pos_temp.x>=0)&&
                (mouse_pos_temp.y>=0)&&
@@ -323,6 +342,8 @@ void *GetFrame(ProgData *pdata){
                                       pdata->enc_data->y_offset),
                                      mouse_pos_temp.width,
                                      mouse_pos_temp.height,
+                                     mouse_xoffset,
+                                     mouse_yoffset,
                                      pdata->npxl);
             }
         }
