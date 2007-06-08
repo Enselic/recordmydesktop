@@ -26,6 +26,9 @@
 
 
 #include <recordmydesktop.h>
+// #include <GL/gl.h>
+// #include <GL/glu.h>
+// #include <GL/glx.h>
 
 int FirstFrame(ProgData *pdata,XImage **image,XShmSegmentInfo *shminfo,
                char **pxl_data){
@@ -104,6 +107,18 @@ void *GetFrame(ProgData *pdata){
     int init_img1=0,init_img2=0,
         img_sel,d_buff;
     img_sel=d_buff=0/*pdata->args.full_shots*/;
+
+//     XVisualInfo vinfo_return;
+//     XMatchVisualInfo(pdata->dpy,pdata->specs.screen,pdata->specs.depth,TrueColor,&vinfo_return );
+//     GLXContext ctx=glXCreateContext( pdata->dpy,
+//                       &vinfo_return,
+//                       NULL,
+//                       True);
+//     glXMakeCurrent( pdata->dpy,
+//                     pdata->args.windowid,
+//                     ctx);
+//
+//     glReadBuffer(GL_FRONT);
 
     char *pxl_data=NULL,*pxl_data_back=NULL;
     if((init_img1=FirstFrame(pdata,&image,&shminfo,&pxl_data)!=0)){
@@ -230,12 +245,20 @@ void *GetFrame(ProgData *pdata){
                                         ((unsigned char*)image->data):
                                         ((unsigned char*)image_back->data));
 
-            if(!pdata->args.noshared)
+            if(!pdata->args.noshared){
                 XShmGetImage(pdata->dpy,pdata->specs.root,
                             ((!img_sel)?image:image_back),
                             (pdata->brwin.rgeom.x),
                             (pdata->brwin.rgeom.y),AllPlanes);
 
+//                 glReadPixels(0,
+//                              0,
+//                              pdata->brwin.rgeom.width,
+//                              pdata->brwin.rgeom.height,
+//                              GL_RGBA,
+//                              GL_UNSIGNED_BYTE,
+//                              front_buff);
+            }
             if(pdata->args.noshared){
                 GetZPixmap( pdata->dpy,
                             pdata->specs.root,
@@ -315,6 +338,7 @@ void *GetFrame(ProgData *pdata){
         pthread_mutex_unlock(&pdata->img_buff_ready_mutex);
         capture_busy=0;
     }
+//    glXDestroyContext(pdata->dpy,ctx);
     pthread_mutex_lock(&pdata->img_buff_ready_mutex);
     pthread_cond_broadcast(&pdata->image_buffer_ready);
     pthread_mutex_unlock(&pdata->img_buff_ready_mutex);
@@ -322,6 +346,11 @@ void *GetFrame(ProgData *pdata){
         XShmDetach (pdata->dpy, &shminfo);
         shmdt (shminfo.shmaddr);
         shmctl (shminfo.shmid, IPC_RMID, 0);
+        if(d_buff){
+            XShmDetach (pdata->dpy, &shminfo_back);
+            shmdt (shminfo_back.shmaddr);
+            shmctl (shminfo_back.shmid, IPC_RMID, 0);
+        }
     }
     pthread_exit(&errno);
 }
