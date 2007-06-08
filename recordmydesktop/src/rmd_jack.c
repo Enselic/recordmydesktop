@@ -137,12 +137,25 @@ void JackShutdown(void *jdata_t){
 
 int StartJackClient(JackData *jdata){
     float ring_buffer_size=0.0;
+    int pid;
+    char pidbuf[8];
+    char rmd_client_name[22];
+
+    //construct the jack client name
+    //which is recordMyDesktop-pid
+    //in order to allow multiple
+    //instances of recordMyDesktop
+    //to connetc to a Jack Server
+    strcpy(rmd_client_name,"recordMyDesktop-");
+    pid=getpid();
+    I16TOA(pid,pidbuf)
+    strcat(rmd_client_name,pidbuf);
 
     if(LoadJackLib(jdata->jack_lib_handle)){
         fprintf (stderr,"Couldn't load the Jack library (libjack.so)!\n");
         return 14;
     }
-    if ((jdata->client=(*jack_client_new_p)("recordMyDesktop"))==0){
+    if ((jdata->client=(*jack_client_new_p)(rmd_client_name))==0){
         fprintf(stderr,"Could not create new client!\n"
                        "Make sure that Jack server is running!\n");
         return 15;
