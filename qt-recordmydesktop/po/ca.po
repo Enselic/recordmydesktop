@@ -1,16 +1,17 @@
-# translation of ca.po to català
+# translation of ca.po to
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Pere Olivares <pere.olivares@gmail.com>, 2007.
+# Orestes Mas <orestes@tsc.upc.edu>, 2007.
 msgid ""
 msgstr ""
 "Project-Id-Version: ca\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-05-12 06:53+0300\n"
-"PO-Revision-Date: 2007-01-07 00:00+0100\n"
-"Last-Translator: Pere Olivares <pere.olivares@gmail.com>\n"
-"Language-Team: català <tradgnome@softcatala.org>\n"
+"PO-Revision-Date: 2007-03-27 14:44+0200\n"
+"Last-Translator: Orestes Mas <orestes@tsc.upc.edu>\n"
+"Language-Team:  <ca@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -44,7 +45,9 @@ msgstr ""
 
 #: src/rmdStrings.py:15
 msgid "Translator Credits And Information(Replace with your info)"
-msgstr "Traducció al Català: Pere Olivares <pere.olivares@gmail.com>"
+msgstr ""
+"Traducció al Català: Pere Olivares <pere.olivares@gmail.com> i Orestes Mas "
+"<orestes@tsc.upc.edu>"
 
 #: src/rmdStrings.py:19
 msgid "Success"
@@ -56,11 +59,11 @@ msgstr "S'ha produït un error en analitzar els arguments."
 
 #: src/rmdStrings.py:21
 msgid "Initializing the encoder failed(either vorbis or theora)"
-msgstr "Ha fallat la iniciacio del codificador (vorbis o theora)"
+msgstr "Ha fallat la inicialització del codificador (vorbis o theora)"
 
 #: src/rmdStrings.py:22
 msgid "Could not open/configure sound card."
-msgstr "N s'ha pogut obrir/configurar la targeta de so."
+msgstr "No s'ha pogut obrir/configurar la tarja de so."
 
 #: src/rmdStrings.py:23
 msgid "Xdamage extension not present."
@@ -68,20 +71,20 @@ msgstr "L'extensió Xdamage no està present."
 
 #: src/rmdStrings.py:24
 msgid "Shared memory extension not present."
-msgstr "L'extensió de memòria compartida no esta present."
+msgstr "L'extensió de memòria compartida no està present."
 
 #: src/rmdStrings.py:25
 msgid "Xfixes extension not present."
-msgstr "L'extensió Xfixes no esta present"
+msgstr "L'extensió Xfixes no està present"
 
 #: src/rmdStrings.py:26
 msgid "XInitThreads failed."
-msgstr "fallida de XInitThreads."
+msgstr "Ha fallat XInitThreads."
 
 #: src/rmdStrings.py:27
 msgid "No $DISPLAY environment variable and none specified as argument."
 msgstr ""
-"No existeix la variable d'entorn $DISPLAY ni s'ha especificat ninguna com "
+"No existeix la variable d'entorn $DISPLAY ni se n'ha especificat cap com "
 "argument."
 
 #: src/rmdStrings.py:28
@@ -90,7 +93,7 @@ msgstr "No es pot connectar al servidor X."
 
 #: src/rmdStrings.py:29
 msgid "Color depth is not 24bpp."
-msgstr "La profunditat de color no es de 24bpp."
+msgstr "La profunditat de color no és de 24bpp."
 
 #: src/rmdStrings.py:30
 msgid "Improper window specification."
@@ -98,27 +101,28 @@ msgstr "Especificació de finestra impròpia."
 
 #: src/rmdStrings.py:31
 msgid "Cannot attach shared memory to proccess."
-msgstr " ﻿No es pot adjuntar memòria compartida al proces."
+msgstr " ﻿No es pot adjuntar memòria compartida al procés."
 
 #: src/rmdStrings.py:32
 msgid "Cannot open file for writting."
-msgstr "No es pot obrir el fitxer per escriptura."
+msgstr "No es pot obrir el fitxer per escriure-hi."
 
 #: src/rmdStrings.py:33
 msgid "Cannot load the Jack library (dlopen/dlsym error on libjack.so)."
 msgstr ""
+"No es pot carregar la llibreria Jack (error dlopen/dlsym a libjack.so)."
 
 #: src/rmdStrings.py:34
 msgid "Cannot create new client."
-msgstr ""
+msgstr "No s'ha pogut crear un nou client."
 
 #: src/rmdStrings.py:35
 msgid "Cannot activate client."
-msgstr ""
+msgstr "No s'ha pogut activar el client."
 
 #: src/rmdStrings.py:36
 msgid "Port registration/connection failure."
-msgstr ""
+msgstr "Ha fallat la connexió/registre al port."
 
 #: src/rmdStrings.py:37
 msgid "Segmentation Fault"
@@ -130,7 +134,7 @@ msgid ""
 "recordMyDesktop has exited with status"
 msgstr ""
 "La gravació ha acabat.\n"
-"recordMyDesktop ha sortit amb estatus"
+"recordMyDesktop ha sortit amb l'estatus"
 
 #: src/rmdStrings.py:41
 msgid "Description"
@@ -143,7 +147,7 @@ msgid ""
 "error code"
 msgstr ""
 "La gravació ha acabat.\n"
-"recordMyDesktop ha surti't amb un codi\n"
+"recordMyDesktop ha sortit amb un codi\n"
 "d'error desconegut"
 
 #: src/rmdStrings.py:46 src/rmdStrings.py:74
@@ -160,7 +164,7 @@ msgstr "Avançat"
 
 #: src/rmdStrings.py:47
 msgid "Select Window"
-msgstr "Selecciona la finestra"
+msgstr "Escull la finestra"
 
 #: src/rmdStrings.py:48
 msgid "Click here to select a window to record"
@@ -183,9 +187,9 @@ msgid ""
 "(this behavior can be changed )"
 msgstr ""
 "Feu clic per triar un nom de fitxer i localització\n"
-"El nom predeterminat és out.ogg en la teva carpeta home\n"
-"Si ja existeix el fitxer el nou tindrà\n"
-"un numero afegit al seu nom\n"
+"El nom predeterminat és out.ogg en la vostra carpeta \"/home\"\n"
+"Si ja existeix el fitxer, el nou tindrà\n"
+"un número afegit al seu nom\n"
 "(aquest comportament es pot canviar)"
 
 #: src/rmdStrings.py:51
@@ -199,9 +203,9 @@ msgid ""
 "so it's recommended, when encoding on the fly,\n"
 "to leave at 100)"
 msgstr ""
-"Tria la qualitat de vídeo de la vostra gravació\n"
+"Trieu la qualitat de vídeo de la vostra gravació\n"
 "(Menor qualitat necessitarà més capacitat de procés,\n"
-"pel que es recomana, quan es grava al vol,\n"
+"per la qual cosa es recomana, quan es grava al vol,\n"
 "deixar-lo en 100)"
 
 #: src/rmdStrings.py:53
@@ -224,11 +228,10 @@ msgid ""
 "Right click on it, to reset the area."
 msgstr ""
 "\n"
-"Per seleccionar l'àrea de gravació:\n"
-"en la previsualització feu clic i arrossegueu\n"
-"amb el botó esquerre del ratolí.\n"
-"\n"
-"Per a reiniciar l'area, fes clic amb el botó\n"
+"Cliqueu i arrossegueu amb el botó esquerre\n"
+"del ratolí, en la previsualització, per seleccionar\n"
+"l'àrea de gravació.\n"
+"Per a reiniciar l'àrea, cliqueu-hi dins amb el botó\n"
 "dret del ratolí."
 
 #: src/rmdStrings.py:58
@@ -250,9 +253,9 @@ msgid ""
 "If you press Cancel or close this window,\n"
 "this proccess cannot be resumed!"
 msgstr ""
-"Si us plau esperi mentre es codifica la vostra gravació\n"
+"Si us plau espereu mentre es codifica la vostra gravació\n"
 "¡¡¡AVIS!!!\n"
-"Si prems Anul·lar o tancas aquesta finestra,\n"
+"Si premeu Anul·lar o tanqueu aquesta finestra,\n"
 " aquest procés no podrà ser continuat!"
 
 #: src/rmdStrings.py:65
@@ -261,7 +264,7 @@ msgstr "complet"
 
 #: src/rmdStrings.py:68
 msgid "Overwite Existing Files"
-msgstr "Sobrescriure fitxers existents"
+msgstr "Sobrescriu els fitxers existents"
 
 #: src/rmdStrings.py:68
 msgid "Working Directory"
@@ -277,7 +280,7 @@ msgstr "Codificació al vol"
 
 #: src/rmdStrings.py:69
 msgid "Zero Compression"
-msgstr "Sense compresió"
+msgstr "Sense compressió"
 
 #: src/rmdStrings.py:70
 msgid "Quick Subsampling"
@@ -313,11 +316,11 @@ msgstr "Extensió MIT-Shm"
 
 #: src/rmdStrings.py:72
 msgid "Include Window Decorations"
-msgstr ""
+msgstr "Inclou les decoracions de les finestres"
 
 #: src/rmdStrings.py:72
 msgid "Tooltips"
-msgstr ""
+msgstr "Pistes"
 
 #: src/rmdStrings.py:73
 msgid "Outline Capture Area On Screen"
@@ -325,7 +328,7 @@ msgstr ""
 
 #: src/rmdStrings.py:75
 msgid "Drop Frames(encoder)"
-msgstr "Descarta captures (codificador)"
+msgstr "Descarta quadres (codificador)"
 
 #: src/rmdStrings.py:75
 msgid "Startup Delay(secs)"
@@ -380,12 +383,12 @@ msgid ""
 "By checking this box, this behavior is disabled and the old file is "
 "overwritten.\n"
 msgstr ""
-"Per defecte, si intenteu desar un fitxer amb un nom que\n"
-" existeix, el fitxer no serà renombrat \n"
-"(per exemple si intentes desar-ho com out.ogg i ja existeix, el fitxer es "
+"Per omissió, si intenteu desar un fitxer amb un nom que ja\n"
+" existeix, el fitxer serà renombrat \n"
+"(per exemple si intenteu desar-lo com out.ogg i ja existeix, el fitxer es "
 "renombrarà com a out.ogg.1)\n"
-"Activant aquesta casella es desactivarà aquest comportament i el fitxer "
-"antic serà borrat.\n"
+"Marcant aquesta casella es desactivarà aquest comportament i el fitxer antic "
+"serà sobreescrit.\n"
 
 #: src/rmdStrings.py:80
 msgid "Directory where temporary files will be saved."
@@ -396,7 +399,7 @@ msgid ""
 "Encode simultaneously with the recording.\n"
 "This will require a lot more processing power.\n"
 msgstr ""
-"Codificar simultàniament en grabar.\n"
+"Codifica simultàniament en grabar.\n"
 "Això requereix molta mes capacitat de procés.\n"
 
 #: src/rmdStrings.py:83
@@ -406,10 +409,10 @@ msgid ""
 "in the expense of hard disk space.\n"
 "This option is valid only when encoding on the fly is disabled."
 msgstr ""
-"No s'aplicarà la compresió en els fitxers temporals.\n"
+"No s'aplicarà la compressió en els fitxers temporals.\n"
 "Si s'habilita, el programa necessitarà menys capacitat de\n"
-"proces, a canvi d'usar mes espai de disc.\n"
-"Aquesta opció nomes es vàlida si esta desactivada la codificació al vol."
+"procés, a canvi d'usar més espai de disc.\n"
+"Aquesta opció nomes és vàlida si està desactivada la codificació al vol."
 
 #: src/rmdStrings.py:84
 msgid ""
@@ -417,7 +420,7 @@ msgid ""
 "processing power, but it might make the colors look a bit more blurry."
 msgstr ""
 "Habilitant aquesta opció el programa necessitarà menys\n"
-"capacitat de procés, però pot fer que els colors es vegin mes borrosos."
+"capacitat de procés, però pot fer que els colors es vegin més borrosos."
 
 #: src/rmdStrings.py:85
 msgid ""
@@ -426,9 +429,9 @@ msgid ""
 "known 3d compositing window manager.\n"
 " "
 msgstr ""
-"Aquesta opció s'ha d'habilitar en grabar finestres 3D.\n"
-"També s'auto-activara al grabar amb un\n"
-"gestor de finestras 3D conegut.\n"
+"Aquesta opció s'ha d'habilitar en gravar finestres 3D.\n"
+"També s'autoactivarà en gravar un\n"
+"gestor de finestres 3D conegut.\n"
 " "
 
 #: src/rmdStrings.py:86
@@ -455,9 +458,9 @@ msgid ""
 "You can also disable cursor drawing."
 msgstr ""
 "El cursor del ratolí que serà dibuixat.\n"
-"Normal es el cursor que veus mentres graves\n"
+"Normal és el cursor que veieu mentres es grava,\n"
 "mentre que blanc i negre són cursors falsos, dibuixats pel programa.\n"
-"També pots deshabilitat el dibuix del cursor."
+"També podeu deshabilitar el dibuix del cursor."
 
 #: src/rmdStrings.py:91
 msgid ""
@@ -469,19 +472,23 @@ msgstr ""
 "Usa l'extensió de memòria MIT compartida quan sigui apropiat,\n"
 "depenent de la resta de configuracions del programa.\n"
 "No es recomana deshabilitar aquesta opció,\n"
-"per que pot alentir severament el programa."
+"perquè pot alentir severament el programa."
 
 #: src/rmdStrings.py:92
 msgid ""
 "When selecting a window via the \"Select Window\" button,\n"
 "include that window's decorations in the recording area."
 msgstr ""
+"Quan s'escull una finestra amb el botó \"Escull la finestra\",\n"
+"inclou les decoracions d'aquesta finestra dins l'àrea a gravar."
 
 #: src/rmdStrings.py:93
 msgid ""
 "Enable or disable tooltips, like this one.\n"
 "(Requires restart)"
 msgstr ""
+"Habilita o deshabilita les pistes, com ara aquesta.\n"
+"(Cal reiniciar)"
 
 #: src/rmdStrings.py:94
 msgid ""
@@ -500,28 +507,37 @@ msgid ""
 "recordMyDesktop must be compiled with JACK\n"
 "support for this option to work."
 msgstr ""
+"Marqueu aquesta opció per tal de gravar l'àudio\n"
+" a través de JACK. El servidor JACK ha d'estar corrent\n"
+"per tal d'obtenir els ports que es gravaran.\n"
+"L'àudio gravat de cadascun d'ells\n"
+"s'escriurà en un canal propi.\n"
+"Per tal que aquesta opció funcioni cal haver\n"
+"compilat el recordMyDesktop amb el suport per a JACK."
 
 #: src/rmdStrings.py:97
 msgid "Use Jack for audio capture."
-msgstr ""
+msgstr "Usa JACK per la captura d'àudio."
 
 #: src/rmdStrings.py:98
 msgid ""
 "Select the ports you want to record from\n"
 "(hold Ctrl to select multiple entries):"
 msgstr ""
+"Escolliu els ports des d'on voleu gravar\n"
+"(useu la tecla Ctrl per fer selecció múltiple):"
 
 #: src/rmdStrings.py:100
 msgid "Available Ports"
-msgstr ""
+msgstr "Ports disponibles"
 
 #: src/rmdStrings.py:101
 msgid "jack_lsp returned no ports."
-msgstr ""
+msgstr "jack_lsp no ha retornat cap port"
 
 #: src/rmdStrings.py:102
 msgid "Make sure that jackd is running."
-msgstr ""
+msgstr "Assegureu-vos que el jack està corrent."
 
 #: src/rmdStrings.py:103
 msgid "Available ports (double click to add):"
@@ -535,9 +551,6 @@ msgstr ""
 msgid "Refresh"
 msgstr ""
 
-#~ msgid "gtk-recordMyDesktop"
-#~ msgstr "gtk-recordMyDesktop"
-
 #~ msgid "Shared Threshold"
 #~ msgstr "Llindar compartit"
 
@@ -546,7 +559,10 @@ msgstr ""
 #~ "of the screenshot through the MIT-Shared memory extension.\n"
 #~ "This option has no effect when using the full shots option.\n"
 #~ msgstr ""
-#~ "Quantitat de canvis en la pantalla, dins d'un marc, que incrementa\n"
-#~ "la captura a través de la memòria MIT compartida.\n"
+#~ "Quantitat de canvis en la pantalla, dins d'un quadre, que dispara\n"
+#~ "la captura a través de l'extensió de memòria compartida MIT.\n"
 #~ "Aquesta opció no té efecte si s'està usant l'opció de captures "
 #~ "completes.\n"
+
+#~ msgid "gtk-recordMyDesktop"
+#~ msgstr "gtk-recordMyDesktop"
