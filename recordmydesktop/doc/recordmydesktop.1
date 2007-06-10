@@ -413,12 +413,48 @@ if you are doing the encoding on the fly
 ,it's better to start with default values and manipulate
 the end\-result with another program.
 .br
-An excellent converter is
+.br
+An excellent converter is the
+.B
+vlc
+media player, which can perform a variety of transcoding
+.br
+operations, either using the graphical interface, or the commandline for more flexibility.
+.br
+vlc is a complex piece of software, so you should consult it's documentation, before
+.br
+using it.
+.br
+.br
+An example follows, which will resize a recording named out.ogg to 512x384:
+.br
+.B
+vlc \-I dummy out.ogg vlc:quit \-\-sout "#transcode{ vcodec = theo, width = 512, height = 384 }:duplicate{ dst = std{ access = file, mux=ogg, dst = \\"out_512x384.ogg\\" }}"
+.br
+.br
+If you wish to change the video quality you can append the
+.B
+\-\-sout\-theora\-quality=n,
+with
+.B
+n
+in the range
+.B
+[1,10]
+e.g:
+.br
+.B
+vlc \-I dummy out.ogg vlc:quit \-\-sout "#transcode{ vcodec = theo, width = 512, height = 384 }:duplicate{ dst = std{ access = file, mux=ogg, dst = \\"out_512x384.ogg\\" }}" \-\-sout\-theora\-quality=3
+.br
+which will give a file of a video quality 18 (in a range of 0-63), thus appropriate for web-publishing.
+.br
+.br
+Another option is
 .B
 ffmpeg2theora
 , which despite its name is also a theora to theora converter.
 .br
-Changing the quality of a recordng with it,can be as simple as :
+Changing the quality of a recordng with it, can be as simple as :
 .br
 .B
 ffmpeg2theora infile.ogg \-v 3 \-a 4 \-o outfile.ogg
@@ -439,7 +475,10 @@ John Varouhakis(johnvarouhakis@gmail.com)
 .SH SEE ALSO
 .BR xwininfo(1)
 .br
+.BR vlc(1)
+.br
 .BR ffmpeg2theora(1)
 .br
 .BR jack_lsp(1)
 .br
+
