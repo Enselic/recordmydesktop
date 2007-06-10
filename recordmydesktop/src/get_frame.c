@@ -186,9 +186,10 @@ void *GetFrame(ProgData *pdata){
             pdata->list_selector=((pdata->list_selector+1)%2);
             pthread_mutex_lock(&pdata->list_mutex[tlist_sel]);
         }
-        if(pdata->args.xfixes_cursor){
-        //xfixes pointer sequence
-        //update previous_position
+        if(pdata->args.xfixes_cursor ||
+           pdata->args.have_dummy_cursor){
+            //pointer sequence
+            //update previous_position
             //(if full_shots is enabled this is skipped since it's pointless)
             if(!pdata->args.full_shots){
                 CLIP_DUMMY_POINTER_AREA(mouse_pos_abs,&pdata->brwin,
@@ -199,31 +200,21 @@ void *GetFrame(ProgData *pdata){
                    (mouse_pos_temp.height>0))
                     RectInsert(&pdata->rect_root[tlist_sel],&mouse_pos_temp);
             }
-            xcim=XFixesGetCursorImage(pdata->dpy);
-            mouse_pos_abs.x=xcim->x-xcim->xhot;
-            mouse_pos_abs.y=xcim->y-xcim->yhot;
-            mouse_pos_abs.width=xcim->width;
-            mouse_pos_abs.height=xcim->height;
-        }
-        if(pdata->args.have_dummy_cursor){
-        //dummy pointer sequence
-        //update previous_position
-        //(if full_shots is enabled this is skipped since it's pointless)
-            if(!pdata->args.full_shots){
-                CLIP_DUMMY_POINTER_AREA(mouse_pos_abs,&pdata->brwin,
-                                        &mouse_pos_temp);
-                if((mouse_pos_temp.x>=0)&&
-                   (mouse_pos_temp.y>=0)&&
-                   (mouse_pos_temp.width>0)&&
-                   (mouse_pos_temp.height>0))
-                    RectInsert(&pdata->rect_root[tlist_sel],&mouse_pos_temp);
+            //find new one
+            if(pdata->args.xfixes_cursor){
+                xcim=XFixesGetCursorImage(pdata->dpy);
+                mouse_pos_abs.x=xcim->x-xcim->xhot;
+                mouse_pos_abs.y=xcim->y-xcim->yhot;
+                mouse_pos_abs.width=xcim->width;
+                mouse_pos_abs.height=xcim->height;
             }
-        //find new one
-            XQueryPointer(pdata->dpy,
-                            pdata->specs.root,
-                            &root_ret,&child_ret,
-                            &mouse_pos_abs.x,&mouse_pos_abs.y,
-                            &mouse_pos_rel.x,&mouse_pos_rel.y,&msk_ret);
+            else{
+                XQueryPointer(pdata->dpy,
+                              pdata->specs.root,
+                              &root_ret,&child_ret,
+                              &mouse_pos_abs.x,&mouse_pos_abs.y,
+                              &mouse_pos_rel.x,&mouse_pos_rel.y,&msk_ret);
+            }
         }
         if(!pdata->args.full_shots)
             UpdateImage(pdata->dpy,
@@ -279,10 +270,11 @@ void *GetFrame(ProgData *pdata){
                               pdata->specs.depth);
             pthread_mutex_unlock(&pdata->yuv_mutex);
         }
-        if(pdata->args.xfixes_cursor){
+        if(pdata->args.xfixes_cursor ||
+           pdata->args.have_dummy_cursor){
             int mouse_xoffset,
                 mouse_yoffset;
-        //avoid segfaults
+            //avoid segfaults
             CLIP_DUMMY_POINTER_AREA(mouse_pos_abs,&pdata->brwin,
                                     &mouse_pos_temp);
             mouse_xoffset=mouse_pos_temp.x-mouse_pos_abs.x;
@@ -291,60 +283,45 @@ void *GetFrame(ProgData *pdata){
                 mouse_xoffset=0;
             if((mouse_yoffset<0) || (mouse_yoffset>mouse_pos_abs.height))
                 mouse_yoffset=0;
-
-        //draw the cursor
+            //draw the cursor
             if((mouse_pos_temp.x>=0)&&
                (mouse_pos_temp.y>=0)&&
                (mouse_pos_temp.width>0)&&
                (mouse_pos_temp.height>0)){
-                XFIXES_POINTER_TO_YUV((&pdata->enc_data->yuv),
-                                      ((unsigned char*)xcim->pixels),
-                                      (mouse_pos_temp.x-
-                                       pdata->brwin.rgeom.x+
-                                       pdata->enc_data->x_offset),
-                                      (mouse_pos_temp.y-
-                                       pdata->brwin.rgeom.y+
-                                       pdata->enc_data->y_offset),
-                                      mouse_pos_temp.width,
-                                      mouse_pos_temp.height,
-                                      mouse_xoffset,
-                                      mouse_yoffset,
-                                      (xcim->width-mouse_pos_temp.width));
+                    if(pdata->args.xfixes_cursor){
+                        XFIXES_POINTER_TO_YUV((&pdata->enc_data->yuv),
+                                            ((unsigned char*)xcim->pixels),
+                                            (mouse_pos_temp.x-
+                                            pdata->brwin.rgeom.x+
+                                            pdata->enc_data->x_offset),
+                                            (mouse_pos_temp.y-
+                                            pdata->brwin.rgeom.y+
+                                            pdata->enc_data->y_offset),
+                                            mouse_pos_temp.width,
+                                            mouse_pos_temp.height,
+                                            mouse_xoffset,
+                                            mouse_yoffset,
+                                            (xcim->width-mouse_pos_temp.width));
+                    }
+                    else{
+                        DUMMY_POINTER_TO_YUV((&pdata->enc_data->yuv),
+                                            pdata->dummy_pointer,
+                                            (mouse_pos_temp.x-
+                                            pdata->brwin.rgeom.x+
+                                            pdata->enc_data->x_offset),
+                                            (mouse_pos_temp.y-
+                                            pdata->brwin.rgeom.y+
+                                            pdata->enc_data->y_offset),
+                                            mouse_pos_temp.width,
+                                            mouse_pos_temp.height,
+                                            mouse_xoffset,
+                                            mouse_yoffset,
+                                            pdata->npxl);
+                    }
             }
-            XFree(xcim);
-            xcim=NULL;
-        }
-
-        if(pdata->args.have_dummy_cursor){
-            int mouse_xoffset,
-                mouse_yoffset;
-        //avoid segfaults
-            CLIP_DUMMY_POINTER_AREA(mouse_pos_abs,&pdata->brwin,
-                                    &mouse_pos_temp);
-            mouse_xoffset=mouse_pos_temp.x-mouse_pos_abs.x;
-            mouse_yoffset=mouse_pos_temp.y-mouse_pos_abs.y;
-            if((mouse_xoffset<0) || (mouse_xoffset>mouse_pos_abs.width))
-                mouse_xoffset=0;
-            if((mouse_yoffset<0) || (mouse_yoffset>mouse_pos_abs.height))
-                mouse_yoffset=0;
-        //draw the cursor
-            if((mouse_pos_temp.x>=0)&&
-               (mouse_pos_temp.y>=0)&&
-               (mouse_pos_temp.width>0)&&
-               (mouse_pos_temp.height>0)){
-                DUMMY_POINTER_TO_YUV((&pdata->enc_data->yuv),
-                                     pdata->dummy_pointer,
-                                     (mouse_pos_temp.x-
-                                      pdata->brwin.rgeom.x+
-                                      pdata->enc_data->x_offset),
-                                     (mouse_pos_temp.y-
-                                      pdata->brwin.rgeom.y+
-                                      pdata->enc_data->y_offset),
-                                     mouse_pos_temp.width,
-                                     mouse_pos_temp.height,
-                                     mouse_xoffset,
-                                     mouse_yoffset,
-                                     pdata->npxl);
+            if(pdata->args.xfixes_cursor){
+                XFree(xcim);
+                xcim=NULL;
             }
         }
         if(!pdata->args.full_shots){
