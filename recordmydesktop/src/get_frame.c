@@ -106,8 +106,9 @@ void *GetFrame(ProgData *pdata){
     XShmSegmentInfo shminfo,shminfo_back;//info structure for the image above.
     int init_img1=0,init_img2=0,
         img_sel,d_buff;
-    img_sel=d_buff=0/*pdata->args.full_shots*/;
+    char *pxl_data=NULL,*pxl_data_back=NULL;
 
+    img_sel=d_buff=0/*pdata->args.full_shots*/;
 //     XVisualInfo vinfo_return;
 //     XMatchVisualInfo(pdata->dpy,pdata->specs.screen,pdata->specs.depth,TrueColor,&vinfo_return );
 //     GLXContext ctx=glXCreateContext( pdata->dpy,
@@ -120,7 +121,7 @@ void *GetFrame(ProgData *pdata){
 //
 //     glReadBuffer(GL_FRONT);
 
-    char *pxl_data=NULL,*pxl_data_back=NULL;
+
     if((init_img1=FirstFrame(pdata,&image,&shminfo,&pxl_data)!=0)){
         if(pdata->args.encOnTheFly){
             if(remove(pdata->args.filename)){
