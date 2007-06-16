@@ -42,7 +42,7 @@ from rmdStrings import *
 class prefsWidget(object):
     def __tooltips__(self):
         self.tooltips=gtk.Tooltips()
-        for i in range(16):
+        for i in range(17):
             self.tooltips.set_tip(self.eboxes[i],prefTooltipLabels[i])
         self.tooltips.set_tip(self.jack_ebox,prefJacktip)
 
@@ -66,6 +66,7 @@ class prefsWidget(object):
         self.__getSelectedPorts__()
         self.values[24]=self.tooltipsComboBox.get_active()
         self.values[25]=self.rFrameComboBox.get_active()
+        self.values[26]=self.extraOptsEntry.get_text().strip()
         self.window.destroy()
         self.optionsOpen[0]=0
 
@@ -234,7 +235,7 @@ class prefsWidget(object):
         self.boxes[9].pack_end(self.deviceEntry,expand=False,fill=False)
 
 #misc page
-        for i in xrange(10,16):
+        for i in xrange(10,17):
             self.labels[i]=gtk.Label(prefLabelStrings[i])
             self.labels[i].set_justify(gtk.JUSTIFY_LEFT)
             self.boxes[i]=gtk.HBox(homogeneous=False, spacing=0)
@@ -287,7 +288,12 @@ class prefsWidget(object):
         self.rFrameComboBox.show()
         self.boxes[15].pack_end(self.rFrameComboBox,expand=False,fill=False)
 
-        for i in range(16):
+        self.extraOptsEntry= gtk.Entry(max=0)
+        self.extraOptsEntry.set_text(self.values[26])
+        self.extraOptsEntry.show()
+        self.boxes[16].pack_end(self.extraOptsEntry,expand=False,fill=False)
+
+        for i in range(17):
             self.boxes[i].show()
             self.eboxes[i].show()
 

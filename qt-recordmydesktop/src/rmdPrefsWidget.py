@@ -42,7 +42,7 @@ from rmdStrings import *
 
 class prefsWidget(object):
     def __tooltips__(self):
-        for i in range(16):
+        for i in range(17):
             self.labels[i].setToolTip(htmlize(prefTooltipLabels[i]))
         self.jack_button.setToolTip(htmlize(prefJacktip))
         self.jack_lsp_label.setToolTip(htmlize(prefJacktip))
@@ -75,6 +75,7 @@ class prefsWidget(object):
         self.__getSelectedPorts__()
         self.values[24]=self.tooltipsComboBox.currentIndex()
         self.values[25]=self.rFrameComboBox.currentIndex()
+        self.values[26]=str(self.extraOptsEntry.text().trimmed())
         self.optionsOpen[0]=0
 
     def __getSelectedPorts__(self):
@@ -209,7 +210,7 @@ class prefsWidget(object):
         self.boxes[9].insertWidget(-1,self.deviceEntry)
 
 #misc page
-        for i in xrange(10,16):
+        for i in xrange(10,17):
             self.labels[i]=QtGui.QLabel(prefLabelStrings[i],self.tabWidgets[3])
             self.labels[i].setAlignment(QtCore.Qt.AlignLeft)
             self.boxes[i]=QtGui.QHBoxLayout()
@@ -254,6 +255,8 @@ class prefsWidget(object):
         self.rFrameComboBox.setCurrentIndex(self.values[25])
         self.boxes[15].insertWidget(-1,self.rFrameComboBox)
 
+        self.extraOptsEntry= QtGui.QLineEdit(self.values[26])
+        self.boxes[16].insertWidget(-1,self.extraOptsEntry)
 
         for i in range(4):
             self.tabWidgets[i].setLayout(self.labelbox[i])
