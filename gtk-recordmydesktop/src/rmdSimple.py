@@ -330,6 +330,11 @@ class simpleWidget(object):
                 self.values.append(rmdConfig.default_values[25])
             else:
                 self.values.append(int(savefile.readline()))
+            p=savefile.readline()
+            if p=='':
+                self.values.append(rmdConfig.default_values[26])
+            else:
+                self.values.append(savefile.readline().replace("\n",""))
             return True
         except:
             return False
@@ -392,6 +397,8 @@ class simpleWidget(object):
             savefile.write("%d\n"%self.values[24])
             savefile.write("#draw an on-screen frame, surrounding the capture area\n")
             savefile.write("%d\n"%self.values[25])
+            savefile.write("#Extra options\n")
+            savefile.write("%s\n"%self.values[26])
             savefile.flush()
             savefile.close()
             return True
