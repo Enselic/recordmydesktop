@@ -194,9 +194,11 @@ class trayIcon(object):
             self.execargs.append('-use-jack')
             for i in self.parent.values[23]:
                 self.execargs.append(i)
+        if self.parent.values[26] != "":
+            for i in self.parent.values[26].split(" "):
+                if i!="":
+                    self.execargs.append(i)
         #print execargs
-
-
 
         self.childP=popen2.Popen3(self.execargs,"t")
         flags = fcntl.fcntl(self.childP.childerr, fcntl.F_GETFL)
