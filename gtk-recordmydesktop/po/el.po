@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: el\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-06-16 20:24+0300\n"
-"PO-Revision-Date: 2007-03-18 18:12+0200\n"
+"PO-Revision-Date: 2007-06-16 20:59+0300\n"
 "Last-Translator: John Varouhakis <johnvarouhakis@gmail.com>\n"
 "Language-Team:  <el@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -19,7 +19,7 @@ msgstr ""
 
 #: src/rmdStrings.py:10
 msgid "Show/hide Main Window"
-msgstr ""
+msgstr "Εμφάνιση/Απόκρυψη κυρίως παραθύρου"
 
 #: src/rmdStrings.py:11
 msgid "_Select Area On Screen"
@@ -27,7 +27,7 @@ msgstr "_Επιλογή Περιοχής στην οθόνη"
 
 #: src/rmdStrings.py:12 src/rmdStrings.py:60
 msgid "Quit"
-msgstr ""
+msgstr "'Εξοδος"
 
 #: src/rmdStrings.py:13
 msgid "a graphical frontend for recordMyDesktop"
@@ -231,15 +231,15 @@ msgstr ""
 
 #: src/rmdStrings.py:58
 msgid "Record"
-msgstr ""
+msgstr "Εγγραφή"
 
 #: src/rmdStrings.py:59
 msgid "Save As"
-msgstr ""
+msgstr "Αποθήκευση ως"
 
 #: src/rmdStrings.py:63
 msgid "Cancel"
-msgstr ""
+msgstr "Ακύρωση"
 
 #: src/rmdStrings.py:64
 msgid ""
@@ -323,7 +323,7 @@ msgstr "Σημείωση της περιοχής καταγραφής στην �
 
 #: src/rmdStrings.py:74
 msgid "Extra Options"
-msgstr ""
+msgstr "Επιπρόσθετες Επιλογές"
 
 #: src/rmdStrings.py:76
 msgid "Drop Frames(encoder)"
@@ -507,6 +507,13 @@ msgid ""
 "they would in the commandline (i.e. separated with spaces).\n"
 "Consult the manpage for more information on using them."
 msgstr ""
+"Έξτρα επιλογές της γραμμής εντολών που θα δωθούν\n"
+"ως ορίσματα στο recordMyDesktop κατά την αρχικοποίηση.\n"
+"Αυτές οι επιλογές πρέπει να εισαχθούν κατά τον ίδιο \n"
+"τρόπο που θα εισάγονταν και στη γραμμή εντολών \n"
+"(δλδ. πρέπει να διαχωρίζονται με κενά).\n"
+"Για περισσότερες πληροφορίες ως προς την χρήση τους, \n"
+"συμβουλευθήτε την manpage του recordMyDesktop. "
 
 #: src/rmdStrings.py:97
 msgid ""
@@ -553,15 +560,13 @@ msgstr "Βεβαιωθείτε ότι ο jackd τρέχει."
 
 #: src/rmdStrings.py:105
 msgid "Available ports (double click to add):"
-msgstr ""
+msgstr "Διαθέσιμες θύρες (διπλό κλικ για προσθήκη):"
 
 #: src/rmdStrings.py:106
 msgid "Selected ports (double click to remove):"
-msgstr ""
+msgstr "Επιλεγμένες θύρες (διπλό κλικ για αφαίρεση):"
 
 #: src/rmdStrings.py:107
 msgid "Refresh"
-msgstr ""
+msgstr "Επαναφόρτωση"
 
-#~ msgid "gtk-recordMyDesktop"
-#~ msgstr "gtk-recordMyDesktop"
