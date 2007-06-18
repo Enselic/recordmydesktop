@@ -141,10 +141,11 @@ class QtThumbSelector(QtGui.QLabel):
             self.x1 = event.x()
             self.y1 = event.y()
     def __draw_frame__(self):
-        self.realFrame=rmdFrame(self.area_return[0],
-                                self.area_return[1],
-                                self.area_return[2]-self.area_return[0],
-                                self.area_return[3]-self.area_return[1])
+        if self.area_return[0]!=-1:
+            self.realFrame=rmdFrame(self.area_return[0],
+                                    self.area_return[1],
+                                    self.area_return[2]-self.area_return[0],
+                                    self.area_return[3]-self.area_return[1])
     def closeEvent(self,event):
         self.realFrame.destroy()
         QtGui.QLabel.close(self)
