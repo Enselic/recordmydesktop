@@ -314,6 +314,8 @@ class prefsWidget(object):
         self.jack_lsp_liststore.setEnabled(val)
         self.jack_lsp_listSave.setEnabled(val)
         self.jack_lsp_refresh.setEnabled(val)
+        if(val):
+            self.__runJackLSP__()
 
     def __init__(self,values,optionsOpen):
         self.values=values
