@@ -72,6 +72,7 @@ class trayIcon(object):
 
 
     def __buttonPress__(self,ActivationReason):
+
         button=0
         if  ActivationReason==QtGui.QSystemTrayIcon.Trigger:
             button=1
@@ -249,6 +250,8 @@ class trayIcon(object):
             os.kill(self.rmdPid,signal.SIGTERM)
             self.state=-1
             monitor=imon.rmdMonitor(self.childP.fromchild,self.rmdPid,self.parent)
+            monitor.exec_()
+
             self.state=0
         else:
             self.__exit_status_dialog(exit_ret[1])
