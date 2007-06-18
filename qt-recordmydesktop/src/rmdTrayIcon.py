@@ -219,8 +219,9 @@ class trayIcon(object):
         self.dialog = QtGui.QWidget()
         self.label1=None
         try:
-            self.label1 = QtGui.QLabel("\t\t"+TrayIconStr['RecFinishedKnown']+
-            ": %d\n"%(status)+TrayIconStr['ErrDesc']+":%s\n"%(rmdErrStr[int(status)]))
+            self.label1 = QtGui.QLabel("\t\t"+TrayIconStr['RecFinishedKnown'] +
+            ": %d\n"%(status) + TrayIconStr['ErrDesc'] + ":" +
+            (rmdErrStr[int(status)]) + "\n")
         except:
             self.label1 = QtGui.QLabel("\t\t"+TrayIconStr['RecFinishedUnknown']+": %d \n"%(status))
         self.label1.setAlignment(QtCore.Qt.AlignHCenter)
