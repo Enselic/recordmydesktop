@@ -99,45 +99,57 @@ int main(int argc,char **argv){
                         &pdata.shm_opcode);
 
 
-        if((exit_status=InitializeData(&pdata,&enc_data,&cache_data))!=0)
-            return exit_status;
+        if((exit_status=InitializeData(&pdata,&enc_data,&cache_data))==0){
 
-        //this is where the capturing happens.
-        rmdThreads(&pdata);
+            u_int32_t   y_t[(pdata.enc_data->yuv.y_width/Y_UNIT_WIDTH)*
+                        (pdata.enc_data->yuv.y_height/Y_UNIT_WIDTH)],
+                        u_t[(pdata.enc_data->yuv.y_width/Y_UNIT_WIDTH)*
+                        (pdata.enc_data->yuv.y_height/Y_UNIT_WIDTH)],
+                        v_t[(pdata.enc_data->yuv.y_width/Y_UNIT_WIDTH)*
+                        (pdata.enc_data->yuv.y_height/Y_UNIT_WIDTH)];
+            yblocks=y_t;
+            ublocks=u_t;
+            vblocks=v_t;
 
-        fprintf(stderr,".");
 
-        fprintf(stderr,"\n");
+            //this is where the capturing happens.
+            rmdThreads(&pdata);
 
-        //encode and then cleanup cache
-        if(!pdata.args.encOnTheFly){
-            if(!Aborted){
-                EncodeCache(&pdata);
+
+            fprintf(stderr,".");
+
+            fprintf(stderr,"\n");
+
+            //encode and then cleanup cache
+            if(!pdata.args.encOnTheFly){
+                if(!Aborted){
+                    EncodeCache(&pdata);
+                }
+                fprintf(stderr,"Cleanning up cache...\n");
+                if(PurgeCache(pdata.cache_data,!pdata.args.nosound))
+                    fprintf(stderr,"Some error occured "
+                                "while cleaning up cache!\n");
+                fprintf(stderr,"Done!!!\n");
             }
-            fprintf(stderr,"Cleanning up cache...\n");
-            if(PurgeCache(pdata.cache_data,!pdata.args.nosound))
-                fprintf(stderr,"Some error occured "
-                               "while cleaning up cache!\n");
-            fprintf(stderr,"Done!!!\n");
+
+            //This can happen earlier, but in some cases it might get stuck.
+            //So we must make sure the recording is not wasted.
+            XCloseDisplay(pdata.dpy);
+
+            if(Aborted && pdata.args.encOnTheFly){
+                if(remove(pdata.args.filename)){
+                    perror("Error while removing file:\n");
+                    return 1;
+                }
+                else{
+                    fprintf(stderr,"SIGABRT received,file %s removed\n",
+                                pdata.args.filename);
+                    return 0;
+                }
+            }
+            else
+                fprintf(stderr,"Goodbye!\n");
         }
-
-        //This can happen earlier, but in some cases it might get stuck.
-        //So we must make sure the recording is not wasted.
-        XCloseDisplay(pdata.dpy);
-
-        if(Aborted && pdata.args.encOnTheFly){
-            if(remove(pdata.args.filename)){
-                perror("Error while removing file:\n");
-                return 1;
-            }
-            else{
-                fprintf(stderr,"SIGABRT received,file %s removed\n",
-                               pdata.args.filename);
-                return 0;
-            }
-        }
-        else
-            fprintf(stderr,"Goodbye!\n");
     }
     return exit_status;
 }
