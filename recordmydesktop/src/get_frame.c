@@ -26,9 +26,12 @@
 
 
 #include <recordmydesktop.h>
-// #include <GL/gl.h>
-// #include <GL/glu.h>
-// #include <GL/glx.h>
+
+#ifdef USE_GLX_CAP
+    #include <GL/gl.h>
+    #include <GL/glu.h>
+    #include <GL/glx.h>
+#endif
 
 int FirstFrame(ProgData *pdata,XImage **image,XShmSegmentInfo *shminfo,
                char **pxl_data){
@@ -96,8 +99,11 @@ int FirstFrame(ProgData *pdata,XImage **image,XShmSegmentInfo *shminfo,
 }
 
 void *GetFrame(ProgData *pdata){
-    int tlist_sel=0;
-    uint msk_ret;
+    int i=0,
+        tlist_sel=0,
+        blocknum_x=pdata->enc_data->yuv.y_width/Y_UNIT_WIDTH,
+        blocknum_y=pdata->enc_data->yuv.y_height/Y_UNIT_WIDTH;
+    unsigned int msk_ret;
     WGeometry mouse_pos_abs,mouse_pos_rel,mouse_pos_temp;
     Window root_ret,child_ret;
     XFixesCursorImage *xcim=NULL;
@@ -108,19 +114,24 @@ void *GetFrame(ProgData *pdata){
         img_sel,d_buff;
     char *pxl_data=NULL,*pxl_data_back=NULL;
 
-    img_sel=d_buff=0/*pdata->args.full_shots*/;
-//     XVisualInfo vinfo_return;
-//     XMatchVisualInfo(pdata->dpy,pdata->specs.screen,pdata->specs.depth,TrueColor,&vinfo_return );
-//     GLXContext ctx=glXCreateContext( pdata->dpy,
-//                       &vinfo_return,
-//                       NULL,
-//                       True);
-//     glXMakeCurrent( pdata->dpy,
-//                     pdata->args.windowid,
-//                     ctx);
-//
-//     glReadBuffer(GL_FRONT);
 
+
+#ifdef USE_GLX_CAP
+    XVisualInfo vinfo_return;
+    XMatchVisualInfo(pdata->dpy,pdata->specs.screen,pdata->specs.depth,TrueColor,&vinfo_return );
+    GLXContext ctx=glXCreateContext( pdata->dpy,
+                      &vinfo_return,
+                      NULL,
+                      True);
+//     fprintf(stderr,"here %d",pdata->args.windowid);
+    glXMakeCurrent( pdata->dpy,
+                    pdata->brwin.windowid,
+                    ctx);
+
+    glReadBuffer(GL_FRONT);
+#endif
+
+    img_sel=d_buff=pdata->args.full_shots;
 
     if((init_img1=FirstFrame(pdata,&image,&shminfo,&pxl_data)!=0)){
         if(pdata->args.encOnTheFly){
@@ -191,14 +202,17 @@ void *GetFrame(ProgData *pdata){
            pdata->args.have_dummy_cursor){
             //pointer sequence
             //update previous_position
-            //(if full_shots is enabled this is skipped since it's pointless)
+            //(if full_shots is enabled the new cursor is
+            //entered on the list for update.
+            //When taking full shots we keep it for further
+            //bellow, to mark the area as dirty when dbuffering.
+            CLIP_DUMMY_POINTER_AREA(mouse_pos_abs,&pdata->brwin,
+                                    &mouse_pos_temp);
             if(!pdata->args.full_shots){
-                CLIP_DUMMY_POINTER_AREA(mouse_pos_abs,&pdata->brwin,
-                                        &mouse_pos_temp);
                 if((mouse_pos_temp.x>=0)&&
-                   (mouse_pos_temp.y>=0)&&
-                   (mouse_pos_temp.width>0)&&
-                   (mouse_pos_temp.height>0))
+                    (mouse_pos_temp.y>=0)&&
+                    (mouse_pos_temp.width>0)&&
+                    (mouse_pos_temp.height>0))
                     RectInsert(&pdata->rect_root[tlist_sel],&mouse_pos_temp);
             }
             //find new one
@@ -217,10 +231,10 @@ void *GetFrame(ProgData *pdata){
                               &mouse_pos_rel.x,&mouse_pos_rel.y,&msk_ret);
             }
         }
-        if(!pdata->args.full_shots)
+        if(!pdata->args.full_shots){
+            pthread_mutex_lock(&pdata->yuv_mutex);
             UpdateImage(pdata->dpy,
                         &pdata->enc_data->yuv,
-                        &pdata->yuv_mutex,
                         &pdata->specs,
                         &pdata->rect_root[tlist_sel],
                         &pdata->brwin,
@@ -230,6 +244,11 @@ void *GetFrame(ProgData *pdata){
                         &shminfo,
                         pdata->shm_opcode,
                         pdata->args.no_quick_subsample);
+            BlocksFromList(&pdata->rect_root[tlist_sel],
+                           pdata->enc_data->yuv.y_width/Y_UNIT_WIDTH,
+                           pdata->enc_data->yuv.y_height/Y_UNIT_WIDTH);
+            pthread_mutex_unlock(&pdata->yuv_mutex);
+        }
         else{
             unsigned char *front_buff=(!img_sel)?((unsigned char*)image->data):
                                       ((unsigned char*)image_back->data);
@@ -238,18 +257,20 @@ void *GetFrame(ProgData *pdata){
                                         ((unsigned char*)image_back->data));
 
             if(!pdata->args.noshared){
+#ifdef USE_GLX_CAP
+                glReadPixels(0,
+                             0,
+                             pdata->brwin.rgeom.width,
+                             pdata->brwin.rgeom.height,
+                             GL_RGBA,
+                             GL_UNSIGNED_BYTE,
+                             front_buff);
+#else
                 XShmGetImage(pdata->dpy,pdata->specs.root,
                             ((!img_sel)?image:image_back),
                             (pdata->brwin.rgeom.x),
                             (pdata->brwin.rgeom.y),AllPlanes);
-
-//                 glReadPixels(0,
-//                              0,
-//                              pdata->brwin.rgeom.width,
-//                              pdata->brwin.rgeom.height,
-//                              GL_RGBA,
-//                              GL_UNSIGNED_BYTE,
-//                              front_buff);
+#endif
             }
             if(pdata->args.noshared){
                 GetZPixmap( pdata->dpy,
@@ -261,6 +282,28 @@ void *GetFrame(ProgData *pdata){
                             pdata->brwin.rgeom.height);
             }
             pthread_mutex_lock(&pdata->yuv_mutex);
+            for(i=0;i<blocknum_x*blocknum_y;i++){
+                yblocks[i]=ublocks[i]=vblocks[i]=0;
+            }
+            if((d_buff)&&
+               (pdata->args.xfixes_cursor ||
+                pdata->args.have_dummy_cursor)){
+            //make previous cursor position dirty
+                if((mouse_pos_temp.x>=0)&&
+                    (mouse_pos_temp.y>=0)&&
+                    (mouse_pos_temp.width>0)&&
+                    (mouse_pos_temp.height>0)){
+
+                    MARK_BACK_BUFFER(   front_buff,\
+                                        back_buff,\
+                                        mouse_pos_temp.x,\
+                                        mouse_pos_temp.y,\
+                                        mouse_pos_temp.width,\
+                                        mouse_pos_temp.height,\
+                                        (pdata->brwin.rgeom.width),\
+                                        pdata->specs.depth)
+                }
+            }
             UPDATE_YUV_BUFFER((&pdata->enc_data->yuv),
                               front_buff,back_buff,
                               (pdata->enc_data->x_offset),
@@ -337,7 +380,9 @@ void *GetFrame(ProgData *pdata){
         pthread_mutex_unlock(&pdata->img_buff_ready_mutex);
         capture_busy=0;
     }
-//    glXDestroyContext(pdata->dpy,ctx);
+#ifdef USE_GLX_CAP
+   glXDestroyContext(pdata->dpy,ctx);
+#endif
     pthread_mutex_lock(&pdata->img_buff_ready_mutex);
     pthread_cond_broadcast(&pdata->image_buffer_ready);
     pthread_mutex_unlock(&pdata->img_buff_ready_mutex);
