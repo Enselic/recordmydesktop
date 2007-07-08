@@ -32,7 +32,16 @@
     #include <config.h>
 #endif
 
+//header inclusion is completely fucked up
+//I'll fix it, I promise
 #include "rmdtypes.h"
+
+//These are the cache blocks. They need to be accesible in the
+//dbuf macros
+u_int32_t   *yblocks,
+            *ublocks,
+            *vblocks;
+
 #include "rmdmacro.h"
 #include "rmdfunc.h"
 
@@ -51,6 +60,9 @@ unsigned char   Yr[256],Yg[256],Yb[256],
 //but they might be usefull later for profiling
 unsigned int    frames_total,   //frames calculated by total time expirations
                 frames_lost;    //the value of shame
+
+
+
 //used to determine frame drop which can
 //happen on failure to receive a signal over a condition variable
 int capture_busy,
