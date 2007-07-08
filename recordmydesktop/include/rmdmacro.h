@@ -284,6 +284,10 @@
              (t3&__B16_MASK)+(t4&__B16_MASK))/4)&__B16_MASK);\
 }
 
+#define POINT_IN_BLOCK(xv,yv,widthv,blocksize) ((yv/blocksize)*\
+                                                (widthv/blocksize)+\
+                                                (xv/blocksize))
+
 #define UPDATE_Y_PLANE(data,\
                        x_tm,\
                        y_tm,\
@@ -330,6 +334,7 @@
                 *yuv_y=_yr[__RVALUE_##__bit_depth__(t_val)] +\
                     _yg[__GVALUE_##__bit_depth__(t_val)] +\
                     _yb[__BVALUE_##__bit_depth__(t_val)] ;\
+                yblocks[POINT_IN_BLOCK(i,k,width_tm,Y_UNIT_WIDTH)]=1;\
             }\
             datapi++;\
             datapi_back++;\
@@ -441,6 +446,8 @@
                                         _ur,_ug,_ubvr,_vg,_vb,\
                                         __sampling_type,\
                                         __bit_depth__)\
+                    ublocks[POINT_IN_BLOCK(i,k,width_tm,Y_UNIT_WIDTH)]=1;\
+                    vblocks[POINT_IN_BLOCK(i,k,width_tm,Y_UNIT_WIDTH)]=1;\
                 }\
                 datapi+=2;\
                 datapi_back+=2;\
@@ -473,6 +480,8 @@
                                         _ur,_ug,_ubvr,_vg,_vb,\
                                         __sampling_type,\
                                         __bit_depth__)\
+                    ublocks[POINT_IN_BLOCK(i,k,width_tm,Y_UNIT_WIDTH)]=1;\
+                    vblocks[POINT_IN_BLOCK(i,k,width_tm,Y_UNIT_WIDTH)]=1;\
                 }\
                 datapi+=2;\
                 datapi_back+=2;\
@@ -620,6 +629,61 @@
     }\
 }
 
+#define MARK_BACK_BUFFER(   data,\
+                            data_back,\
+                            x_tm,\
+                            y_tm,\
+                            width_tm,\
+                            height_tm,\
+                            buffer_width,\
+                            __bit_depth__){\
+    if((__bit_depth__==24)||(__bit_depth__==32)){\
+        MARK_BACK_BUFFER_C( data,\
+                            data_back,\
+                            x_tm,\
+                            y_tm,\
+                            width_tm,\
+                            height_tm,\
+                            buffer_width,\
+                            32)\
+    }\
+    else{\
+        MARK_BACK_BUFFER_C( data,\
+                            data_back,\
+                            x_tm,\
+                            y_tm,\
+                            width_tm,\
+                            height_tm,\
+                            buffer_width,\
+                            16)\
+    }\
+}\
+
+
+#define MARK_BACK_BUFFER_C( data,\
+                            data_back,\
+                            x_tm,\
+                            y_tm,\
+                            width_tm,\
+                            height_tm,\
+                            buffer_width,\
+                            __bit_depth__){\
+    int k,i;\
+    register u_int##__bit_depth__##_t\
+        *datapi=\
+            ((u_int##__bit_depth__##_t *)data)+y_tm*buffer_width+x_tm,\
+        *datapi_back=\
+            ((u_int##__bit_depth__##_t *)data_back)+y_tm*buffer_width+x_tm;\
+    for(k=0;k<height_tm;k++){\
+        for(i=0;i<width_tm;i++){\
+            *datapi_back=*datapi+1;\
+            datapi++;\
+            datapi_back++;\
+        }\
+        datapi+=buffer_width-width_tm;\
+        datapi_back+=buffer_width-width_tm;\
+    }\
+}
 
 #define I16TOA(number,buffer){\
     int t_num=(number),__k=0,__i=0;\
