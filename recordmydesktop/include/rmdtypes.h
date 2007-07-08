@@ -103,8 +103,8 @@ enum{
 
 typedef struct _DisplaySpecs{   //this struct holds some basic information
     int screen;                 //about the display,needed mostly for
-    uint width;                 //validity checks at startup
-    uint height;
+    unsigned int width;                 //validity checks at startup
+    unsigned int height;
     Window root;
     Visual *visual;
     GC gc;
