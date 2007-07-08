@@ -29,7 +29,6 @@
 
 void UpdateImage(Display * dpy,
                 yuv_buffer *yuv,
-                pthread_mutex_t *yuv_mutex,
                 DisplaySpecs *specs,
                 RectArea **root,
                 BRWindow *brwin,
@@ -64,14 +63,12 @@ void UpdateImage(Display * dpy,
                               temp->geom.width,
                               temp->geom.height);
             }
-            pthread_mutex_lock(yuv_mutex);
             UPDATE_YUV_BUFFER(yuv,dtap,NULL,
                                 (temp->geom.x-brwin->rgeom.x+enc->x_offset),
                                 (temp->geom.y-brwin->rgeom.y+enc->y_offset),
                                 (temp->geom.width),(temp->geom.height),
                                 no_quick_subsample,
                                 specs->depth);
-            pthread_mutex_unlock(yuv_mutex);
             temp=temp->next;
         }while(temp!=NULL);
     }
