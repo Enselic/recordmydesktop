@@ -27,7 +27,22 @@
 
 
 
-#include <recordmydesktop.h>
+// #include <recordmydesktop.h>
+#ifdef HAVE_CONFIG_H
+    #include <config.h>
+#endif
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <fcntl.h>
+
+#ifdef HAVE_LIBASOUND
+    #include <alsa/asoundlib.h>
+#else
+    #include <sys/ioctl.h>
+    #include <sys/soundcard.h>
+#endif
 
 #ifdef HAVE_LIBASOUND
 
