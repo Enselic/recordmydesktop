@@ -161,8 +161,9 @@ class trayIcon(object):
             self.execargs.append('%d'%(self.parent.values[5][2]-self.parent.values[5][0]))
             self.execargs.append('-height')
             self.execargs.append('%d'%(self.parent.values[5][3]-self.parent.values[5][1]))
-            for i in range(4):
-                self.parent.values[5][i]=-1
+            if(not self.parent.values[14]):
+                for i in range(4):
+                    self.parent.values[5][i]=-1
         if self.parent.values[6]>0:
             self.execargs.append('-delay')
             self.execargs.append('%d'%self.parent.values[6])

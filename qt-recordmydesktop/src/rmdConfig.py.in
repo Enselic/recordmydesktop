@@ -22,7 +22,7 @@ default_values=[15,     #framerate
                 "$DISPLAY", #display, this is not interpreted as an env variable
                             #but when the value is set to this the argument is omitted
                 0,          #shared memory,0 on 1 off
-                1,          #drop frames,unused in 0.3,0, removed at 0.3.4, preserved for compatibility of prefs file.
+                0,          #reset recording area ,0 on 1 off
                 75,         #shared threshold.Removed at 0.3.4, preserved for compatibility of prefs file.
                 1,          #quick subsampling,0 on 1 off
                 "/tmp",     #working directory

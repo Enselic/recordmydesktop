@@ -71,6 +71,7 @@ prefLabelStrings=[_('Overwite Existing Files'),_('Working Directory'),
                 _('Channels'),_('Frequency'),_('Device'),_('Display'),_('Mouse Cursor'),
                 _('MIT-Shm extension'),_('Include Window Decorations'),_('Tooltips'),
                 _('Outline Capture Area On Screen'),
+                _('Reset Capture Area'),
                 _('Extra Options'),
                 _('Video Quality'),_('Sound Quality'),
                 _('Drop Frames(encoder)'),_('Startup Delay(secs)'),]
@@ -93,6 +94,7 @@ prefTooltipLabels=[_('By default, if you try to save under a filename that alrea
                 _('When selecting a window via the "Select Window" button,\ninclude that window\'s decorations in the recording area.'),
                 _('Enable or disable tooltips, like this one.\n(Requires restart)'),
                 _('Draw a frame on the screen, around the area\nthat will get captured.\n(This frame will remain throughout the recording.)'),
+                _('Reset capture area after every recording\nand at program shutdown.'),
                 _('Extra commandline options that will get\npassed to recordMyDesktop during initialization.\nThese options must be entered the same way\nthey would in the commandline (i.e. separated with spaces).\nConsult the manpage for more information on using them.')]
 prefJacktip=_("Enable this option to record audio through\nJACK. The Jack server must be running in order to\nobtain the ports that will be recorded.\nThe audio recorded from each one\nwill be written on a channel of its own.\nrecordMyDesktop must be compiled with JACK\nsupport for this option to work.")
 

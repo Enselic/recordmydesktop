@@ -268,7 +268,7 @@ class simpleWidget(object):
             savefile.readline()
             self.values.append(savefile.readline().replace("\n",""))
             #recording area is not saved
-            self.values.append(rmdConfig.default_values[5])
+            self.values.append([])
             for i in range(3):
                 savefile.readline()
                 self.values.append(int(savefile.readline()))
@@ -279,9 +279,23 @@ class simpleWidget(object):
                 self.values.append(int(savefile.readline()))
             savefile.readline()
             self.values.append(savefile.readline().replace("\n",""))
-            for i in range(4):
+            for i in range(2):
                 savefile.readline()
                 self.values.append(int(savefile.readline()))
+            savefile.readline()
+            areastring=savefile.readline()
+            try:
+                as1=areastring.replace('\n','').split(',')
+                for i in range(4):
+                    self.values[5].append(int(as1[i]))
+            except:
+                self.values[5]=[]
+                for i in rmdConfig.default_values[5]:
+                    self.values[5].append(i)
+            #open for some future option
+            self.values.append(0)
+            savefile.readline()
+            self.values.append(int(savefile.readline()))
             savefile.readline()
             self.values.append(savefile.readline().replace("\n",""))
             for i in range(2):
@@ -359,11 +373,13 @@ class simpleWidget(object):
             savefile.write("%s\n"%self.values[12])
             savefile.write("#Shared memory,1 disabled 0 enabled\n")
             savefile.write("%d\n"%self.values[13])
-            savefile.write("#Drop frames(encoder option),1 disabled 0 enabled.Unused at 0.3.0, removed at 0.3.4, preserved for compatibility of prefs file.\n")
+            savefile.write("#Reset capture area,1 disabled 0 enabled\n")
             savefile.write("%d\n"%self.values[14])
-            savefile.write("#Shared memory threshold,0-100. Removed at 0.3.4,"
-                           " preserved for compatibility of prefs file\n")
-            savefile.write("%d\n"%self.values[15])
+            savefile.write("#Recording area\n")
+            if(self.values[14]):
+                savefile.write("%d,%d,%d,%d\n"%(self.values[5][0],self.values[5][1],self.values[5][2],self.values[5][3]))
+            else:
+                savefile.write("%d,%d,%d,%d\n"%(rmdConfig.default_values[5][0],rmdConfig.default_values[5][1],rmdConfig.default_values[5][2],rmdConfig.default_values[5][3]))
             savefile.write("#Quick subsampling,1 disabled 0 enabled\n")
             savefile.write("%d\n"%self.values[16])
             savefile.write("#Working directory(temporary files)\n")

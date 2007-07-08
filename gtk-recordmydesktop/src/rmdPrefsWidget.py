@@ -42,7 +42,7 @@ from rmdStrings import *
 class prefsWidget(object):
     def __tooltips__(self):
         self.tooltips=gtk.Tooltips()
-        for i in range(17):
+        for i in range(18):
             self.tooltips.set_tip(self.eboxes[i],prefTooltipLabels[i])
         self.tooltips.set_tip(self.jack_ebox,prefJacktip)
 
@@ -55,6 +55,7 @@ class prefsWidget(object):
         self.values[9]=self.deviceEntry.get_text().replace(' ','')
         self.values[12]=self.displayEntry.get_text().replace(' ','')
         self.values[13]=self.sharedComboBox.get_active()
+        self.values[14]=self.areaResetComboBox.get_active()
 #        self.values[15]=self.thresSpinButton.get_value_as_int()
         self.values[16]=self.quickComboBox.get_active()
         self.values[17]=self.workdirEntry.get_text()
@@ -235,7 +236,7 @@ class prefsWidget(object):
         self.boxes[9].pack_end(self.deviceEntry,expand=False,fill=False)
 
 #misc page
-        for i in xrange(10,17):
+        for i in xrange(10,18):
             self.labels[i]=gtk.Label(prefLabelStrings[i])
             self.labels[i].set_justify(gtk.JUSTIFY_LEFT)
             self.boxes[i]=gtk.HBox(homogeneous=False, spacing=0)
@@ -288,12 +289,19 @@ class prefsWidget(object):
         self.rFrameComboBox.show()
         self.boxes[15].pack_end(self.rFrameComboBox,expand=False,fill=False)
 
+        self.areaResetComboBox = gtk.combo_box_new_text()
+        for i in range(2):
+            self.areaResetComboBox.append_text(prefStateStrings[i])
+        self.areaResetComboBox.set_active(self.values[14])
+        self.areaResetComboBox.show()
+        self.boxes[16].pack_end(self.areaResetComboBox,expand=False,fill=False)
+
         self.extraOptsEntry= gtk.Entry(max=0)
         self.extraOptsEntry.set_text(self.values[26])
         self.extraOptsEntry.show()
-        self.boxes[16].pack_end(self.extraOptsEntry,expand=False,fill=False)
+        self.boxes[17].pack_end(self.extraOptsEntry,expand=False,fill=False)
 
-        for i in range(17):
+        for i in range(18):
             self.boxes[i].show()
             self.eboxes[i].show()
 
