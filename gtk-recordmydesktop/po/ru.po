@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-16 20:24+0300\n"
+"POT-Creation-Date: 2007-07-07 19:19+0300\n"
 "PO-Revision-Date: 2007-04-15 20:00+0200\n"
 "Last-Translator: JekaDer <yourname@mail.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -145,11 +145,11 @@ msgstr ""
 "recordMyDesktop завершился с неизвестным\n"
 "кодом ошибки"
 
-#: src/rmdStrings.py:46 src/rmdStrings.py:75
+#: src/rmdStrings.py:46 src/rmdStrings.py:76
 msgid "Video Quality"
 msgstr "Качество картинки"
 
-#: src/rmdStrings.py:46 src/rmdStrings.py:75
+#: src/rmdStrings.py:46 src/rmdStrings.py:76
 msgid "Sound Quality"
 msgstr "Качество звука"
 
@@ -263,7 +263,7 @@ msgstr "Переписать существующие файлы"
 msgid "Working Directory"
 msgstr "Рабочая директория"
 
-#: src/rmdStrings.py:69 src/rmdStrings.py:82
+#: src/rmdStrings.py:69 src/rmdStrings.py:83
 msgid "Frames Per Second"
 msgstr "Кадров в секунду"
 
@@ -320,58 +320,62 @@ msgid "Outline Capture Area On Screen"
 msgstr "Обвести область захвата на экране"
 
 #: src/rmdStrings.py:74
+msgid "Reset Capture Area"
+msgstr ""
+
+#: src/rmdStrings.py:75
 msgid "Extra Options"
 msgstr ""
 
-#: src/rmdStrings.py:76
+#: src/rmdStrings.py:77
 msgid "Drop Frames(encoder)"
 msgstr "Опускать кадры(при кодировании)"
 
-#: src/rmdStrings.py:76
+#: src/rmdStrings.py:77
 msgid "Startup Delay(secs)"
 msgstr "Задержка перед запуском (сек)"
 
-#: src/rmdStrings.py:77
+#: src/rmdStrings.py:78
 msgid "Normal"
 msgstr "Обычный"
 
-#: src/rmdStrings.py:77
+#: src/rmdStrings.py:78
 msgid "White"
 msgstr "Белый"
 
-#: src/rmdStrings.py:77
+#: src/rmdStrings.py:78
 msgid "Black"
 msgstr "Чёрный"
 
-#: src/rmdStrings.py:77
+#: src/rmdStrings.py:78
 msgid "None"
 msgstr "Никакого"
 
-#: src/rmdStrings.py:78
+#: src/rmdStrings.py:79
 msgid "Enabled"
 msgstr "Вкл"
 
-#: src/rmdStrings.py:78
+#: src/rmdStrings.py:79
 msgid "Disabled"
 msgstr "Откл"
 
-#: src/rmdStrings.py:79
+#: src/rmdStrings.py:80
 msgid "Files"
 msgstr "Файлы"
 
-#: src/rmdStrings.py:79
+#: src/rmdStrings.py:80
 msgid "Performance"
 msgstr "Быстродействие"
 
-#: src/rmdStrings.py:79
+#: src/rmdStrings.py:80
 msgid "Sound"
 msgstr "Звук"
 
-#: src/rmdStrings.py:79
+#: src/rmdStrings.py:80
 msgid "Misc"
 msgstr "Разное"
 
-#: src/rmdStrings.py:80
+#: src/rmdStrings.py:81
 msgid ""
 "By default, if you try to save under a filename that already\n"
 "exists, the new file will be renamed\n"
@@ -386,11 +390,11 @@ msgstr ""
 "то файл будет создан под названием out.ogg.1).\n"
 "При включении опции, новый файл будет записан поверхсуществующего.\n"
 
-#: src/rmdStrings.py:81
+#: src/rmdStrings.py:82
 msgid "Directory where temporary files will be saved."
 msgstr "Директория для временных файлов"
 
-#: src/rmdStrings.py:83
+#: src/rmdStrings.py:84
 msgid ""
 "Encode simultaneously with the recording.\n"
 "This will require a lot more processing power.\n"
@@ -398,7 +402,7 @@ msgstr ""
 "Кодировать во время записи.\n"
 "Это затребует намного больше ресурсов\n"
 
-#: src/rmdStrings.py:84
+#: src/rmdStrings.py:85
 msgid ""
 "Do not apply compression on the temporary files.\n"
 "If enabled, the program will need less processing power,\n"
@@ -410,7 +414,7 @@ msgstr ""
 "однако понадобится больше места на диске.\n"
 "Опция работает только при отключённом сжатии на лету."
 
-#: src/rmdStrings.py:85
+#: src/rmdStrings.py:86
 msgid ""
 "This option, if enabled, will cause the program to require less\n"
 "processing power, but it might make the colors look a bit more blurry."
@@ -418,7 +422,7 @@ msgstr ""
 "Включив эту опцию, можно снизить нагрузку на процессор,\n"
 "но она может размыть цвета."
 
-#: src/rmdStrings.py:86
+#: src/rmdStrings.py:87
 msgid ""
 "This option should be enabled when recording 3d windows.\n"
 "It is also auto-enabled when recording a\n"
@@ -430,23 +434,23 @@ msgstr ""
 "3D композитного менеджера окон.\n"
 " "
 
-#: src/rmdStrings.py:87
+#: src/rmdStrings.py:88
 msgid "Number of audio channels."
 msgstr "Число аудиоканалов."
 
-#: src/rmdStrings.py:88
+#: src/rmdStrings.py:89
 msgid "Sound frequency."
 msgstr "Частота звука"
 
-#: src/rmdStrings.py:89
+#: src/rmdStrings.py:90
 msgid "ALSA sound device, that is used for sound recording."
 msgstr "Звуковое устройство ALSA, используемое для захвата звука"
 
-#: src/rmdStrings.py:90
+#: src/rmdStrings.py:91
 msgid "Connection to the Xserver."
 msgstr "Соединение с Xserver"
 
-#: src/rmdStrings.py:91
+#: src/rmdStrings.py:92
 msgid ""
 "The mouse cursor that will be drawn.\n"
 "Normal is for the real cursor that you see while recording,\n"
@@ -458,7 +462,7 @@ msgstr ""
 "в то время, как белый и чёрный указатели отрисовываются программой.\n"
 "Можно так-же отключить отрисовку указателя."
 
-#: src/rmdStrings.py:92
+#: src/rmdStrings.py:93
 msgid ""
 "Use the MIT-Shared memory extension, whenever appropriate,\n"
 " depending on the rest of the program settings.\n"
@@ -470,7 +474,7 @@ msgstr ""
 "Отключать данную опцию не рекомендуется,\n"
 "так как это может существенно замедлить работу программы."
 
-#: src/rmdStrings.py:93
+#: src/rmdStrings.py:94
 msgid ""
 "When selecting a window via the \"Select Window\" button,\n"
 "include that window's decorations in the recording area."
@@ -478,7 +482,7 @@ msgstr ""
 "При выборе окна кнопкой \"Выбрать Окно\",\n"
 "включать его обрамление в запись."
 
-#: src/rmdStrings.py:94
+#: src/rmdStrings.py:95
 msgid ""
 "Enable or disable tooltips, like this one.\n"
 "(Requires restart)"
@@ -486,7 +490,7 @@ msgstr ""
 "Включить, или выключить подсказки, как эта.\n"
 "(Требуется перезапуск)"
 
-#: src/rmdStrings.py:95
+#: src/rmdStrings.py:96
 msgid ""
 "Draw a frame on the screen, around the area\n"
 "that will get captured.\n"
@@ -496,7 +500,13 @@ msgstr ""
 "которая будет захвачена.\n"
 "(Эта рамка будет видна всё время захвата.)"
 
-#: src/rmdStrings.py:96
+#: src/rmdStrings.py:97
+msgid ""
+"Reset capture area after every recording\n"
+"and at program shutdown."
+msgstr ""
+
+#: src/rmdStrings.py:98
 msgid ""
 "Extra commandline options that will get\n"
 "passed to recordMyDesktop during initialization.\n"
@@ -505,7 +515,7 @@ msgid ""
 "Consult the manpage for more information on using them."
 msgstr ""
 
-#: src/rmdStrings.py:97
+#: src/rmdStrings.py:99
 msgid ""
 "Enable this option to record audio through\n"
 "JACK. The Jack server must be running in order to\n"
@@ -523,11 +533,11 @@ msgstr ""
 "recordMyDesktop должен быть скмпиллирован\n"
 "с поддержкой JACK для работы этой опции."
 
-#: src/rmdStrings.py:99
+#: src/rmdStrings.py:101
 msgid "Use Jack for audio capture."
 msgstr "Использовать Jack для захвата звука"
 
-#: src/rmdStrings.py:100
+#: src/rmdStrings.py:102
 msgid ""
 "Select the ports you want to record from\n"
 "(hold Ctrl to select multiple entries):"
@@ -535,27 +545,27 @@ msgstr ""
 "Выберите порты, с которых будет производиться запись\n"
 "(держите Ctrl, чтоб выбрать несколько):"
 
-#: src/rmdStrings.py:102
+#: src/rmdStrings.py:104
 msgid "Available Ports"
 msgstr "Доступные порты"
 
-#: src/rmdStrings.py:103
+#: src/rmdStrings.py:105
 msgid "jack_lsp returned no ports."
 msgstr "jack_lsp не вернул портов"
 
-#: src/rmdStrings.py:104
+#: src/rmdStrings.py:106
 msgid "Make sure that jackd is running."
 msgstr "Убедитесь, что запущен jackd."
 
-#: src/rmdStrings.py:105
+#: src/rmdStrings.py:107
 msgid "Available ports (double click to add):"
 msgstr ""
 
-#: src/rmdStrings.py:106
+#: src/rmdStrings.py:108
 msgid "Selected ports (double click to remove):"
 msgstr ""
 
-#: src/rmdStrings.py:107
+#: src/rmdStrings.py:109
 msgid "Refresh"
 msgstr ""
 
