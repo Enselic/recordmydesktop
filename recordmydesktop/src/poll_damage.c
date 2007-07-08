@@ -25,7 +25,19 @@
 ******************************************************************************/
 
 
-#include <recordmydesktop.h>
+#ifdef HAVE_CONFIG_H
+    #include <config.h>
+#endif
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <X11/Xlib.h>
+#include <X11/Xlibint.h>
+#include <X11/extensions/Xdamage.h>
+#include <pthread.h>
+#include <rmdfunc.h>
+#include <rmdtypes.h>
+#include <rmdmacro.h>
 
 int rmdErrorHandler( Display *dpy, XErrorEvent *e )
 {
@@ -104,6 +116,7 @@ void *PollDamage(ProgData *pdata){
         }
 
     }
+
     pthread_exit(&errno);
 }
 
