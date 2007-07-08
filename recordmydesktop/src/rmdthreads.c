@@ -25,7 +25,18 @@
 ******************************************************************************/
 
 
-#include <recordmydesktop.h>
+#ifdef HAVE_CONFIG_H
+    #include <config.h>
+#endif
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+#include <unistd.h>
+#include <rmdfunc.h>
+#include <rmdtypes.h>
+
+
 
 void rmdThreads(ProgData *pdata){
     pthread_t   poll_damage_t,
@@ -112,6 +123,7 @@ void rmdThreads(ProgData *pdata){
     else
         pthread_join(image_cache_t,NULL);
     fprintf(stderr,".");
+
     if(!pdata->args.nosound){
 #ifdef HAVE_JACK_H
         if(pdata->args.use_jack)
@@ -139,6 +151,7 @@ void rmdThreads(ProgData *pdata){
     if(pdata->args.encOnTheFly)
         pthread_join(flush_to_ogg_t,NULL);
     fprintf(stderr,".");
+
 
     if(!pdata->args.full_shots)
         pthread_join(poll_damage_t,NULL);
