@@ -511,3 +511,39 @@ void ClearList(RectArea **root){
     }
 }
 
+void BlocksFromList(RectArea **root,
+                    unsigned int blocknum_x,
+                    unsigned int blocknum_y){
+
+    RectArea *temp;
+    unsigned int i,
+                 j,
+                 blockno,
+                 row_start,
+                 row_end,
+                 column_start,
+                 column_end;
+    temp=*root;
+    for(i=0;i<blocknum_x*blocknum_y;i++){
+        yblocks[i]=ublocks[i]=vblocks[i]=0;
+    }
+
+    while(temp!=NULL){
+        column_start=temp->geom.x/Y_UNIT_WIDTH;
+        column_end=(temp->geom.x+temp->geom.width)/Y_UNIT_WIDTH;
+        row_start=temp->geom.y/Y_UNIT_WIDTH;
+        row_end=(temp->geom.y+temp->geom.height)/Y_UNIT_WIDTH;
+        for(i=row_start;i<row_end+1;i++){
+            for(j=column_start;j<column_end+1;j++){
+                blockno=i*blocknum_x+j;
+                yblocks[blockno]=1;
+                ublocks[blockno]=1;
+                vblocks[blockno]=1;
+            }
+        }
+        temp=temp->next;
+    }
+
+}
+
+
