@@ -133,8 +133,6 @@ void RegisterCallbacks(ProgArgs *args);
 *
 * \param yuv yuv_buffer that is to be modified
 *
-* \param yuv_mutex lock on the buffer
-*
 * \param specs DisplaySpecs struct with
 *              information about the display to be recorded
 *
@@ -154,7 +152,6 @@ void RegisterCallbacks(ProgArgs *args);
 */
 void UpdateImage(Display * dpy,
                 yuv_buffer *yuv,
-                pthread_mutex_t *yuv_mutex,
                 DisplaySpecs *specs,
                 RectArea **root,
                 BRWindow *brwin,
@@ -660,6 +657,18 @@ int StopJackClient(JackData *jdata);
 
 #endif
 
+/**
+*   Extract cache blocks from damage list
+*
+* \param root Root entry of the list with damaged areas
+*
+* \param blocknum_x Width of image in blocks
+*
+* \param blocknum_y Height of image in blocks
+*/
+void BlocksFromList(RectArea **root,
+                    unsigned int blocknum_x,
+                    unsigned int blocknum_y);
 
 #endif
 
