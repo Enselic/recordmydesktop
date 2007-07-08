@@ -156,8 +156,6 @@ int InitializeData(ProgData *pdata,
         pdata->enc_data->yuv.v[i]=pdata->enc_data->yuv.u[i]=127;
     }
 
-
-
     pdata->frametime=(1000000)/pdata->args.fps;
     return 0;
 
