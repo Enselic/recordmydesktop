@@ -1,3 +1,15 @@
+/*VERSION 0.3.5*/
+*Corrected cursor top/left behavior, fixed xfixes cursor placing.
+*Double buffered capturing on full-shots, to convert only changed pixels to yuv.
+*Cache block information is now is more efficiently extracted from the damage list
+(when using xdamage) and during the rgb2yuv conversion(when using full shots).
+*Jack client uniquely named, to allow simultaneous recordings when using it.
+*updated man page
+*removed uneccesary calculation of the alpha component when
+calculating average pixel value for the u and v planes
+*Ub,Vr replaced with UvBr
+*changed scope of image buffer to be local in GetFrame
+
 /*VERSION 0.3.4*/
 *Fixed configure script to exit when zlib is not found.
 *Fixed behavior of the program when using both the MIT-Shm and Xdamage extensions.

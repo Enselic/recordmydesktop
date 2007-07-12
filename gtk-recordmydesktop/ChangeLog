@@ -1,3 +1,14 @@
+/*VERSION 0.3.5*/
+*synced to recordMyDesktop 0.3.5
+*added russian translation by Женя
+*updated French translation by Stephan Bellegy
+*Updated Italian translation by Giovanni Scafora
+*Updated Brazilian translation by Caio Alonso
+*fixed installation in locations not present in python's path
+*moved all translatable string to src/rmdStrings.py, for easier
+maintanance and sharing among the interfaces
+*reseting of capture area is now optional
+
 /*VERSION 0.3.4*/
 *Synced to version 0.3.4 of recordMyDesktop.
 *Added an optional persistent frame around the capture area.
