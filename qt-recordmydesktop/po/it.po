@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-07-07 19:19+0300\n"
-"PO-Revision-Date: 2007-03-29 23:55+0100\n"
+"PO-Revision-Date: 2007-07-12 17:30+0100\n"
 "Last-Translator: Giovanni Scafora <linuxmania@gmail.com>\n"
 "Language-Team: Arch Linux Italian Team <linuxmania@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -20,15 +20,15 @@ msgstr ""
 
 #: src/rmdStrings.py:10
 msgid "Show/hide Main Window"
-msgstr ""
+msgstr "Mostra/Nascondi la finestra principale"
 
 #: src/rmdStrings.py:11
 msgid "_Select Area On Screen"
-msgstr "_Selezionare un'area sullo schermo"
+msgstr "_Selezionare l'area sullo schermo"
 
 #: src/rmdStrings.py:12 src/rmdStrings.py:60
 msgid "Quit"
-msgstr ""
+msgstr "Esci"
 
 #: src/rmdStrings.py:13
 msgid "a graphical frontend for recordMyDesktop"
@@ -234,15 +234,15 @@ msgstr ""
 
 #: src/rmdStrings.py:58
 msgid "Record"
-msgstr ""
+msgstr "Registra"
 
 #: src/rmdStrings.py:59
 msgid "Save As"
-msgstr ""
+msgstr "Salva come"
 
 #: src/rmdStrings.py:63
 msgid "Cancel"
-msgstr ""
+msgstr "Elimina"
 
 #: src/rmdStrings.py:64
 msgid ""
@@ -326,19 +326,19 @@ msgstr "Contorno dell'area di registrazione"
 
 #: src/rmdStrings.py:74
 msgid "Reset Capture Area"
-msgstr ""
+msgstr "Resetta l'area di cattura"
 
 #: src/rmdStrings.py:75
 msgid "Extra Options"
-msgstr ""
+msgstr "Opzioni extra"
 
 #: src/rmdStrings.py:77
 msgid "Drop Frames(encoder)"
-msgstr "Scarta fotogrammi(encoder)"
+msgstr "Scarta fotogrammi (encoder)"
 
 #: src/rmdStrings.py:77
 msgid "Startup Delay(secs)"
-msgstr "Ritardo all'avvio(in secondi)"
+msgstr "Ritardo all'avvio (in secondi)"
 
 #: src/rmdStrings.py:78
 msgid "Normal"
@@ -417,8 +417,8 @@ msgid ""
 "This option is valid only when encoding on the fly is disabled."
 msgstr ""
 "Non abilitare la compressione sui file temporanei.\n"
-"Se abilitata, il programma richiederà minor potenza\n"
-"di calcolo, ma maggior spazio sul disco rigido.\n"
+"Se è abilitata, il programma richiederà una minor potenza\n"
+"di calcolo, ma uno spazio maggiore sul disco rigido.\n"
 "Questa opzione è valida solo quando la codifica\n"
 "al volo è disabilitata."
 
@@ -428,7 +428,7 @@ msgid ""
 "processing power, but it might make the colors look a bit more blurry."
 msgstr ""
 "Questa opzione, se abilitata, forzerà il programma a\n"
-"richiedere minor potenza di calcolo, ma i colori\n"
+"richiedere una minor potenza di calcolo, ma i colori\n"
 "saranno meno definiti."
 
 #: src/rmdStrings.py:87
@@ -439,9 +439,9 @@ msgid ""
 " "
 msgstr ""
 "Questa opzione dovrebbe essere abilitata quando si\n"
-"registra una finestra 3d.\n"
+"registra una finestra in 3d.\n"
 "Sarà automaticamente abilitata, quando si registra\n"
-"un 3d window manager compositing conosciuto\n"
+"da un 3d window manager compositing conosciuto\n"
 " "
 
 #: src/rmdStrings.py:88
@@ -469,8 +469,8 @@ msgid ""
 msgstr ""
 "Il cursore del mouse che sarà visualizzato.\n"
 "Normale, mostra il cursore che si vedrà durante la\n"
-"registrazione, mentre nero e bianco sono dei finti\n"
-"cursori, creati dal programma.\n"
+"registrazione, mentre nero e bianco sono dei cursori\n"
+"finti, generati dal programma.\n"
 "È possibile, inoltre, disabilitare la visualizzazione del cursore."
 
 #: src/rmdStrings.py:93
@@ -499,7 +499,7 @@ msgid ""
 "Enable or disable tooltips, like this one.\n"
 "(Requires restart)"
 msgstr ""
-"Abilitare o disabilitare i suggerimenti.\n"
+"Abilita o disabilita i suggerimenti.\n"
 "(Richiede il riavvio del programma)"
 
 #: src/rmdStrings.py:96
@@ -508,7 +508,7 @@ msgid ""
 "that will get captured.\n"
 "(This frame will remain throughout the recording.)"
 msgstr ""
-"Visualizza una linea sullo schermo, intorno\n"
+"Visualizza una linea sullo schermo, attorno\n"
 "all'area che sarà catturata.\n"
 "(Questa linea sarà visibile durante la registrazione.)"
 
@@ -517,6 +517,8 @@ msgid ""
 "Reset capture area after every recording\n"
 "and at program shutdown."
 msgstr ""
+"Resetta l'area di cattura dopo ogni registrazione\n"
+"e quando si chiude il programma."
 
 #: src/rmdStrings.py:98
 msgid ""
@@ -526,6 +528,11 @@ msgid ""
 "they would in the commandline (i.e. separated with spaces).\n"
 "Consult the manpage for more information on using them."
 msgstr ""
+"Opzioni extra da linea di comando che saranno\n"
+"passate a recordMyDesktop durante l'inizializzazione.\n"
+"Queste opzioni devono essere inserite esattamente come\n"
+"richiesto per la linea di comando (ad es.: separate con spazi).\n"
+"Per maggiori informazioni sul loro utilizzo, consultate il manuale."
 
 #: src/rmdStrings.py:99
 msgid ""
@@ -571,15 +578,12 @@ msgstr "Assicurarsi che jackd sia in funzione."
 
 #: src/rmdStrings.py:107
 msgid "Available ports (double click to add):"
-msgstr ""
+msgstr "Porte disponibili (doppio click per aggiungerle):"
 
 #: src/rmdStrings.py:108
 msgid "Selected ports (double click to remove):"
-msgstr ""
+msgstr "Porte selezionate (doppio click per rimuoverle):"
 
 #: src/rmdStrings.py:109
 msgid "Refresh"
-msgstr ""
-
-#~ msgid "gtk-recordMyDesktop"
-#~ msgstr "gtk-recordMyDesktop"
+msgstr "Aggiorna"
