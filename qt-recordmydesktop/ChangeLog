@@ -15,7 +15,9 @@ to be inserted as jack ports.
 *moved all translatable string to src/rmdStrings.py, for easier
 maintanance and sharing among the interfaces
 *reseting of capture area is now optional
-
+*Updated Italian translation by Giovanni Scafora
+*Updated Brazilian translation by Caio Alonso
+*Updated Spanish translation by José "L. Redrejo" Rodríguez
 
 /*VERSION 0.1*/
 First Version
