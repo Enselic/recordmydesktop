@@ -1,3 +1,22 @@
+/*VERSION 0.2*/
+*Synced to recordMyDesktop 0.3.5
+*fixed installation in locations not present in python's path
+*changed size of buttons in main window, added to them record/save/quit pixmaps
+*improved alignment of elements in advanced window
+*added icons in save as,record and exit buttons
+*fixed jack port init error
+*error codes appear correctly now, in case of an unexpected exit
+*fixed behavior of encoding dialog (the program now properly waits end
+or cancelation of encoding before allowing new recording to take place)
+*removed zero size frame that appeared in top-left
+corner when no area was selected( fullscreen mode)
+*added check to prevent jack_lsp warning strings
+to be inserted as jack ports.
+*moved all translatable string to src/rmdStrings.py, for easier
+maintanance and sharing among the interfaces
+*reseting of capture area is now optional
+
+
 /*VERSION 0.1*/
 First Version
 
