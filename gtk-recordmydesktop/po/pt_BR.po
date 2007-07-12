@@ -6,16 +6,16 @@ msgstr ""
 "Project-Id-Version: gtk-recordMyDesktop 0.3.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-07-07 19:19+0300\n"
-"PO-Revision-Date: 2007-04-27 13:09-0300\n"
+"PO-Revision-Date: 2007-07-12 14:38-0300\n"
 "Last-Translator: Caio Alonso <lancelotz.skywalker@gmail.com>\n"
 "Language-Team: Portuguese/Brazil <gnome-l10n-br@listas.cipsga.org.br>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: 8bit"
 
 #: src/rmdStrings.py:10
 msgid "Show/hide Main Window"
-msgstr ""
+msgstr "Exibir/Ocultar Janela Principal"
 
 #: src/rmdStrings.py:11
 msgid "_Select Area On Screen"
@@ -23,7 +23,7 @@ msgstr "_Selecionar área na tela"
 
 #: src/rmdStrings.py:12 src/rmdStrings.py:60
 msgid "Quit"
-msgstr ""
+msgstr "Sair"
 
 #: src/rmdStrings.py:13
 msgid "a graphical frontend for recordMyDesktop"
@@ -227,15 +227,15 @@ msgstr ""
 
 #: src/rmdStrings.py:58
 msgid "Record"
-msgstr ""
+msgstr "Gravar"
 
 #: src/rmdStrings.py:59
 msgid "Save As"
-msgstr ""
+msgstr "Salvar Como"
 
 #: src/rmdStrings.py:63
 msgid "Cancel"
-msgstr ""
+msgstr "Cancelar"
 
 #: src/rmdStrings.py:64
 msgid ""
@@ -319,11 +319,11 @@ msgstr "Contorno na Área de Captura na Tela"
 
 #: src/rmdStrings.py:74
 msgid "Reset Capture Area"
-msgstr ""
+msgstr "Resetar Área de Captura"
 
 #: src/rmdStrings.py:75
 msgid "Extra Options"
-msgstr ""
+msgstr "Opções Extras"
 
 #: src/rmdStrings.py:77
 msgid "Drop Frames(encoder)"
@@ -503,6 +503,8 @@ msgid ""
 "Reset capture area after every recording\n"
 "and at program shutdown."
 msgstr ""
+"Resetar a área de captura depois de cada\n"
+"gravação e quando fechar o programa."
 
 #: src/rmdStrings.py:98
 msgid ""
@@ -512,6 +514,12 @@ msgid ""
 "they would in the commandline (i.e. separated with spaces).\n"
 "Consult the manpage for more information on using them."
 msgstr ""
+"Opções extras de linha de comando que\n"
+"irão ser passadas para o recordMyDesktop durante\n"
+"a inicialização.\n"
+"Estas opções precisam ser inseridas da mesma forma\n"
+"que seriam na linha de comando (separadas com espaços).\n"
+"Consulte a página man para mais informações."
 
 #: src/rmdStrings.py:99
 msgid ""
@@ -557,15 +565,15 @@ msgstr "Certifique-se que jackd está rodando."
 
 #: src/rmdStrings.py:107
 msgid "Available ports (double click to add):"
-msgstr ""
+msgstr "Portas disponíveis (duplo clique para adicionar)"
 
 #: src/rmdStrings.py:108
 msgid "Selected ports (double click to remove):"
-msgstr ""
+msgstr "Portas selecionadas (duplo clique para remover):"
 
 #: src/rmdStrings.py:109
 msgid "Refresh"
-msgstr ""
+msgstr "Atualizar"
 
 #~ msgid "gtk-recordMyDesktop"
 #~ msgstr "gtk-recordMyDesktop"
