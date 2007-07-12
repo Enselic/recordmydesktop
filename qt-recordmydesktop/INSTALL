@@ -10,7 +10,7 @@ GNU automake >=1.5
 Python >= 2.4
 Qt>=4.2
 PyQt4>=4.1
-recordMyDesktop 0.3.4
+recordMyDesktop 0.3.5
 
 To compile the program you have to go through the regular drill:
 
