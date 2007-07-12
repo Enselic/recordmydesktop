@@ -2,23 +2,24 @@
 # Copyright (C) 2007 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # <>, 2007.
-# 
-# 
+#
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-07-07 19:19+0300\n"
-"PO-Revision-Date: 2007-03-19 12:44-0400\n"
-"Last-Translator:  <>\n"
+"PO-Revision-Date: 2007-07-12 17:15+0200\n"
+"Last-Translator: José L. Redrejo Rodríguez\n"
 "Language-Team:  <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.1\n"
 
 #: src/rmdStrings.py:10
 msgid "Show/hide Main Window"
-msgstr ""
+msgstr "Mostrar/Ocultar la Ventana Principal"
 
 #: src/rmdStrings.py:11
 msgid "_Select Area On Screen"
@@ -26,7 +27,7 @@ msgstr "_Elige un área en la pantalla"
 
 #: src/rmdStrings.py:12 src/rmdStrings.py:60
 msgid "Quit"
-msgstr ""
+msgstr "Salir"
 
 #: src/rmdStrings.py:13
 msgid "a graphical frontend for recordMyDesktop"
@@ -44,8 +45,7 @@ msgstr ""
 
 #: src/rmdStrings.py:15
 msgid "Translator Credits And Information(Replace with your info)"
-msgstr ""
-"Traducción español: José L. Redrejo Rodríguez, Rolando Espinoza La Fuente"
+msgstr "Traducción español: José L. Redrejo Rodríguez, Rolando Espinoza La Fuente"
 
 #: src/rmdStrings.py:19
 msgid "Success"
@@ -234,15 +234,15 @@ msgstr ""
 
 #: src/rmdStrings.py:58
 msgid "Record"
-msgstr ""
+msgstr "Grabar"
 
 #: src/rmdStrings.py:59
 msgid "Save As"
-msgstr ""
+msgstr "Guardar como"
 
 #: src/rmdStrings.py:63
 msgid "Cancel"
-msgstr ""
+msgstr "Cancelar"
 
 #: src/rmdStrings.py:64
 msgid ""
@@ -326,11 +326,11 @@ msgstr "Contorno en el Area de Captura en Pantalla"
 
 #: src/rmdStrings.py:74
 msgid "Reset Capture Area"
-msgstr ""
+msgstr "Inicializar el área de captura"
 
 #: src/rmdStrings.py:75
 msgid "Extra Options"
-msgstr ""
+msgstr "Opciones Extra"
 
 #: src/rmdStrings.py:77
 msgid "Drop Frames(encoder)"
@@ -512,6 +512,8 @@ msgid ""
 "Reset capture area after every recording\n"
 "and at program shutdown."
 msgstr ""
+"Inicializar el área de captura después de\n"
+"cada grabación y al salir del programa."
 
 #: src/rmdStrings.py:98
 msgid ""
@@ -521,6 +523,11 @@ msgid ""
 "they would in the commandline (i.e. separated with spaces).\n"
 "Consult the manpage for more information on using them."
 msgstr ""
+"Opciones extra de línea de comandos que se\n"
+"pasarán a recordMyDesktop al inicializarse.\n"
+"Estas opciones deben introducirse igual que se\n"
+"haría en la línea de comandos (separadas por espacios).\n"
+"Consulte la página man para más información sobre su uso."
 
 #: src/rmdStrings.py:99
 msgid ""
@@ -565,28 +572,13 @@ msgstr "Aseguresé de que jackd este corriendo."
 
 #: src/rmdStrings.py:107
 msgid "Available ports (double click to add):"
-msgstr ""
+msgstr "Puertos disponibles (doble clic para añadir):"
 
 #: src/rmdStrings.py:108
 msgid "Selected ports (double click to remove):"
-msgstr ""
+msgstr "Puertos seleccionados (doble clic para borrar):"
 
 #: src/rmdStrings.py:109
 msgid "Refresh"
-msgstr ""
+msgstr "Refrescar"
 
-#~ msgid "gtk-recordMyDesktop"
-#~ msgstr "gtk-recordMyDesktop"
-
-#~ msgid "Shared Threshold"
-#~ msgstr "Umbral compartido"
-
-#~ msgid ""
-#~ "Amount of screen change, within a frame that triggers retrieval\n"
-#~ "of the screenshot through the MIT-Shared memory extension.\n"
-#~ "This option has no effect when using the full shots option.\n"
-#~ msgstr ""
-#~ "Cantidad de cambios en la pantalla, dentro de un cuadro, que dispara\n"
-#~ "la captura del pantallazo mediante la extensión de memoria MIT_Shared.\n"
-#~ "Esta opción no tiene efecto si se está usando la opción de capturas "
-#~ "completas.\n"
