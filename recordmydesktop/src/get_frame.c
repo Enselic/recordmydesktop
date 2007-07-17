@@ -245,6 +245,8 @@ void *GetFrame(ProgData *pdata){
                         pdata->shm_opcode,
                         pdata->args.no_quick_subsample);
             BlocksFromList(&pdata->rect_root[tlist_sel],
+                           pdata->brwin.rgeom.x,
+                           pdata->brwin.rgeom.y,
                            pdata->enc_data->yuv.y_width/Y_UNIT_WIDTH,
                            pdata->enc_data->yuv.y_height/Y_UNIT_WIDTH);
             pthread_mutex_unlock(&pdata->yuv_mutex);

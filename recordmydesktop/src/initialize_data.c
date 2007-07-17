@@ -58,7 +58,8 @@ int InitializeData(ProgData *pdata,
                                               &pdata->npxl);
         pdata->dummy_p_size=16;
     }
-
+    else
+        pdata->dummy_p_size=0;
 
 
     pdata->rect_root[0]=pdata->rect_root[1]=NULL;

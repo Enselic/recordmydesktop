@@ -512,6 +512,8 @@ void ClearList(RectArea **root){
 }
 
 void BlocksFromList(RectArea **root,
+                    unsigned int x_offset,
+                    unsigned int y_offset,
                     unsigned int blocknum_x,
                     unsigned int blocknum_y){
 
@@ -529,10 +531,10 @@ void BlocksFromList(RectArea **root,
     }
 
     while(temp!=NULL){
-        column_start=temp->geom.x/Y_UNIT_WIDTH;
-        column_end=(temp->geom.x+temp->geom.width)/Y_UNIT_WIDTH;
-        row_start=temp->geom.y/Y_UNIT_WIDTH;
-        row_end=(temp->geom.y+temp->geom.height)/Y_UNIT_WIDTH;
+        column_start=(temp->geom.x-x_offset)/Y_UNIT_WIDTH;
+        column_end=(temp->geom.x+temp->geom.width-x_offset)/Y_UNIT_WIDTH;
+        row_start=(temp->geom.y-y_offset)/Y_UNIT_WIDTH;
+        row_end=(temp->geom.y+temp->geom.height-y_offset)/Y_UNIT_WIDTH;
         for(i=row_start;i<row_end+1;i++){
             for(j=column_start;j<column_end+1;j++){
                 blockno=i*blocknum_x+j;
