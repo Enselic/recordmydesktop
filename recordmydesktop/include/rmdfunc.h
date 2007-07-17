@@ -662,11 +662,17 @@ int StopJackClient(JackData *jdata);
 *
 * \param root Root entry of the list with damaged areas
 *
+* \param x_offset left x of the recording area
+*
+* \param x_offset upper y of the recording area
+*
 * \param blocknum_x Width of image in blocks
 *
 * \param blocknum_y Height of image in blocks
 */
 void BlocksFromList(RectArea **root,
+                    unsigned int x_offset,
+                    unsigned int y_offset,
                     unsigned int blocknum_x,
                     unsigned int blocknum_y);
 
