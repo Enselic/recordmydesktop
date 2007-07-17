@@ -90,7 +90,7 @@ void *CaptureSound(ProgData *pdata){
         }
 
         //create new buffer
-        newbuf=(SndBuffer *)malloc(sizeof(SndBuffer *));
+        newbuf=(SndBuffer *)malloc(sizeof(SndBuffer));
 #ifdef HAVE_LIBASOUND
         newbuf->data=(signed char *)malloc(frames*framesize);
 #else
