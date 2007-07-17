@@ -3,7 +3,7 @@
 
 AC_PREREQ(2.59)
 AC_INIT(src/recordmydesktop.c)
-AM_INIT_AUTOMAKE(recordmydesktop,0.3.5,)
+AM_INIT_AUTOMAKE(recordmydesktop,0.3.5.1,)
 
 AC_CONFIG_SRCDIR([src/recordmydesktop.c])
 AM_CONFIG_HEADER(config.h)
@@ -13,6 +13,8 @@ AM_CONFIG_HEADER(config.h)
 # Checks for programs.
 
 AC_PROG_CC
+
+AC_CANONICAL_HOST
 
 # Checks for header files.
 
@@ -104,7 +106,15 @@ else
 fi
 
 if test x$jack_headers_present = xtrue; then
-    AC_CHECK_LIB([dl],[dlopen],,libdl_np=true)
+    case "$host_os" in
+    *bsd*)
+            AC_CHECK_LIB([c], [dlopen],,libdl_np=true)
+    ;;
+    *)
+            AC_CHECK_LIB([dl],[dlopen],,libdl_np=true)
+    ;;
+    esac
+
     if test x$libdl_np != xtrue; then
         AC_DEFINE([HAVE_JACK_H],1,
                 define to 1 if <jack/jack.h> exists)
