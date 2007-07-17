@@ -1,3 +1,10 @@
+/*Version 0.3.5.1*/
+* Corrected segmentation fault when recording non-fullscreen areas
+(bug-report and solution to the problem provided Sander Jansen)
+* Corrected incorrect allocation of queued sound buffers
+(could cause segmentation faults in FreeBSD)
+* Corrected dlopen lookup on *bsd (libc instead of libdl)
+
 /*VERSION 0.3.5*/
 *Corrected cursor top/left behavior, fixed xfixes cursor placing.
 *Double buffered capturing on full-shots, to convert only changed pixels to yuv.
