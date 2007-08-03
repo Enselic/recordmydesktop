@@ -37,8 +37,11 @@ void QueryExtensions(Display *dpy,
         shm_event_base,
         shm_error_base;
 
-    if(!XDamageQueryExtension( dpy, damage_event, damage_error)){
-        fprintf(stderr,"XDamage extension not found!!!\n");
+    if((!(args->full_shots))&&(!XDamageQueryExtension( dpy, damage_event, damage_error))){
+        fprintf(stderr,"XDamage extension not found!!!\n"
+                       "Try again using the --full-shots option, though\n"
+                       "enabling XDamage is highly recommended,\n"
+                       "for performance reasons.\n");
         exit(4);
     }
     if((!args->noshared)&&(!XQueryExtension(dpy,
