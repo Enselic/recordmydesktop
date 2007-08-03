@@ -296,13 +296,17 @@ void *GetFrame(ProgData *pdata){
                     (mouse_pos_temp.width>0)&&
                     (mouse_pos_temp.height>0)){
 
-                    MARK_BACK_BUFFER(   front_buff,\
-                                        back_buff,\
-                                        mouse_pos_temp.x,\
-                                        mouse_pos_temp.y,\
-                                        mouse_pos_temp.width,\
-                                        mouse_pos_temp.height,\
-                                        (pdata->brwin.rgeom.width),\
+                    MARK_BACK_BUFFER(   front_buff,
+                                        back_buff,
+                                        (mouse_pos_temp.x-
+                                         pdata->brwin.rgeom.x+
+                                         pdata->enc_data->x_offset),
+                                        (mouse_pos_temp.y-
+                                         pdata->brwin.rgeom.y+
+                                         pdata->enc_data->y_offset),
+                                        mouse_pos_temp.width,
+                                        mouse_pos_temp.height,
+                                        (pdata->brwin.rgeom.width),
                                         pdata->specs.depth)
                 }
             }
