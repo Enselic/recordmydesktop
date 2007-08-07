@@ -200,6 +200,7 @@
     (args)->height=\
     (args)->nosound=\
     (args)->full_shots=\
+    (args)->follow_mouse=\
     (args)->encOnTheFly=\
     (args)->nowmcheck=\
     (args)->overwrite=\
@@ -630,7 +631,6 @@
 }
 
 #define MARK_BACK_BUFFER(   data,\
-                            data_back,\
                             x_tm,\
                             y_tm,\
                             width_tm,\
@@ -639,7 +639,6 @@
                             __bit_depth__){\
     if((__bit_depth__==24)||(__bit_depth__==32)){\
         MARK_BACK_BUFFER_C( data,\
-                            data_back,\
                             x_tm,\
                             y_tm,\
                             width_tm,\
@@ -649,7 +648,6 @@
     }\
     else{\
         MARK_BACK_BUFFER_C( data,\
-                            data_back,\
                             x_tm,\
                             y_tm,\
                             width_tm,\
@@ -661,7 +659,6 @@
 
 
 #define MARK_BACK_BUFFER_C( data,\
-                            data_back,\
                             x_tm,\
                             y_tm,\
                             width_tm,\
@@ -671,17 +668,13 @@
     int k,i;\
     register u_int##__bit_depth__##_t\
         *datapi=\
-            ((u_int##__bit_depth__##_t *)data)+y_tm*buffer_width+x_tm,\
-        *datapi_back=\
-            ((u_int##__bit_depth__##_t *)data_back)+y_tm*buffer_width+x_tm;\
+            ((u_int##__bit_depth__##_t *)data)+y_tm*buffer_width+x_tm;\
     for(k=0;k<height_tm;k++){\
         for(i=0;i<width_tm;i++){\
-            *datapi_back=*datapi+1;\
+            *datapi+=1;\
             datapi++;\
-            datapi_back++;\
         }\
         datapi+=buffer_width-width_tm;\
-        datapi_back+=buffer_width-width_tm;\
     }\
 }
 
