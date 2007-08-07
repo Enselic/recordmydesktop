@@ -236,6 +236,13 @@ Image Options:
 .br
 .TP
 .B
+    \-\-follow\-mouse
+    When this option is enabled, the capture area follows the mouse cursor. This
+    is meaningfull only when the selected area is a subset of the full screen.
+    This option auto-enables --full-shots.
+.br
+.TP
+.B
     \-\-quick\-subsampling
     Do subsampling of the chroma planes by discarding extra pixels.
 .br
@@ -320,6 +327,13 @@ Encoding Options:
 .br
 .B
 Misc Options:
+.br
+.TP
+.B
+    \-\-print\-config
+    Print compilation time options. Currently prints whether Jack capture is
+    enabled and if ALSA or OSS is used (may contain more information
+    in the future).
 .br
 .TP
 .B
