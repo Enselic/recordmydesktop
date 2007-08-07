@@ -495,6 +495,10 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
         else if(!strcmp(argv[i],"--full-shots")){
             arg_return->full_shots=1;
         }
+        else if(!strcmp(argv[i],"--follow-mouse")){
+            arg_return->full_shots=1;
+            arg_return->follow_mouse=1;
+        }
         else if(!strcmp(argv[i],"--quick-subsampling")){
             arg_return->no_quick_subsample=0;
         }
