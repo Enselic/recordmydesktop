@@ -150,12 +150,13 @@ class trayIcon(object):
             self.execargs.append("--full-shots")
         if self.parent.values[13] == 1:
             self.execargs.append("--no-shared")
-        if self.parent.values[5][0]>0  :
-            self.execargs.append('-x')
-            self.execargs.append('%d'%self.parent.values[5][0])
-        if self.parent.values[5][1]>0:
-            self.execargs.append('-y')
-            self.execargs.append('%d'%self.parent.values[5][1])
+        if self.parent.values[15]==1:
+            if self.parent.values[5][0]>0  :
+                self.execargs.append('-x')
+                self.execargs.append('%d'%self.parent.values[5][0])
+            if self.parent.values[5][1]>0:
+                self.execargs.append('-y')
+                self.execargs.append('%d'%self.parent.values[5][1])
         if self.parent.values[5][2]>0 and self.parent.values[5][3]>0:
             self.execargs.append('-width')
             self.execargs.append('%d'%(self.parent.values[5][2]-self.parent.values[5][0]))
@@ -191,6 +192,8 @@ class trayIcon(object):
             self.execargs.append('--compress-cache')
         if self.parent.values[20] == True:
             self.execargs.append('--overwrite')
+        if self.parent.values[15] == 0:
+            self.execargs.append('--follow-mouse')
         if self.parent.values[22] == True:
             self.execargs.append('-use-jack')
             for i in self.parent.values[23]:

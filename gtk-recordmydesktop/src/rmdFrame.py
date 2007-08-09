@@ -26,19 +26,20 @@
 import pygtk
 pygtk.require('2.0')
 import gtk
+import gobject
 
 class rmdFrame:
     borderwidth=6
     outlinewidth=1
 
-    def __init__(self,x,y,w,h):
+    def __init__(self,x,y,w,h,parent):
         self.window=gtk.Window(gtk.WINDOW_TOPLEVEL)
         self.area=gtk.DrawingArea()
         self.x=x
         self.y=y
         self.w=w
         self.h=h
-
+        self.parent=parent
         mask = gtk.gdk.Pixmap(None,
                               self.w+self.borderwidth*2,
                               self.h+self.borderwidth*2,
@@ -71,6 +72,27 @@ class rmdFrame:
         self.window.move(self.x-self.borderwidth,
                          self.y-self.borderwidth)
         self.window.set_resizable(False)
+        self.disp=gtk.gdk.display_get_default()
+        self.wroot = gtk.gdk.get_default_root_window()
+        (self.wwidth, self.wheight) = self.wroot.get_size()
+        self.timed_id=gobject.timeout_add(10,self.moveFrame)
+
+    def moveFrame(self):
+        if self.parent.values[15]==0:
+            npos=gtk.gdk.Display.get_pointer(self.disp)
+            x=npos[1]-self.w/2
+            y=npos[2]-self.h/2
+            x=(x>>1)<<1
+            y=(y>>1)<<1
+            if x<0:x=0
+            if y<0:y=0
+            if x+self.w>self.wwidth:x=self.wwidth-self.w
+            if y+self.h>self.wheight:y=self.wheight-self.h
+            if(x!=self.x or y!= self.y):
+                self.x=x
+                self.y=y
+                self.window.move(self.x-(self.borderwidth),self.y-(self.borderwidth))
+        return True
 
 
     def __expose_cb(self, widget, event):

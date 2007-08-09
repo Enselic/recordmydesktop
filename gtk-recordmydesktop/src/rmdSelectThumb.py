@@ -192,8 +192,11 @@ class GtkThumbSelector(gtk.DrawingArea):
             if self.area_return[3]>=0:
                 vals[3]=self.area_return[3]-self.area_return[1]
             if vals[0] >0 or vals[1] >0 or vals[2] <self.wwidth or vals[3] <self.wheight:
-                if self.selecting==0:
+                if self.selecting==0 and self.caller.values[15]==1:
                     self.__draw_lines__(self.root,vals,self.factor)
+                elif self.selecting==0 and self.caller.values[15]==0:
+                    self.__check_frame__()
+
             elif self.realFrame!=None:
                 self.realFrame.destroy()
                 self.realFrame=None
@@ -210,9 +213,13 @@ class GtkThumbSelector(gtk.DrawingArea):
                 img.put_pixel(vals[0]/factor+k,i,0xff0000)
                 img.put_pixel((vals[0]+vals[2]/2-k)/factor,i,0xff0000)
                 img.put_pixel((vals[0]+vals[2]-1-k)/factor,i,0xff0000)
+        self.__check_frame__()
+
+    def __check_frame__(self):
         if self.realFrame!=None:
-            if (self.area_return[0]!=self.realFrame.x or
-               self.area_return[1]!=self.realFrame.y or
+            if (((self.area_return[0]!=self.realFrame.x or
+               self.area_return[1]!=self.realFrame.y) and
+               self.caller.values[15]==1) or
                self.area_return[2]-self.area_return[0]!=self.realFrame.w or
                self.area_return[3]-self.area_return[1]!=self.realFrame.h or
                self.caller.values[25]):
@@ -228,7 +235,8 @@ class GtkThumbSelector(gtk.DrawingArea):
         self.realFrame=rmdFrame(self.area_return[0],
                                 self.area_return[1],
                                 self.area_return[2]-self.area_return[0],
-                                self.area_return[3]-self.area_return[1])
+                                self.area_return[3]-self.area_return[1],
+                                self.caller)
 
 #area_return=[-1,-1,-1,-1]
 

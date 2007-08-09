@@ -23,7 +23,7 @@ default_values=[15,     #framerate
                             #but when the value is set to this the argument is omitted
                 0,          #shared memory,0 on 1 off
                 0,          #reset recording area ,0 on 1 off
-                75,         #shared threshold.Removed at 0.3.4, preserved for compatibility of prefs file.
+                1,          #follow mouse,0 on 1 off
                 1,          #quick subsampling,0 on 1 off
                 "/tmp",     #working directory
                 1,          #on the fly encoding,0 on 1 off

@@ -42,7 +42,7 @@ from rmdStrings import *
 
 class prefsWidget(object):
     def __tooltips__(self):
-        for i in range(18):
+        for i in range(19):
             self.labels[i].setToolTip(htmlize(prefTooltipLabels[i]))
         self.jack_button.setToolTip(htmlize(prefJacktip))
         self.jack_lsp_label.setToolTip(htmlize(prefJacktip))
@@ -60,6 +60,7 @@ class prefsWidget(object):
         self.values[12]=self.displayEntry.text().replace(' ','')
         self.values[13]=self.sharedComboBox.currentIndex()
         self.values[14]=self.areaResetComboBox.currentIndex()
+        self.values[15]=self.followMouseComboBox.currentIndex()
         self.values[16]=self.quickComboBox.currentIndex()
         self.values[17]=self.workdirEntry.text()
         self.values[18]=self.onTheFlyComboBox.currentIndex()
@@ -211,7 +212,7 @@ class prefsWidget(object):
         self.boxes[9].insertWidget(-1,self.deviceEntry)
 
 #misc page
-        for i in xrange(10,18):
+        for i in xrange(10,19):
             self.labels[i]=QtGui.QLabel(prefLabelStrings[i],self.tabWidgets[3])
             self.labels[i].setAlignment(QtCore.Qt.AlignLeft)
             self.boxes[i]=QtGui.QHBoxLayout()
@@ -227,43 +228,48 @@ class prefsWidget(object):
         self.mouseComboBox = QtGui.QComboBox(self.tabWidgets[3])
         for i in range(4):
             self.mouseComboBox.addItem(prefMouseStrings[i])
-        self.mouseComboBox.setCurrentIndex(self.values[1])
+        self.mouseComboBox.setCurrentIndex(self.values[15])
         self.boxes[11].insertWidget(-1,self.mouseComboBox)
 
+        self.followMouseComboBox = QtGui.QComboBox(self.tabWidgets[3])
+        for i in range(2):
+            self.followMouseComboBox.addItem(prefStateStrings[i])
+        self.followMouseComboBox.setCurrentIndex(self.values[15])
+        self.boxes[12].insertWidget(-1,self.followMouseComboBox)
 
         self.sharedComboBox = QtGui.QComboBox(self.tabWidgets[3])
         for i in range(2):
             self.sharedComboBox.addItem(prefStateStrings[i])
         self.sharedComboBox.setCurrentIndex(self.values[13])
-        self.boxes[12].insertWidget(-1,self.sharedComboBox)
+        self.boxes[13].insertWidget(-1,self.sharedComboBox)
 
         self.winDecoComboBox = QtGui.QComboBox(self.tabWidgets[3])
         for i in range(2):
             self.winDecoComboBox.addItem(prefStateStrings[i])
         self.winDecoComboBox.setCurrentIndex(self.values[21])
-        self.boxes[13].insertWidget(-1,self.winDecoComboBox)
+        self.boxes[14].insertWidget(-1,self.winDecoComboBox)
 
         self.tooltipsComboBox = QtGui.QComboBox(self.tabWidgets[3])
         for i in range(2):
             self.tooltipsComboBox.addItem(prefStateStrings[i])
         self.tooltipsComboBox.setCurrentIndex(self.values[24])
-        self.boxes[14].insertWidget(-1,self.tooltipsComboBox)
+        self.boxes[15].insertWidget(-1,self.tooltipsComboBox)
 
 
         self.rFrameComboBox = QtGui.QComboBox(self.tabWidgets[3])
         for i in range(2):
             self.rFrameComboBox.addItem(prefStateStrings[i])
         self.rFrameComboBox.setCurrentIndex(self.values[25])
-        self.boxes[15].insertWidget(-1,self.rFrameComboBox)
+        self.boxes[16].insertWidget(-1,self.rFrameComboBox)
 
         self.areaResetComboBox = QtGui.QComboBox(self.tabWidgets[3])
         for i in range(2):
             self.areaResetComboBox.addItem(prefStateStrings[i])
         self.areaResetComboBox.setCurrentIndex(self.values[14])
-        self.boxes[16].insertWidget(-1,self.areaResetComboBox)
+        self.boxes[17].insertWidget(-1,self.areaResetComboBox)
 
         self.extraOptsEntry= QtGui.QLineEdit(self.values[26])
-        self.boxes[17].insertWidget(-1,self.extraOptsEntry)
+        self.boxes[18].insertWidget(-1,self.extraOptsEntry)
 
         for i in range(4):
             self.tabWidgets[i].setLayout(self.labelbox[i])

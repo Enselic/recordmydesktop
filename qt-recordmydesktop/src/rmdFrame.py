@@ -29,13 +29,13 @@ class rmdFrame:
     borderwidth=6
     outlinewidth=1
 
-    def __init__(self,x,y,w,h):
+    def __init__(self,x,y,w,h,parent):
         self.window=QtGui.QWidget(None,QtCore.Qt.X11BypassWindowManagerHint|QtCore.Qt.WindowStaysOnTopHint)
         self.x=x
         self.y=y
         self.w=w
         self.h=h
-
+        self.parent=parent
         self.mask = QtGui.QBitmap(self.w+self.borderwidth*2,
                              self.h+self.borderwidth*2)
         self.mask.fill(QtCore.Qt.color1)
@@ -49,9 +49,31 @@ class rmdFrame:
         self.window.move(self.x-self.borderwidth,
                          self.y-self.borderwidth)
         self.window.show()
+        self.timer=QtCore.QTimer(None)
+        self.timer.connect(self.timer,QtCore.SIGNAL("timeout()"),
+                        self.moveFrame)
+        self.timer.start(10)
+        self.screen_width=QtGui.qApp.desktop().width()
+        self.screen_height=QtGui.qApp.desktop().height()
+
+    def moveFrame(self):
+        if self.parent.values[15]==0:
+            npos=QtGui.QCursor.pos()
+            x=npos.x()-self.w/2
+            y=npos.y()-self.h/2
+            x=(x>>1)<<1
+            y=(y>>1)<<1
+            if x<0:x=0
+            if y<0:y=0
+            if x+self.w>self.screen_width:x=self.screen_width-self.w
+            if y+self.h>self.screen_height:y=self.screen_height-self.h
+            if(x!=self.x or y!= self.y):
+                self.x=x
+                self.y=y
+                self.window.move(self.x-(self.borderwidth),self.y-(self.borderwidth))
+
 
     def paintEvent(self,Event):
-
         painterw= QtGui.QPainter(self.window)
         painterw.fillRect(0,0,self.w+self.borderwidth*2,
                          self.h+self.borderwidth*2,
@@ -83,7 +105,7 @@ class rmdFrame:
         pass
 
     def destroy(self):
-        #self.area.destroy()
+        self.timer.stop()
         try:
             self.window.close()
         except:

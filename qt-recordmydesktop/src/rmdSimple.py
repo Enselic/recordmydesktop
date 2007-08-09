@@ -292,7 +292,7 @@ class simpleWidget(object):
                 self.values[5]=[]
                 for i in rmdConfig.default_values[5]:
                     self.values[5].append(i)
-            #open for some future option
+            #loaded further bellow
             self.values.append(0)
             savefile.readline()
             self.values.append(int(savefile.readline()))
@@ -338,6 +338,13 @@ class simpleWidget(object):
                 self.values.append(rmdConfig.default_values[26])
             else:
                 self.values.append(savefile.readline().replace("\n",""))
+            p=savefile.readline()
+            if p=='':
+                self.values[15]=rmdConfig.default_values[15]
+            else:
+                t_followmouse=int(savefile.readline())
+                if t_followmouse>1: t_followmouse=1
+                self.values[15]=t_followmouse
             return True
         except:
             return False
@@ -404,6 +411,8 @@ class simpleWidget(object):
             savefile.write("%d\n"%self.values[25])
             savefile.write("#Extra options\n")
             savefile.write("%s\n"%self.values[26])
+            savefile.write("#Follow mouse,1 disabled 0 enabled\n")
+            savefile.write("%d\n"%self.values[15])
             savefile.flush()
             savefile.close()
             return True

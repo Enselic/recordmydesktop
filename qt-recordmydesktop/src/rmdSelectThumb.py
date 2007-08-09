@@ -68,8 +68,9 @@ class QtThumbSelector(QtGui.QLabel):
     def update(self):
         QtGui.QLabel.update(self)
         if self.realFrame!=None:
-            if (self.area_return[0]!=self.realFrame.x or
-               self.area_return[1]!=self.realFrame.y or
+            if (((self.area_return[0]!=self.realFrame.x or
+               self.area_return[1]!=self.realFrame.y) and
+               self.caller.values[15]==1) or
                self.area_return[2]-self.area_return[0]!=self.realFrame.w or
                self.area_return[3]-self.area_return[1]!=self.realFrame.h or
                self.caller.values[25]):
@@ -93,19 +94,19 @@ class QtThumbSelector(QtGui.QLabel):
 
         painter = QtGui.QPainter(self)
         painter.drawPixmap(0,0,self.wwidth/self.factor,self.wheight/self.factor,self.pix)
-
-        if self.x1 >= 0:
-            x = min(self.x1, self.x2)
-            y = min(self.y1, self.y2)
-            w = max(self.x1, self.x2) - x
-            h = max(self.y1, self.y2) - y
-            painter.fillRect(x,y,w,h,QtGui.QBrush(QtCore.Qt.red,QtCore.Qt.CrossPattern))
-        elif self.area_return[0]>=0 or self.area_return[1]>=0 or self.area_return[2]>=0 or self.area_return[3]>=0:
-            x = max(0, self.area_return[0])/self.factor
-            y = max(0, self.area_return[1])/self.factor
-            w = min(self.wwidth, self.area_return[2])/self.factor - x
-            h = min(self.wheight, self.area_return[3])/self.factor - y
-            painter.fillRect(x,y,w,h,QtGui.QBrush(QtCore.Qt.red,QtCore.Qt.CrossPattern))
+        if self.selecting==1 or  self.caller.values[15]==1:
+            if self.x1 >= 0:
+                x = min(self.x1, self.x2)
+                y = min(self.y1, self.y2)
+                w = max(self.x1, self.x2) - x
+                h = max(self.y1, self.y2) - y
+                painter.fillRect(x,y,w,h,QtGui.QBrush(QtCore.Qt.red,QtCore.Qt.CrossPattern))
+            elif self.area_return[0]>=0 or self.area_return[1]>=0 or self.area_return[2]>=0 or self.area_return[3]>=0:
+                x = max(0, self.area_return[0])/self.factor
+                y = max(0, self.area_return[1])/self.factor
+                w = min(self.wwidth, self.area_return[2])/self.factor - x
+                h = min(self.wheight, self.area_return[3])/self.factor - y
+                painter.fillRect(x,y,w,h,QtGui.QBrush(QtCore.Qt.red,QtCore.Qt.CrossPattern))
     def mouseMoveEvent(self, event):
         if self.x1 >= 0:
             rect = QtCore.QRect()
@@ -145,7 +146,8 @@ class QtThumbSelector(QtGui.QLabel):
             self.realFrame=rmdFrame(self.area_return[0],
                                     self.area_return[1],
                                     self.area_return[2]-self.area_return[0],
-                                    self.area_return[3]-self.area_return[1])
+                                    self.area_return[3]-self.area_return[1],
+                                    self.caller)
     def closeEvent(self,event):
         self.realFrame.destroy()
         QtGui.QLabel.close(self)

@@ -42,7 +42,7 @@ from rmdStrings import *
 class prefsWidget(object):
     def __tooltips__(self):
         self.tooltips=gtk.Tooltips()
-        for i in range(18):
+        for i in range(19):
             self.tooltips.set_tip(self.eboxes[i],prefTooltipLabels[i])
         self.tooltips.set_tip(self.jack_ebox,prefJacktip)
 
@@ -56,7 +56,7 @@ class prefsWidget(object):
         self.values[12]=self.displayEntry.get_text().replace(' ','')
         self.values[13]=self.sharedComboBox.get_active()
         self.values[14]=self.areaResetComboBox.get_active()
-#        self.values[15]=self.thresSpinButton.get_value_as_int()
+        self.values[15]=self.followMouseComboBox.get_active()
         self.values[16]=self.quickComboBox.get_active()
         self.values[17]=self.workdirEntry.get_text()
         self.values[18]=self.onTheFlyComboBox.get_active()
@@ -236,7 +236,7 @@ class prefsWidget(object):
         self.boxes[9].pack_end(self.deviceEntry,expand=False,fill=False)
 
 #misc page
-        for i in xrange(10,18):
+        for i in xrange(10,19):
             self.labels[i]=gtk.Label(prefLabelStrings[i])
             self.labels[i].set_justify(gtk.JUSTIFY_LEFT)
             self.boxes[i]=gtk.HBox(homogeneous=False, spacing=0)
@@ -259,27 +259,33 @@ class prefsWidget(object):
         self.mouseComboBox.show()
         self.boxes[11].pack_end(self.mouseComboBox,expand=False,fill=False)
 
+        self.followMouseComboBox = gtk.combo_box_new_text()
+        for i in range(2):
+            self.followMouseComboBox.append_text(prefStateStrings[i])
+        self.followMouseComboBox.set_active(self.values[15])
+        self.followMouseComboBox.show()
+        self.boxes[12].pack_end(self.followMouseComboBox,expand=False,fill=False)
 
         self.sharedComboBox = gtk.combo_box_new_text()
         for i in range(2):
             self.sharedComboBox.append_text(prefStateStrings[i])
         self.sharedComboBox.set_active(self.values[13])
         self.sharedComboBox.show()
-        self.boxes[12].pack_end(self.sharedComboBox,expand=False,fill=False)
+        self.boxes[13].pack_end(self.sharedComboBox,expand=False,fill=False)
 
         self.winDecoComboBox = gtk.combo_box_new_text()
         for i in range(2):
             self.winDecoComboBox.append_text(prefStateStrings[i])
         self.winDecoComboBox.set_active(self.values[21])
         self.winDecoComboBox.show()
-        self.boxes[13].pack_end(self.winDecoComboBox,expand=False,fill=False)
+        self.boxes[14].pack_end(self.winDecoComboBox,expand=False,fill=False)
 
         self.tooltipsComboBox = gtk.combo_box_new_text()
         for i in range(2):
             self.tooltipsComboBox.append_text(prefStateStrings[i])
         self.tooltipsComboBox.set_active(self.values[24])
         self.tooltipsComboBox.show()
-        self.boxes[14].pack_end(self.tooltipsComboBox,expand=False,fill=False)
+        self.boxes[15].pack_end(self.tooltipsComboBox,expand=False,fill=False)
 
 
         self.rFrameComboBox = gtk.combo_box_new_text()
@@ -287,21 +293,21 @@ class prefsWidget(object):
             self.rFrameComboBox.append_text(prefStateStrings[i])
         self.rFrameComboBox.set_active(self.values[25])
         self.rFrameComboBox.show()
-        self.boxes[15].pack_end(self.rFrameComboBox,expand=False,fill=False)
+        self.boxes[16].pack_end(self.rFrameComboBox,expand=False,fill=False)
 
         self.areaResetComboBox = gtk.combo_box_new_text()
         for i in range(2):
             self.areaResetComboBox.append_text(prefStateStrings[i])
         self.areaResetComboBox.set_active(self.values[14])
         self.areaResetComboBox.show()
-        self.boxes[16].pack_end(self.areaResetComboBox,expand=False,fill=False)
+        self.boxes[17].pack_end(self.areaResetComboBox,expand=False,fill=False)
 
         self.extraOptsEntry= gtk.Entry(max=0)
         self.extraOptsEntry.set_text(self.values[26])
         self.extraOptsEntry.show()
-        self.boxes[17].pack_end(self.extraOptsEntry,expand=False,fill=False)
+        self.boxes[18].pack_end(self.extraOptsEntry,expand=False,fill=False)
 
-        for i in range(18):
+        for i in range(19):
             self.boxes[i].show()
             self.eboxes[i].show()
 
