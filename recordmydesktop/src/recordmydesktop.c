@@ -121,7 +121,7 @@ int main(int argc,char **argv){
             fprintf(stderr,"\n");
 
             //encode and then cleanup cache
-            if(!pdata.args.encOnTheFly){
+            if(!pdata.args.encOnTheFly && !pdata.args.no_encode){
                 if(!Aborted){
                     EncodeCache(&pdata);
                 }
