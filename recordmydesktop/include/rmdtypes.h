@@ -160,6 +160,7 @@ typedef struct _ProgArgs{
                         //(which changes full-shots and with-shared to 1)
     int full_shots;     //do not poll damage, take full screenshots
     int follow_mouse;   //capture area follows the mouse(fullshots auto enabled)
+    int no_encode;      //do not encode or delete the temporary files(debug opt)
     int no_quick_subsample;             //average pixels in chroma planes
     int v_bitrate,v_quality,s_quality;  //video bitrate,video-sound quality
     int encOnTheFly;    //encode while recording, no caching(default 0)
