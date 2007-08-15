@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-07 19:19+0300\n"
+"POT-Creation-Date: 2007-08-15 01:56+0300\n"
 "PO-Revision-Date: 2007-07-12 17:30+0100\n"
 "Last-Translator: Giovanni Scafora <linuxmania@gmail.com>\n"
 "Language-Team: Arch Linux Italian Team <linuxmania@gmail.com>\n"
@@ -309,6 +309,10 @@ msgid "Mouse Cursor"
 msgstr "Cursore del mouse"
 
 #: src/rmdStrings.py:72
+msgid "Follow Mouse"
+msgstr ""
+
+#: src/rmdStrings.py:72
 msgid "MIT-Shm extension"
 msgstr "Estensione MIT-Shm"
 
@@ -316,7 +320,7 @@ msgstr "Estensione MIT-Shm"
 msgid "Include Window Decorations"
 msgstr "Includere le decorazioni della finestra"
 
-#: src/rmdStrings.py:72
+#: src/rmdStrings.py:73
 msgid "Tooltips"
 msgstr "Suggerimenti"
 
@@ -475,6 +479,15 @@ msgstr ""
 
 #: src/rmdStrings.py:93
 msgid ""
+"When This option is enabled, the capture\n"
+"area will follow your mouse cursor.\n"
+"Enabling this option will also enable full shots at\n"
+"every frame, so it's not recommended\n"
+"for large capture areas."
+msgstr ""
+
+#: src/rmdStrings.py:94
+msgid ""
 "Use the MIT-Shared memory extension, whenever appropriate,\n"
 " depending on the rest of the program settings.\n"
 "Disabling this option is not recommended,\n"
@@ -485,7 +498,7 @@ msgstr ""
 "programma. Non è consigliabile disabilitare questa\n"
 "opzione, in quanto può rallentare molto il programma."
 
-#: src/rmdStrings.py:94
+#: src/rmdStrings.py:95
 msgid ""
 "When selecting a window via the \"Select Window\" button,\n"
 "include that window's decorations in the recording area."
@@ -494,7 +507,7 @@ msgstr ""
 "\",\n"
 "nell'area di registrazione saranno incluse queste decorazioni."
 
-#: src/rmdStrings.py:95
+#: src/rmdStrings.py:96
 msgid ""
 "Enable or disable tooltips, like this one.\n"
 "(Requires restart)"
@@ -502,7 +515,7 @@ msgstr ""
 "Abilita o disabilita i suggerimenti.\n"
 "(Richiede il riavvio del programma)"
 
-#: src/rmdStrings.py:96
+#: src/rmdStrings.py:97
 msgid ""
 "Draw a frame on the screen, around the area\n"
 "that will get captured.\n"
@@ -512,7 +525,7 @@ msgstr ""
 "all'area che sarà catturata.\n"
 "(Questa linea sarà visibile durante la registrazione.)"
 
-#: src/rmdStrings.py:97
+#: src/rmdStrings.py:98
 msgid ""
 "Reset capture area after every recording\n"
 "and at program shutdown."
@@ -520,7 +533,7 @@ msgstr ""
 "Resetta l'area di cattura dopo ogni registrazione\n"
 "e quando si chiude il programma."
 
-#: src/rmdStrings.py:98
+#: src/rmdStrings.py:99
 msgid ""
 "Extra commandline options that will get\n"
 "passed to recordMyDesktop during initialization.\n"
@@ -534,7 +547,7 @@ msgstr ""
 "richiesto per la linea di comando (ad es.: separate con spazi).\n"
 "Per maggiori informazioni sul loro utilizzo, consultate il manuale."
 
-#: src/rmdStrings.py:99
+#: src/rmdStrings.py:100
 msgid ""
 "Enable this option to record audio through\n"
 "JACK. The Jack server must be running in order to\n"
@@ -552,11 +565,11 @@ msgstr ""
 "recordMyDesktop deve essere compilato con il supporto\n"
 "a JACK, affinché questa opzione funzioni correttamente."
 
-#: src/rmdStrings.py:101
+#: src/rmdStrings.py:102
 msgid "Use Jack for audio capture."
 msgstr "Usare Jack per la cattura dell'audio"
 
-#: src/rmdStrings.py:102
+#: src/rmdStrings.py:103
 msgid ""
 "Select the ports you want to record from\n"
 "(hold Ctrl to select multiple entries):"
@@ -564,26 +577,26 @@ msgstr ""
 "Selezionare le porte dalle quali si desidera registrare\n"
 "(Premere Ctrl per selezionare scelte multiple):"
 
-#: src/rmdStrings.py:104
+#: src/rmdStrings.py:105
 msgid "Available Ports"
 msgstr "Porte disponibili"
 
-#: src/rmdStrings.py:105
+#: src/rmdStrings.py:106
 msgid "jack_lsp returned no ports."
 msgstr "jack_lsp non ha rilevato porte disponibili."
 
-#: src/rmdStrings.py:106
+#: src/rmdStrings.py:107
 msgid "Make sure that jackd is running."
 msgstr "Assicurarsi che jackd sia in funzione."
 
-#: src/rmdStrings.py:107
+#: src/rmdStrings.py:108
 msgid "Available ports (double click to add):"
 msgstr "Porte disponibili (doppio click per aggiungerle):"
 
-#: src/rmdStrings.py:108
+#: src/rmdStrings.py:109
 msgid "Selected ports (double click to remove):"
 msgstr "Porte selezionate (doppio click per rimuoverle):"
 
-#: src/rmdStrings.py:109
+#: src/rmdStrings.py:110
 msgid "Refresh"
 msgstr "Aggiorna"
