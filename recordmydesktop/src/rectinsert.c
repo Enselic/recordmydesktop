@@ -532,9 +532,9 @@ void BlocksFromList(RectArea **root,
 
     while(temp!=NULL){
         column_start=(temp->geom.x-x_offset)/Y_UNIT_WIDTH;
-        column_end=(temp->geom.x+temp->geom.width-x_offset)/Y_UNIT_WIDTH;
+        column_end=(temp->geom.x+(temp->geom.width-1)-x_offset)/Y_UNIT_WIDTH;
         row_start=(temp->geom.y-y_offset)/Y_UNIT_WIDTH;
-        row_end=(temp->geom.y+temp->geom.height-y_offset)/Y_UNIT_WIDTH;
+        row_end=(temp->geom.y+(temp->geom.height-1)-y_offset)/Y_UNIT_WIDTH;
         for(i=row_start;i<row_end+1;i++){
             for(j=column_start;j<column_end+1;j++){
                 blockno=i*blocknum_x+j;
