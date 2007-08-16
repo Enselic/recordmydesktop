@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: el\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-08-15 01:56+0300\n"
-"PO-Revision-Date: 2007-07-07 19:35+0300\n"
+"PO-Revision-Date: 2007-08-16 23:27+0300\n"
 "Last-Translator: John Varouhakis <johnvarouhakis@gmail.com>\n"
 "Language-Team:  <el@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -307,7 +307,7 @@ msgstr "Δείκτης ποντικιού"
 
 #: src/rmdStrings.py:72
 msgid "Follow Mouse"
-msgstr ""
+msgstr "Η περιοχή εγγραφής να ακολουθεί το ποντίκι."
 
 #: src/rmdStrings.py:72
 msgid "MIT-Shm extension"
@@ -476,6 +476,12 @@ msgid ""
 "every frame, so it's not recommended\n"
 "for large capture areas."
 msgstr ""
+"Όταν αυτή η επιλογή είναι ενεργοποιημένη ,\n"
+"η περιοχή εγγραφής θα ακολουθεί το ποντίκι.\n"
+"Η ενεργοποίηση αυτής της επιλογής δεν συνίσταται\n"
+"για μεγάλες περιοχές,καθότι ενεργοποιεί\n"
+"αυτόματα τις πλήρεις λήψεις σε κάθε\n"
+"στιγμιότυπο."
 
 #: src/rmdStrings.py:94
 msgid ""
@@ -595,3 +601,4 @@ msgstr "Επιλεγμένες θύρες (διπλό κλικ για αφαίρ
 #: src/rmdStrings.py:110
 msgid "Refresh"
 msgstr "Επαναφόρτωση"
+
