@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-08-15 01:56+0300\n"
-"PO-Revision-Date: 2007-07-12 17:30+0100\n"
+"PO-Revision-Date: 2007-08-17 08:00+0100\n"
 "Last-Translator: Giovanni Scafora <linuxmania@gmail.com>\n"
 "Language-Team: Arch Linux Italian Team <linuxmania@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr "Mostra/Nascondi la finestra principale"
 
 #: src/rmdStrings.py:11
 msgid "_Select Area On Screen"
-msgstr "_Selezionare l'area sullo schermo"
+msgstr "_Seleziona l'area sullo schermo"
 
 #: src/rmdStrings.py:12 src/rmdStrings.py:60
 msgid "Quit"
@@ -85,7 +85,7 @@ msgstr "XInitThreads non è andato a buon fine."
 #: src/rmdStrings.py:27
 msgid "No $DISPLAY environment variable and none specified as argument."
 msgstr ""
-"Non è stata specificata una variabile d'ambiente $DISPLAY come argomento."
+"Non è stata specificata la variabile d'ambiente $DISPLAY come argomento."
 
 #: src/rmdStrings.py:28
 msgid "Cannot connect to Xserver."
@@ -163,7 +163,7 @@ msgstr "Avanzate"
 
 #: src/rmdStrings.py:47
 msgid "Select Window"
-msgstr "Selezionare una finestra"
+msgstr "Seleziona una finestra"
 
 #: src/rmdStrings.py:48
 msgid "Click here to select a window to record"
@@ -209,11 +209,11 @@ msgstr ""
 
 #: src/rmdStrings.py:53
 msgid "Enable/Disable sound recording."
-msgstr "Abilitare o disabilitare la registrazione dell'audio."
+msgstr "Abilita o disabilita la registrazione dell'audio."
 
 #: src/rmdStrings.py:54
 msgid "Select the audio quality of your recording."
-msgstr "Selezionare la qualità audio della registrazione."
+msgstr "Seleziona la qualità audio della registrazione."
 
 #: src/rmdStrings.py:55
 msgid "Click here to access more options."
@@ -262,7 +262,7 @@ msgstr "completo"
 
 #: src/rmdStrings.py:68
 msgid "Overwite Existing Files"
-msgstr "Sovrascrivere i file esistenti"
+msgstr "Sovrascrive i file esistenti"
 
 #: src/rmdStrings.py:68
 msgid "Working Directory"
@@ -310,7 +310,7 @@ msgstr "Cursore del mouse"
 
 #: src/rmdStrings.py:72
 msgid "Follow Mouse"
-msgstr ""
+msgstr "Segue il mouse"
 
 #: src/rmdStrings.py:72
 msgid "MIT-Shm extension"
@@ -318,7 +318,7 @@ msgstr "Estensione MIT-Shm"
 
 #: src/rmdStrings.py:72
 msgid "Include Window Decorations"
-msgstr "Includere le decorazioni della finestra"
+msgstr "Include le decorazioni della finestra"
 
 #: src/rmdStrings.py:73
 msgid "Tooltips"
@@ -485,6 +485,11 @@ msgid ""
 "every frame, so it's not recommended\n"
 "for large capture areas."
 msgstr ""
+"Abilitando questa opzione, l'area di cattura\n"
+"seguirà il cursore del mouse.\n"
+"Inoltre, con questa opzione saranno abilitati\n"
+"i fotogrammi a schermo intero, quindi non è\n"
+"consigliata per la cattura di grandi aree."
 
 #: src/rmdStrings.py:94
 msgid ""
