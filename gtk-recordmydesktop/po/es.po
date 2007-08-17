@@ -1,17 +1,19 @@
+# translation of es.po to spanish
 # translation of es.po to
 # Copyright (C) 2007 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
+#
+#
 # <>, 2007.
-#
-#
+# José L. Redrejo Rodríguez <jredrejo@edu.juntaextremadura.net>, 2007.
 msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-08-15 01:56+0300\n"
-"PO-Revision-Date: 2007-07-12 17:15+0200\n"
-"Last-Translator: José L. Redrejo Rodríguez\n"
-"Language-Team:  <es@li.org>\n"
+"PO-Revision-Date: 2007-08-17 13:13+0200\n"
+"Last-Translator: José L. Redrejo Rodríguez <jredrejo@edu.juntaextremadura.net>\n"
+"Language-Team: spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -45,8 +47,7 @@ msgstr ""
 
 #: src/rmdStrings.py:15
 msgid "Translator Credits And Information(Replace with your info)"
-msgstr ""
-"Traducción español: José L. Redrejo Rodríguez, Rolando Espinoza La Fuente"
+msgstr "Traducción español: José L. Redrejo Rodríguez, Rolando Espinoza La Fuente"
 
 #: src/rmdStrings.py:19
 msgid "Success"
@@ -311,7 +312,7 @@ msgstr "Cursor del ratón"
 
 #: src/rmdStrings.py:72
 msgid "Follow Mouse"
-msgstr ""
+msgstr "Seguir el ratón"
 
 #: src/rmdStrings.py:72
 msgid "MIT-Shm extension"
@@ -481,6 +482,11 @@ msgid ""
 "every frame, so it's not recommended\n"
 "for large capture areas."
 msgstr ""
+"Cuando se habilita esta opción, el área de\n"
+"captura seguirá el cursor del ratón.\n"
+"Habilitándola también habilitará pantallazos completos\n"
+"en cada cuadro, por lo que no es muy\n"
+"recomendable usarlo con áreas de captura grandes."
 
 #: src/rmdStrings.py:94
 msgid ""
@@ -595,3 +601,4 @@ msgstr "Puertos seleccionados (doble clic para borrar):"
 #: src/rmdStrings.py:110
 msgid "Refresh"
 msgstr "Refrescar"
+
