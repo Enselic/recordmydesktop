@@ -1,3 +1,11 @@
+/*Version 0.3.6*/
+* Corrected segmentation fault when recording non-fullscreen areas, using the
+full-shots mode(i.e. no Xdamage)
+* Fixed arrays boundary overstep in BlocksFromList (resulting in segfault,
+especially when compiled with -fstack-protector)
+* Removed the need for Xdamage to be present even when it is not used.
+* Added follow-mouse option(i.e. capture area tracks the mouse cursor).
+
 /*Version 0.3.5.1*/
 * Corrected segmentation fault when recording non-fullscreen areas
 (bug-report and solution to the problem provided Sander Jansen)

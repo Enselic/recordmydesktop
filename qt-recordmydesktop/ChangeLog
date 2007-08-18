@@ -1,3 +1,13 @@
+/*VERSION 0.3.6*/
+*Version *BUMPED* to indicate full compatibility with recordMyDesktop
+*synced to recordMyDesktop 0.3.6
+(--follow-mouse option and cursor-tracking frame)
+*Updated Brazilian translation by Caio Alonso.
+*Updated Italian translation by Giovanni Scafora.
+*Updated Spanish translation by José "L. Redrejo" Rodríguez.
+*Added Polish translation, by Tomasz Wojtyś.
+
+
 /*VERSION 0.2*/
 *Synced to recordMyDesktop 0.3.5
 *fixed installation in locations not present in python's path
