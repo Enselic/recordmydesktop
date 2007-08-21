@@ -39,7 +39,9 @@ class QtThumbSelector(QtGui.QLabel):
         QtGui.QLabel.__init__(self,parent)
         self.x1=self.y1=-1
         self.x2 = self.y2 = -1
-        self.root=QtGui.QApplication.desktop().winId()
+        #self.root=QtGui.QApplication.desktop().winId()
+        self.root=QtGui.QX11Info().appRootWindow()
+
         self.pix=QtGui.QPixmap.grabWindow(self.root)
         siz=QtGui.QApplication.desktop().screenGeometry()
         (self.wwidth, self.wheight)=(siz.width(),siz.height())
