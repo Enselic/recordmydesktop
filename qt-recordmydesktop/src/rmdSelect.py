@@ -32,7 +32,7 @@ class QtAreaSelector(QtGui.QLabel):
         QtGui.QLabel.__init__(self,None,QtCore.Qt.WindowStaysOnTopHint)
         self.x1=self.y1=-1
         self.x2=self.y2=0
-        self.pix=QtGui.QPixmap.grabWindow(QtGui.QApplication.desktop().winId())
+        self.pix=QtGui.QPixmap.grabWindow(QtGui.QX11Info().appRootWindow())
         siz=QtGui.QApplication.desktop().screenGeometry()
         (self.width, self.height)=(siz.width(),siz.height())
     def paintEvent(self, event):
