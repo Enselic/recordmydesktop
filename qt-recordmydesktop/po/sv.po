@@ -1,0 +1,596 @@
+# Swedish translation for gtk-recordmydesktop.
+# Copyright (C) 2007 Free Software Foundation, Inc.
+# This file is distributed under the same license as the gtk-recordmydesktop package.
+# Daniel Nylander <po@danielnylander.se>, 2007.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gtk-recordmydesktop\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-09-10 15:16+0200\n"
+"PO-Revision-Date: 2007-09-10 16:36+0100\n"
+"Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
+"Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../src/rmdStrings.py:10
+msgid "Show/hide Main Window"
+msgstr "Visa/dölj huvudfönstret"
+
+#: ../src/rmdStrings.py:11
+msgid "_Select Area On Screen"
+msgstr "_Välj område på skärmen"
+
+#: ../src/rmdStrings.py:12
+#: ../src/rmdStrings.py:60
+msgid "Quit"
+msgstr "Avsluta"
+
+#: ../src/rmdStrings.py:13
+msgid "a graphical frontend for recordMyDesktop"
+msgstr "ett grafiskt gränssnitt för recordMyDesktop"
+
+#: ../src/rmdStrings.py:14
+msgid ""
+"Copyright (C) John Varouhakis\n"
+"Portions Copyright (C) 2005-6 Zaheer Abbas Merali, John N. Laliberte\n"
+"Portions Copyright (C) Fluendo S.L."
+msgstr ""
+"Copyright © John Varouhakis\n"
+"Delar av källkoden är Copyright © 2005-6 Zaheer Abbas Merali, John N. Laliberte\n"
+"Delar av källkoden är Copyright © Fluendo S.L."
+
+#: ../src/rmdStrings.py:15
+msgid "Translator Credits And Information(Replace with your info)"
+msgstr "Daniel Nylander <po@danielnylander.se>"
+
+#: ../src/rmdStrings.py:19
+msgid "Success"
+msgstr "Lyckades"
+
+#: ../src/rmdStrings.py:20
+msgid "Error while parsing the arguments."
+msgstr "Fel vid tolkning av argumenten."
+
+#: ../src/rmdStrings.py:21
+msgid "Initializing the encoder failed(either vorbis or theora)"
+msgstr "Initiering av kodaren misslyckades(antingen vorbis eller theora)"
+
+#: ../src/rmdStrings.py:22
+msgid "Could not open/configure sound card."
+msgstr "Kunde inte öppna/konfigurera ljudkortet."
+
+#: ../src/rmdStrings.py:23
+msgid "Xdamage extension not present."
+msgstr "Utökningen Xdamage finns inte tillgänglig."
+
+#: ../src/rmdStrings.py:24
+msgid "Shared memory extension not present."
+msgstr "Utökning för delat minne finns inte tillgänglig."
+
+#: ../src/rmdStrings.py:25
+msgid "Xfixes extension not present."
+msgstr "Utökningen Xfixes finns inte tillgänglig."
+
+#: ../src/rmdStrings.py:26
+msgid "XInitThreads failed."
+msgstr "XInitThreads misslyckades."
+
+#: ../src/rmdStrings.py:27
+msgid "No $DISPLAY environment variable and none specified as argument."
+msgstr "Miljövariabeln $DISPLAY finns inte och ingen har angivits som argument."
+
+#: ../src/rmdStrings.py:28
+msgid "Cannot connect to Xserver."
+msgstr "Kan inte ansluta till Xserver."
+
+#: ../src/rmdStrings.py:29
+msgid "Color depth is not 24bpp."
+msgstr "Färgdjupet är inte 24 bpp."
+
+#: ../src/rmdStrings.py:30
+msgid "Improper window specification."
+msgstr "Felaktig fönsterspecifikation."
+
+#: ../src/rmdStrings.py:31
+msgid "Cannot attach shared memory to proccess."
+msgstr "Kan inte fästa delat minne till process."
+
+#: ../src/rmdStrings.py:32
+msgid "Cannot open file for writting."
+msgstr "Kan inte öppna fil för skrivning."
+
+#: ../src/rmdStrings.py:33
+msgid "Cannot load the Jack library (dlopen/dlsym error on libjack.so)."
+msgstr "Kan inte läsa in Jack-biblioteket (fel vid dlopen/dlsym i libjack.so)."
+
+#: ../src/rmdStrings.py:34
+msgid "Cannot create new client."
+msgstr "Kan inte skapa ny klient."
+
+#: ../src/rmdStrings.py:35
+msgid "Cannot activate client."
+msgstr "Kan inte aktivera klient."
+
+#: ../src/rmdStrings.py:36
+msgid "Port registration/connection failure."
+msgstr "Portregistrering/anslutningsfel."
+
+#: ../src/rmdStrings.py:37
+msgid "Segmentation Fault"
+msgstr "Segmenteringsfel"
+
+#: ../src/rmdStrings.py:40
+msgid ""
+"Recording is finished.\n"
+"recordMyDesktop has exited with status"
+msgstr ""
+"Inspelningen är färdig.\n"
+"recordMyDesktop har avslutats med status"
+
+#: ../src/rmdStrings.py:41
+msgid "Description"
+msgstr "Beskrivning"
+
+#: ../src/rmdStrings.py:42
+msgid ""
+"Recording is finished.\n"
+"recordMyDesktop has exited with uknown\n"
+"error code"
+msgstr ""
+"Inspelningen är färdig.\n"
+"recordMyDesktop har avslutats med okänd\n"
+"felkod"
+
+#: ../src/rmdStrings.py:46
+#: ../src/rmdStrings.py:76
+msgid "Video Quality"
+msgstr "Videokvalitet"
+
+#: ../src/rmdStrings.py:46
+#: ../src/rmdStrings.py:76
+msgid "Sound Quality"
+msgstr "Ljudkvalitet"
+
+#: ../src/rmdStrings.py:47
+msgid "Advanced"
+msgstr "Avancerat"
+
+#: ../src/rmdStrings.py:47
+msgid "Select Window"
+msgstr "Välj fönster"
+
+#: ../src/rmdStrings.py:48
+msgid "Click here to select a window to record"
+msgstr "Klicka här för att välja ett fönster att spela in"
+
+#: ../src/rmdStrings.py:49
+msgid ""
+"Click to start the recording.\n"
+"This window will hide itself."
+msgstr ""
+"Klicka för att starta inspelningen.\n"
+"Fönstret kommer att döljas."
+
+#: ../src/rmdStrings.py:50
+msgid ""
+"Click to choose a filename and location.\n"
+"Default is out.ogg in your home folder.\n"
+"If the file already exists, the new one\n"
+"will have a number attached on its name\n"
+"(this behavior can be changed )"
+msgstr ""
+"Klicka för att välja ett filnamn och plats.\n"
+"Standard är out.ogg i din hemkatalog.\n"
+"Om filen redan finns kommer den nya filen\n"
+"att få ett löpnummer i sitt filnamn\n"
+"(beteendet kan dock ändras)"
+
+#: ../src/rmdStrings.py:51
+msgid "Click to exit the program."
+msgstr "Klicka för att avsluta programmet."
+
+#: ../src/rmdStrings.py:52
+msgid ""
+"Select the video quality of your recording.\n"
+"(Lower quality will require more proccessing power,\n"
+"so it's recommended, when encoding on the fly,\n"
+"to leave at 100)"
+msgstr ""
+"Välj videokvaliteten för din inspelning.\n"
+"(Lägre kvalitet kräver mer processorkraft,\n"
+"så det rekommenderas, vid direktkodning,\n"
+"att lämna den vid 100)"
+
+#: ../src/rmdStrings.py:53
+msgid "Enable/Disable sound recording."
+msgstr "Aktivera/inaktivera ljudinspelning."
+
+#: ../src/rmdStrings.py:54
+msgid "Select the audio quality of your recording."
+msgstr "Välj ljudkvaliteten för din inspelning."
+
+#: ../src/rmdStrings.py:55
+msgid "Click here to access more options."
+msgstr "Klicka här för att komma åt fler alternativ."
+
+#: ../src/rmdStrings.py:56
+msgid ""
+"\n"
+"Left click and drag, on the preview image,\n"
+"to select an area for recording.\n"
+"Right click on it, to reset the area."
+msgstr ""
+"\n"
+"Vänsterklicka och dra, i förhandsvisningsrutan,\n"
+"för att välja ett område att spela in.\n"
+"Högerklicka på det för att nollställa området."
+
+#: ../src/rmdStrings.py:58
+msgid "Record"
+msgstr "Spela in"
+
+#: ../src/rmdStrings.py:59
+msgid "Save As"
+msgstr "Spara som"
+
+#: ../src/rmdStrings.py:63
+msgid "Cancel"
+msgstr "Avbryt"
+
+#: ../src/rmdStrings.py:64
+msgid ""
+"Please wait while your recording is being encoded\n"
+"WARNING!!!\n"
+"If you press Cancel or close this window,\n"
+"this proccess cannot be resumed!"
+msgstr ""
+"Vänta under tiden din inspelning kodas\n"
+"VARNING!!!\n"
+"Om du trycker på Avbryt eller stänger fönstret\n"
+"kan denna process inte återupptas!"
+
+#: ../src/rmdStrings.py:65
+msgid "complete"
+msgstr "färdig"
+
+#: ../src/rmdStrings.py:68
+msgid "Overwite Existing Files"
+msgstr "Skriv över befintliga filer"
+
+#: ../src/rmdStrings.py:68
+msgid "Working Directory"
+msgstr "Arbetskatalog"
+
+#: ../src/rmdStrings.py:69
+#: ../src/rmdStrings.py:83
+msgid "Frames Per Second"
+msgstr "Bildrutor per sekund"
+
+#: ../src/rmdStrings.py:69
+msgid "Encode On the Fly"
+msgstr "Direktkodning"
+
+#: ../src/rmdStrings.py:69
+msgid "Zero Compression"
+msgstr "Ingen komprimering"
+
+#: ../src/rmdStrings.py:70
+msgid "Quick Subsampling"
+msgstr "Snabb undersampling"
+
+#: ../src/rmdStrings.py:70
+msgid "Full shots at every frame"
+msgstr "Fullständiga bildrutor"
+
+#: ../src/rmdStrings.py:71
+msgid "Channels"
+msgstr "Kanaler"
+
+#: ../src/rmdStrings.py:71
+msgid "Frequency"
+msgstr "Frekvens"
+
+#: ../src/rmdStrings.py:71
+msgid "Device"
+msgstr "Enhet"
+
+#: ../src/rmdStrings.py:71
+msgid "Display"
+msgstr "Display"
+
+#: ../src/rmdStrings.py:71
+msgid "Mouse Cursor"
+msgstr "Muspekare"
+
+#: ../src/rmdStrings.py:72
+msgid "Follow Mouse"
+msgstr "Följ musen"
+
+#: ../src/rmdStrings.py:72
+msgid "MIT-Shm extension"
+msgstr "Utökningen MIT-Shm"
+
+#: ../src/rmdStrings.py:72
+msgid "Include Window Decorations"
+msgstr "Inkludera fönsterdekorationer"
+
+#: ../src/rmdStrings.py:73
+msgid "Tooltips"
+msgstr "Verktygstips"
+
+#: ../src/rmdStrings.py:73
+msgid "Outline Capture Area On Screen"
+msgstr "Markera fångstområde på skärm"
+
+#: ../src/rmdStrings.py:74
+msgid "Reset Capture Area"
+msgstr "Nollställ fångstområde"
+
+#: ../src/rmdStrings.py:75
+msgid "Extra Options"
+msgstr "Extra alternativ"
+
+#: ../src/rmdStrings.py:77
+msgid "Drop Frames(encoder)"
+msgstr "Kasta bildrutor (kodare)"
+
+#: ../src/rmdStrings.py:77
+msgid "Startup Delay(secs)"
+msgstr "Uppstartsfördröjning(sekunder)"
+
+#: ../src/rmdStrings.py:78
+msgid "Normal"
+msgstr "Normal"
+
+#: ../src/rmdStrings.py:78
+msgid "White"
+msgstr "Vit"
+
+#: ../src/rmdStrings.py:78
+msgid "Black"
+msgstr "Svart"
+
+#: ../src/rmdStrings.py:78
+msgid "None"
+msgstr "Ingen"
+
+#: ../src/rmdStrings.py:79
+msgid "Enabled"
+msgstr "Aktiverat"
+
+#: ../src/rmdStrings.py:79
+msgid "Disabled"
+msgstr "Inaktiverat"
+
+#. 0,1
+#: ../src/rmdStrings.py:80
+msgid "Files"
+msgstr "Filer"
+
+#: ../src/rmdStrings.py:80
+msgid "Performance"
+msgstr "Prestanda"
+
+#: ../src/rmdStrings.py:80
+msgid "Sound"
+msgstr "Ljud"
+
+#: ../src/rmdStrings.py:80
+msgid "Misc"
+msgstr "Diverse"
+
+#: ../src/rmdStrings.py:81
+msgid ""
+"By default, if you try to save under a filename that already\n"
+"exists, the new file will be renamed\n"
+"(for example if you try to save as out.ogg and that file exists, your file will be named out.ogg.1).\n"
+"By checking this box, this behavior is disabled and the old file is overwritten.\n"
+msgstr ""
+"Om du försöker att spara med ett filnamn som redan finns\n"
+"kommer den nya filen som standard att döpas om (till exempel om\n"
+"du försöker att spara som out.ogg och den filen finns, kommer din fil att få namnet out.ogg.1).\n"
+"Genom att kryssa i denna ruta kommer beteendet att inaktiveras och den gamla filen skrivas över.\n"
+
+#: ../src/rmdStrings.py:82
+msgid "Directory where temporary files will be saved."
+msgstr "Katalog där temporära filer kommer att sparas."
+
+#: ../src/rmdStrings.py:84
+msgid ""
+"Encode simultaneously with the recording.\n"
+"This will require a lot more processing power.\n"
+msgstr ""
+"Koda samtidigt som inspelningen sker.\n"
+"Det här kräver mycket mer processorkraft.\n"
+
+#: ../src/rmdStrings.py:85
+msgid ""
+"Do not apply compression on the temporary files.\n"
+"If enabled, the program will need less processing power,\n"
+"in the expense of hard disk space.\n"
+"This option is valid only when encoding on the fly is disabled."
+msgstr ""
+"Tillämpa ingen komprimering på temporära filer.\n"
+"Om aktiverat kommer programmet att behöva mindre\n"
+"processkraft men mycket mer hårddiskutrymme.\n"
+"Det här alternativet är endast giltigt när direktkodning är inaktiverat."
+
+#: ../src/rmdStrings.py:86
+msgid ""
+"This option, if enabled, will cause the program to require less\n"
+"processing power, but it might make the colors look a bit more blurry."
+msgstr ""
+"Det här alternativet kommer, om aktiverat, att göra att programmet\n"
+"kräver mindre processorkraft men det kan orsaka oskarpa färger."
+
+#: ../src/rmdStrings.py:87
+msgid ""
+"This option should be enabled when recording 3d windows.\n"
+"It is also auto-enabled when recording a\n"
+"known 3d compositing window manager.\n"
+" "
+msgstr ""
+"Det här alternativet ska aktiveras vid inspelning av 3d-fönster.\n"
+"Det blir också automatiskt aktiverat vid inspelning med en\n"
+"känd fönsterhanterare med 3d-compositering.\n"
+" "
+
+#: ../src/rmdStrings.py:88
+msgid "Number of audio channels."
+msgstr "Antal ljudkanaler."
+
+#: ../src/rmdStrings.py:89
+msgid "Sound frequency."
+msgstr "Ljudfrekvens."
+
+#: ../src/rmdStrings.py:90
+msgid "ALSA sound device, that is used for sound recording."
+msgstr "ALSA-ljudenhet som används för ljudinspelning."
+
+#: ../src/rmdStrings.py:91
+msgid "Connection to the Xserver."
+msgstr "Anslutning till Xserver."
+
+#: ../src/rmdStrings.py:92
+msgid ""
+"The mouse cursor that will be drawn.\n"
+"Normal is for the real cursor that you see while recording,\n"
+"while black and white are fake cursors, drawn by the program.\n"
+"You can also disable cursor drawing."
+msgstr ""
+"Muspekaren som ska ritas ut.\n"
+"Normal är för verklig pekare som du ser vid inspelning,\n"
+"och svart samt vit är fuskpekare, utritade av programmet.\n"
+"Du kan även inaktivera utritning av muspekare."
+
+#: ../src/rmdStrings.py:93
+msgid ""
+"When This option is enabled, the capture\n"
+"area will follow your mouse cursor.\n"
+"Enabling this option will also enable full shots at\n"
+"every frame, so it's not recommended\n"
+"for large capture areas."
+msgstr ""
+"När det här alternativet är aktiverat kommer\n"
+"fångstområdet att följa din muspekare.\n"
+"Aktivering av det här alternativet kommer även att\n"
+"aktivera fullständiga bildrutor så det rekommenderas\n"
+"inte för stora fångstområden."
+
+#: ../src/rmdStrings.py:94
+msgid ""
+"Use the MIT-Shared memory extension, whenever appropriate,\n"
+" depending on the rest of the program settings.\n"
+"Disabling this option is not recommended,\n"
+"as it may severely slow down the program."
+msgstr ""
+"Använd utökningen MIT för delat minne, när det är möjligt,\n"
+" beroende på resten av programinställningarna.\n"
+"Inaktivering av det här alternativet är inte rekommenderat,\n"
+"eftersom det gör att programmet går mycket långsammare."
+
+#: ../src/rmdStrings.py:95
+msgid ""
+"When selecting a window via the \"Select Window\" button,\n"
+"include that window's decorations in the recording area."
+msgstr ""
+"Vid val av ett fönster via knappen \"Välj fönster\" kommer\n"
+"fönstrets dekorationer att inkluderas i inspelningsområdet."
+
+#: ../src/rmdStrings.py:96
+msgid ""
+"Enable or disable tooltips, like this one.\n"
+"(Requires restart)"
+msgstr ""
+"Aktivera eller inaktivera verktygstips, exempelvis detta.\n"
+"(Kräver en omstart)"
+
+#: ../src/rmdStrings.py:97
+msgid ""
+"Draw a frame on the screen, around the area\n"
+"that will get captured.\n"
+"(This frame will remain throughout the recording.)"
+msgstr ""
+"Rita ut en ruta på skärmen runt det område som\n"
+"ska fångas.\n"
+"(Den här rutan kommer att finnas kvar under inspelningen.)"
+
+#: ../src/rmdStrings.py:98
+msgid ""
+"Reset capture area after every recording\n"
+"and at program shutdown."
+msgstr ""
+"Nollställ fångstområdet efter varje inspelning\n"
+"och när programmet avslutas."
+
+#: ../src/rmdStrings.py:99
+msgid ""
+"Extra commandline options that will get\n"
+"passed to recordMyDesktop during initialization.\n"
+"These options must be entered the same way\n"
+"they would in the commandline (i.e. separated with spaces).\n"
+"Consult the manpage for more information on using them."
+msgstr ""
+"Extra kommandoradsflaggor som ska skickas till\n"
+"recordMyDesktop under initiering.\n"
+"Dessa flaggor måste anges på samma sätt som de skulle\n"
+"göras på kommandoraden (alltså separerade med blanksteg).\n"
+"Läs på manualsidan för mer information om hur man använder dem."
+
+#: ../src/rmdStrings.py:100
+msgid ""
+"Enable this option to record audio through\n"
+"JACK. The Jack server must be running in order to\n"
+"obtain the ports that will be recorded.\n"
+"The audio recorded from each one\n"
+"will be written on a channel of its own.\n"
+"recordMyDesktop must be compiled with JACK\n"
+"support for this option to work."
+msgstr ""
+"Aktivera det här alternativet för att spela in ljud\n"
+"genom JACK. Jack-servern måste köras för att kunna\n"
+"hämta in de portar som kommer att spelas in.\n"
+"Ljudet som spelas in från varje port kommer att\n"
+"skrivas på en egen kanal.\n"
+"recordMyDesktop måste kompileras med stöd för\n"
+"JACK för att det här alternativet ska fungera."
+
+#: ../src/rmdStrings.py:102
+msgid "Use Jack for audio capture."
+msgstr "Använd Jack för ljudfångst."
+
+#: ../src/rmdStrings.py:103
+msgid ""
+"Select the ports you want to record from\n"
+"(hold Ctrl to select multiple entries):"
+msgstr ""
+"Välj portarna som du vill spela in från\n"
+"(håll ner Ctrl för att välja flera portar):"
+
+#: ../src/rmdStrings.py:105
+msgid "Available Ports"
+msgstr "Tillgängliga portar"
+
+#: ../src/rmdStrings.py:106
+msgid "jack_lsp returned no ports."
+msgstr "jack_lsp returnerade inga portar."
+
+#: ../src/rmdStrings.py:107
+msgid "Make sure that jackd is running."
+msgstr "Försäkra dig om att jackd är igång."
+
+#: ../src/rmdStrings.py:108
+msgid "Available ports (double click to add):"
+msgstr "Tillgängliga portar (dubbelklicka för att lägga till):"
+
+#: ../src/rmdStrings.py:109
+msgid "Selected ports (double click to remove):"
+msgstr "Valda portar (dubbelklicka för att ta bort):"
+
+#: ../src/rmdStrings.py:110
+msgid "Refresh"
+msgstr "Uppdatera"
+
