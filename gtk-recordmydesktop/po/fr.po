@@ -485,6 +485,11 @@ msgid ""
 "every frame, so it's not recommended\n"
 "for large capture areas."
 msgstr ""
+"Lorsque cette option est activée, la zone\n"
+"de capture suivra le curseur de la souris.\n"
+"Le fait d'activer cette option, activera également une capture\n"
+"d'écran complète à chaque image, ce qui n'est pas recommandé\n"
+"pour les grandes zones de capture."
 
 #: src/rmdStrings.py:94
 msgid ""
