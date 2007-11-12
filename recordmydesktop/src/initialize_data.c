@@ -157,6 +157,13 @@ int InitializeData(ProgData *pdata,
         pdata->enc_data->yuv.v[i]=pdata->enc_data->yuv.u[i]=127;
     }
 
+    yblocks=malloc(sizeof(u_int32_t)*(pdata->enc_data->yuv.y_width/Y_UNIT_WIDTH)*
+                (pdata->enc_data->yuv.y_height/Y_UNIT_WIDTH));
+    ublocks=malloc(sizeof(u_int32_t)*(pdata->enc_data->yuv.y_width/Y_UNIT_WIDTH)*
+                (pdata->enc_data->yuv.y_height/Y_UNIT_WIDTH));
+    vblocks=malloc(sizeof(u_int32_t)*(pdata->enc_data->yuv.y_width/Y_UNIT_WIDTH)*
+                (pdata->enc_data->yuv.y_height/Y_UNIT_WIDTH));
+
     pdata->frametime=(1000000)/pdata->args.fps;
     return 0;
 

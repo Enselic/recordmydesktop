@@ -28,7 +28,9 @@ recordmydesktop_SOURCES=	recordmydesktop.c\
 							encode_cache.c\
 							rmdthreads.c\
 							initialize_data.c\
-							rmd_jack.c
+							rmd_jack.c\
+							cleanup.c\
+							specsfile.c
 
 INCLUDES= $(all_includes) -I$(top_srcdir)/include
 
