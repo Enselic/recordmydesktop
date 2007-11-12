@@ -80,6 +80,7 @@ class prefsWidget(object):
         self.values[26]=str(self.extraOptsEntry.text().trimmed())
         self.optionsOpen[0]=0
 
+
     def __getSelectedPorts__(self):
         iters_t=[]
         self.values[23]=[]
@@ -292,6 +293,7 @@ class prefsWidget(object):
         stdout.close()
         stderr.close()
         self.jack_lsp_liststore.clear()
+
         if ports!=[]:
             for i in ports:
                 self.ports.append(i.replace('\n',""))
@@ -303,8 +305,6 @@ class prefsWidget(object):
             self.jack_lsp_liststore.setEnabled(False)
             self.jack_lsp_listSave.setEnabled(False)
             self.values[23]=[]
-        for i in self.values[23]:
-            self.jack_lsp_listSave.insertItem(-1,QtGui.QListWidgetItem(i))
         for i in self.ports:
             self.jack_lsp_liststore.insertItem(-1,QtGui.QListWidgetItem(i))
 
@@ -342,6 +342,10 @@ class prefsWidget(object):
         self.__makeCons__()
         self.__runJackLSP__()
         self.__jack_enabled_check__()
+        for i in self.values[23]:
+            self.jack_lsp_listSave.insertItem(-1,QtGui.QListWidgetItem(i))
+
+
         if self.values[24]==0:
             self.__tooltips__()
         self.window.show()
