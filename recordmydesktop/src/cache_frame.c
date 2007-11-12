@@ -78,6 +78,8 @@ void *CacheImageBuffer(ProgData *pdata){
         frameno=0,
         nbytes=0,
         nth_cache=1;
+    unsigned int total_bytes=0,
+                 total_received_bytes=0;
     u_int32_t   ynum,unum,vnum,
                 y_short_blocks[blocknum_x*blocknum_y],
                 u_short_blocks[blocknum_x*blocknum_y],
@@ -241,10 +243,23 @@ void *CacheImageBuffer(ProgData *pdata){
                                 //space is freed the recording
                                 //can be proccessed later.
             }
+            total_bytes+=(nbytes>>20);
             nth_cache++;
             nbytes=0;
         }
     }
+    total_bytes+=(nbytes>>20);
+    total_received_bytes=((frameno*((pdata->specs.depth>=24)?4:2)*
+                   pdata->brwin.rgeom.width*pdata->brwin.rgeom.height)>>20);
+    fprintf(stderr,"\n*********************************************\n"
+                   "\nCached %d MB, from %d MB that were received.\n"
+                   "Average cache compression ratio: %u %%\n"
+                   "\n*********************************************\n",
+                   total_bytes,
+                   total_received_bytes,
+                   (total_bytes*100)/total_received_bytes
+                   );
+
 
     fprintf(stderr,"Saved %d frames in a total of %d requests\n",
                    frameno,frames_total);fflush(stderr);
