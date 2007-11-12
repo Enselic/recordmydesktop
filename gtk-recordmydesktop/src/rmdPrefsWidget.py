@@ -224,7 +224,7 @@ class prefsWidget(object):
         self.boxes[7].pack_end(self.channelsSpinButton,expand=False,fill=False)
 
 
-        self.freqAdjustment=gtk.Adjustment(value=self.values[8], lower=0,upper=44100, step_incr=1, page_incr=100, page_size=0)
+        self.freqAdjustment=gtk.Adjustment(value=self.values[8], lower=0,upper=48000, step_incr=1, page_incr=100, page_size=0)
         self.freqSpinButton= gtk.SpinButton(self.freqAdjustment, climb_rate=0.5, digits=0)
         self.freqSpinButton.show()
         self.boxes[8].pack_end(self.freqSpinButton,expand=False,fill=False)

@@ -203,7 +203,7 @@ class prefsWidget(object):
 
 
         self.freqSpinButton= QtGui.QSpinBox(self.tabWidgets[2])
-        self.freqSpinButton.setRange(0,44100)
+        self.freqSpinButton.setRange(0,48000)
         self.freqSpinButton.setSingleStep(100)
         self.freqSpinButton.setValue(self.values[8])
         self.boxes[8].insertWidget(-1,self.freqSpinButton)
