@@ -676,5 +676,22 @@ void BlocksFromList(RectArea **root,
                     unsigned int blocknum_x,
                     unsigned int blocknum_y);
 
+
+/**
+*   Currently only frees some memory
+*   (y,u,v blocks)
+*
+*
+*/
+void CleanUp(void);
+
+
+
+
 #endif
+
+
+
+
+
 
