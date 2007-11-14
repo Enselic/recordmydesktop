@@ -31,7 +31,7 @@
 void EncodeCache(ProgData *pdata){
     pthread_t   flush_to_ogg_t,
                 load_cache_t;
-
+    fprintf(stderr,"STATE:ENCODING\n");
     fprintf(stderr,"Encoding started!\nThis may take several minutes.\n"
     "Pressing Ctrl-C will cancel the procedure"
     " (resuming will not be possible, but\n"

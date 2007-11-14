@@ -47,10 +47,13 @@ void SetExpired(int signum){
 }
 
 void SetPaused(int signum){
-    if(!Paused)
+    if(!Paused){
         Paused=1;
+        fprintf(stderr,"STATE:PAUSED\n");
+    }
     else{
         Paused=0;
+        fprintf(stderr,"STATE:RECORDING\n");
 /*FIXME */
 //This is not safe.
 //cond_var signaling must move away from signal handlers
