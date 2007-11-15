@@ -104,6 +104,11 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
     "\t--no-wm-check\t\tDo not try to detect"
     " the window manager(and set options according to it)\n"
 
+    "\t-pause-shortcut MOD+KEY\tShortcut that will be used for (un)pausing" 
+    "(default Control+Mod1+p).\n"
+    "\t-stop-shortcut MOD+KEY\tShortcut that will be used to stop the "
+    "recording (default Control+Mod1+s).\n" 
+
     "\t--compress-cache\tImage data are cached with light compression.\n"
     "\t-workdir DIR\t\tLocation where a temporary directory"
     " will be created to hold project files(default $HOME).\n"
@@ -410,6 +415,30 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
             }
             else{
                 fprintf(stderr,"Argument Usage: -workdir DIR\n");
+                return 1;
+            }
+            i++;
+        }
+        else if(!strcmp(argv[i],"-pause-shortcut")){
+            if(i+1<argc){
+                free(arg_return->pause_shortcut);
+                arg_return->pause_shortcut=malloc(strlen(argv[i+1])+1);
+                strcpy(arg_return->pause_shortcut,argv[i+1]);
+            }
+            else{
+                fprintf(stderr,"Argument Usage: -pause-shortcut MOD+KEY\n");
+                return 1;
+            }
+            i++;
+        }
+        else if(!strcmp(argv[i],"-stop-shortcut")){
+            if(i+1<argc){
+                free(arg_return->stop_shortcut);
+                arg_return->stop_shortcut=malloc(strlen(argv[i+1])+1);
+                strcpy(arg_return->stop_shortcut,argv[i+1]);
+            }
+            else{
+                fprintf(stderr,"Argument Usage: -stop-shortcut MOD+KEY\n");
                 return 1;
             }
             i++;

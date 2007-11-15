@@ -100,6 +100,30 @@ int main(int argc,char **argv){
 
 
         if((exit_status=InitializeData(&pdata,&enc_data,&cache_data))==0){
+            if(!strcmp(pdata.args.pause_shortcut,
+                      pdata.args.stop_shortcut)||
+                RegisterShortcut(pdata.dpy,
+                                 pdata.specs.root,
+                                 pdata.args.pause_shortcut,
+                                 &(pdata.pause_key)) ||
+                RegisterShortcut(pdata.dpy,
+                                 pdata.specs.root,
+                                 pdata.args.stop_shortcut,
+                                 &(pdata.stop_key))){
+
+                fprintf(stderr,"Invalid shortcut,"
+                               " or shortcuts are the same!\n\n"
+                               "Using defaults.\n");
+
+                RegisterShortcut(pdata.dpy,
+                                 pdata.specs.root,
+                                 "Control+Mod1+p",
+                                 &(pdata.pause_key));
+                RegisterShortcut(pdata.dpy,
+                                 pdata.specs.root,
+                                 "Control+Mod1+s",
+                                 &(pdata.stop_key));
+            }
 
             //this is where the capturing happens.
             rmdThreads(&pdata);

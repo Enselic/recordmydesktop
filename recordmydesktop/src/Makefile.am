@@ -11,7 +11,7 @@ recordmydesktop_SOURCES=	recordmydesktop.c\
 							register_callbacks.c\
 							get_frame.c\
 							update_image.c\
-							poll_damage.c\
+							poll_events.c\
 							encode_image_buffer.c\
 							bgr_to_yuv.c\
 							flush_to_ogg.c\
