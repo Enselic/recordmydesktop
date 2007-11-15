@@ -53,7 +53,29 @@ SIGABRT
 terminates the program and removes the specified output file.
 .br
 .br
+This signals can also be delivered on the application, with the use of 
+shortcuts.
 .br
+See 
+.B
+\-pause\-shortcut
+and
+.B
+\-stop\-shortcut
+, on the 
+.B
+Misc.
+section
+of 
+.B
+Options
+bellow.
+.br
+ 
+.br
+ 
+.br
+ 
 A typical scenario of recording can be a command as simple as:
 .br
 .B
@@ -341,6 +363,29 @@ Misc Options:
     When a 3d compositing window manager is detected the program will function as if the
     \-\-full\-shots option has been specified. This option disables that
     behavior alltogether.
+.br
+.TP
+.B
+    \-pause\-shortcut MOD+KEY
+    Shortcut that will be used for pausing or unpausing the recording.
+    MOD can be any combination of the following modifier keys:
+    Control, Shift and Mod1 to Mod5. The modifiers can be separated 
+    with any character(
+.B
+except SPACE
+) or none at all. KEY can be any key defined in 
+    /usr/include/X11/keysymdef.h without the XK_ prefix.
+    The list of modifiers must be separated from the key with a plus('+')
+    sign.
+    Default is Control+Mod1+p (Mod1 usually corresponds to left Alt).
+    
+.br
+.TP
+.B
+    \-stop\-shortcut MOD+KEY
+    Shortcut that will be used to stop the recording.
+    For more, see \-pause\-shortcut above.
+    Default is Control+Mod1+s. 
 .br
 .TP
 .B
