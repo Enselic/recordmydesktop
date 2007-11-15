@@ -37,10 +37,11 @@
 
 /**
 * Loop calling XNextEvent.Retrieve and place on
-* list damage events that arive, create damage for new windows.
+* list damage events that arive, create damage for new windows
+* and pickup key events for shortcuts.
 * \param pdata ProgData struct containing all program data
 */
-void *PollDamage(ProgData *pdata);
+void *PollEvents(ProgData *pdata);
 
 /**
 * Retrieve frame form xserver, and transform to a yuv buffer,
@@ -686,6 +687,28 @@ void BlocksFromList(RectArea **root,
 void CleanUp(void);
 
 
+/*
+ * Check a shortcut combination and if valid, 
+ * register it, on the root window.
+ *
+ * \param dpy Connection to the X Server
+ *
+ * \param root Root window id
+ *
+ * \param shortcut String represantation of the shortcut
+ *
+ * \param HotKey Pre-allocated struct that is filled with the 
+ *               modifiers and the keycode, for checks on incoming 
+ *               keypress events. Left untouched if the call fails.
+ *
+ *  
+ *  \returns 0 on Success, 1 on Failure. 
+ *
+ */
+int RegisterShortcut(Display *dpy,
+                     Window root,
+                     const char *shortcut,
+                     HotKey *hotkey);
 
 
 #endif

@@ -228,6 +228,10 @@
     (args)->s_quality=10;\
     (args)->workdir=(char *)malloc(5);\
     strcpy((args)->workdir,"/tmp");\
+    (args)->pause_shortcut=(char *)malloc(15);\
+    strcpy((args)->pause_shortcut,"Control+Mod1+p");\
+    (args)->stop_shortcut=(char *)malloc(15);\
+    strcpy((args)->stop_shortcut,"Control+Mod1+s");\
 }
 
 #define QUERY_DISPLAY_SPECS(display,specstruct){\

@@ -165,10 +165,12 @@ typedef struct _ProgArgs{
     int v_bitrate,v_quality,s_quality;  //video bitrate,video-sound quality
     int encOnTheFly;    //encode while recording, no caching(default 0)
     char *workdir;      //directory to be used for cache files(default $HOME)
-    int zerocompression;//image data are always flushed uncompressed
-    int overwrite;      //overwite a previously existing file
-                        //(do not add a .number postfix)
-    int use_jack;       //record audio with jack
+    char *pause_shortcut;   //pause/unpause shortcut sequence(Control+Alt+p)
+    char *stop_shortcut;    //stop shortcut sequence(Control+Alt+s)
+    int zerocompression;    //image data are always flushed uncompressed
+    int overwrite;          //overwite a previously existing file
+                            //(do not add a .number postfix)
+    int use_jack;           //record audio with jack
     unsigned int jack_nports;
     char **jack_port_names;
     float jack_ringbuffer_secs;
@@ -253,6 +255,12 @@ typedef struct _JackData{
 }JackData;
 #endif
 
+typedef struct _HotKey{     //Hold info about the shortcuts
+    int modnum;             //modnum is the number of modifier masks
+    unsigned int mask[4];  //that should be checked (the initial
+    int key;                //user requested modifier plus it's
+}HotKey;                    //combinations with LockMask and NumLockMask).
+
 //this structure holds any data related to the program
 //It's usage is mostly to be given as an argument to the
 //threads,so they will have access to the program data, avoiding
@@ -267,6 +275,8 @@ typedef struct _ProgData{
     SndBuffer   *sound_buffer;
     EncData     *enc_data;
     CacheData   *cache_data;
+    HotKey      pause_key,  //Shortcuts
+                stop_key;
 #ifdef HAVE_JACK_H
     JackData    *jdata;
 #endif
