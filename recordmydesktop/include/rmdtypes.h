@@ -19,8 +19,6 @@
 *   along with this program; if not, write to the Free Software               *
 *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA  *
 *                                                                             *
-*                                                                             *
-*                                                                             *
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
@@ -219,6 +217,7 @@ typedef struct _CacheData{
                         //and also, a frontend can identify
                         //leftovers from a possible crash
                         //and delete them
+            *specsfile, //workdir+projname+specs.txt
             *imgdata,   //workdir+projname+img.out.gz
             *audiodata; //workdir+projname+audio.pcm
 
