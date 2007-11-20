@@ -93,6 +93,11 @@ int PurgeCache(CacheData *cache_data_t,int sound){
             exit_value=1;
         }
     }
+    if(remove(cache_data_t->specsfile)){
+            fprintf(stderr,"Couldn't remove temporary file %s",
+                           cache_data_t->specsfile);
+            exit_value=1;
+    }
     if(remove(cache_data_t->projname)){
         fprintf(stderr,"Couldn't remove temporary directory %s",
                        cache_data_t->projname);
@@ -154,6 +159,10 @@ void InitCacheData(ProgData *pdata,
     cache_data_t->audiodata=malloc(strlen(cache_data_t->projname)+10);
     strcpy(cache_data_t->audiodata,cache_data_t->projname);
     strcat(cache_data_t->audiodata,"audio.pcm");
+    //specsfile
+    cache_data_t->specsfile=malloc(strlen(cache_data_t->projname)+10);
+    strcpy(cache_data_t->specsfile,cache_data_t->projname);
+    strcat(cache_data_t->specsfile,"specs.txt");
 
     //now that've got out buffers and our filenames we start
     //creating the needed files
@@ -186,6 +195,11 @@ void InitCacheData(ProgData *pdata,
                           cache_data_t->audiodata);
            exit(13);
         }
+    }
+    if(WriteSpecsFile(pdata)){
+        fprintf(stderr,"Could not write specsfile %s !!!\n",
+                        cache_data_t->specsfile);
+        exit(13);
     }
 
 }

@@ -24,8 +24,74 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
+#include <stdlib.h>
+#include <stdio.h>
 
 #include <rmdtypes.h>
+
+
+
+int WriteStrOpt(FILE *fp,char *desc,char delim,char *val){
+
+
+
+}
+
+int WriteIntOpt(FILE *fp,char *desc,char delim,int val){
+
+
+
+}
+
+int WriteFloatOpt(FILE *fp,char *desc,char delim,int val){
+
+
+
+}
+
+
+char *ReadStrOpt(FILE *fp,char delim){
+
+
+}
+
+int ReadIntOpt(FILE *fp,char delim){
+
+
+}
+
+float ReadFloatOpt(FILE *fp,char delim){
+
+
+}
+
+
+int WriteSpecsFile(ProgData *pdata){
+    
+    FILE *fp;
+
+
+    fp=fopen(pdata->cache_data->specsfile,"wb");
+    if(fp==NULL)
+        return 1;
+
+
+
+    fclose(fp);
+    return 0;
+
+}
+
+int ReadSpecsFile(ProgData *pdata){
+
+
+
+
+
+}
+
+
+
 
 
 
