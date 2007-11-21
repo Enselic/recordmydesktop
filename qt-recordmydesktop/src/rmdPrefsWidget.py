@@ -229,7 +229,7 @@ class prefsWidget(object):
         self.mouseComboBox = QtGui.QComboBox(self.tabWidgets[3])
         for i in range(4):
             self.mouseComboBox.addItem(prefMouseStrings[i])
-        self.mouseComboBox.setCurrentIndex(self.values[15])
+        self.mouseComboBox.setCurrentIndex(self.values[1])
         self.boxes[11].insertWidget(-1,self.mouseComboBox)
 
         self.followMouseComboBox = QtGui.QComboBox(self.tabWidgets[3])
