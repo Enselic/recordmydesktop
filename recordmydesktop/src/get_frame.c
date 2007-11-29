@@ -213,7 +213,7 @@ void *GetFrame(ProgData *pdata){
         //if we are left behind we must not wait.
         //also before actually pausing we must make sure the streams
         //are synced. sound stops so this should only happen quickly.
-        if(pdata->avd>0){
+        if(pdata->avd>0 || pdata->args.nosound){
             pthread_mutex_lock(&time_mutex);
             pthread_cond_wait(&pdata->time_cond,&time_mutex);
             pthread_mutex_unlock(&time_mutex);
