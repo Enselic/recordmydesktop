@@ -91,14 +91,8 @@ void RegisterCallbacks(ProgArgs *args){
     struct sigaction time_act,pause_act,end_act;
 
     
-    if(args->fps!=1){
-        value.it_interval.tv_sec=value.it_value.tv_sec=0;
-        value.it_interval.tv_usec=value.it_value.tv_usec=(1000000)/args->fps;
-    }
-    else{
-        value.it_interval.tv_sec=value.it_value.tv_sec=1;
-        value.it_interval.tv_usec=value.it_value.tv_usec=0;
-    }
+    value.it_interval.tv_sec=value.it_value.tv_sec=1/args->fps;
+    value.it_interval.tv_usec=value.it_value.tv_usec=(1000000)/args->fps-value.it_value.tv_sec*1000000;
 
     setitimer(ITIMER_REAL,&value,NULL);
     time_act.sa_handler=SetExpired;
