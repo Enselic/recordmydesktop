@@ -40,8 +40,10 @@ int main(int argc,char **argv){
     if(ParseArgs(argc,argv,&pdata.args)){
         exit(1);
     }
-    if(pdata.args.display!=NULL)
+    if(pdata.args.display!=NULL){
         pdata.dpy = XOpenDisplay(pdata.args.display);
+        XSetErrorHandler(rmdErrorHandler);
+    }
     else{
         fprintf(stderr,"No display specified for connection!\n");
         exit(8);
@@ -100,6 +102,7 @@ int main(int argc,char **argv){
 
 
         if((exit_status=InitializeData(&pdata,&enc_data,&cache_data))==0){
+
             if(!strcmp(pdata.args.pause_shortcut,
                       pdata.args.stop_shortcut)||
                 RegisterShortcut(pdata.dpy,
