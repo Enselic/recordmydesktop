@@ -26,6 +26,7 @@
 
 
 #include <recordmydesktop.h>
+#include <X11/extensions/shape.h>
 
 void QueryExtensions(Display *dpy,
                      ProgArgs *args,
@@ -35,7 +36,9 @@ void QueryExtensions(Display *dpy,
     int xf_event_basep,
         xf_error_basep,
         shm_event_base,
-        shm_error_base;
+        shm_error_base,
+        shape_event_base,
+        shape_error_base;
 
     if((!(args->full_shots))&&(!XDamageQueryExtension( dpy, damage_event, damage_error))){
         fprintf(stderr,"XDamage extension not found!!!\n"
@@ -54,7 +57,6 @@ void QueryExtensions(Display *dpy,
                        "Try again using the --no-shared option\n");
         exit(5);
     }
-
     if((args->xfixes_cursor)&&
        (XFixesQueryExtension(dpy,&xf_event_basep,&xf_error_basep)==False)){
         args->xfixes_cursor=0;
@@ -63,4 +65,12 @@ void QueryExtensions(Display *dpy,
                        " --no-cursor option.\n");
         exit(6);
     }
+    if((!args->noframe)&&
+       (!XShapeQueryExtension(dpy,&shape_event_base,&shape_error_base))){
+        fprintf(stderr,"XShape Not Found!!!\n"
+                       "Frame won't be available.\n");
+
+        args->noframe=1;
+    }
+
 }

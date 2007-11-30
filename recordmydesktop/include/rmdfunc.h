@@ -723,10 +723,74 @@ int RegisterShortcut(Display *dpy,
  *            otherwise.
  *
  */
-
 int rmdErrorHandler(Display *dpy,XErrorEvent *e);
 
+/*
+ * Create a frame that marks the recording area.
+ *
+ * \param dpy Connection to the X Server
+ *
+ * \param screen Recorded screen
+ *
+ * \param root Root window of the display
+ *
+ * \param x X pos of the recorded area
+ *
+ * \param y Y pos of the recorded area
+ *
+ * \param width Width of the recorded area
+ *
+ * \param height Height of the recorded area
+ *
+ * \returns The WindowID of the frame
+ *
+ */
+Window rmdFrameInit(Display *dpy,
+                    int screen,
+                    Window root,
+                    int x,
+                    int y,
+                    int width,
+                    int height);
 
+
+/*
+ * Move the frame (subtracts the borderwidth)
+ *
+ * \param dpy Connection to the X Server
+ *
+ * \param win WindowId of the frame
+ *
+ * \param x New X pos of the recorded area
+ *
+ * \param y New Y pos of the recorded area
+ *
+ */
+void rmdMoveFrame(Display *dpy,
+                  Window win,
+                  int x,
+                  int y);
+
+
+/*
+ * Redraw the frame that marks the recording area.
+ *
+ * \param dpy Connection to the X Server
+ *
+ * \param screen Recorded screen
+ *
+ * \param win WindoID of the frame
+ *
+ * \param width Width of the recorded area
+ *
+ * \param height Height of the recorded area
+ *
+ */
+void rmdDrawFrame(Display *dpy,
+                  int screen,
+                  Window win,
+                  int width,
+                  int height);
 #endif
 
 

@@ -524,6 +524,9 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
         else if(!strcmp(argv[i],"--full-shots")){
             arg_return->full_shots=1;
         }
+        else if(!strcmp(argv[i],"--no-frame")){
+            arg_return->noframe=1;
+        }
         else if(!strcmp(argv[i],"--follow-mouse")){
             arg_return->full_shots=1;
             arg_return->follow_mouse=1;

@@ -27,11 +27,6 @@
 
 #include <recordmydesktop.h>
 
-#ifdef USE_GLX_CAP
-    #include <GL/gl.h>
-    #include <GL/glu.h>
-    #include <GL/glx.h>
-#endif
 
 int FirstFrame(ProgData *pdata,XImage **image,XShmSegmentInfo *shminfo,
                char **pxl_data){
@@ -139,7 +134,9 @@ void *GetFrame(ProgData *pdata){
     unsigned int msk_ret;
     WGeometry mouse_pos_abs,mouse_pos_rel,mouse_pos_temp;
     BRWindow temp_brwin;
-    Window root_ret,child_ret;
+    Window root_ret,
+           child_ret,
+           shaped_w=None; //Frame
     XFixesCursorImage *xcim=NULL;
     XImage *image=NULL,*image_back=NULL;          //the image that holds
                                         //the current full screenshot
@@ -150,20 +147,6 @@ void *GetFrame(ProgData *pdata){
 
 
 
-#ifdef USE_GLX_CAP
-    XVisualInfo vinfo_return;
-    XMatchVisualInfo(pdata->dpy,pdata->specs.screen,pdata->specs.depth,TrueColor,&vinfo_return );
-    GLXContext ctx=glXCreateContext( pdata->dpy,
-                      &vinfo_return,
-                      NULL,
-                      True);
-//     fprintf(stderr,"here %d",pdata->args.windowid);
-    glXMakeCurrent( pdata->dpy,
-                    pdata->brwin.windowid,
-                    ctx);
-
-    glReadBuffer(GL_FRONT);
-#endif
 
     img_sel=d_buff=pdata->args.full_shots;
 
@@ -202,6 +185,15 @@ void *GetFrame(ProgData *pdata){
 
     }
 
+    if(!pdata->args.noframe){
+        shaped_w=rmdFrameInit(pdata->dpy,
+                              pdata->specs.screen,
+                              pdata->specs.root,
+                              pdata->brwin.rgeom.x,
+                              pdata->brwin.rgeom.y,
+                              pdata->brwin.rgeom.width,
+                              pdata->brwin.rgeom.height);
+    }
 
     mouse_pos_abs.x=mouse_pos_temp.x=0;
     mouse_pos_abs.y=mouse_pos_temp.y=0;
@@ -276,6 +268,18 @@ void *GetFrame(ProgData *pdata){
                             ((pdata->args.xfixes_cursor)?xcim->yhot:0),
                             pdata->specs.width,
                             pdata->specs.height);
+            if(!pdata->args.noframe){
+                rmdMoveFrame(pdata->dpy,
+                             shaped_w,
+                             temp_brwin.rgeom.x,
+                             temp_brwin.rgeom.y);
+
+                rmdDrawFrame(pdata->dpy,
+                             pdata->specs.screen,  
+                             shaped_w,
+                             pdata->brwin.rgeom.width,
+                             pdata->brwin.rgeom.height);
+            }
         }
 
         if(!pdata->args.full_shots){
@@ -306,20 +310,10 @@ void *GetFrame(ProgData *pdata){
                                         ((unsigned char*)image_back->data));
 
             if(!pdata->args.noshared){
-#ifdef USE_GLX_CAP
-                glReadPixels(0,
-                             0,
-                             temp_brwin.rgeom.width,
-                             temp_brwin.rgeom.height,
-                             GL_RGBA,
-                             GL_UNSIGNED_BYTE,
-                             front_buff);
-#else
                 XShmGetImage(pdata->dpy,pdata->specs.root,
                             ((!img_sel)?image:image_back),
                             (temp_brwin.rgeom.x),
                             (temp_brwin.rgeom.y),AllPlanes);
-#endif
             }
             if(pdata->args.noshared){
                 GetZPixmap( pdata->dpy,
@@ -429,9 +423,12 @@ void *GetFrame(ProgData *pdata){
         pthread_mutex_unlock(&pdata->img_buff_ready_mutex);
         capture_busy=0;
     }
-#ifdef USE_GLX_CAP
-   glXDestroyContext(pdata->dpy,ctx);
-#endif
+
+    if(!pdata->args.noframe){
+        XDestroyWindow(pdata->dpy,shaped_w);
+    }
+
+
     pthread_mutex_lock(&pdata->img_buff_ready_mutex);
     pthread_cond_broadcast(&pdata->image_buffer_ready);
     pthread_mutex_unlock(&pdata->img_buff_ready_mutex);

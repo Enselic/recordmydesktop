@@ -207,6 +207,7 @@
     (args)->use_jack=\
     (args)->noshared=\
     (args)->no_encode=\
+    (args)->noframe=\
     (args)->jack_nports=0;\
     (args)->jack_ringbuffer_secs=3.0;\
     (args)->jack_port_names=NULL;\
