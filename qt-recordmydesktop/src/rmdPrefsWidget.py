@@ -50,33 +50,45 @@ class prefsWidget(object):
         self.jack_lsp_liststore.setToolTip(htmlize(prefJacktip))
         self.jack_lsp_listSave.setToolTip(htmlize(prefJacktip))
 
+    def __tButToBox__(self,checkbox):
+        if checkbox.checkState()==QtCore.Qt.Checked:
+            return 0
+        else:
+            return 1
+    def __rCheckState__(self,val):
+        if val==0:
+            return QtCore.Qt.Checked
+        else:
+            return QtCore.Qt.Unchecked
+
+
     def destroy(self,Event=None):
         self.values[0]=self.fpsSpinButton.value()
         self.values[1]=self.mouseComboBox.currentIndex()
-        self.values[3]=self.fullComboBox.currentIndex()
+        self.values[3]=self.__tButToBox__(self.fullComboBox)
         self.values[7]=self.channelsSpinButton.value()
         self.values[8]=self.freqSpinButton.value()
         self.values[9]=self.deviceEntry.text().replace(' ','')
         self.values[12]=self.displayEntry.text().replace(' ','')
-        self.values[13]=self.sharedComboBox.currentIndex()
-        self.values[14]=self.areaResetComboBox.currentIndex()
-        self.values[15]=self.followMouseComboBox.currentIndex()
-        self.values[16]=self.quickComboBox.currentIndex()
+        self.values[13]=self.__tButToBox__(self.sharedComboBox)
+        self.values[14]=self.__tButToBox__(self.areaResetComboBox)
+        self.values[15]=self.__tButToBox__(self.followMouseComboBox)
+        self.values[16]=self.__tButToBox__(self.quickComboBox)
         self.values[17]=self.workdirEntry.text()
-        self.values[18]=self.onTheFlyComboBox.currentIndex()
-        self.values[19]=self.zeroCmpComboBox.currentIndex()
+        self.values[18]=self.__tButToBox__(self.onTheFlyComboBox)
+        self.values[19]=self.__tButToBox__(self.zeroCmpComboBox)
         if self.overwriteFilesButton.checkState()==QtCore.Qt.Checked:
             self.values[20]=True
         else:
             self.values[20]=False
-        self.values[21]=self.winDecoComboBox.currentIndex()
+        self.values[21]=self.__tButToBox__(self.winDecoComboBox)
         if self.jack_button.checkState()==QtCore.Qt.Checked:
             self.values[22]=True
         else:
             self.values[22]=False
         self.__getSelectedPorts__()
-        self.values[24]=self.tooltipsComboBox.currentIndex()
-        self.values[25]=self.rFrameComboBox.currentIndex()
+        self.values[24]=self.__tButToBox__(self.tooltipsComboBox)
+        self.values[25]=self.__tButToBox__(self.rFrameComboBox)
         self.values[26]=str(self.extraOptsEntry.text().trimmed())
         self.optionsOpen[0]=0
 
@@ -136,28 +148,20 @@ class prefsWidget(object):
         self.fpsSpinButton.setValue(self.values[0])
         self.boxes[2].insertWidget(-1,self.fpsSpinButton)
 
-        self.onTheFlyComboBox = QtGui.QComboBox(self.tabWidgets[1])
-        for i in range(2):
-            self.onTheFlyComboBox.addItem(prefStateStrings[i])
-        self.onTheFlyComboBox.setCurrentIndex(self.values[18])
+        self.onTheFlyComboBox = QtGui.QCheckBox(self.tabWidgets[1])
+        self.onTheFlyComboBox.setCheckState(self.__rCheckState__(self.values[18]))
         self.boxes[3].insertWidget(-1,self.onTheFlyComboBox)
 
-        self.zeroCmpComboBox = QtGui.QComboBox(self.tabWidgets[1])
-        for i in range(2):
-            self.zeroCmpComboBox.addItem(prefStateStrings[i])
-        self.zeroCmpComboBox.setCurrentIndex(self.values[19])
+        self.zeroCmpComboBox = QtGui.QCheckBox(self.tabWidgets[1])
+        self.zeroCmpComboBox.setCheckState(self.__rCheckState__(self.values[19]))
         self.boxes[4].insertWidget(-1,self.zeroCmpComboBox)
 
-        self.quickComboBox = QtGui.QComboBox(self.tabWidgets[1])
-        for i in range(2):
-            self.quickComboBox.addItem(prefStateStrings[i])
-        self.quickComboBox.setCurrentIndex(self.values[16])
+        self.quickComboBox = QtGui.QCheckBox(self.tabWidgets[1])
+        self.quickComboBox.setCheckState(self.__rCheckState__(self.values[16]))
         self.boxes[5].insertWidget(-1,self.quickComboBox)
 
-        self.fullComboBox = QtGui.QComboBox(self.tabWidgets[1])
-        for i in range(2):
-            self.fullComboBox.addItem(prefStateStrings[i])
-        self.fullComboBox.setCurrentIndex(self.values[3])
+        self.fullComboBox = QtGui.QCheckBox(self.tabWidgets[1])
+        self.fullComboBox.setCheckState(self.__rCheckState__(self.values[3]))
         self.boxes[6].insertWidget(-1,self.fullComboBox)
 
 #sound page
@@ -232,41 +236,29 @@ class prefsWidget(object):
         self.mouseComboBox.setCurrentIndex(self.values[1])
         self.boxes[11].insertWidget(-1,self.mouseComboBox)
 
-        self.followMouseComboBox = QtGui.QComboBox(self.tabWidgets[3])
-        for i in range(2):
-            self.followMouseComboBox.addItem(prefStateStrings[i])
-        self.followMouseComboBox.setCurrentIndex(self.values[15])
+        self.followMouseComboBox = QtGui.QCheckBox(self.tabWidgets[3])
+        self.followMouseComboBox.setCheckState(self.__rCheckState__(self.values[15]))
         self.boxes[12].insertWidget(-1,self.followMouseComboBox)
 
-        self.sharedComboBox = QtGui.QComboBox(self.tabWidgets[3])
-        for i in range(2):
-            self.sharedComboBox.addItem(prefStateStrings[i])
-        self.sharedComboBox.setCurrentIndex(self.values[13])
+        self.sharedComboBox = QtGui.QCheckBox(self.tabWidgets[3])
+        self.sharedComboBox.setCheckState(self.__rCheckState__(self.values[13]))
         self.boxes[13].insertWidget(-1,self.sharedComboBox)
 
-        self.winDecoComboBox = QtGui.QComboBox(self.tabWidgets[3])
-        for i in range(2):
-            self.winDecoComboBox.addItem(prefStateStrings[i])
-        self.winDecoComboBox.setCurrentIndex(self.values[21])
+        self.winDecoComboBox = QtGui.QCheckBox(self.tabWidgets[3])
+        self.winDecoComboBox.setCheckState(self.__rCheckState__(self.values[21]))
         self.boxes[14].insertWidget(-1,self.winDecoComboBox)
 
-        self.tooltipsComboBox = QtGui.QComboBox(self.tabWidgets[3])
-        for i in range(2):
-            self.tooltipsComboBox.addItem(prefStateStrings[i])
-        self.tooltipsComboBox.setCurrentIndex(self.values[24])
+        self.tooltipsComboBox = QtGui.QCheckBox(self.tabWidgets[3])
+        self.tooltipsComboBox.setCheckState(self.__rCheckState__(self.values[24]))
         self.boxes[15].insertWidget(-1,self.tooltipsComboBox)
 
 
-        self.rFrameComboBox = QtGui.QComboBox(self.tabWidgets[3])
-        for i in range(2):
-            self.rFrameComboBox.addItem(prefStateStrings[i])
-        self.rFrameComboBox.setCurrentIndex(self.values[25])
+        self.rFrameComboBox = QtGui.QCheckBox(self.tabWidgets[3])
+        self.rFrameComboBox.setCheckState(self.__rCheckState__(self.values[25]))
         self.boxes[16].insertWidget(-1,self.rFrameComboBox)
 
-        self.areaResetComboBox = QtGui.QComboBox(self.tabWidgets[3])
-        for i in range(2):
-            self.areaResetComboBox.addItem(prefStateStrings[i])
-        self.areaResetComboBox.setCurrentIndex(self.values[14])
+        self.areaResetComboBox = QtGui.QCheckBox(self.tabWidgets[3])
+        self.areaResetComboBox.setCheckState(self.__rCheckState__(self.values[14]))
         self.boxes[17].insertWidget(-1,self.areaResetComboBox)
 
         self.extraOptsEntry= QtGui.QLineEdit(self.values[26])

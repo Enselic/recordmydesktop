@@ -39,6 +39,7 @@ from qt_recordMyDesktop import rmdSimple
 
 def main():
     app=QtGui.QApplication(sys.argv)
+    app.setQuitOnLastWindowClosed(False)
     tr=rmdSimple.simpleWidget()
     app.exec_()
 
