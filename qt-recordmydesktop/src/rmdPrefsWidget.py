@@ -337,7 +337,7 @@ class prefsWidget(object):
         self.window = QtGui.QWidget()
         self.window.closeEvent= self.destroy
 
-        self.window.setWindowTitle("recordMyDesktop")
+        self.window.setWindowTitle("recordMyDesktop: "+smplButtonStrings[0])
         self.__subWidgets__()
         self.__makeCons__()
         self.__runJackLSP__()

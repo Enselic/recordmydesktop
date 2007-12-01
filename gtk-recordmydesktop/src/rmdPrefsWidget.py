@@ -370,7 +370,7 @@ class prefsWidget(object):
         self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
         self.window.connect("destroy", self.destroy)
         self.window.set_border_width(10)
-        self.window.set_title("recordMyDesktop")
+        self.window.set_title("recordMyDesktop: "+smplButtonStrings[0])
         self.__subWidgets__()
         self.__makeCons__()
         self.__runJackLSP__()
