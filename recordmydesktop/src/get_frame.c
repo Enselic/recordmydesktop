@@ -135,8 +135,7 @@ void *GetFrame(ProgData *pdata){
     WGeometry mouse_pos_abs,mouse_pos_rel,mouse_pos_temp;
     BRWindow temp_brwin;
     Window root_ret,
-           child_ret,
-           shaped_w=None; //Frame
+           child_ret; //Frame
     XFixesCursorImage *xcim=NULL;
     XImage *image=NULL,*image_back=NULL;          //the image that holds
                                         //the current full screenshot
@@ -186,13 +185,14 @@ void *GetFrame(ProgData *pdata){
     }
 
     if(!pdata->args.noframe){
-        shaped_w=rmdFrameInit(pdata->dpy,
+        pdata->shaped_w=rmdFrameInit(pdata->dpy,
                               pdata->specs.screen,
                               pdata->specs.root,
                               pdata->brwin.rgeom.x,
                               pdata->brwin.rgeom.y,
                               pdata->brwin.rgeom.width,
                               pdata->brwin.rgeom.height);
+        XSelectInput(pdata->dpy,pdata->shaped_w,ExposureMask);
     }
 
     mouse_pos_abs.x=mouse_pos_temp.x=0;
@@ -270,15 +270,10 @@ void *GetFrame(ProgData *pdata){
                             pdata->specs.height);
             if(!pdata->args.noframe){
                 rmdMoveFrame(pdata->dpy,
-                             shaped_w,
+                             pdata->shaped_w,
                              temp_brwin.rgeom.x,
                              temp_brwin.rgeom.y);
 
-                rmdDrawFrame(pdata->dpy,
-                             pdata->specs.screen,  
-                             shaped_w,
-                             pdata->brwin.rgeom.width,
-                             pdata->brwin.rgeom.height);
             }
         }
 
@@ -425,7 +420,7 @@ void *GetFrame(ProgData *pdata){
     }
 
     if(!pdata->args.noframe){
-        XDestroyWindow(pdata->dpy,shaped_w);
+        XDestroyWindow(pdata->dpy,pdata->shaped_w);
     }
 
 

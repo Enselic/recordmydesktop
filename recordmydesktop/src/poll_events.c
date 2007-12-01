@@ -52,6 +52,7 @@ void *PollEvents(ProgData *pdata){
 
     XSelectInput (pdata->dpy,pdata->specs.root, SubstructureNotifyMask);
 
+
     if(!pdata->args.full_shots){
         XQueryTree (pdata->dpy,
                     pdata->specs.root,
@@ -109,6 +110,20 @@ void *PollEvents(ProgData *pdata){
                     continue;
                 }
             }
+        }
+        else if(event.type == Expose){
+            
+            if(event.xexpose.count!=0)
+                continue;
+            else if(!pdata->args.noframe){
+                rmdDrawFrame(pdata->dpy,
+                             pdata->specs.screen,  
+                             pdata->shaped_w,
+                             pdata->brwin.rgeom.width,
+                             pdata->brwin.rgeom.height);
+                
+            }
+
         }
         else if(!pdata->args.full_shots){
             if(event.type == MapNotify ){

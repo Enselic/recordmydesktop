@@ -321,6 +321,7 @@ typedef struct _ProgData{
     unsigned int periodtime,//time that a sound buffer lasts (microsecs)
                 frametime;  //time that a frame lasts (microsecs)
     char    *window_manager;   //name of the window manager at program launch
+    Window  shaped_w;       //frame
     int list_selector,      //selector for the rect_roots
         damage_event,       //damage event base code
         damage_error,       //damage error base code
