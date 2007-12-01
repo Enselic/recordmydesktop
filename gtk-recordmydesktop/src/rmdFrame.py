@@ -75,10 +75,10 @@ class rmdFrame:
         self.disp=gtk.gdk.display_get_default()
         self.wroot = gtk.gdk.get_default_root_window()
         (self.wwidth, self.wheight) = self.wroot.get_size()
-        self.timed_id=gobject.timeout_add(10,self.moveFrame)
+        self.timed_id=gobject.timeout_add(100,self.moveFrame)
 
     def moveFrame(self):
-        if self.parent.values[15]==0:
+        if self.parent.values[15]==0 and self.parent.hidden[0]==0:
             npos=gtk.gdk.Display.get_pointer(self.disp)
             x=npos[1]-self.w/2
             y=npos[2]-self.h/2

@@ -52,12 +52,12 @@ class rmdFrame:
         self.timer=QtCore.QTimer(None)
         self.timer.connect(self.timer,QtCore.SIGNAL("timeout()"),
                         self.moveFrame)
-        self.timer.start(10)
+        self.timer.start(100)
         self.screen_width=QtGui.qApp.desktop().width()
         self.screen_height=QtGui.qApp.desktop().height()
 
     def moveFrame(self):
-        if self.parent.values[15]==0:
+        if self.parent.values[15]==0 and self.window.isVisible() :
             npos=QtGui.QCursor.pos()
             x=npos.x()-self.w/2
             y=npos.y()-self.h/2

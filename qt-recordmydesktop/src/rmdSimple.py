@@ -163,9 +163,13 @@ class simpleWidget(object):
                 print "Warning!!!Couldn't save preferences"
             sys.exit()
     def hide(self,Event=None):
+        if self.image.realFrame != None and self.values[25]==0:
+            self.image.realFrame.window.hide()
         self.window.hide()
         self.hidden[0]=1
     def show(self,Event=None):
+        if self.image.realFrame != None and self.values[25]==0:
+            self.image.realFrame.window.show()
         self.window.show()
         self.hidden[0]=0
     def __swap_visibility__(self,event=None):

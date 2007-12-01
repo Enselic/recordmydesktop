@@ -189,6 +189,8 @@ class trayIcon(object):
             self.execargs.append('-use-jack')
             for i in self.parent.values[23]:
                 self.execargs.append(i)
+        if self.parent.values[25] == 1:
+            self.execargs.append('--no-frame')
         if self.parent.values[26] != "":
             for i in self.parent.values[26].split(" "):
                 if i!="":
