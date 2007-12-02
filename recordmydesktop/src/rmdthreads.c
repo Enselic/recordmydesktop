@@ -46,7 +46,8 @@ void rmdThreads(ProgData *pdata){
                 sound_capture_t,
                 sound_encode_t,
                 sound_cache_t,
-                flush_to_ogg_t;
+                flush_to_ogg_t,
+                timer_t;
     Window dummy_w;
 
     if(pdata->args.delay>0){
@@ -98,6 +99,11 @@ void rmdThreads(ProgData *pdata){
                        (void *)pdata);
 
     RegisterCallbacks(&pdata->args);
+    pdata->timer_alive=1;
+    pthread_create(&timer_t,
+                   NULL,
+                   (void *)rmdTimer,
+                   (void *)pdata);
     fprintf(stderr,"Capturing!\n");
 #ifdef HAVE_JACK_H
     if(pdata->args.use_jack){
@@ -176,6 +182,8 @@ void rmdThreads(ProgData *pdata){
     pthread_join(poll_events_t,NULL);
 
     //Now that we are done with recording we cancel the timer
-    CancelTimer();
+    pdata->timer_alive=0;
+    pthread_join(timer_t,NULL);
+
 
 }

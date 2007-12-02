@@ -25,50 +25,36 @@
 ******************************************************************************/
 
 
+#ifdef HAVE_CONFIG_H
+    #include <config.h>
+#endif
+
+#include <stdio.h>
+#include <stdlib.h>
 #include <recordmydesktop.h>
 
-void SetPaused(int signum){
-    if(!Paused){
-        Paused=1;
-        fprintf(stderr,"STATE:PAUSED\n");
+
+void *rmdTimer(ProgData *pdata){
+
+
+    while(pdata->timer_alive){
+
+        if(!Paused){
+            frames_total++;
+            if(capture_busy){
+                frames_lost++;
+            }
+            pthread_mutex_lock(&time_mutex);
+            pthread_cond_broadcast(time_cond);
+            pthread_mutex_unlock(&time_mutex);
+        }
+        usleep(pdata->frametime);
+
     }
-    else{
-        Paused=0;
-        fprintf(stderr,"STATE:RECORDING\n");
-/*FIXME */
-//This is not safe.
-//cond_var signaling must move away from signal handlers
-//alltogether (JackCapture, SetExpired, SetPaused).
-//Better would be a set of pipes for each of these.
-//The callback should write on the pipe and the main thread
-//should perform a select over the fd's, signaling afterwards the
-//appropriate cond_var.
-        pthread_mutex_lock(&pause_mutex);
-        pthread_cond_broadcast(pause_cond);
-        pthread_mutex_unlock(&pause_mutex);
-    }
+
+
+    pthread_exit(&errno);
 }
 
 
-void SetRunning(int signum){
-    *Running=0;
-    if(signum==SIGABRT)
-        Aborted=1;
-}
-
-
-void RegisterCallbacks(ProgArgs *args){
-
-    struct sigaction pause_act,end_act;
-    
-    pause_act.sa_handler=SetPaused;
-    end_act.sa_handler=SetRunning;
-    sigfillset(&(pause_act.sa_mask));
-    sigfillset(&(end_act.sa_mask));
-    pause_act.sa_flags=end_act.sa_flags=0;
-    sigaction(SIGUSR1,&pause_act,NULL);
-    sigaction(SIGINT,&end_act,NULL);
-    sigaction(SIGTERM,&end_act,NULL);
-    sigaction(SIGABRT,&end_act,NULL);
-}
 

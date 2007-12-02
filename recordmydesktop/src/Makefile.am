@@ -33,7 +33,9 @@ recordmydesktop_SOURCES=	recordmydesktop.c\
 							specsfile.c\
 							shortcuts.c\
 							rmd_error.c\
-							rmd_frame.c
+							rmd_frame.c\
+							rmd_timer.c
+
 
 INCLUDES= $(all_includes) -I$(top_srcdir)/include
 

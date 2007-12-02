@@ -332,6 +332,7 @@ typedef struct _ProgData{
         v_encoding_clean,       //  >>  >>
         v_enc_thread_waiting,   //these indicate a wait
         th_enc_thread_waiting,  //condition on the cond vars.
+        timer_alive,        //determines loop of timer thread
         hard_pause,         //if sound device doesn't support pause
                             //we have to close and reopen
         avd;                //syncronization among audio and video

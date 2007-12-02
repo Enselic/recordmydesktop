@@ -44,6 +44,16 @@
 void *PollEvents(ProgData *pdata);
 
 /**
+* Loop ,signal timer cond var,sleep-\ 
+*  ^                                 |
+*  |________________________________/
+*   
+*
+* \param pdata ProgData struct containing all program data
+*/
+void *rmdTimer(ProgData *pdata);
+
+/**
 * Retrieve frame form xserver, and transform to a yuv buffer,
 * either directly(full shots) or by calling UpdateImage.
 * \param pdata ProgData struct containing all program data
@@ -113,13 +123,6 @@ int CollideRects(WGeometry *wgeom1,
                  WGeometry **wgeom_return,
                  int *ngeoms);
 
-/**
-* Broadcast time condition variable, increment frame count.
-*
-* \param signum Number of signal received(unused, always SIGALRM)
-*
-*/
-void SetExpired(int signum);
 
 /**
 * Set up all callbacks and signal handlers
@@ -445,10 +448,6 @@ void *LoadCache(ProgData *pdata);
 */
 void SyncEncodeImageBuffer(ProgData *pdata);
 
-/**
-* Stop the timer
-*/
-void CancelTimer(void);
 
 /**
 * As EncodeSoundBuffer, only with the assumption that
@@ -791,6 +790,9 @@ void rmdDrawFrame(Display *dpy,
                   Window win,
                   int width,
                   int height);
+
+
+
 #endif
 
 
