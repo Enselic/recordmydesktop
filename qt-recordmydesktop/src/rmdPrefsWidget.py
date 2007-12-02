@@ -108,9 +108,17 @@ class prefsWidget(object):
         self.labelbox={}
         self.tabWidgets={}
         self.notebook = QtGui.QTabWidget(self.window)
+        self.baseLayout=QtGui.QVBoxLayout(self.window)
+        self.baseLayout.setSpacing(0)
+        try:
+            self.baseLayout.setContentsMargins(0,9,0,0)
+        except:
+            self.baseLayout.setMargin(0)
+        self.window.setLayout(self.baseLayout)
+
         for i in range(4):
-            self.labelbox[i]=QtGui.QVBoxLayout()
-            self.tabWidgets[i]=QtGui.QWidget()
+            self.tabWidgets[i]=QtGui.QWidget(self.notebook)
+            self.labelbox[i]=QtGui.QVBoxLayout(self.tabWidgets[i])
 #Files page
         for i in range(2):
             self.labels[i]=QtGui.QLabel(prefLabelStrings[i],self.tabWidgets[0])
@@ -267,7 +275,8 @@ class prefsWidget(object):
         for i in range(4):
             self.tabWidgets[i].setLayout(self.labelbox[i])
             self.notebook.insertTab(-1,self.tabWidgets[i],prefTabStrings[i])
-        self.notebook.show()
+
+        self.baseLayout.addWidget(self.notebook)
         return
 
     def addPort(self,lwi):
