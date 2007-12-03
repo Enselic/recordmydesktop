@@ -46,27 +46,28 @@ class prefsWidget(object):
             self.tooltips.set_tip(self.eboxes[i],prefTooltipLabels[i])
         self.tooltips.set_tip(self.jack_ebox,prefJacktip)
 
+
     def destroy(self,Event=None):
         self.values[0]=self.fpsSpinButton.get_value_as_int()
         self.values[1]=self.mouseComboBox.get_active()
-        self.values[3]=self.fullComboBox.get_active()
+        self.values[3]=int(not self.fullComboBox.get_active())
         self.values[7]=self.channelsSpinButton.get_value_as_int()
         self.values[8]=self.freqSpinButton.get_value_as_int()
         self.values[9]=self.deviceEntry.get_text().replace(' ','')
         self.values[12]=self.displayEntry.get_text().replace(' ','')
-        self.values[13]=self.sharedComboBox.get_active()
-        self.values[14]=self.areaResetComboBox.get_active()
-        self.values[15]=self.followMouseComboBox.get_active()
-        self.values[16]=self.quickComboBox.get_active()
+        self.values[13]=int(not self.sharedComboBox.get_active())
+        self.values[14]=int(not self.areaResetComboBox.get_active())
+        self.values[15]=int(not self.followMouseComboBox.get_active())
+        self.values[16]=int(not self.quickComboBox.get_active())
         self.values[17]=self.workdirEntry.get_text()
-        self.values[18]=self.onTheFlyComboBox.get_active()
-        self.values[19]=self.zeroCmpComboBox.get_active()
+        self.values[18]=int(not self.onTheFlyComboBox.get_active())
+        self.values[19]=int(not self.zeroCmpComboBox.get_active())
         self.values[20]=self.overwriteFilesButton.get_active()
-        self.values[21]=self.winDecoComboBox.get_active()
+        self.values[21]=int(not self.winDecoComboBox.get_active())
         self.values[22]=self.jack_button.get_active()
         self.__getSelectedPorts__()
-        self.values[24]=self.tooltipsComboBox.get_active()
-        self.values[25]=self.rFrameComboBox.get_active()
+        self.values[24]=int(not self.tooltipsComboBox.get_active())
+        self.values[25]=int(not self.rFrameComboBox.get_active())
         self.values[26]=self.extraOptsEntry.get_text().strip()
         self.window.destroy()
         self.optionsOpen[0]=0
@@ -132,31 +133,23 @@ class prefsWidget(object):
         self.fpsSpinButton.show()
         self.boxes[2].pack_end(self.fpsSpinButton,expand=False,fill=False)
 
-        self.onTheFlyComboBox = gtk.combo_box_new_text()
-        for i in range(2):
-            self.onTheFlyComboBox.append_text(prefStateStrings[i])
-        self.onTheFlyComboBox.set_active(self.values[18])
+        self.onTheFlyComboBox = gtk.CheckButton(" ")
+        self.onTheFlyComboBox.set_active(int(not self.values[18]))
         self.onTheFlyComboBox.show()
         self.boxes[3].pack_end(self.onTheFlyComboBox,expand=False,fill=False)
 
-        self.zeroCmpComboBox = gtk.combo_box_new_text()
-        for i in range(2):
-            self.zeroCmpComboBox.append_text(prefStateStrings[i])
-        self.zeroCmpComboBox.set_active(self.values[19])
+        self.zeroCmpComboBox = gtk.CheckButton(" ")
+        self.zeroCmpComboBox.set_active(int(not self.values[19]))
         self.zeroCmpComboBox.show()
         self.boxes[4].pack_end(self.zeroCmpComboBox,expand=False,fill=False)
 
-        self.quickComboBox = gtk.combo_box_new_text()
-        for i in range(2):
-            self.quickComboBox.append_text(prefStateStrings[i])
-        self.quickComboBox.set_active(self.values[16])
+        self.quickComboBox = gtk.CheckButton(" ")
+        self.quickComboBox.set_active(int(not self.values[16]))
         self.quickComboBox.show()
         self.boxes[5].pack_end(self.quickComboBox,expand=False,fill=False)
 
-        self.fullComboBox = gtk.combo_box_new_text()
-        for i in range(2):
-            self.fullComboBox.append_text(prefStateStrings[i])
-        self.fullComboBox.set_active(self.values[3])
+        self.fullComboBox = gtk.CheckButton(" ")
+        self.fullComboBox.set_active(int(not self.values[3]))
         self.fullComboBox.show()
         self.boxes[6].pack_end(self.fullComboBox,expand=False,fill=False)
 
@@ -259,46 +252,34 @@ class prefsWidget(object):
         self.mouseComboBox.show()
         self.boxes[11].pack_end(self.mouseComboBox,expand=False,fill=False)
 
-        self.followMouseComboBox = gtk.combo_box_new_text()
-        for i in range(2):
-            self.followMouseComboBox.append_text(prefStateStrings[i])
-        self.followMouseComboBox.set_active(self.values[15])
+        self.followMouseComboBox = gtk.CheckButton(" ")
+        self.followMouseComboBox.set_active(int(not self.values[15]))
         self.followMouseComboBox.show()
         self.boxes[12].pack_end(self.followMouseComboBox,expand=False,fill=False)
 
-        self.sharedComboBox = gtk.combo_box_new_text()
-        for i in range(2):
-            self.sharedComboBox.append_text(prefStateStrings[i])
-        self.sharedComboBox.set_active(self.values[13])
+        self.sharedComboBox = gtk.CheckButton(" ")
+        self.sharedComboBox.set_active(int(not self.values[13]))
         self.sharedComboBox.show()
         self.boxes[13].pack_end(self.sharedComboBox,expand=False,fill=False)
 
-        self.winDecoComboBox = gtk.combo_box_new_text()
-        for i in range(2):
-            self.winDecoComboBox.append_text(prefStateStrings[i])
-        self.winDecoComboBox.set_active(self.values[21])
+        self.winDecoComboBox = gtk.CheckButton(" ")
+        self.winDecoComboBox.set_active(int(not self.values[21]))
         self.winDecoComboBox.show()
         self.boxes[14].pack_end(self.winDecoComboBox,expand=False,fill=False)
 
-        self.tooltipsComboBox = gtk.combo_box_new_text()
-        for i in range(2):
-            self.tooltipsComboBox.append_text(prefStateStrings[i])
-        self.tooltipsComboBox.set_active(self.values[24])
+        self.tooltipsComboBox = gtk.CheckButton(" ")
+        self.tooltipsComboBox.set_active(int(not self.values[24]))
         self.tooltipsComboBox.show()
         self.boxes[15].pack_end(self.tooltipsComboBox,expand=False,fill=False)
 
 
-        self.rFrameComboBox = gtk.combo_box_new_text()
-        for i in range(2):
-            self.rFrameComboBox.append_text(prefStateStrings[i])
-        self.rFrameComboBox.set_active(self.values[25])
+        self.rFrameComboBox = gtk.CheckButton(" ")
+        self.rFrameComboBox.set_active(int(not self.values[25]))
         self.rFrameComboBox.show()
         self.boxes[16].pack_end(self.rFrameComboBox,expand=False,fill=False)
 
-        self.areaResetComboBox = gtk.combo_box_new_text()
-        for i in range(2):
-            self.areaResetComboBox.append_text(prefStateStrings[i])
-        self.areaResetComboBox.set_active(self.values[14])
+        self.areaResetComboBox = gtk.CheckButton(" ")
+        self.areaResetComboBox.set_active(int(not self.values[14]))
         self.areaResetComboBox.show()
         self.boxes[17].pack_end(self.areaResetComboBox,expand=False,fill=False)
 
