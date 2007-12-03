@@ -65,7 +65,7 @@ void RegisterCallbacks(ProgArgs *args){
     end_act.sa_handler=SetRunning;
     sigfillset(&(pause_act.sa_mask));
     sigfillset(&(end_act.sa_mask));
-    pause_act.sa_flags=end_act.sa_flags=0;
+    pause_act.sa_flags=end_act.sa_flags=SA_RESTART;
     sigaction(SIGUSR1,&pause_act,NULL);
     sigaction(SIGINT,&end_act,NULL);
     sigaction(SIGTERM,&end_act,NULL);
