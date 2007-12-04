@@ -238,6 +238,30 @@ class simpleWidget(object):
         self.start_button.connect(self.start_button,QtCore.SIGNAL("clicked()"),self.trayIcon.record_ext)
         self.s_button.connect(self.s_button,QtCore.SIGNAL("clicked()"),self.__sound_check__)
         self.win_button.connect(self.win_button,QtCore.SIGNAL("clicked()"),self.__select_window__)
+    def __register_shortcuts__(self):
+        exit_sh=QtGui.QShortcut(QtGui.QKeySequence("Ctrl+q"),self.window)
+        self.window.connect(exit_sh,
+                            QtCore.SIGNAL("activated()"),
+                            self.window,
+                            QtCore.SLOT("close()"))
+        rec_sh=QtGui.QShortcut(QtGui.QKeySequence("Ctrl+r"),self.window)
+        self.window.connect(rec_sh,
+                            QtCore.SIGNAL("activated()"),
+                            self.trayIcon.record_ext)
+        adv_sh=QtGui.QShortcut(QtGui.QKeySequence("Ctrl+p"),self.window)
+        self.window.connect(adv_sh,
+                            QtCore.SIGNAL("activated()"),
+                            self.advanced)
+        save_sh=QtGui.QShortcut(QtGui.QKeySequence("Ctrl+s"),self.window)
+        self.window.connect(save_sh,
+                            QtCore.SIGNAL("activated()"),
+                            self.__fileSelect__)
+        hide_sh=QtGui.QShortcut(QtGui.QKeySequence("Ctrl+h"),self.window)
+        self.window.connect(hide_sh,
+                            QtCore.SIGNAL("activated()"),
+                            self.trayIcon.tray_popup._prefs_widget)
+
+
 
     def __sound_check__(self,widget=None):
         self.s_quality.setEnabled(self.values[2])
@@ -447,6 +471,7 @@ class simpleWidget(object):
 
         self.trayIcon=trayIcon(self)
         self.__makeCons__()
+        self.__register_shortcuts__()
 
         if self.values[24]==0:
             self.__tooltips__()

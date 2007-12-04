@@ -357,7 +357,11 @@ class prefsWidget(object):
         self.optionsOpen=optionsOpen
         self.window = QtGui.QWidget()
         self.window.closeEvent= self.destroy
-
+        esc_sh=QtGui.QShortcut(QtGui.QKeySequence("Esc"),self.window)
+        self.window.connect(esc_sh,
+                            QtCore.SIGNAL("activated()"),
+                            self.window,
+                            QtCore.SLOT("close()"))
         self.window.setWindowTitle("recordMyDesktop: "+smplButtonStrings[0])
         self.__subWidgets__()
         self.__makeCons__()
