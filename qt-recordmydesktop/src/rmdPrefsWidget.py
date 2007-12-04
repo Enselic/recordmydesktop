@@ -127,8 +127,21 @@ class prefsWidget(object):
             self.boxes[i].insertWidget(-1,self.labels[i])
             self.boxes[i].insertStretch(-1,0)
             self.labelbox[0].insertLayout(-1,self.boxes[i])
-            self.labelbox[0].insertSpacing(-1,20)
+            self.labelbox[0].insertSpacing(-1,(1-i)*30+10)
+        self.workdir_layout=QtGui.QHBoxLayout()
+
+        self.workdirEntry= QtGui.QLineEdit(self.values[17],self.tabWidgets[0])
+        self.workdir_layout.insertWidget(-1,self.workdirEntry)
+        style=QtGui.QApplication.style()
+        self.workdir_button=QtGui.QPushButton(QtGui.QIcon(style.standardPixmap(QtGui.QStyle.SP_DialogSaveButton)),"")
+        self.workdir_layout.insertWidget(-1,self.workdir_button)
+
+        self.labelbox[0].insertLayout(-1,self.workdir_layout)
+        self.labelbox[0].insertSpacing(-1,20)
+        self.labelbox[0].insertStretch(-1,0)
+
         self.labelbox[0].setSizeConstraint(QtGui.QLayout.SetMaximumSize)
+
 
         self.overwriteFilesButton=QtGui.QCheckBox(self.tabWidgets[0])
         if self.values[20]:
@@ -137,8 +150,10 @@ class prefsWidget(object):
             self.overwriteFilesButton.setCheckState(QtCore.Qt.Unchecked)
         self.boxes[0].insertWidget(-1,self.overwriteFilesButton)
 
-        self.workdirEntry= QtGui.QLineEdit(self.values[17],self.tabWidgets[0])
-        self.boxes[1].insertWidget(-1,self.workdirEntry)
+
+
+
+
 
 #Performance page
         for i in xrange(2,7):
@@ -309,12 +324,17 @@ class prefsWidget(object):
         for i in self.ports:
             self.jack_lsp_liststore.insertItem(-1,QtGui.QListWidgetItem(i))
 
+    def __workdirSelect__(self,Event=None):
+        tpath=QtGui.QFileDialog.getExistingDirectory(self.window,'',self.workdirEntry.text())
+        if tpath!= '':
+            self.workdirEntry.setText(tpath)
 
     def __makeCons__(self):
         self.jack_button.connect(self.jack_button,QtCore.SIGNAL("clicked()"),self.__jack_enabled_check__)
         self.jack_lsp_refresh.connect(self.jack_lsp_refresh,QtCore.SIGNAL("clicked()"),self.__runJackLSP__)
         self.jack_lsp_liststore.connect(self.jack_lsp_liststore,QtCore.SIGNAL("itemDoubleClicked(QListWidgetItem *)"),self.addPort)
         self.jack_lsp_listSave.connect(self.jack_lsp_listSave,QtCore.SIGNAL("itemDoubleClicked(QListWidgetItem *)"),self.remPort)
+        self.workdir_button.connect(self.workdir_button,QtCore.SIGNAL("clicked()"),self.__workdirSelect__)
 
     def __jack_enabled_check__(self):
         val=False
