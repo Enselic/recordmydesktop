@@ -50,7 +50,7 @@ u_int32_t   *yblocks,
 /**Globals*/
 //I've read somewhere that I'll go to hell for using globals...
 
-int Paused,*Running,Aborted;
+int Paused,*Running,Aborted,PauseStateChanged;
 pthread_cond_t  *time_cond,*pause_cond;
 pthread_mutex_t pause_mutex,time_mutex;
 unsigned char   Yr[256],Yg[256],Yb[256],

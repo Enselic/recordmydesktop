@@ -88,6 +88,7 @@ int InitializeData(ProgData *pdata,
     time_cond=&pdata->time_cond;
     pause_cond=&pdata->pause_cond;
     Running=&pdata->running;
+    PauseStateChanged=0;
 
     if(!pdata->args.nosound){
         if(!pdata->args.use_jack){

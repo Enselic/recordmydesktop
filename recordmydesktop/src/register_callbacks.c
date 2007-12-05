@@ -28,25 +28,9 @@
 #include <recordmydesktop.h>
 
 void SetPaused(int signum){
-    if(!Paused){
-        Paused=1;
-        fprintf(stderr,"STATE:PAUSED\n");
-    }
-    else{
-        Paused=0;
-        fprintf(stderr,"STATE:RECORDING\n");
-/*FIXME */
-//This is not safe.
-//cond_var signaling must move away from signal handlers
-//alltogether (JackCapture, SetExpired, SetPaused).
-//Better would be a set of pipes for each of these.
-//The callback should write on the pipe and the main thread
-//should perform a select over the fd's, signaling afterwards the
-//appropriate cond_var.
-        pthread_mutex_lock(&pause_mutex);
-        pthread_cond_broadcast(pause_cond);
-        pthread_mutex_unlock(&pause_mutex);
-    }
+
+    PauseStateChanged=1;
+
 }
 
 
@@ -60,7 +44,7 @@ void SetRunning(int signum){
 void RegisterCallbacks(ProgArgs *args){
 
     struct sigaction pause_act,end_act;
-    
+ 
     pause_act.sa_handler=SetPaused;
     end_act.sa_handler=SetRunning;
     sigfillset(&(pause_act.sa_mask));

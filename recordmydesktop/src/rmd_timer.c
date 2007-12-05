@@ -35,9 +35,29 @@
 
 
 void *rmdTimer(ProgData *pdata){
-
+    
+    long unsigned int secs_tw=1/pdata->args.fps;
+    long unsigned int usecs_tw=(1000000)/pdata->args.fps-
+                               secs_tw*1000000;
 
     while(pdata->timer_alive){
+
+        if(PauseStateChanged){
+            PauseStateChanged=0;
+
+            if(!Paused){
+                Paused=1;
+                fprintf(stderr,"STATE:PAUSED\n");
+            }
+            else{
+                Paused=0;
+                fprintf(stderr,"STATE:RECORDING\n");
+                pthread_mutex_lock(&pause_mutex);
+                pthread_cond_broadcast(pause_cond);
+                pthread_mutex_unlock(&pause_mutex);
+            }
+
+        }
 
         if(!Paused){
             frames_total++;
@@ -48,7 +68,10 @@ void *rmdTimer(ProgData *pdata){
             pthread_cond_broadcast(time_cond);
             pthread_mutex_unlock(&time_mutex);
         }
-        usleep(pdata->frametime);
+
+        if(secs_tw)
+            sleep(secs_tw);
+        usleep(usecs_tw);
 
     }
 
