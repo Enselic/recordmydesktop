@@ -32,6 +32,9 @@ int FirstFrame(ProgData *pdata,XImage **image,XShmSegmentInfo *shminfo,
                char **pxl_data){
 
     if((pdata->args.noshared)){
+
+        *pxl_data=(char *)malloc(pdata->brwin.nbytes);
+        
         (*image)=XCreateImage(pdata->dpy,
                             pdata->specs.visual,
                             pdata->specs.depth,
@@ -49,7 +52,6 @@ int FirstFrame(ProgData *pdata,XImage **image,XShmSegmentInfo *shminfo,
                    pdata->brwin.rgeom.y,
                    pdata->brwin.rgeom.width,
                    pdata->brwin.rgeom.height);
-        *pxl_data=(char *)malloc(pdata->brwin.nbytes);
     }
     else{
         (*image)=XShmCreateImage(pdata->dpy,
