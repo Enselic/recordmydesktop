@@ -47,11 +47,11 @@ void *rmdTimer(ProgData *pdata){
 
             if(!Paused){
                 Paused=1;
-                fprintf(stderr,"STATE:PAUSED\n");
+                fprintf(stderr,"STATE:PAUSED\n");fflush(stderr);
             }
             else{
                 Paused=0;
-                fprintf(stderr,"STATE:RECORDING\n");
+                fprintf(stderr,"STATE:RECORDING\n");fflush(stderr);
                 pthread_mutex_lock(&pause_mutex);
                 pthread_cond_broadcast(pause_cond);
                 pthread_mutex_unlock(&pause_mutex);
