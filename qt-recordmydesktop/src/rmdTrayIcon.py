@@ -28,6 +28,8 @@
 from PyQt4 import QtGui,QtCore
 import locale, gettext
 import rmdConfig
+import re
+
 def _(s):
     return QtCore.QString.fromUtf8(gettext.gettext(s))
 gettext.textdomain('qt-recordMyDesktop')
@@ -123,6 +125,7 @@ class trayIcon(object):
     def __execRMD__(self):
         self.parent.close_advanced()
         self.parent.update()
+        self.ch_err=""
         self.execargs=["recordmydesktop","-o",'%s'%self.parent.values[4],
                   "-fps","%d"%self.parent.values[0]]
         if self.parent.values[2]==False :
@@ -199,7 +202,7 @@ class trayIcon(object):
 
 
 
-        self.childP=popen2.Popen3(self.execargs,"t")
+        self.childP=popen2.Popen3(self.execargs,"t",0)
         flags = fcntl.fcntl(self.childP.childerr, fcntl.F_GETFL)
         fcntl.fcntl(self.childP.childerr, fcntl.F_SETFL, flags | os.O_NONBLOCK)
         self.rmdPid=self.childP.pid
@@ -216,6 +219,7 @@ class trayIcon(object):
             for i in self.execargs:
                 error_log.write("%s "%i)
             error_log.write("\n\n\n#recordMyDesktop stderror output:\n")
+            error_log.write(self.ch_err)
             try:
                 for err_line in self.childP.childerr.readlines():
                     error_log.write(err_line)
@@ -248,17 +252,17 @@ class trayIcon(object):
     def __pauseRMD__(self):
         os.kill(self.rmdPid,signal.SIGUSR1)
 
-    def __stopRMD__(self):
+    def __stopRMD__(self,need_kill=True):
         if self.timed_id!=None:
             self.timed_id.stop()
             self.timed_id=None
         exit_ret=os.waitpid(self.rmdPid,os.WNOHANG)
         if exit_ret[0] == 0:
-            os.kill(self.rmdPid,signal.SIGTERM)
+            if need_kill:
+                os.kill(self.rmdPid,signal.SIGTERM)
             self.state=-1
             monitor=imon.rmdMonitor(self.childP.fromchild,self.rmdPid,self.parent)
             monitor.exec_()
-
             self.state=0
         else:
             self.__exit_status_dialog(exit_ret[1])
@@ -284,7 +288,36 @@ class trayIcon(object):
                 self.timed_id.stop()
                 return False
             else:
+                new_stderr=""
+                #try:
+                while True:
+                    try:
+                        err_line=self.childP.childerr.readline()
+                        new_stderr+=err_line
+                    except:
+                        break
+
+                self.ch_err+=new_stderr
+                if(self.ch_err.find("STATE:RECORDING")>=0):
+                    rp=re.compile("STATE:RECORDING")
+                    self.ch_err=rp.sub("",self.ch_err)
+                    print "EXTERNAL STATE CHANGE:RECORDING"
+                    self.__set_icon__(self.trayIcon,"stop")
+                    self.state=1
+                elif(self.ch_err.find("STATE:PAUSED")>=0):
+                    rp=re.compile("STATE:PAUSED")
+                    self.ch_err=rp.sub("",self.ch_err)
+                    print "EXTERNAL STATE CHANGE:PAUSED"
+                    self.__set_icon__(self.trayIcon,"pause")
+                    self.state=2
+                elif(self.ch_err.find("STATE:ENCODING")>=0):
+                    rp=re.compile("STATE:ENCODING")
+                    self.ch_err=rp.sub("",self.ch_err)
+                    print "EXTERNAL STATE CHANGE:ENCODING"
+                    self.__stopRMD__(False)
+
                 return True
+
         else:
             self.timed_id.stop()
             return False
