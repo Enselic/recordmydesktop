@@ -260,7 +260,10 @@ class simpleWidget(object):
         self.window.connect(hide_sh,
                             QtCore.SIGNAL("activated()"),
                             self.trayIcon.tray_popup._prefs_widget)
-
+        esc_sh=QtGui.QShortcut(QtGui.QKeySequence("Esc"),self.window)
+        self.window.connect(esc_sh,
+                            QtCore.SIGNAL("activated()"),
+                            self.trayIcon.tray_popup._prefs_widget)
 
 
     def __sound_check__(self,widget=None):

@@ -362,6 +362,11 @@ class prefsWidget(object):
                             QtCore.SIGNAL("activated()"),
                             self.window,
                             QtCore.SLOT("close()"))
+        adv_sh=QtGui.QShortcut(QtGui.QKeySequence("Ctrl+p"),self.window)
+        self.window.connect(adv_sh,
+                            QtCore.SIGNAL("activated()"),
+                            self.window,
+                            QtCore.SLOT("close()"))
         self.window.setWindowTitle("recordMyDesktop: "+smplButtonStrings[0])
         self.__subWidgets__()
         self.__makeCons__()
