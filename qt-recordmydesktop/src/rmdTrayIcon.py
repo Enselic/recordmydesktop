@@ -61,8 +61,6 @@ from rmdStrings import *
 
 
 class trayIcon(object):
-    #values=[15,0,0,1,os.path.join(os.getenv('HOME'),'out.ogg'),[-1,-1,-1,-1],0,
-            #1,22050,'hw:0,0',63,10,"$DISPLAY",0,1,75,1]
     state=0#0 stopped,1 recording,2 paused
     rmdPid=None
     optionsOpen=[1]
