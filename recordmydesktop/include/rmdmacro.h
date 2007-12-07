@@ -214,7 +214,7 @@
     (args)->zerocompression=\
     (args)->no_quick_subsample=1;\
     (args)->filename=(char *)malloc(8);\
-    strcpy((args)->filename,"out.ogg");\
+    strcpy((args)->filename,"out.ogv");\
     (args)->cursor_color=1;\
     (args)->have_dummy_cursor=0;\
     (args)->xfixes_cursor=1;\

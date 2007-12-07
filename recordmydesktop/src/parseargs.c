@@ -120,7 +120,7 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
     " delete it\n"
 
     "\t\t\t\t(default is to add a number postfix to the new one).\n"
-    "\t-o filename\t\tName of recorded video(default out.ogg).\n"
+    "\t-o filename\t\tName of recorded video(default out.ogv).\n"
     "\n\tIf no other options are specified, filename can be given "
     "without the -o switch.\n\n\n";
 

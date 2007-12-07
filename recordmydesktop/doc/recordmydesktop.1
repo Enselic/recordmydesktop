@@ -18,7 +18,7 @@ filename
 .br
 .SH DESCRIPTION
 .PP
-        recordMyDesktop produces a file(default out.ogg) that contains a video and audio recording
+        recordMyDesktop produces a file(default out.ogv) that contains a video and audio recording
 .br
 of a linux desktop session. The default behavior of recording is to mark areas that have changed(through libxdamage)
 .br
@@ -81,14 +81,14 @@ A typical scenario of recording can be a command as simple as:
 .B
 ~$ recordmydesktop
 .br
-which will produce a fullscreen recording named out.ogg
+which will produce a fullscreen recording named out.ogv
 .br
 while a command like:
 .br
 .B
-~$ recordmydesktop foo.ogg
+~$ recordmydesktop foo.ogv
 .br
-will write output to foo.ogg
+will write output to foo.ogv
 .br
 .br
 Since version 0.3, encoding will happen right after the recording finishes.
@@ -99,7 +99,7 @@ While this behavior saves a lot of CPU, you can revert to the old one by enterin
 To specify a region for recording you can type this:
 .br
 .B
-~$ recordmydesktop \-x X_pos \-y Y_pos \-width WIDTH \-height HEIGHT \-o foo.ogg
+~$ recordmydesktop \-x X_pos \-y Y_pos \-width WIDTH \-height HEIGHT \-o foo.ogv
 .br
 where X_pos and Y_pos specify the offset in pixels from the upper left
 .br
@@ -415,14 +415,14 @@ except SPACE
     \-\-overwrite
     If there is already a file with the same name, delete it.
     Default action is to add a number postfix to the new file.
-    For example when not specifying a name, if out.ogg exists,
-    the new file will be out.ogg.1 and if that exists too, out.ogg.2
+    For example when not specifying a name, if out.ogv exists,
+    the new file will be out.ogv.1 and if that exists too, out.ogv.2
     and so on (no ad-infinitum though, more like ad-short-integer...)
 .br
 .TP
 .B
     \-o filename
-    Name of recorded video(default out.ogg).
+    Name of recorded video(default out.ogv).
 
 
 
@@ -493,10 +493,10 @@ vlc is a complex piece of software, so you should consult it's documentation, be
 using it.
 .br
 .br
-An example follows, which will resize a recording named out.ogg to 512x384:
+An example follows, which will resize a recording named out.ogv to 512x384:
 .br
 .B
-vlc \-I dummy out.ogg vlc:quit \-\-sout "#transcode{ vcodec = theo, width = 512, height = 384 }:duplicate{ dst = std{ access = file, mux=ogg, dst = \\"out_512x384.ogg\\" }}"
+vlc \-I dummy out.ogv vlc:quit \-\-sout "#transcode{ vcodec = theo, width = 512, height = 384 }:duplicate{ dst = std{ access = file, mux=ogg, dst = \\"out_512x384.ogv\\" }}"
 .br
 .br
 If you wish to change the video quality you can append the
@@ -511,7 +511,7 @@ in the range
 e.g:
 .br
 .B
-vlc \-I dummy out.ogg vlc:quit \-\-sout "#transcode{ vcodec = theo, width = 512, height = 384 }:duplicate{ dst = std{ access = file, mux=ogg, dst = \\"out_512x384.ogg\\" }}" \-\-sout\-theora\-quality=3
+vlc \-I dummy out.ogv vlc:quit \-\-sout "#transcode{ vcodec = theo, width = 512, height = 384 }:duplicate{ dst = std{ access = file, mux=ogg, dst = \\"out_512x384.ogv\\" }}" \-\-sout\-theora\-quality=3
 .br
 which will give a file of a video quality 18 (in a range of 0-63), thus appropriate for web-publishing.
 .br
@@ -524,7 +524,7 @@ ffmpeg2theora
 Changing the quality of a recordng with it, can be as simple as :
 .br
 .B
-ffmpeg2theora infile.ogg \-v 3 \-a 4 \-o outfile.ogg
+ffmpeg2theora infile.ogv \-v 3 \-a 4 \-o outfile.ogv
 .br
 It can even perform resizing on the size of the recording, or change the overall duration.
 .br
