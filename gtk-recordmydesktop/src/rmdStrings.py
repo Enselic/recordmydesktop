@@ -47,7 +47,7 @@ smplLabelStrings=[_('Video Quality'),_('Sound Quality')]
 smplButtonStrings=[_('Advanced'),_('Select Window')]
 smplTooltipLabels=[_('Click here to select a window to record'),
                 _('Click to start the recording.\nThis window will hide itself.'),
-                _('Click to choose a filename and location.\nDefault is out.ogg in your home folder.\nIf the file already exists, the new one\nwill have a number attached on its name\n(this behavior can be changed )'),
+                _('Click to choose a filename and location.\nDefault is out.ogv in your home folder.\nIf the file already exists, the new one\nwill have a number attached on its name\n(this behavior can be changed )'),
                 _('Click to exit the program.'),
                 _('Select the video quality of your recording.\n(Lower quality will require more proccessing power,\nso it\'s recommended, when encoding on the fly,\nto leave at 100)'),
                 _('Enable/Disable sound recording.'),
@@ -78,7 +78,7 @@ prefLabelStrings=[_('Overwite Existing Files'),_('Working Directory'),
 prefMouseStrings=[_('Normal'),_('White'),_('Black'),_('None')]
 prefStateStrings=[_('Enabled'),_('Disabled')]#0,1
 prefTabStrings=[_('Files'),_('Performance'),_('Sound'),_('Misc')]
-prefTooltipLabels=[_('By default, if you try to save under a filename that already\nexists, the new file will be renamed\n(for example if you try to save as out.ogg and that file exists, your file will be named out.ogg.1).\nBy checking this box, this behavior is disabled and the old file is overwritten.\n'),
+prefTooltipLabels=[_('By default, if you try to save under a filename that already\nexists, the new file will be renamed\n(for example if you try to save as out.ogv and that file exists, your file will be named out.ogv.1).\nBy checking this box, this behavior is disabled and the old file is overwritten.\n'),
                 _('Directory where temporary files will be saved.'),
                 _('Frames Per Second'),
                 _('Encode simultaneously with the recording.\nThis will require a lot more processing power.\n'),
