@@ -41,6 +41,7 @@ class TrayPopupMenu:
         self.values=values
         self._setup_popup_menu()
         self.selector = None
+        self.popupmenu.show_all()
 
     def _setup_popup_menu(self):
         self.popupmenu = gtk.Menu()
