@@ -337,6 +337,14 @@ class prefsWidget(object):
         self.jack_button.connect("clicked",self.__jack_enabled_check__)
         self.jack_lsp_refresh.connect("clicked",self.__runJackLSP__)
 
+    def __register_shortcuts__(self):
+        self.parent.advanced_button.add_accelerator("clicked",self.accel_group,
+                                     ord('P'), gtk.gdk.CONTROL_MASK,
+                                     gtk.ACCEL_VISIBLE)
+        self.parent.advanced_button.add_accelerator("clicked",self.accel_group,
+                                     gtk.gdk.keyval_from_name("Escape"),0,
+                                     gtk.ACCEL_VISIBLE)
+
     def __jack_enabled_check__(self,widget):
         self.channelsSpinButton.set_sensitive(not widget.get_active())
         self.freqSpinButton.set_sensitive(not widget.get_active())
@@ -344,16 +352,21 @@ class prefsWidget(object):
         self.jack_lsp_listview.set_sensitive(widget.get_active())
         self.jack_lsp_refresh.set_sensitive(widget.get_active())
 
-    def __init__(self,values,optionsOpen):
+    def __init__(self,parent,values,optionsOpen):
         self.values=values
         self.ports=[]
+        self.parent=parent
         self.optionsOpen=optionsOpen
         self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
         self.window.connect("destroy", self.destroy)
         self.window.set_border_width(10)
         self.window.set_title("recordMyDesktop: "+smplButtonStrings[0])
+        self.accel_group = gtk.AccelGroup()
+        self.window.add_accel_group(self.accel_group)
+
         self.__subWidgets__()
         self.__makeCons__()
+        self.__register_shortcuts__()
         self.__runJackLSP__()
         self.__jack_enabled_check__(self.jack_button)
         if self.values[24]==0:

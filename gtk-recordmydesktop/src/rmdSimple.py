@@ -187,7 +187,7 @@ class simpleWidget(object):
     def advanced(self,button=None):
         if self.optionsOpen[0] ==0:
             self.optionsOpen[0]=1
-            self.options=pW.prefsWidget(self.values,self.optionsOpen)
+            self.options=pW.prefsWidget(self,self.values,self.optionsOpen)
             #self.parent.show()
         else:
             if self.options != None:
@@ -253,6 +253,32 @@ class simpleWidget(object):
         self.s_button.connect("clicked",self.__sound_check__)
         self.win_button.connect("clicked",self.__select_window__)
         self.window.connect("window-state-event",self.__swap_visibility__)
+
+    def __register_shortcuts__(self):
+        self.advanced_button.add_accelerator("clicked",self.accel_group,
+                                             ord('P'), gtk.gdk.CONTROL_MASK,
+                                             gtk.ACCEL_VISIBLE)
+        self.file_button.add_accelerator("clicked",self.accel_group,
+                                         ord('S'), gtk.gdk.CONTROL_MASK,
+                                         gtk.ACCEL_VISIBLE)
+        self.quit_button.add_accelerator("clicked",self.accel_group,
+                                         ord('Q'), gtk.gdk.CONTROL_MASK,
+                                         gtk.ACCEL_VISIBLE)
+        self.start_button.add_accelerator("clicked",self.accel_group,
+                                          ord('R'), gtk.gdk.CONTROL_MASK,
+                                          gtk.ACCEL_VISIBLE)
+
+        self.trayIcon.tray_popup.popupmenu_prefs_widget.add_accelerator(
+            "activate",self.accel_group,
+            ord('H'), gtk.gdk.CONTROL_MASK,
+            gtk.ACCEL_VISIBLE
+        )
+        self.trayIcon.tray_popup.popupmenu_prefs_widget.add_accelerator(
+            "activate",self.accel_group,
+            gtk.gdk.keyval_from_name("Escape"),0,
+            gtk.ACCEL_VISIBLE
+        )
+
     def __sound_check__(self,widget):
         self.s_quality.set_sensitive(widget.get_active())
         self.values[2]=widget.get_active()
@@ -445,7 +471,8 @@ class simpleWidget(object):
         self.window.set_border_width(10)
         self.window.set_title("recordMyDesktop")
         self.__subWidgets__()
-
+        self.accel_group = gtk.AccelGroup()
+        self.window.add_accel_group(self.accel_group)
         #self.timed_id=gobject.timeout_add(2000,self.__update_image__)
         #if resolution is low let it decide size on it's own
 
@@ -455,6 +482,7 @@ class simpleWidget(object):
 
         self.trayIcon=trayIcon(self)
         self.__makeCons__()
+        self.__register_shortcuts__()
         if self.values[24]==0:
             self.__tooltips__()
         self.s_quality.set_sensitive(self.values[2])
