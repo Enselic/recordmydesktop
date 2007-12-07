@@ -350,13 +350,7 @@ class prefsWidget(object):
         self.jack_lsp_refresh.setEnabled(val)
         if(val):
             self.__runJackLSP__()
-
-    def __init__(self,values,optionsOpen):
-        self.values=values
-        self.ports=[]
-        self.optionsOpen=optionsOpen
-        self.window = QtGui.QWidget()
-        self.window.closeEvent= self.destroy
+    def __register_shortcuts__(self):
         esc_sh=QtGui.QShortcut(QtGui.QKeySequence("Esc"),self.window)
         self.window.connect(esc_sh,
                             QtCore.SIGNAL("activated()"),
@@ -367,9 +361,17 @@ class prefsWidget(object):
                             QtCore.SIGNAL("activated()"),
                             self.window,
                             QtCore.SLOT("close()"))
+
+    def __init__(self,values,optionsOpen):
+        self.values=values
+        self.ports=[]
+        self.optionsOpen=optionsOpen
+        self.window = QtGui.QWidget()
+        self.window.closeEvent= self.destroy
         self.window.setWindowTitle("recordMyDesktop: "+smplButtonStrings[0])
         self.__subWidgets__()
         self.__makeCons__()
+        self.__register_shortcuts__()
         self.__runJackLSP__()
         self.__jack_enabled_check__()
         for i in self.values[23]:
