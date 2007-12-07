@@ -87,6 +87,22 @@ class prefsWidget(object):
         for i in iters_t:
             self.values[23].append(self.jack_lsp_listview.get_model().get_value(i,0))
 
+    def __fileSelQuit__(self,Event=None):
+        self.fileSel.destroy()
+
+    def __fileSelOk__(self,Event=None):
+        new_val=self.fileSel.get_filename()
+        self.workdirEntry.set_text(new_val)
+        self.fileSel.destroy()
+
+    def __fileSelect__(self,Event=None):
+        self.fileSel = gtk.FileSelection(title=None)
+        self.fileSel.ok_button.connect("clicked", self.__fileSelOk__)
+        self.fileSel.cancel_button.connect("clicked", self.__fileSelQuit__)
+        self.fileSel.set_filename(self.workdirEntry.get_text())
+        self.fileSel.show()
+
+
     def __subWidgets__(self):
         self.labels={}
         self.boxes={}
@@ -107,6 +123,9 @@ class prefsWidget(object):
             self.eboxes[i].add(self.boxes[i])
             self.labelbox[0].pack_start(self.eboxes[i],expand=False,fill=False)
 
+        #self.workdir_layout=gtk.HBox(homogeneous=False, spacing=0)
+
+
         self.overwriteFilesButton=gtk.CheckButton(label=None)
         self.overwriteFilesButton.set_active(self.values[20])
         self.overwriteFilesButton.show()
@@ -115,7 +134,18 @@ class prefsWidget(object):
         self.workdirEntry= gtk.Entry(max=0)
         self.workdirEntry.set_text(self.values[17])
         self.workdirEntry.show()
-        self.boxes[1].pack_end(self.workdirEntry,expand=True,fill=True)
+        self.boxes[1].pack_end(self.workdirEntry,expand=False,fill=False)
+
+        #self.file_button=gtk.Button(None,gtk.STOCK_SAVE_AS)
+        #self.file_button.show()
+
+
+        #self.workdir_layout.pack_start(self.workdirEntry,expand=True,fill=True)
+        #self.workdir_layout.pack_start(self.file_button,expand=False,fill=False)
+        #self.workdir_layout.show()
+
+        #self.labelbox[0].pack_start(self.workdir_layout,expand=False,fill=False)
+
 
 #Performance page
         for i in xrange(2,7):
@@ -336,6 +366,7 @@ class prefsWidget(object):
     def __makeCons__(self):
         self.jack_button.connect("clicked",self.__jack_enabled_check__)
         self.jack_lsp_refresh.connect("clicked",self.__runJackLSP__)
+        #self.file_button.connect("clicked",self.__fileSelect__)
 
     def __register_shortcuts__(self):
         self.parent.advanced_button.add_accelerator("clicked",self.accel_group,
