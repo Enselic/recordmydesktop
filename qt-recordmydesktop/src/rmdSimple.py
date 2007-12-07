@@ -194,7 +194,7 @@ class simpleWidget(object):
                 self.optionsOpen[0]=0
 
     def __fileSelect__(self,Event=None):
-        tfilename=QtGui.QFileDialog.getSaveFileName(self.window,'',self.values[4],"*.ogg *.ogg.*;; *.*")
+        tfilename=QtGui.QFileDialog.getSaveFileName(self.window,'',self.values[4],"*.ogv *.ogv.*;; *.ogg *.ogg.*;; *.*")
         if tfilename!= '':
             self.values[4]=tfilename
     def __select_window__(self,button=None):

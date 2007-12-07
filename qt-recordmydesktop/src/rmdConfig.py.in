@@ -11,7 +11,7 @@ default_values=[15,     #framerate
                 0,      #cursor
                 True,   #sound
                 1,      #full shots,0 on 1 off
-                os.path.join(os.getenv('HOME'),'out.ogg'), #filename
+                os.path.join(os.getenv('HOME'),'out.ogv'), #filename
                 [-1,-1,-1,-1],  #recording area(<0 means auto)
                 0,          #delay ,unused on 0.3
                 1,          #no of channels
