@@ -1,3 +1,17 @@
+/*VERSION 0.3.7*/
+*sv.po: added Swedish translation by Daniel Nylander
+*fr.po: Updated French translation from Vincent MERLET
+*synced to recordMyDesktop 0.3.7
+*fixed jack ports re-insertion bug.
+*fixed cursor type selection bug.
+*fixed premature exit problem 
+(closing of prefs win when main win was hidden)
+*replaced all enabled/disabled ComboBoxes with CheckButtons
+*added button/dialog for workdir selection 
+*added shortcuts for common actions
+ctr+r,ctr+s,ctr+h,ctr+q,,ctr+p,esc
+*other minor bugfixes
+
 /*VERSION 0.3.6*/
 *Version *BUMPED* to indicate full compatibility with recordMyDesktop
 *synced to recordMyDesktop 0.3.6

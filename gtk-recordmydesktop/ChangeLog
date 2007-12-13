@@ -1,3 +1,14 @@
+/*VERSION 0.3.7*/
+*sv.po: added Swedish translation by Daniel Nylander
+*fr.po: Updated French translation from Vincent MERLET
+*synced to recordMyDesktop 0.3.7
+*frontend check freq constraint
+*replaced all enabled/disabled ComboBoxes with CheckButtons
+*added shortcuts for common actions
+ctr+r,ctr+s,ctr+h,ctr+q,ctr+p,esc
+*other minor bugfixes
+
+
 /*VERSION 0.3.6*/
 *synced to recordMyDesktop 0.3.6
 (--follow-mouse option and cursor-tracking frame)

@@ -1,3 +1,14 @@
+/*Version 0.3.7*/
+*Added configurable,global shortcuts for 
+pause/unpause and stop.
+*Added frame that surrounds the capture area.
+*New rescue feature (allows encoding of 
+crashed/interrupted sessions).
+*fixed overcapture on no-sound
+*fixed deadlock and behavior on fps<=1
+*fixed crash when using --no-shared
+*other minor bugfixes
+
 /*Version 0.3.6*/
 * Corrected segmentation fault when recording non-fullscreen areas, using the
 full-shots mode(i.e. no Xdamage)
