@@ -335,7 +335,8 @@ typedef struct _ProgData{
         timer_alive,        //determines loop of timer thread
         hard_pause,         //if sound device doesn't support pause
                             //we have to close and reopen
-        avd;                //syncronization among audio and video
+        avd,                //syncronization among audio and video
+        sound_framesize;    //size of each sound frame
 #ifdef HAVE_LIBASOUND
     snd_pcm_t *sound_handle;
     snd_pcm_uframes_t periodsize;

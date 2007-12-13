@@ -132,18 +132,8 @@ void *LoadCache(ProgData *pdata){
         blocknum_y=pdata->enc_data->yuv.y_height/Y_UNIT_WIDTH,
         blockszy=Y_UNIT_BYTES,//size of y plane block in bytes
         blockszuv=UV_UNIT_BYTES;//size of u,v plane blocks in bytes
-#ifdef HAVE_LIBASOUND
-    int framesize=((snd_pcm_format_width(SND_PCM_FORMAT_S16_LE))/8)*
-                  pdata->args.channels;//audio frame size
-#else
-    int framesize=pdata->args.channels<<1;//Always signed 16 bit data
-#endif
-#ifdef HAVE_JACK_H
-    if(pdata->args.use_jack)
-        framesize=sizeof(jack_default_audio_sample_t)*
-                  pdata->jdata->nports;
-#endif
-    signed char *sound_data=(signed char *)malloc(pdata->periodsize*framesize);
+    signed char *sound_data=(signed char *)malloc(pdata->periodsize*
+                                                  pdata->sound_framesize);
 
     u_int32_t YBlocks[(yuv->y_width*yuv->y_height)/Y_UNIT_BYTES],
               UBlocks[(yuv->uv_width*yuv->uv_height)/UV_UNIT_BYTES],
@@ -197,8 +187,12 @@ void *LoadCache(ProgData *pdata){
                 //sync
                 missing_frames+=frame.header->current_total-
                                 (extra_frames+frame.header->frameno);
-                fprintf(stdout,"\r[%d%%] ",
-                ((frame.header->frameno+extra_frames)*100)/frames_total);
+                if(frames_total)
+                    fprintf(stdout,"\r[%d%%] ",
+                    ((frame.header->frameno+extra_frames)*100)/frames_total);
+                else
+                    fprintf(stdout,"\r[%d frames rendered] ",
+                            (frame.header->frameno+extra_frames));
                 fflush(stdout);
                 if( (frame.header->Ynum<=blocknum_x*blocknum_y) &&
                     (frame.header->Unum<=blocknum_x*blocknum_y) &&
@@ -260,7 +254,8 @@ void *LoadCache(ProgData *pdata){
         //audio load and encoding
         else{
             if(!audio_end){
-                int nbytes=fread(sound_data,1,pdata->periodsize*framesize,afp);
+                int nbytes=fread(sound_data,1,pdata->periodsize*
+                                 pdata->sound_framesize,afp);
                 if(nbytes<=0)
                     audio_end=1;
                 else

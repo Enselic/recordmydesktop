@@ -792,6 +792,42 @@ void rmdDrawFrame(Display *dpy,
                   int height);
 
 
+/*
+ * Create a text file that holds the required
+ * capture attributes, in the cache directory.
+ *
+ * \param pdata ProgData struct containing all program data
+ *
+ * \returns 0 on Success, 1 on failure
+ *
+ */ 
+int WriteSpecsFile(ProgData *pdata);
+
+
+
+/*
+ * Read the  text file that holds the required
+ * capture attributes, in the cache directory.
+ *
+ * \param pdata ProgData struct that will be fille 
+ *        with  all program data
+ *
+ * \returns 0 on Success, 1 on failure
+ *
+ */ 
+int ReadSpecsFile(ProgData *pdata);
+
+
+/*
+ * Restore a previous recording, found in 
+ * the given path.
+ *
+ * \param path Path to the cache folder.
+ *
+ * \returns 0 on Success, 1 on failure
+ *
+ */
+int rmdRestore(const char *path);
 
 #endif
 

@@ -352,6 +352,20 @@ Misc Options:
 .br
 .TP
 .B
+    \-restore path_to_data   
+    Encode cache data from a previous session, into an Ogg/Theora+Vorbis
+    file. The filename will be the one that was chosen initially.
+    Any other option specified with this one will be implicitly ignored
+    and recordMyDesktop will exit after the end of the encoding.
+    This option was added in recordMyDesktop 0.3.7 and it will not
+    work with cache files produced from earlier versions.
+    When using this option, remember that
+   
+.B
+recordMyDesktop's cache is not safe, in respect to type-sizes and endianness.
+.br
+.TP
+.B
     \-\-print\-config
     Print compilation time options. Currently prints whether Jack capture is
     enabled and if ALSA or OSS is used (may contain more information

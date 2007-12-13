@@ -32,13 +32,14 @@ int main(int argc,char **argv){
     ProgData pdata;
 
     exit_status=0;
-    if(XInitThreads ()==0){
-        fprintf(stderr,"Couldn't initialize thread support!\n");
-        exit(7);
-    }
+    
     DEFAULT_ARGS(&pdata.args);
     if(ParseArgs(argc,argv,&pdata.args)){
         exit(1);
+    }
+    if(XInitThreads ()==0){
+        fprintf(stderr,"Couldn't initialize thread support!\n");
+        exit(7);
     }
     if(pdata.args.display!=NULL){
         pdata.dpy = XOpenDisplay(pdata.args.display);

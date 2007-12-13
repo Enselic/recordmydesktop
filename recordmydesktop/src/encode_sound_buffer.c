@@ -31,12 +31,8 @@ void *EncodeSoundBuffer(ProgData *pdata){
     int sampread=pdata->periodsize;
 #ifdef HAVE_JACK_H
     void *jackbuf=NULL;
-    int framesize=sizeof(jack_default_audio_sample_t)*
-                         pdata->jdata->nports;
     if(pdata->args.use_jack){
-        framesize=sizeof(jack_default_audio_sample_t)*
-                  pdata->jdata->nports;
-        jackbuf=malloc(framesize*pdata->jdata->buffersize);
+        jackbuf=malloc(pdata->sound_framesize*pdata->jdata->buffersize);
     }
 #endif
     pdata->v_encoding_clean=0;
@@ -84,10 +80,11 @@ void *EncodeSoundBuffer(ProgData *pdata){
         else{
 #ifdef HAVE_JACK_H
             if((*jack_ringbuffer_read_space_p)(pdata->jdata->sound_buffer)>=
-               (framesize*pdata->jdata->buffersize)){
+               (pdata->sound_framesize*pdata->jdata->buffersize)){
                 (*jack_ringbuffer_read_p)(pdata->jdata->sound_buffer,
                                           jackbuf,
-                                          (framesize*pdata->jdata->buffersize));
+                                          (pdata->sound_framesize*
+                                           pdata->jdata->buffersize));
                 vorbis_buffer=vorbis_analysis_buffer(&pdata->enc_data->m_vo_dsp,
                                                     sampread);
                 for(j=0;j<pdata->args.channels;j++){

@@ -30,18 +30,10 @@ void *CacheSoundBuffer(ProgData *pdata){
 //It's sound is tiny compared to that of image, so
 //compressing would reducethe overall size by only an
 //insignificant fraction.
-#ifdef HAVE_LIBASOUND
-    int framesize=((snd_pcm_format_width(SND_PCM_FORMAT_S16_LE))/8)*
-                  pdata->args.channels;
-#else
-    int framesize=pdata->args.channels<<1;//Always signed 16 bit data
-#endif
 #ifdef HAVE_JACK_H
     void *jackbuf=NULL;
     if(pdata->args.use_jack){
-        framesize=sizeof(jack_default_audio_sample_t)*
-                  pdata->jdata->nports;
-        jackbuf=malloc(framesize*pdata->jdata->buffersize);
+        jackbuf=malloc(pdata->sound_framesize*pdata->jdata->buffersize);
     }
 #endif
     while((pdata->running)){
@@ -69,7 +61,7 @@ void *CacheSoundBuffer(ProgData *pdata){
             //advance the list
             pdata->sound_buffer=pdata->sound_buffer->next;
             pthread_mutex_unlock(&pdata->sound_buffer_mutex);
-            fwrite(buff->data,1,pdata->periodsize*framesize,
+            fwrite(buff->data,1,pdata->periodsize*pdata->sound_framesize,
                    pdata->cache_data->afp);
             free(buff->data);
             free(buff);
@@ -77,11 +69,13 @@ void *CacheSoundBuffer(ProgData *pdata){
         else{
 #ifdef HAVE_JACK_H
             if((*jack_ringbuffer_read_space_p)(pdata->jdata->sound_buffer)>=
-               (framesize*pdata->jdata->buffersize)){
+               (pdata->sound_framesize*pdata->jdata->buffersize)){
                 (*jack_ringbuffer_read_p)(pdata->jdata->sound_buffer,
                                           jackbuf,
-                                          (framesize*pdata->jdata->buffersize));
-                fwrite(jackbuf,1,(framesize*pdata->jdata->buffersize),
+                                          (pdata->sound_framesize*
+                                           pdata->jdata->buffersize));
+                fwrite(jackbuf,1,(pdata->sound_framesize*
+                                  pdata->jdata->buffersize),
                        pdata->cache_data->afp);
             }
             else{

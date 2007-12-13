@@ -101,6 +101,7 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
     "\t-s_quality n\t\tDesired audio quality(-1 to 10).\n\n"
 
     "Misc Options:\n"
+    "\t-restore path_to_data\tRestore (encode) data from a previous session.\n"
     "\t--no-wm-check\t\tDo not try to detect"
     " the window manager(and set options according to it)\n"
 
@@ -512,6 +513,17 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
             else{
                 fprintf(stderr,"Argument Usage: --ring-buffer-size"
                                 " N(floating point number>0.0)\n");
+                return 1;
+            }
+            i++;
+        }
+        else if(!strcmp(argv[i],"-restore")){
+            if(i+1<argc){
+                int ex_st=rmdRestore(argv[i+1]);
+                exit(ex_st);
+            }
+            else{
+                fprintf(stderr,"Argument Usage: -restore path_to_data\n");
                 return 1;
             }
             i++;

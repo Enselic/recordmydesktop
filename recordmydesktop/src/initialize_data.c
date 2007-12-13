@@ -101,6 +101,10 @@ int InitializeData(ProgData *pdata,
                                         &pdata->periodsize,
                                         &pdata->periodtime,
                                         &pdata->hard_pause);
+            pdata->sound_framesize=((snd_pcm_format_width(
+                                     SND_PCM_FORMAT_S16_LE))/8)*
+                                     pdata->args.channels;
+
             if(pdata->sound_handle==NULL){
 #else
             pdata->sound_handle=OpenDev(pdata->args.device,
@@ -110,6 +114,7 @@ int InitializeData(ProgData *pdata,
                             ((pdata->args.channels<<1)*pdata->args.frequency);
             //when using OSS periodsize serves as an alias of buffsize
             pdata->periodsize=pdata->args.buffsize;
+            pdata->sound_framesize=pdata->args.channels<<1;
             if(pdata->sound_handle<0){
 #endif
                 fprintf(stderr,"Error while opening/configuring soundcard %s\n"
@@ -138,6 +143,9 @@ int InitializeData(ProgData *pdata,
             pdata->args.channels=pdata->jdata->nports;
             pdata->periodtime=(1000000*pdata->args.buffsize)/
                               pdata->args.frequency;
+            pdata->sound_framesize=sizeof(jack_default_audio_sample_t)*
+                                   pdata->jdata->nports;
+
 #else
             fprintf(stderr,"Should not be here!\n");
             exit(-1);
