@@ -819,7 +819,7 @@ int ReadSpecsFile(ProgData *pdata);
 
 
 /*
- * Restore a previous recording, found in 
+ * Rescue a previous recording, found in 
  * the given path.
  *
  * \param path Path to the cache folder.
@@ -827,7 +827,7 @@ int ReadSpecsFile(ProgData *pdata);
  * \returns 0 on Success, 1 on failure
  *
  */
-int rmdRestore(const char *path);
+int rmdRescue(const char *path);
 
 #endif
 

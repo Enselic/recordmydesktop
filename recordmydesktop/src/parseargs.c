@@ -101,7 +101,7 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
     "\t-s_quality n\t\tDesired audio quality(-1 to 10).\n\n"
 
     "Misc Options:\n"
-    "\t-restore path_to_data\tRestore (encode) data from a previous session.\n"
+    "\t-rescue path_to_data\tEncode data from a previous, crashed, session.\n"
     "\t--no-wm-check\t\tDo not try to detect"
     " the window manager(and set options according to it)\n"
 
@@ -517,13 +517,13 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
             }
             i++;
         }
-        else if(!strcmp(argv[i],"-restore")){
+        else if(!strcmp(argv[i],"-rescue")){
             if(i+1<argc){
-                int ex_st=rmdRestore(argv[i+1]);
+                int ex_st=rmdRescue(argv[i+1]);
                 exit(ex_st);
             }
             else{
-                fprintf(stderr,"Argument Usage: -restore path_to_data\n");
+                fprintf(stderr,"Argument Usage: -rescue path_to_data\n");
                 return 1;
             }
             i++;

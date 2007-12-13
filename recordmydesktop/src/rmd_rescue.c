@@ -29,7 +29,7 @@
 #include <recordmydesktop.h>
 
 
-int rmdRestore(const char *path){
+int rmdRescue(const char *path){
 
     int i=0,
         width,
