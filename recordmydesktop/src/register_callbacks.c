@@ -35,9 +35,13 @@ void SetPaused(int signum){
 
 
 void SetRunning(int signum){
-    *Running=0;
-    if(signum==SIGABRT)
-        Aborted=1;
+    
+    if(!Paused){
+        *Running=0;
+        if(signum==SIGABRT)
+            Aborted=1;
+    }
+
 }
 
 
