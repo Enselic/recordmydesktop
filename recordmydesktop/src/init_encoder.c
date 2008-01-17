@@ -26,13 +26,18 @@
 
 
 #include <recordmydesktop.h>
+#include <string.h>
 
 int IncrementalNaming(char **name){
     struct stat buff;
     char *base_name__;
-    int i=0;
-    base_name__=malloc(strlen(*name)+1);
-    strcpy(base_name__,*name);
+    int i=0,
+        fname_length=strlen(*name)-4;
+
+    base_name__=malloc(fname_length+1);
+    strncpy(base_name__,*name,fname_length);
+    base_name__[fname_length]='\0';
+
 
     //this will go on an endless loop if you have 65536?
     //files with the same name
@@ -43,10 +48,11 @@ int IncrementalNaming(char **name){
         char numbuf[8];
 
         strcpy(tname,base_name__);
-        strcat(tname,".");
+        strcat(tname,"-");
         i++;
         I16TOA((i),numbuf)
         strcat(tname,numbuf);
+        strcat(tname,".ogv");
         //save new name
 
         free(*name);
@@ -60,7 +66,9 @@ int IncrementalNaming(char **name){
 }
 
 void InitEncoder(ProgData *pdata,EncData *enc_data_t,int buffer_ready){
-    int y1,y2;
+    int y1,
+        y2,
+        fname_length;
     (pdata)->enc_data=enc_data_t;
     srand(time(NULL));
     y1=rand();
@@ -70,6 +78,26 @@ void InitEncoder(ProgData *pdata,EncData *enc_data_t,int buffer_ready){
     ogg_stream_init(&enc_data_t->m_ogg_ts,y1);
     if(!pdata->args.nosound)
         ogg_stream_init(&enc_data_t->m_ogg_vs,y2);
+    fname_length=strlen(pdata->args.filename);
+   if(!(fname_length>4 &&
+       pdata->args.filename[fname_length-4] == '.' &&
+       (pdata->args.filename[fname_length-3] == 'o' ||
+        pdata->args.filename[fname_length-3] == 'O') &&
+       (pdata->args.filename[fname_length-2] == 'g' ||
+        pdata->args.filename[fname_length-2] == 'G') &&
+       (pdata->args.filename[fname_length-1] == 'v' ||
+        pdata->args.filename[fname_length-1] == 'V'))){
+    
+        char *new_name=malloc(fname_length+5);
+        strcpy(new_name,pdata->args.filename);
+        strcat(new_name,".ogv");
+        
+        free(pdata->args.filename);
+        pdata->args.filename=new_name;
+
+
+    }
+        
     if(!pdata->args.overwrite)
         IncrementalNaming(&(pdata)->args.filename);
     enc_data_t->fp=fopen((pdata)->args.filename,"w");
