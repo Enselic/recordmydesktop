@@ -35,7 +35,8 @@ recordmydesktop_SOURCES=	recordmydesktop.c\
 							rmd_error.c\
 							rmd_frame.c\
 							rmd_timer.c\
-							rmd_rescue.c
+							rmd_rescue.c\
+							skeleton.c
 
 
 INCLUDES= $(all_includes) -I$(top_srcdir)/include

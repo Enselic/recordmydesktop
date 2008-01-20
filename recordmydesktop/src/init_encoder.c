@@ -27,6 +27,20 @@
 
 #include <recordmydesktop.h>
 #include <string.h>
+#include <skeleton.h>
+
+void m_add_fishead_packet(ogg_stream_state *m_ogg_state){
+
+    fishead_packet skel_fp;
+    
+    skel_fp.ptime_n=skel_fp.btime_n=0;
+    skel_fp.ptime_d=skel_fp.btime_d=1000;
+    
+    add_fishead_to_stream(m_ogg_state,&skel_fp);
+    
+
+}
+
 
 int IncrementalNaming(char **name){
     struct stat buff;
@@ -66,20 +80,20 @@ int IncrementalNaming(char **name){
 }
 
 void InitEncoder(ProgData *pdata,EncData *enc_data_t,int buffer_ready){
-    int y1,
+    
+    int y0,
+        y1,
         y2,
         fname_length;
-    (pdata)->enc_data=enc_data_t;
-    srand(time(NULL));
-    y1=rand();
-    y2=rand();
-    y2+=(y1==y2);
+    ogg_stream_state m_ogg_skel;
+    ogg_page skel_og_pg;
+    fisbone_packet skel_fbv,    //video fisbone packet
+                   skel_fba ;   //audio fisbone packet
 
-    ogg_stream_init(&enc_data_t->m_ogg_ts,y1);
-    if(!pdata->args.nosound)
-        ogg_stream_init(&enc_data_t->m_ogg_vs,y2);
+    (pdata)->enc_data=enc_data_t;
+
     fname_length=strlen(pdata->args.filename);
-   if(!(fname_length>4 &&
+    if(!(fname_length>4 &&
        pdata->args.filename[fname_length-4] == '.' &&
        (pdata->args.filename[fname_length-3] == 'o' ||
         pdata->args.filename[fname_length-3] == 'O') &&
@@ -106,6 +120,34 @@ void InitEncoder(ProgData *pdata,EncData *enc_data_t,int buffer_ready){
                        (pdata)->args.filename);
         exit(13);
     }
+
+    //each stream must have a unique 
+    srand(time(NULL));
+    y0=rand()+1;
+    y1=rand()+1;
+    y2=rand()+1;
+    y2+=(y1==y2);
+    y0=(((y0==y1)||(y0==y2))?(y1+y2):y0);
+
+    //init ogg streams
+    //skeleton first
+    ogg_stream_init(&m_ogg_skel,y0);
+    m_add_fishead_packet(&m_ogg_skel);
+	if(ogg_stream_pageout(&m_ogg_skel,&skel_og_pg)!= 1){
+        fprintf (stderr, "Internal Ogg library error.\n");
+        exit (2);
+    }
+    fwrite(skel_og_pg.header,1,skel_og_pg.header_len,enc_data_t->fp);
+    fwrite(skel_og_pg.body,1,skel_og_pg.body_len,enc_data_t->fp);
+    
+
+
+    ogg_stream_init(&enc_data_t->m_ogg_ts,y1);
+    if(!pdata->args.nosound)
+        ogg_stream_init(&enc_data_t->m_ogg_vs,y2);
+
+
+
     theora_info_init(&enc_data_t->m_th_inf);
     enc_data_t->m_th_inf.frame_width=(pdata)->brwin.rgeom.width;
     enc_data_t->m_th_inf.frame_height=(pdata)->brwin.rgeom.height;
@@ -203,6 +245,51 @@ void InitEncoder(ProgData *pdata,EncData *enc_data_t,int buffer_ready){
         ogg_stream_packetin(&enc_data_t->m_ogg_vs,&header_code);
     }
 
+    //fishbone packets go here
+    memset(&skel_fbv,0,sizeof(skel_fbv));
+    skel_fbv.serial_no=enc_data_t->m_ogg_ts.serialno;
+    skel_fbv.nr_header_packet=2+(!pdata->args.nosound);
+    skel_fbv.granule_rate_n=enc_data_t->m_th_inf.fps_numerator;
+    skel_fbv.granule_rate_d=enc_data_t->m_th_inf.fps_denominator;
+    skel_fbv.start_granule=0;
+    skel_fbv.preroll=0;
+    skel_fbv.granule_shift=theora_granule_shift(&enc_data_t->m_th_inf);
+    add_message_header_field(&skel_fbv,
+                             "Content-Type",
+                             "video/x-theora");
+
+    add_fisbone_to_stream(&m_ogg_skel,&skel_fbv);
+
+    if(!pdata->args.nosound){
+
+        memset(&skel_fba,0,sizeof(skel_fba));
+        skel_fba.serial_no=enc_data_t->m_ogg_vs.serialno;
+        skel_fba.nr_header_packet=3;
+        skel_fba.granule_rate_n=pdata->args.frequency;
+        skel_fba.granule_rate_d=(ogg_int64_t)1;
+        skel_fba.start_granule=0;
+        skel_fba.preroll=2;
+        skel_fba.granule_shift=0;
+        add_message_header_field(&skel_fba,
+                                 "Content-Type",
+                                 "audio/x-vorbis");
+
+        add_fisbone_to_stream(&m_ogg_skel,&skel_fba);
+    
+    }
+
+    while(1){
+        int result = ogg_stream_flush(&m_ogg_skel, &skel_og_pg);
+        if(result<0){
+            fprintf (stderr, "Internal Ogg library error.\n");
+            exit(2);
+        }
+        if(result==0)
+            break;
+        fwrite(skel_og_pg.header,1,skel_og_pg.header_len,enc_data_t->fp);
+        fwrite(skel_og_pg.body,1,skel_og_pg.body_len,enc_data_t->fp);
+	}
+
 
 
     while(1){
@@ -238,8 +325,18 @@ void InitEncoder(ProgData *pdata,EncData *enc_data_t,int buffer_ready){
                    enc_data_t->fp);
         }
     }
+    
+    //skeleton eos
+    add_eos_packet_to_stream(&m_ogg_skel);
+	if(ogg_stream_flush(&m_ogg_skel,&skel_og_pg)<0){
+        fprintf(stderr,"Internal Ogg library error.\n");
+        exit(2);
+    }
+    fwrite(skel_og_pg.header,1,skel_og_pg.header_len,enc_data_t->fp);
+    fwrite(skel_og_pg.body,1,skel_og_pg.body_len,enc_data_t->fp);
 
 
+    //theora buffer allocation, if any
     if(!buffer_ready){
         enc_data_t->yuv.y=(unsigned char *)malloc(enc_data_t->m_th_inf.height*
                           enc_data_t->m_th_inf.width);
