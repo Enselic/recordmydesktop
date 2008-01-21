@@ -248,7 +248,7 @@ void InitEncoder(ProgData *pdata,EncData *enc_data_t,int buffer_ready){
     //fishbone packets go here
     memset(&skel_fbv,0,sizeof(skel_fbv));
     skel_fbv.serial_no=enc_data_t->m_ogg_ts.serialno;
-    skel_fbv.nr_header_packet=2+(!pdata->args.nosound);
+    skel_fbv.nr_header_packet=3;
     skel_fbv.granule_rate_n=enc_data_t->m_th_inf.fps_numerator;
     skel_fbv.granule_rate_d=enc_data_t->m_th_inf.fps_denominator;
     skel_fbv.start_granule=0;
