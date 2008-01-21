@@ -473,14 +473,14 @@ program.
 Running a command like :
 .br
 .B
-xwininfo |grep "Window id:"|sed \-e "s/xwininfo\\:\\ Window id:\\ // ;s/\\ \.*//"
+xwininfo | awk \'/Window id:/ {print $4}\'
 .br
 will give you only the id of the window(which should look like this: 0x4800005)
 .br
 More conviniently you can put all that in the command that launches recordMyDesktop like this:
 .br
 .B
-~$recordmydesktop \-windowid $(xwininfo |grep "Window id:"|sed \-e "s/xwininfo\\:\\ Window id:\\ // ;s/\\ \.*//" )
+~$recordmydesktop \-windowid $(xwininfo | awk \'/Window id:/ {print $4}\')
 .br
 .br
     Also, the lower quality you select on a video recording (
