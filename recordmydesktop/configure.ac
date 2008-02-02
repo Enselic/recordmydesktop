@@ -3,7 +3,7 @@
 
 AC_PREREQ(2.59)
 AC_INIT(src/recordmydesktop.c)
-AM_INIT_AUTOMAKE(recordmydesktop,0.3.7.1,)
+AM_INIT_AUTOMAKE(recordmydesktop,0.3.7.2,)
 
 AC_CONFIG_SRCDIR([src/recordmydesktop.c])
 AM_CONFIG_HEADER(config.h)
@@ -15,7 +15,7 @@ AM_CONFIG_HEADER(config.h)
 AC_PROG_CC
 
 AC_CANONICAL_HOST
-
+AC_C_BIGENDIAN 
 # Checks for header files.
 
 AC_HEADER_DIRENT
