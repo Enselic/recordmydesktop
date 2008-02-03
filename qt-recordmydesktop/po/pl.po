@@ -1,22 +1,23 @@
+# translation of pl.po to
 # Polish translation of recordMyDesktop.
 # Copyright (C) 2007 THE recordMyDesktop'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the recordMyDesktop package.
 # Tomasz Wojtyś <tsr@fenix.katowice.pl>, 2007.
-# , fuzzy
 # tsr <tsr84@o2.pl>, 2007.
-# 
-# 
+# Paweł T. Smoliński <linuxuser@czlowieksukcesu.pl>, 2008.
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: recordMyDesktop VERSION\n"
+"Project-Id-Version: pl\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-08-15 01:56+0300\n"
-"PO-Revision-Date: 2007-08-15 18:00+0200\n"
-"Last-Translator: Tomasz Wojtyś <tsr@fenix.katowice.pl>\n"
-"Language-Team: Polish <gnomepl@pandora.info.bielsko.pl>\n"
+"PO-Revision-Date: 2008-02-03 19:09+0100\n"
+"Last-Translator: Paweł Smoliński\n"
+"Language-Team:  <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
 
 #: src/rmdStrings.py:10
 msgid "Show/hide Main Window"
@@ -24,7 +25,7 @@ msgstr "Pokaż/ukryj okno główne"
 
 #: src/rmdStrings.py:11
 msgid "_Select Area On Screen"
-msgstr "Zaznacz obszar na ekranie"
+msgstr "Zaznacz ob_szar na ekranie"
 
 #: src/rmdStrings.py:12 src/rmdStrings.py:60
 msgid "Quit"
@@ -32,20 +33,21 @@ msgstr "Wyjście"
 
 #: src/rmdStrings.py:13
 msgid "a graphical frontend for recordMyDesktop"
-msgstr "Nakładka graficzna na recordMyDesktop"
+msgstr "graficzna nakładka dla  recordMyDesktop"
 
 #: src/rmdStrings.py:14
 msgid ""
 "Copyright (C) John Varouhakis\n"
 "Portions Copyright (C) 2005-6 Zaheer Abbas Merali, John N. Laliberte\n"
 "Portions Copyright (C) Fluendo S.L."
-msgstr "Copyright·(C)·John·Varouhakis\n"
+msgstr ""
+"Copyright·(C)·John·Varouhakis\n"
 "Portions·Copyright·(C)·2005-6·Zaheer·Abbas·Merali,·John·N.·Laliberte\n"
 "Portions·Copyright·(C)·Fluendo·S.L."
 
 #: src/rmdStrings.py:15
 msgid "Translator Credits And Information(Replace with your info)"
-msgstr "Tłumacz: Tomasz Wojtyś"
+msgstr "Tłumacz: Tomasz Wojtyś, Paweł T. Smoliński"
 
 #: src/rmdStrings.py:19
 msgid "Success"
@@ -53,7 +55,7 @@ msgstr "Powodzenie"
 
 #: src/rmdStrings.py:20
 msgid "Error while parsing the arguments."
-msgstr "Błąd podczas parsowania argumentów."
+msgstr "Błąd podczas analizy argumentów."
 
 #: src/rmdStrings.py:21
 msgid "Initializing the encoder failed(either vorbis or theora)"
@@ -65,23 +67,23 @@ msgstr "Nie można otworzyć/skonfigurować karty dźwiękowej."
 
 #: src/rmdStrings.py:23
 msgid "Xdamage extension not present."
-msgstr ""
+msgstr "Rozszerzenie Xdamage nie jest dostępne."
 
 #: src/rmdStrings.py:24
 msgid "Shared memory extension not present."
-msgstr ""
+msgstr "Rozszerzenie współdzielenia pamięci nie jest dostępne."
 
 #: src/rmdStrings.py:25
 msgid "Xfixes extension not present."
-msgstr ""
+msgstr "Rozszerzenie Xfixes nie jest dostępne."
 
 #: src/rmdStrings.py:26
 msgid "XInitThreads failed."
-msgstr ""
+msgstr "Błąd podczas wykonania XInitThreads."
 
 #: src/rmdStrings.py:27
 msgid "No $DISPLAY environment variable and none specified as argument."
-msgstr "Nie ma zmiennej środowiskowej $DISPLAY ani nie podano argumentu."
+msgstr "Brak zmiennej środowiskowej $DISPLAY. Nie podano jej również jako argumentu."
 
 #: src/rmdStrings.py:28
 msgid "Cannot connect to Xserver."
@@ -93,7 +95,7 @@ msgstr "Głębia kolorów nie jest 24 bitowa."
 
 #: src/rmdStrings.py:30
 msgid "Improper window specification."
-msgstr ""
+msgstr "Niepoprawne określenie okna."
 
 #: src/rmdStrings.py:31
 msgid "Cannot attach shared memory to proccess."
@@ -105,7 +107,7 @@ msgstr "Nie można otworzyć pliku do zapisu."
 
 #: src/rmdStrings.py:33
 msgid "Cannot load the Jack library (dlopen/dlsym error on libjack.so)."
-msgstr ""
+msgstr "Nie można załadować biblioteki Jack (błąd dlopen/dlsym przy libjack.so)."
 
 #: src/rmdStrings.py:34
 msgid "Cannot create new client."
@@ -117,17 +119,18 @@ msgstr "Nie można uaktywnić klienta."
 
 #: src/rmdStrings.py:36
 msgid "Port registration/connection failure."
-msgstr "Rejestrowanie/połączenie do portu nie powiodło się."
+msgstr "Rejestracja/podłączenie portu nie powiodło się."
 
 #: src/rmdStrings.py:37
 msgid "Segmentation Fault"
-msgstr ""
+msgstr "Błąd dostępu do pamięci."
 
 #: src/rmdStrings.py:40
 msgid ""
 "Recording is finished.\n"
 "recordMyDesktop has exited with status"
-msgstr "Nagrywanie zakończone.\n"
+msgstr ""
+"Nagrywanie zakończone.\n"
 "recordMyDesktop zakończył ze statusem"
 
 #: src/rmdStrings.py:41
@@ -139,7 +142,8 @@ msgid ""
 "Recording is finished.\n"
 "recordMyDesktop has exited with uknown\n"
 "error code"
-msgstr "Nagrywanie zakończone.\n"
+msgstr ""
+"Nagrywanie zakończone.\n"
 "recordMyDesktop zakończył z nieznanym\n"
 "kodem błędu"
 
@@ -167,7 +171,8 @@ msgstr "Kliknij tutaj aby wybrać okno do nagrywania"
 msgid ""
 "Click to start the recording.\n"
 "This window will hide itself."
-msgstr "Kliknij aby zacząć nagrywanie.\n"
+msgstr ""
+"Kliknij aby zacząć nagrywanie.\n"
 "To okno zostanie ukryte."
 
 #: src/rmdStrings.py:50
@@ -177,8 +182,9 @@ msgid ""
 "If the file already exists, the new one\n"
 "will have a number attached on its name\n"
 "(this behavior can be changed )"
-msgstr "Kliknij aby wybrać nazwę pliku i położenie.\n"
-"Domyślnie jest out.ogv w twoim katalogu domowym.\n"
+msgstr ""
+"Kliknij aby wybrać nazwę pliku i położenie.\n"
+"Domyślnie jest to out.ogv w twoim katalogu domowym.\n"
 "Jeżeli plik istnieje, wtedy zostanie utworzony nowy\n"
 "z numerem dołączonym do jego nazwy\n"
 "(takie zachowanie może być zmienione)"
@@ -193,10 +199,11 @@ msgid ""
 "(Lower quality will require more proccessing power,\n"
 "so it's recommended, when encoding on the fly,\n"
 "to leave at 100)"
-msgstr "Wybież jakość obrazu.\n"
+msgstr ""
+"Wybierz jakość obrazu.\n"
 "(Niższa jakość wymaga większej mocy obliczeniowej,\n"
-"więc nie jest zalecana przy kodowaniu w locie,\n"
-"zostawić wtedy na 100)"
+"więc przy nagrywaniu w locie poleca się,\n"
+"pozostawienie wartości na 100)"
 
 #: src/rmdStrings.py:53
 msgid "Enable/Disable sound recording."
@@ -204,7 +211,7 @@ msgstr "Włącza/wyłącza nagrywanie dźwięku."
 
 #: src/rmdStrings.py:54
 msgid "Select the audio quality of your recording."
-msgstr "Wybież jakość dźwięku."
+msgstr "Wybierz jakość dźwięku."
 
 #: src/rmdStrings.py:55
 msgid "Click here to access more options."
@@ -216,10 +223,11 @@ msgid ""
 "Left click and drag, on the preview image,\n"
 "to select an area for recording.\n"
 "Right click on it, to reset the area."
-msgstr "\n"
+msgstr ""
+"\n"
 "Kliknij lewym przyciskiem i przeciągnij na podglądzie,\n"
 "aby zaznaczyć obszar do nagrywania.\n"
-"Kliknij prawym przyciekiem aby go usunąć."
+"Kliknij prawym przyciskiem aby go usunąć."
 
 #: src/rmdStrings.py:58
 msgid "Record"
@@ -239,9 +247,10 @@ msgid ""
 "WARNING!!!\n"
 "If you press Cancel or close this window,\n"
 "this proccess cannot be resumed!"
-msgstr "Proszę czekać. Trwa kodowanie nagrania\n"
+msgstr ""
+"Proszę czekać. Trwa kodowanie nagrania\n"
 "UWAGA!!!\n"
-"Jeśli naciśniejsz Anuluj lub zamkniesz to okno,\n"
+"Jeśli naciśniesz Anuluj lub zamkniesz to okno,\n"
 "ten proces nie będzie mógł być ponowiony!"
 
 #: src/rmdStrings.py:65
@@ -254,7 +263,7 @@ msgstr "Nadpisuj istniejące pliki"
 
 #: src/rmdStrings.py:68
 msgid "Working Directory"
-msgstr "Katalog tymczasowy"
+msgstr "Katalog roboczy"
 
 #: src/rmdStrings.py:69 src/rmdStrings.py:83
 msgid "Frames Per Second"
@@ -286,7 +295,7 @@ msgstr "Częstotliwość"
 
 #: src/rmdStrings.py:71
 msgid "Device"
-msgstr "Użądzenie"
+msgstr "Urządzenie"
 
 #: src/rmdStrings.py:71
 msgid "Display"
@@ -302,11 +311,11 @@ msgstr "Śledzenie myszy"
 
 #: src/rmdStrings.py:72
 msgid "MIT-Shm extension"
-msgstr ""
+msgstr "Rozszerzenie MIT-Shm"
 
 #: src/rmdStrings.py:72
 msgid "Include Window Decorations"
-msgstr "Dołącz dekoratory okna"
+msgstr "Dołącz dekorację okna"
 
 #: src/rmdStrings.py:73
 msgid "Tooltips"
@@ -326,7 +335,7 @@ msgstr "Dodatkowe opcje"
 
 #: src/rmdStrings.py:77
 msgid "Drop Frames(encoder)"
-msgstr ""
+msgstr "Opuszczaj ramki (koder)"
 
 #: src/rmdStrings.py:77
 msgid "Startup Delay(secs)"
@@ -361,9 +370,8 @@ msgid "Files"
 msgstr "Pliki"
 
 #: src/rmdStrings.py:80
-#, fuzzy
 msgid "Performance"
-msgstr "Osiągi"
+msgstr "Wydajność"
 
 #: src/rmdStrings.py:80
 msgid "Sound"
@@ -381,12 +389,13 @@ msgid ""
 "will be named out.ogv.1).\n"
 "By checking this box, this behavior is disabled and the old file is "
 "overwritten.\n"
-msgstr "Domyślnie jeśli spróbujesz zapisać plik pod nazwą, która już istnieje,\n"
+msgstr ""
+"Domyślnie jeśli spróbujesz zapisać plik pod nazwą, która już istnieje,\n"
 "nazwa nowego pliku zostanie zmieniona\n"
 "(przykładowo jeśli chcesz zapisać plik jako out.ogv i taki plik już istnieje,"
 "będzie on zapisany pod nazwą out.ogv.1).\n"
-"Zaznaczenie tej opcji powoduje wyłączenie takiego zachowania,\n"
-"a nowe pliki są nadpisywane.\n"
+"Zaznaczenie tej opcji powoduje wyłączenie takiego zachowania -\n"
+"nowe pliki będą nadpisywane.\n"
 
 #: src/rmdStrings.py:82
 msgid "Directory where temporary files will be saved."
@@ -397,6 +406,8 @@ msgid ""
 "Encode simultaneously with the recording.\n"
 "This will require a lot more processing power.\n"
 msgstr ""
+"Koduj równolegle podczas nagrywania.\n"
+"Opcja ta wymaga dużej mocy procesora.\n"
 
 #: src/rmdStrings.py:85
 msgid ""
@@ -404,7 +415,8 @@ msgid ""
 "If enabled, the program will need less processing power,\n"
 "in the expense of hard disk space.\n"
 "This option is valid only when encoding on the fly is disabled."
-msgstr "Nie kompresuje plików tymczasowych.\n"
+msgstr ""
+"Nie kompresuje plików tymczasowych.\n"
 "Jeśli opcja aktywna wtedy program potrzebuje mniej mocy obliczeniowej,\n"
 "kosztem miejsca na dysku twardym.\n"
 "Opcja jest poprawna tylko kiedy kodowanie w locie jest wyłączone."
@@ -413,7 +425,8 @@ msgstr "Nie kompresuje plików tymczasowych.\n"
 msgid ""
 "This option, if enabled, will cause the program to require less\n"
 "processing power, but it might make the colors look a bit more blurry."
-msgstr "Ta opcja jeśli jest zaznaczona powoduje, że program potrzebuje mniej\n"
+msgstr ""
+"Jeśli ta opcja jest zaznaczona, program będzie potrzebował mniej\n"
 "mocy obliczeniowej, lecz kolory mogą wyglądać trochę nieostro."
 
 #: src/rmdStrings.py:87
@@ -422,7 +435,8 @@ msgid ""
 "It is also auto-enabled when recording a\n"
 "known 3d compositing window manager.\n"
 " "
-msgstr "Ta opcja powinna byż zaznaczona podczas nagrywania okien 3D.\n"
+msgstr ""
+"Ta opcja powinna powinna być zaznaczona podczas nagrywania okien 3D.\n"
 "Jest ona zaznaczana automatycznie kiedy trwa nagrywanie znanego\n"
 "kompozytowego menedżera okien 3D.\n"
 " "
@@ -437,7 +451,7 @@ msgstr "Częstotliwość próbkowania dźwięku."
 
 #: src/rmdStrings.py:90
 msgid "ALSA sound device, that is used for sound recording."
-msgstr "Użądzenie dźwiękowe ALSA, które jest używane do nagrywania dźwięku."
+msgstr "Urządzenie dźwiękowe ALSA, które będzie użyte do nagrywania dźwięku."
 
 #: src/rmdStrings.py:91
 msgid "Connection to the Xserver."
@@ -449,7 +463,8 @@ msgid ""
 "Normal is for the real cursor that you see while recording,\n"
 "while black and white are fake cursors, drawn by the program.\n"
 "You can also disable cursor drawing."
-msgstr "Kursor myszy jaki będzie rysowany.\n"
+msgstr ""
+"Kursor myszy jaki będzie widoczny.\n"
 "Normalny jest to kursor, który widzisz podczas nagrywania,\n"
 "biały oraz czarny są to udawane kursory rysowane przez program.\n"
 "Możesz również wyłączyć rysowanie kursora."
@@ -461,7 +476,8 @@ msgid ""
 "Enabling this option will also enable full shots at\n"
 "every frame, so it's not recommended\n"
 "for large capture areas."
-msgstr "Kiedy ta opcja jest aktywna, obszar przechwytywania\n"
+msgstr ""
+"Kiedy ta opcja jest aktywna, obszar przechwytywania\n"
 "będzie podążał za kursorem myszy.\n"
 "Włączenie tej opcji powoduje zazwyczaj włączenie przechwytywania\n"
 "pełnych zrzutów co każdą klatkę, więc nie jest to zalecane\n"
@@ -474,19 +490,25 @@ msgid ""
 "Disabling this option is not recommended,\n"
 "as it may severely slow down the program."
 msgstr ""
+"Użycie rozszerzenia MIT-Shared jest polecane z uwagi na\n"
+"zależności z innymi ustawieniami programu.\n"
+"Wyłączenie tej opcji nie jest polecane,\n"
+"ponieważ może znacząco spowolnić działanie programu."
 
 #: src/rmdStrings.py:95
 msgid ""
 "When selecting a window via the \"Select Window\" button,\n"
 "include that window's decorations in the recording area."
-msgstr "Kiedy zaznaczasz okno przez przycisk \"Zaznacz okno\",\n"
-"opcja dołącze dekorator okna do obszaru nagrywania."
+msgstr ""
+"Kiedy zaznaczasz okno przez przycisk \"Zaznacz okno\",\n"
+"opcja dołączy dekorację okna do obszaru nagrywania."
 
 #: src/rmdStrings.py:96
 msgid ""
 "Enable or disable tooltips, like this one.\n"
 "(Requires restart)"
-msgstr "Włącza lub wyłącza podpowiedzi takie jak ta.\n"
+msgstr ""
+"Włącza lub wyłącza podpowiedzi takie jak ta.\n"
 "(Wymaga ponownego uruchomienia)"
 
 #: src/rmdStrings.py:97
@@ -494,7 +516,8 @@ msgid ""
 "Draw a frame on the screen, around the area\n"
 "that will get captured.\n"
 "(This frame will remain throughout the recording.)"
-msgstr "Rysuj ramkę na ekranie, ponad obszarem,\n"
+msgstr ""
+"Rysuj ramkę na ekranie, ponad obszarem,\n"
 "który jest przechwytywany.\n"
 "(Ramka będzie widoczna podczas nagrywania.))"
 
@@ -502,7 +525,8 @@ msgstr "Rysuj ramkę na ekranie, ponad obszarem,\n"
 msgid ""
 "Reset capture area after every recording\n"
 "and at program shutdown."
-msgstr "Usuwaj obszar przechwytywania po każdym nagrywaniu\n"
+msgstr ""
+"Usuwaj obszar przechwytywania po każdym nagrywaniu\n"
 "oraz przy zamykaniu programu."
 
 #: src/rmdStrings.py:99
@@ -512,9 +536,10 @@ msgid ""
 "These options must be entered the same way\n"
 "they would in the commandline (i.e. separated with spaces).\n"
 "Consult the manpage for more information on using them."
-msgstr "Dodatkowe opcje linii poleceń, które zostaną\n"
+msgstr ""
+"Dodatkowe opcje linii poleceń, które zostaną\n"
 "przesłane do recordMyDesktop podczas uruchamiania.\n"
-"Opcje muszą być podane w taki sam sposób jak z linii poleceń\n"
+"Opcje te muszą być podane w taki sam sposób jak z linii poleceń\n"
 "(np muszą być oddzielone spacjami).\n"
 "Więcej informacji znajdziesz w dokumentacji."
 
@@ -528,16 +553,24 @@ msgid ""
 "recordMyDesktop must be compiled with JACK\n"
 "support for this option to work."
 msgstr ""
+"Włącz tą opcję aby nagrywać dźwięk poprzez\n"
+"JACK. Serwer JACK musi być uruchomiony aby\n"
+"umożliwić pobranie portów do nagrania.\n"
+"Dźwięk nagrany z każdego portu będzie zapisany w\n"
+"odpowiadającym mu kanale. recordMyDesktop \n"
+"musi być skompilowany z obsługą JACK aby opcja "
+"ta działała"
 
 #: src/rmdStrings.py:102
 msgid "Use Jack for audio capture."
-msgstr ""
+msgstr "Użyj JACKa aby przechwycić dźwięk."
 
 #: src/rmdStrings.py:103
 msgid ""
 "Select the ports you want to record from\n"
 "(hold Ctrl to select multiple entries):"
-msgstr "Zaznacz porty z których chcesz nagrywać\n"
+msgstr ""
+"Zaznacz porty z których chcesz nagrywać\n"
 "(przytrzymaj Ctrl aby zaznaczyć kilka):)"
 
 #: src/rmdStrings.py:105
@@ -546,11 +579,11 @@ msgstr "Dostępne porty"
 
 #: src/rmdStrings.py:106
 msgid "jack_lsp returned no ports."
-msgstr ""
+msgstr "jack_lsp nie zwrócił żadnych portów."
 
 #: src/rmdStrings.py:107
 msgid "Make sure that jackd is running."
-msgstr ""
+msgstr "Upewnij się że jackd jest uruchomiony."
 
 #: src/rmdStrings.py:108
 msgid "Available ports (double click to add):"
