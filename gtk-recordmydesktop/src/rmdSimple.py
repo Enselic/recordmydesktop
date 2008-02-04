@@ -488,8 +488,8 @@ class simpleWidget(object):
         self.s_quality.set_sensitive(self.values[2])
         self.s_button.set_active(self.values[2])
         self.window.show()
-        wh=self.window.size_request()
-        self.window.set_size_request(wh[0],wh[1])
+#        wh=self.window.size_request()
+#        self.window.set_size_request(wh[0],wh[1])
         gtk.main()
 
 

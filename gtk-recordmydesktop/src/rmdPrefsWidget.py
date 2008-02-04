@@ -123,7 +123,7 @@ class prefsWidget(object):
             self.eboxes[i].add(self.boxes[i])
             self.labelbox[0].pack_start(self.eboxes[i],expand=False,fill=False)
 
-        #self.workdir_layout=gtk.HBox(homogeneous=False, spacing=0)
+        self.workdir_layout=gtk.HBox(homogeneous=False, spacing=0)
 
 
         self.overwriteFilesButton=gtk.CheckButton(label=None)
@@ -134,17 +134,18 @@ class prefsWidget(object):
         self.workdirEntry= gtk.Entry(max=0)
         self.workdirEntry.set_text(self.values[17])
         self.workdirEntry.show()
-        self.boxes[1].pack_end(self.workdirEntry,expand=False,fill=False)
-
+        #self.boxes[1].pack_end(self.workdirEntry,expand=False,fill=False)
         #self.file_button=gtk.Button(None,gtk.STOCK_SAVE_AS)
         #self.file_button.show()
+        self.workdir_button=gtk.Button(None,gtk.STOCK_SAVE_AS)
+        self.workdir_button.show()
 
 
-        #self.workdir_layout.pack_start(self.workdirEntry,expand=True,fill=True)
-        #self.workdir_layout.pack_start(self.file_button,expand=False,fill=False)
-        #self.workdir_layout.show()
+        self.workdir_layout.pack_start(self.workdirEntry,expand=True,fill=True)
+        self.workdir_layout.pack_start(self.workdir_button,expand=False,fill=False)
+        self.workdir_layout.show()
 
-        #self.labelbox[0].pack_start(self.workdir_layout,expand=False,fill=False)
+        self.labelbox[0].pack_start(self.workdir_layout,expand=False,fill=False)
 
 
 #Performance page
@@ -363,10 +364,25 @@ class prefsWidget(object):
         if (not failed) and self.values[23]==[]:
             self.jack_lsp_listview.get_selection().select_path((0,))
             #print self.jack_lsp_listview.get_selection().get_selected_rows()
+
+    def __workdirSelect__(self,Event=None):
+        p=gtk.FileChooserDialog(title=None,
+                                action=gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER,
+                                buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,
+                                         gtk.STOCK_OPEN,gtk.RESPONSE_OK)
+                               )
+        p.set_filename(self.workdirEntry.get_text())
+        if p.run()==gtk.RESPONSE_OK:
+            tpath=p.get_filename()
+            if tpath!= '':
+                self.workdirEntry.set_text(tpath)
+        p.hide()
+        p.destroy()
+
     def __makeCons__(self):
         self.jack_button.connect("clicked",self.__jack_enabled_check__)
         self.jack_lsp_refresh.connect("clicked",self.__runJackLSP__)
-        #self.file_button.connect("clicked",self.__fileSelect__)
+        self.workdir_button.connect("clicked",self.__workdirSelect__)
 
     def __register_shortcuts__(self):
         self.parent.advanced_button.add_accelerator("clicked",self.accel_group,
