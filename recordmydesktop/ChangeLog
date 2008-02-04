@@ -1,3 +1,7 @@
+/*Version 0.3.7.2*/
+* Updated src/skeleton.c from libboggz trunk
+(fix for big endian hosts)
+
 /*Version 0.3.7.1*/
 * Added skeleton bitstream in encoded files.
 * minor bugfixes
