@@ -62,9 +62,7 @@ int InitializeData(ProgData *pdata,
         pdata->dummy_p_size=0;
 
 
-    pdata->rect_root[0]=pdata->rect_root[1]=NULL;
-    pthread_mutex_init(&pdata->list_mutex[0],NULL);
-    pthread_mutex_init(&pdata->list_mutex[1],NULL);
+    pdata->rect_root=NULL;
     pthread_mutex_init(&pdata->sound_buffer_mutex,NULL);
     pthread_mutex_init(&pdata->snd_buff_ready_mutex,NULL);
     pthread_mutex_init(&pdata->img_buff_ready_mutex,NULL);
@@ -82,7 +80,7 @@ int InitializeData(ProgData *pdata,
     pthread_cond_init(&pdata->theora_lib_clean,NULL);
     pthread_cond_init(&pdata->vorbis_lib_clean,NULL);
     pdata->th_encoding_clean=pdata->v_encoding_clean=1;
-    pdata->list_selector=Paused=Aborted=pdata->avd=0;
+    Paused=Aborted=pdata->avd=0;
     pdata->sound_buffer=NULL;
     pdata->running=1;
     time_cond=&pdata->time_cond;

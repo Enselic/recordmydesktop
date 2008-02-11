@@ -64,10 +64,12 @@ void *rmdTimer(ProgData *pdata){
             if(capture_busy){
                 frames_lost++;
             }
-            pthread_mutex_lock(&time_mutex);
-            pthread_cond_broadcast(time_cond);
-            pthread_mutex_unlock(&time_mutex);
         }
+        
+        pthread_mutex_lock(&time_mutex);
+        pthread_cond_broadcast(time_cond);
+        pthread_mutex_unlock(&time_mutex);
+        
 
         if(secs_tw)
             sleep(secs_tw);

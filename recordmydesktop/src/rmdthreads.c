@@ -48,7 +48,6 @@ void rmdThreads(ProgData *pdata){
                 sound_cache_t,
                 flush_to_ogg_t,
                 timer_t;
-    Window dummy_w;
 
     if(pdata->args.delay>0){
         fprintf(stderr,"Will sleep for %d seconds now.\n",pdata->args.delay);
@@ -56,10 +55,6 @@ void rmdThreads(ProgData *pdata){
     }
 
     /*start threads*/
-    pthread_create(&poll_events_t,
-                   NULL,
-                   (void *)PollEvents,
-                   (void *)pdata);
     pthread_create(&image_capture_t,
                    NULL,
                    (void *)GetFrame,
@@ -156,30 +151,6 @@ void rmdThreads(ProgData *pdata){
     if(pdata->args.encOnTheFly)
         pthread_join(flush_to_ogg_t,NULL);
     fprintf(stderr,".");
-
-    /* 
-     * HACK ALERT
-     * This window (dummy_w) is created
-     * only so that we will receive a final
-     * create notify event. This is needed 
-     * especially for the full_shots mode were
-     * there are no damage events and the 
-     * poll_events thread might get stuck indefinatelly.
-     * XFlush is also needed in order to get the event
-     * before the current thread gets stuck at the join call.
-     * The second XFlush should be unnecesary.
-     */
-     
-    dummy_w=XCreateSimpleWindow(pdata->dpy,
-                                pdata->specs.root,
-                                1,1,1,1,0,
-                                pdata->specs.bpixel,
-                                pdata->specs.wpixel);
-    XFlush(pdata->dpy);
-    XDestroyWindow(pdata->dpy,dummy_w);
-    XFlush(pdata->dpy);
-
-    pthread_join(poll_events_t,NULL);
 
     //Now that we are done with recording we cancel the timer
     pdata->timer_alive=0;

@@ -40,14 +40,12 @@
 #include <rmdmacro.h>
 
 
-void *PollEvents(ProgData *pdata){
+void InitEventsPolling(ProgData *pdata){
     Window root_return,
            parent_return,
            *children;
     unsigned int i,
-                 nchildren,
-                 inserts=0;
-    XEvent event;
+                 nchildren;
 
 
     XSelectInput (pdata->dpy,pdata->specs.root, SubstructureNotifyMask);
@@ -78,7 +76,16 @@ void *PollEvents(ProgData *pdata){
     }
 
 
-    while(pdata->running){
+
+}
+
+
+void EventLoop(ProgData *pdata){
+    int inserts=0;
+
+    XEvent event;
+
+    while(XPending(pdata->dpy)){
         XNextEvent(pdata->dpy,&event);
         if(event.type == KeyPress){
             XKeyEvent *e=(XKeyEvent *)(&event);
@@ -146,10 +153,7 @@ void *PollEvents(ProgData *pdata){
                 if((wgeom.x>=0)&&(wgeom.y>=0)&&
                    (wgeom.width>0)&&(wgeom.height>0)){
 
-                    int tlist_sel=pdata->list_selector;
-                    pthread_mutex_lock(&pdata->list_mutex[tlist_sel]);
-                    inserts+=RectInsert(&pdata->rect_root[tlist_sel],&wgeom);
-                    pthread_mutex_unlock(&pdata->list_mutex[tlist_sel]);
+                    inserts+=RectInsert(&pdata->rect_root,&wgeom);
 
                 }
             }
@@ -157,6 +161,7 @@ void *PollEvents(ProgData *pdata){
 
     }
 
-    pthread_exit(&errno);
+
 }
+
 

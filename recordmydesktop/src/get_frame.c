@@ -130,7 +130,6 @@ void MoveCaptureArea(   BRWindow *brwin,
 
 void *GetFrame(ProgData *pdata){
     int i=0,
-        tlist_sel=0,
         blocknum_x=pdata->enc_data->yuv.y_width/Y_UNIT_WIDTH,
         blocknum_y=pdata->enc_data->yuv.y_height/Y_UNIT_WIDTH;
     unsigned int msk_ret;
@@ -202,6 +201,8 @@ void *GetFrame(ProgData *pdata){
     mouse_pos_abs.width=mouse_pos_temp.width=pdata->dummy_p_size;
     mouse_pos_abs.height=mouse_pos_temp.height=pdata->dummy_p_size;
 
+    InitEventsPolling(pdata);
+
     while(pdata->running){
 
         //if we are left behind we must not wait.
@@ -212,22 +213,18 @@ void *GetFrame(ProgData *pdata){
             pthread_cond_wait(&pdata->time_cond,&time_mutex);
             pthread_mutex_unlock(&time_mutex);
             if(Paused){
-                pthread_mutex_lock(&pause_mutex);
-                pthread_cond_wait(&pdata->pause_cond,&pause_mutex);
-                pthread_mutex_unlock(&pause_mutex);
+                EventLoop(pdata);
+                continue;
             }
         }
+        EventLoop(pdata);
         if(d_buff)
             img_sel=(img_sel)?0:1;
         capture_busy=1;
 
         BRWinCpy(&temp_brwin,&pdata->brwin);
-        //mutexes and lists with changes are useless when full_shots is enabled
-        if(!pdata->args.full_shots){
-            tlist_sel=pdata->list_selector;
-            pdata->list_selector=((pdata->list_selector+1)%2);
-            pthread_mutex_lock(&pdata->list_mutex[tlist_sel]);
-        }
+
+
         if(pdata->args.xfixes_cursor ||
            pdata->args.have_dummy_cursor||
            pdata->args.follow_mouse){
@@ -244,7 +241,7 @@ void *GetFrame(ProgData *pdata){
                     (mouse_pos_temp.y>=0)&&
                     (mouse_pos_temp.width>0)&&
                     (mouse_pos_temp.height>0))
-                    RectInsert(&pdata->rect_root[tlist_sel],&mouse_pos_temp);
+                    RectInsert(&pdata->rect_root,&mouse_pos_temp);
             }
             //find new one
             if(pdata->args.xfixes_cursor){
@@ -284,7 +281,7 @@ void *GetFrame(ProgData *pdata){
             UpdateImage(pdata->dpy,
                         &pdata->enc_data->yuv,
                         &pdata->specs,
-                        &pdata->rect_root[tlist_sel],
+                        &pdata->rect_root,
                         &temp_brwin,
                         pdata->enc_data,
                         image->data,
@@ -292,7 +289,7 @@ void *GetFrame(ProgData *pdata){
                         &shminfo,
                         pdata->shm_opcode,
                         pdata->args.no_quick_subsample);
-            BlocksFromList(&pdata->rect_root[tlist_sel],
+            BlocksFromList(&pdata->rect_root,
                            temp_brwin.rgeom.x,
                            temp_brwin.rgeom.y,
                            pdata->enc_data->yuv.y_width/Y_UNIT_WIDTH,
@@ -409,8 +406,7 @@ void *GetFrame(ProgData *pdata){
             }
         }
         if(!pdata->args.full_shots){
-            ClearList(&pdata->rect_root[tlist_sel]);
-            pthread_mutex_unlock(&pdata->list_mutex[tlist_sel]);
+            ClearList(&pdata->rect_root);
         }
         if(encoder_busy){
             frames_lost++;
