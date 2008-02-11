@@ -253,7 +253,7 @@ void *CacheImageBuffer(ProgData *pdata){
                    pdata->brwin.rgeom.width*pdata->brwin.rgeom.height)>>20);
     if(total_received_bytes){
         fprintf(stderr,"\n*********************************************\n"
-                       "\nCached %d MB, from %d MB that were received.\n"
+                       "\nCached %u MB, from %u MB that were received.\n"
                        "Average cache compression ratio: %u %%\n"
                        "\n*********************************************\n",
                        total_bytes,
