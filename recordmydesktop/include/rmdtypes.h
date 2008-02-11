@@ -270,7 +270,7 @@ typedef struct _ProgData{
     ProgArgs args;          //the program arguments
     DisplaySpecs specs;     //Display specific information
     BRWindow brwin;         //recording window
-    RectArea *rect_root[2]; //the interchanging list roots for storing
+    RectArea *rect_root;    //the interchanging list roots for storing
                             //the changed regions
     SndBuffer   *sound_buffer;
     EncData     *enc_data;
@@ -283,9 +283,7 @@ typedef struct _ProgData{
 /**X related info*/
     Display *dpy;           //curtrent display
 /** Mutexes*/
-    pthread_mutex_t list_mutex[2],  //mutexes for concurrency
-                                    //protection of the lists
-                    sound_buffer_mutex,
+    pthread_mutex_t sound_buffer_mutex,
                     snd_buff_ready_mutex,
                     img_buff_ready_mutex,
                     theora_lib_mutex,
@@ -322,8 +320,7 @@ typedef struct _ProgData{
                 frametime;  //time that a frame lasts (microsecs)
     char    *window_manager;   //name of the window manager at program launch
     Window  shaped_w;       //frame
-    int list_selector,      //selector for the rect_roots
-        damage_event,       //damage event base code
+    int damage_event,       //damage event base code
         damage_error,       //damage error base code
         shm_opcode,         //MIT-Shm opcode
         running,            //1 while the program is capturing/paused/encoding

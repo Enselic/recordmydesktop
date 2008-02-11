@@ -36,12 +36,20 @@
 /**Function prototypes*/
 
 /**
+* Start listening to damage and substructure notify events
+* (needed before EventLoop call)
+* \param pdata ProgData struct containing all program data
+*/
+void InitEventsPolling(ProgData *pdata);
+
+
+/**
 * Loop calling XNextEvent.Retrieve and place on
 * list damage events that arive, create damage for new windows
 * and pickup key events for shortcuts.
 * \param pdata ProgData struct containing all program data
 */
-void *PollEvents(ProgData *pdata);
+void EventLoop(ProgData *pdata);
 
 /**
 * Loop ,signal timer cond var,sleep-\ 
