@@ -28,6 +28,8 @@
 #include <recordmydesktop.h>
 
 
+//besides taking the first screenshot, this functions primary purpose is to 
+//initialize the structures and memory.
 int FirstFrame(ProgData *pdata,XImage **image,XShmSegmentInfo *shminfo,
                char **pxl_data){
 
@@ -111,6 +113,8 @@ void BRWinCpy(BRWindow *target,BRWindow *source){
 
 }
 
+//recenters the capture area to the mouse
+//without exiting the display bounding box
 void MoveCaptureArea(   BRWindow *brwin,
                         int cursor_x,
                         int cursor_y,
@@ -127,6 +131,8 @@ void MoveCaptureArea(   BRWindow *brwin,
     brwin->rgeom.y=(t_y<0)?0:((t_y+brwin->rgeom.height>height)?
                                height-brwin->rgeom.height:t_y);
 }
+
+
 
 void *GetFrame(ProgData *pdata){
     int i=0,
@@ -200,7 +206,10 @@ void *GetFrame(ProgData *pdata){
     mouse_pos_abs.y=mouse_pos_temp.y=0;
     mouse_pos_abs.width=mouse_pos_temp.width=pdata->dummy_p_size;
     mouse_pos_abs.height=mouse_pos_temp.height=pdata->dummy_p_size;
-
+    
+    //This is the the place where we call XSelectInput
+    //and arrange so that we listen for damage on all 
+    //windows
     InitEventsPolling(pdata);
 
     while(pdata->running){
@@ -213,11 +222,17 @@ void *GetFrame(ProgData *pdata){
             pthread_cond_wait(&pdata->time_cond,&time_mutex);
             pthread_mutex_unlock(&time_mutex);
             if(Paused){
+                //this is necessary since event loop processes
+                //the shortcuts which will unpause the program
                 EventLoop(pdata);
                 continue;
             }
         }
+        //read all events and construct list with damage 
+        //events (if not full_shots)
         EventLoop(pdata);
+
+        //switch back and front buffers (full_shots only)
         if(d_buff)
             img_sel=(img_sel)?0:1;
         capture_busy=1;
