@@ -256,7 +256,7 @@ void InitEncoder(ProgData *pdata,EncData *enc_data_t,int buffer_ready){
     skel_fbv.granule_shift=theora_granule_shift(&enc_data_t->m_th_inf);
     add_message_header_field(&skel_fbv,
                              "Content-Type",
-                             "video/x-theora");
+                             "video/theora");
 
     add_fisbone_to_stream(&m_ogg_skel,&skel_fbv);
 
@@ -272,7 +272,7 @@ void InitEncoder(ProgData *pdata,EncData *enc_data_t,int buffer_ready){
         skel_fba.granule_shift=0;
         add_message_header_field(&skel_fba,
                                  "Content-Type",
-                                 "audio/x-vorbis");
+                                 "audio/vorbis");
 
         add_fisbone_to_stream(&m_ogg_skel,&skel_fba);
     
