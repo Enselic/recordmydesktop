@@ -204,14 +204,18 @@ class simpleWidget(object):
     def __fileSelOk__(self,Event=None):
         self.values[4]=self.fileSel.get_filename()
         #self.pathEntry.set_text(self.fileSel.get_filename())
-        self.fileSel.destroy()
 
     def __fileSelect__(self,Event=None):
-        self.fileSel = gtk.FileSelection(title=None)
-        self.fileSel.ok_button.connect("clicked", self.__fileSelOk__)
-        self.fileSel.cancel_button.connect("clicked", self.__fileSelQuit__)
+        self.fileSel = gtk.FileChooserDialog(title=None,
+                       action=gtk.FILE_CHOOSER_ACTION_SAVE,
+                       buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,
+                                gtk.STOCK_SAVE,gtk.RESPONSE_OK))
         self.fileSel.set_filename(self.values[4])
         self.fileSel.show()
+        if self.fileSel.run() == gtk.RESPONSE_OK:
+            self.__fileSelOk__()
+        self.__fileSelQuit__()
+
     def __select_window__(self,button):
         xwininfo_com=['xwininfo','-frame']
         if self.values[21]==1:
