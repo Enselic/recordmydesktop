@@ -95,13 +95,6 @@ class prefsWidget(object):
         self.workdirEntry.set_text(new_val)
         self.fileSel.destroy()
 
-    def __fileSelect__(self,Event=None):
-        self.fileSel = gtk.FileSelection(title=None)
-        self.fileSel.ok_button.connect("clicked", self.__fileSelOk__)
-        self.fileSel.cancel_button.connect("clicked", self.__fileSelQuit__)
-        self.fileSel.set_filename(self.workdirEntry.get_text())
-        self.fileSel.show()
-
 
     def __subWidgets__(self):
         self.labels={}
