@@ -1,46 +1,13 @@
-/******************************************************************************
-*                                skeleton.h                                   *
-*                          author: Tahseen Mohammad                           *
-*******************************************************************************
-*   Redistribution and use in source and binary forms, with or without        *
-*   modification, are permitted provided that the following conditions        *
-*   are met:                                                                  *
-*                                                                             *
-*   - Redistributions of source code must retain the above copyright          *
-*   notice, this list of conditions and the following disclaimer.             *
-*                                                                             * 
-*   - Redistributions in binary form must reproduce the above copyright       *
-*   notice, this list of conditions and the following disclaimer in the       *
-*   documentation and/or other materials provided with the distribution.      *
-*                                                                             *
-*   - Neither the name of the Xiph.org Foundation nor the names of its        *
-*   contributors may be used to endorse or promote products derived from      *
-*   this software without specific prior written permission.                  *
-*                                                                             *
-*   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS       *
-*   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT       *
-*   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR     *
-*   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR *
-*   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,     *
-*   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,       *
-*   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR        *
-*   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF    *
-*   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING      *
-*   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS        *
-*   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.              *
-******************************************************************************/
-
-
+/*
+ * skeleton.h
+ * author: Tahseen Mohammad
+ */
 
 #ifndef _SKELETON_H
 #define _SKELETON_H
 
 #ifdef __cplusplus
 extern "C" {
-#endif
-
-#ifdef WIN32
-#define snprintf _snprintf
 #endif
 
 #include <ogg/ogg.h>
@@ -85,10 +52,13 @@ typedef struct {
 extern int write_ogg_page_to_file(ogg_page *og, FILE *out);
 extern int add_message_header_field(fisbone_packet *fp, char *header_key, char *header_value);
 /* remember to deallocate the returned ogg_packet properly */
-extern ogg_packet ogg_from_fishead(fishead_packet *fp);
-extern ogg_packet ogg_from_fisbone(fisbone_packet *fp);
-extern fishead_packet fishead_from_ogg(ogg_packet *op);
-extern fisbone_packet fisbone_from_ogg(ogg_packet *op);
+extern int ogg_from_fishead(fishead_packet *fp,ogg_packet *op);
+extern int ogg_from_fisbone(fisbone_packet *fp,ogg_packet *op);
+extern int fisbone_clear(fisbone_packet *fp);
+extern int fishead_from_ogg(ogg_packet *op,fishead_packet *fp);
+extern int fisbone_from_ogg(ogg_packet *op,fisbone_packet *fp);
+extern int fishead_from_ogg_page(const ogg_page *og,fishead_packet *fp);
+extern int fisbone_from_ogg_page(const ogg_page *og,fisbone_packet *fp);
 extern int add_fishead_to_stream(ogg_stream_state *os, fishead_packet *fp);
 extern int add_fisbone_to_stream(ogg_stream_state *os, fisbone_packet *fp);
 extern int add_eos_packet_to_stream(ogg_stream_state *os);
