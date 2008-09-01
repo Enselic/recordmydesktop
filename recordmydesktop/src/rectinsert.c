@@ -269,19 +269,27 @@ int CollideRects(WGeometry *wgeom1,
     }
 }
 
-int RectInsert(RectArea **root,WGeometry *wgeom){
+/**
+ * If needed, grow the passed geometry so its position and size
+ * becomes even.
+ */
+static void MakeGeometryEven(WGeometry *wgeom){
 
-    int total_insertions=0;
-    RectArea *temp=NULL,*newnode=(RectArea *)malloc(sizeof(RectArea));
-    //align
-    //we do need to know boundaries
     wgeom->width+=(wgeom->width%2)|(wgeom->x%2);
     wgeom->height+=(wgeom->height%2)|(wgeom->y%2);
     wgeom->width+=(wgeom->width%2);
     wgeom->height+=(wgeom->height%2);
     wgeom->x-=wgeom->x%2;
     wgeom->y-=wgeom->y%2;
-//     fprintf(stderr," %d %d %d %d\n",wgeom->x,
+
+}
+
+int RectInsert(RectArea **root,WGeometry *wgeom){
+
+    int total_insertions=0;
+    RectArea *temp=NULL,*newnode=(RectArea *)malloc(sizeof(RectArea));
+
+    MakeGeometryEven(wgeom);
 
     newnode->geom.x=wgeom->x;
     newnode->geom.y=wgeom->y;
@@ -306,14 +314,7 @@ int RectInsert(RectArea **root,WGeometry *wgeom){
                 insert_ok=1;
             else{
                 for(i=0;i<ngeoms;i++){
-                    wgeom_return[i]->width+=(wgeom_return[i]->width%2)|
-                                            (wgeom_return[i]->x%2);
-                    wgeom_return[i]->height+=(wgeom_return[i]->height%2)|
-                                             (wgeom_return[i]->y%2);
-                    wgeom_return[i]->width+=(wgeom_return[i]->width%2);
-                    wgeom_return[i]->height+=(wgeom_return[i]->height%2);
-                    wgeom_return[i]->x-=wgeom_return[i]->x%2;
-                    wgeom_return[i]->y-=wgeom_return[i]->y%2;
+                    MakeGeometryEven(wgeom_return[i]);
                 }
                 insert_ok=0;
                 switch(collres){
