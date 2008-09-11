@@ -28,6 +28,123 @@
 #include <recordmydesktop.h>
 
 
+#define CLIP_DUMMY_POINTER_AREA(dummy_p_area,brwin,wgeom){\
+    (wgeom)->x=((((dummy_p_area).x+\
+                (dummy_p_area).width>=(brwin)->rgeom.x)&&\
+                ((dummy_p_area).x<=(brwin)->rgeom.x+\
+                (brwin)->rgeom.width))?\
+                (((dummy_p_area).x<=(brwin)->rgeom.x)?\
+                (brwin)->rgeom.x:(dummy_p_area).x):-1);\
+    (wgeom)->y=((((dummy_p_area).y+\
+                (dummy_p_area).height>=(brwin)->rgeom.y)&&\
+                ((dummy_p_area).y<=(brwin)->rgeom.y+\
+                (brwin)->rgeom.height))?\
+                (((dummy_p_area).y<=(brwin)->rgeom.y)?\
+                (brwin)->rgeom.y:(dummy_p_area).y):-1);\
+    (wgeom)->width=((dummy_p_area).x<=(brwin)->rgeom.x)?\
+                (dummy_p_area).width-\
+                ((brwin)->rgeom.x-(dummy_p_area).x):\
+                ((dummy_p_area).x<=(brwin)->rgeom.x+\
+                (brwin)->rgeom.width)?\
+                ((brwin)->rgeom.width-(dummy_p_area).x+\
+                (brwin)->rgeom.x<(dummy_p_area).width)?\
+                (brwin)->rgeom.width-(dummy_p_area).x+\
+                (brwin)->rgeom.x:(dummy_p_area).width:-1;\
+    (wgeom)->height=((dummy_p_area).y<=(brwin)->rgeom.y)?\
+                (dummy_p_area).height-\
+                ((brwin)->rgeom.y-(dummy_p_area).y):\
+                ((dummy_p_area).y<=(brwin)->rgeom.y+\
+                (brwin)->rgeom.height)?\
+                ((brwin)->rgeom.height-(dummy_p_area).y+\
+                (brwin)->rgeom.y<(dummy_p_area).height)?\
+                (brwin)->rgeom.height-(dummy_p_area).y+\
+                (brwin)->rgeom.y:(dummy_p_area).height:-1;\
+    if((wgeom)->width>(brwin)->rgeom.width)\
+        (wgeom)->width=(brwin)->rgeom.width;\
+    if((wgeom)->height>(brwin)->rgeom.height)\
+        (wgeom)->height=(brwin)->rgeom.height;\
+}
+
+#define XFIXES_POINTER_TO_YUV(yuv,\
+                              data,\
+                              x_tm,\
+                              y_tm,\
+                              width_tm,\
+                              height_tm,\
+                              x_offset,\
+                              y_offset,\
+                              column_discard_stride){\
+    int i,k,j=0;\
+    unsigned char avg0,avg1,avg2,avg3;\
+    int x_2=x_tm/2,y_2=y_tm/2;\
+    for(k=y_offset;k<y_offset+height_tm;k++){\
+        for(i=x_offset;i<x_offset+width_tm;i++){\
+                j=k*(width_tm+column_discard_stride)+i;\
+                yuv->y[x_tm+(i-x_offset)+(k+y_tm-y_offset)*yuv->y_width]=\
+                    (yuv->y[x_tm+(i-x_offset)+(k-y_offset+y_tm)*yuv->y_width]*\
+                    (UCHAR_MAX-data[(j*RMD_ULONG_SIZE_T)+__ABYTE])+\
+                    (Yr[data[(j*RMD_ULONG_SIZE_T)+__RBYTE]]+\
+                    Yg[data[(j*RMD_ULONG_SIZE_T)+__GBYTE]] +\
+                    Yb[data[(j*RMD_ULONG_SIZE_T)+__BBYTE]])*\
+                data[(j*RMD_ULONG_SIZE_T)+__ABYTE])/UCHAR_MAX ;\
+                if((k%2)&&(i%2)){\
+                    avg3=AVG_4_PIXELS(data,\
+                                      (width_tm+column_discard_stride),\
+                                      k,i,__ABYTE);\
+                    avg2=AVG_4_PIXELS(data,\
+                                      (width_tm+column_discard_stride),\
+                                      k,i,__RBYTE);\
+                    avg1=AVG_4_PIXELS(data,\
+                                      (width_tm+column_discard_stride),\
+                                      k,i,__GBYTE);\
+                    avg0=AVG_4_PIXELS(data,\
+                                      (width_tm+column_discard_stride),\
+                                      k,i,__BBYTE);\
+                    yuv->u[x_2+(i-x_offset)/2+((k-y_offset)/2+y_2)*\
+                           yuv->uv_width]=\
+                    (yuv->u[x_2+(i-x_offset)/2+((k-y_offset)/2+y_2)*\
+                            yuv->uv_width]*\
+                    (UCHAR_MAX-avg3)+\
+                    (Ur[avg2] + Ug[avg1] +UbVr[avg0])*avg3)/UCHAR_MAX;\
+                    yuv->v[x_2+(i-x_offset)/2+((k-y_offset)/2+y_2)*\
+                           yuv->uv_width]=\
+                    (yuv->v[x_2+(i-x_offset)/2+((k-y_offset)/2+y_2)*\
+                            yuv->uv_width]*\
+                    (UCHAR_MAX-avg3)+\
+                    (UbVr[avg2] + Vg[avg1] +Vb[avg0])*avg3)/UCHAR_MAX;\
+                }\
+        }\
+    }\
+}
+
+#define MARK_BACK_BUFFER(   data,\
+                            x_tm,\
+                            y_tm,\
+                            width_tm,\
+                            height_tm,\
+                            buffer_width,\
+                            __bit_depth__){\
+    if((__bit_depth__==24)||(__bit_depth__==32)){\
+        MARK_BACK_BUFFER_C( data,\
+                            x_tm,\
+                            y_tm,\
+                            width_tm,\
+                            height_tm,\
+                            buffer_width,\
+                            32)\
+    }\
+    else{\
+        MARK_BACK_BUFFER_C( data,\
+                            x_tm,\
+                            y_tm,\
+                            width_tm,\
+                            height_tm,\
+                            buffer_width,\
+                            16)\
+    }\
+}\
+
+
 //besides taking the first screenshot, this functions primary purpose is to 
 //initialize the structures and memory.
 int FirstFrame(ProgData *pdata,XImage **image,XShmSegmentInfo *shminfo,

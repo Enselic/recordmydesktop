@@ -103,36 +103,6 @@ void ClearList(RectArea **root);
 int RectInsert(RectArea **root,WGeometry *wgeom);
 
 /**
-* Collide two rectangles and dictate most sane action for insertion,
-* as well as provide the updated rectangle(s)
-* \param wgeom1 resident rectangle
-*
-* \param wgeom2 New rectangle
-*
-* \param wgeom_return Pointer to rectangles to be inserted
-*
-* \param ngeoms number of entries in wgeom_return
-*
-* \retval 0 No collision
-*
-* \retval 1 wgeom1 is covered by wgeom2
-*
-* \retval 2 wgeom2 is covered by wgeom1
-*
-* \retval -1 wgeom1 was broken (new is picked up in wgeom_return)
-*
-* \retval -2 wgeom2 was broken (new is picked up in wgeom_return)
-*
-* \retval -10 Grouping the two geoms is possible
-*
-*/
-int CollideRects(WGeometry *wgeom1,
-                 WGeometry *wgeom2,
-                 WGeometry **wgeom_return,
-                 int *ngeoms);
-
-
-/**
 * Set up all callbacks and signal handlers
 * \param pdata ProgData struct containing all program data
 */
@@ -394,19 +364,6 @@ void InitEncoder(ProgData *pdata,EncData *enc_data_t,int buffer_ready);
 * Fill Yr,Yg,Yb,Ur,Ug.Ub,Vr,Vg,Vb arrays(globals) with values.
 */
 void MakeMatrices();
-/**
-*Align the recording window to a divisible by 2 pixel start and
-*and a size divisible by 16.
-*
-* \param start x or y of the recording window
-*
-* \param size  width or height of the recording window
-*
-* \param limit  width or height of the Display
-*
-* \note This is called separately for width and height.
-*/
-void SizePack2_8_16(int *start,int *size,int limit);
 
 /**
 * Image caching thread. Copies the yuv buffer, compares with the last one and
@@ -476,18 +433,6 @@ void SyncEncodeSoundBuffer(ProgData *pdata,signed char *buff);
 * \returns Window manager name
 */
 char *rmdWMCheck(Display *dpy,Window root);
-
-/**
-*Construct an number postfixed name
-*
-* \param name base name
-*
-* \param newname modified name
-*
-* \n number to be used as a postfix
-*
-*/
-void CacheFileN(char *name,char **newname,int n);
 
 /**
 * Change file pointer to a new file while writting
@@ -563,84 +508,10 @@ int InitializeData(ProgData *pdata,
                    CacheData *cache_data);
 
 #ifdef HAVE_JACK_H
-/**
-*
-*   Global Fuction Pointers To Jack API Calls
-*
-*/
-jack_client_t *(*jack_client_new_p)(const char *client_name);
-jack_nframes_t (*jack_get_sample_rate_p)(jack_client_t * client);
-int (*jack_set_buffer_size_p)(jack_client_t *client, jack_nframes_t nframes);
-jack_nframes_t (*jack_get_buffer_size_p)(jack_client_t *client);
-int (*jack_set_process_callback_p)(jack_client_t *client,
-                                   JackProcessCallback process_callback,
-                                   void *arg);
-void (*jack_on_shutdown_p)(jack_client_t *client,
-                           void(*function)(void *arg),
-                           void *arg);
-int (*jack_activate_p)(jack_client_t *client);
-int (*jack_client_close_p)(jack_client_t *client);
-void *(*jack_port_get_buffer_p)(jack_port_t *port,jack_nframes_t);
-jack_port_t *(*jack_port_register_p)(jack_client_t *client,
-                                     const char *port_name,
-                                     const char *port_type,
-                                     unsigned long flags,
-                                     unsigned long buffer_size);
-int (*jack_connect_p)(jack_client_t *client,
-                      const char *source_port,
-                      const char *destination_port);
-const char *(*jack_port_name_p)(const jack_port_t *port);
-int (*jack_port_name_size_p)(void);
-jack_ringbuffer_t *(*jack_ringbuffer_create_p)(size_t sz);
-void (*jack_ringbuffer_free_p)(jack_ringbuffer_t *rb);
+
 size_t (*jack_ringbuffer_read_p)(jack_ringbuffer_t *rb,
                                  char *dest, size_t cnt);
 size_t (*jack_ringbuffer_read_space_p)(const jack_ringbuffer_t *rb);
-size_t (*jack_ringbuffer_write_p)(jack_ringbuffer_t *rb,
-                                  const char *src,
-                                  size_t cnt);
-/**
-*   End Of Function Pointers
-*/
-
-/**
-*   Callback for capture through jack
-*
-*   \param  nframes Number of frames captured
-*
-*   \param jdata_t  Pointer to JackData struct containing port
-*                   and client information
-*
-*   \returns Zero always
-*/
-int JackCapture(jack_nframes_t nframes,void *jdata_t);
-
-/**
-*   Callback for jack server shutdown
-*
-*   \param jdata_t  Pointer to JackData struct containing port
-*                   and client information
-*/
-void JackShutdown(void *jdata_t);
-
-/**
-*   Register and Activate specified ports
-*
-*   \param jdata_t  Pointer to JackData struct containing port
-*                   and client information
-*
-*   \returns 0 on Success, 1 on failure
-*/
-int SetupPorts(JackData *jdata);
-
-/**
-*   dlopen libjack and dlsym all needed functions
-*
-*   \param jack_lib_handle  Pointer to handle for jack library
-*
-*   \returns 0 on Success, 1 on failure
-*/
-int LoadJackLib(void *jack_lib_handle);
 
 /**
 *   Load libjack, create and activate client,register ports

@@ -40,6 +40,46 @@
 #include <rmdmacro.h>
 
 
+#define CLIP_EVENT_AREA(e,brwin,wgeom){\
+    if(((e)->area.x<=(brwin)->rgeom.x)&&((e)->area.y<=(brwin)->rgeom.y)&&\
+        ((e)->area.width>=(brwin)->rgeom.width)&&\
+        ((e)->area.height<(brwin)->rgeom.height)){\
+        (wgeom)->x=(brwin)->rgeom.x;\
+        (wgeom)->y=(brwin)->rgeom.y;\
+        (wgeom)->width=(brwin)->rgeom.width;\
+        (wgeom)->height=(brwin)->rgeom.height;\
+    }\
+    else{\
+        (wgeom)->x=((((e)->area.x+(e)->area.width>=(brwin)->rgeom.x)&&\
+        ((e)->area.x<=(brwin)->rgeom.x+(brwin)->rgeom.width))?\
+        (((e)->area.x<=(brwin)->rgeom.x)?(brwin)->rgeom.x:(e)->area.x):-1);\
+    \
+        (wgeom)->y=((((e)->area.y+(e)->area.height>=(brwin)->rgeom.y)&&\
+        ((e)->area.y<=(brwin)->rgeom.y+(brwin)->rgeom.height))?\
+        (((e)->area.y<=(brwin)->rgeom.y)?(brwin)->rgeom.y:(e)->area.y):-1);\
+    \
+        (wgeom)->width=((e)->area.x<=(brwin)->rgeom.x)?\
+        (e)->area.width-((brwin)->rgeom.x-(e)->area.x):\
+        ((e)->area.x<=(brwin)->rgeom.x+(brwin)->rgeom.width)?\
+        (((brwin)->rgeom.width-(e)->area.x+(brwin)->rgeom.x<(e)->area.width)?\
+        (brwin)->rgeom.width-(e)->area.x+(brwin)->rgeom.x:e->area.width):-1;\
+    \
+        (wgeom)->height=((e)->area.y<=(brwin)->rgeom.y)?\
+        (e)->area.height-((brwin)->rgeom.y-(e)->area.y):\
+        ((e)->area.y<=(brwin)->rgeom.y+(brwin)->rgeom.height)?\
+        (((brwin)->rgeom.height-(e)->area.y+\
+         (brwin)->rgeom.y<(e)->area.height)?\
+         (brwin)->rgeom.height-(e)->area.y+\
+         (brwin)->rgeom.y:(e)->area.height):-1;\
+    \
+        if((wgeom)->width>(brwin)->rgeom.width)\
+            (wgeom)->width=(brwin)->rgeom.width;\
+        if((wgeom)->height>(brwin)->rgeom.height)\
+            (wgeom)->height=(brwin)->rgeom.height;\
+    }\
+}
+
+
 void InitEventsPolling(ProgData *pdata){
     Window root_return,
            parent_return,

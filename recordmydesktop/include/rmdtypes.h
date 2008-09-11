@@ -371,20 +371,5 @@ typedef struct _FrameHeader{
                 Vnum;   //number of changed blocks in the V plane
 }FrameHeader;
 
-//The frame after retrieval.
-//Based on the Header information
-//we can read the correct amount of bytes.
-
-
-typedef struct _CachedFrame{
-    FrameHeader *header;
-    u_int32_t     *YBlocks,     //identifying number on the grid,
-                  *UBlocks,     //starting at top left
-                  *VBlocks;     //       >>      >>
-    unsigned char *YData,   //pointer to data for the blocks that have changed,
-                  *UData,   //which have to be remapped
-                  *VData;   //on the buffer when reading
-}CachedFrame;
-
 #endif
 

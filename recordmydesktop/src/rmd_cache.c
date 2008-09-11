@@ -27,7 +27,17 @@
 #include <recordmydesktop.h>
 
 
-void CacheFileN(char *name,char **newname,int n){//nth cache file
+/**
+*Construct an number postfixed name
+*
+* \param name base name
+*
+* \param newname modified name
+*
+* \n number to be used as a postfix
+*
+*/
+static void CacheFileN(char *name, char **newname, int n) { // Nth cache file
     char numbuf[8];
     strcpy(*newname,name);
     strcat(*newname,".");

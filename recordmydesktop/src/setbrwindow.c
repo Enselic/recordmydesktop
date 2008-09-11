@@ -26,7 +26,20 @@
 
 
 #include <recordmydesktop.h>
-void SizePack2_8_16(int *start,int *size,int limit){
+
+/**
+*Align the recording window to a divisible by 2 pixel start and
+*and a size divisible by 16.
+*
+* \param start x or y of the recording window
+*
+* \param size  width or height of the recording window
+*
+* \param limit  width or height of the Display
+*
+* \note This is called separately for width and height.
+*/
+static void SizePack2_8_16(int *start, int *size, int limit) {
     int octoffset,hexoffset;
 
     //align in two

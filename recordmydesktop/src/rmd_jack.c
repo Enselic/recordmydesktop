@@ -28,7 +28,65 @@
 #include <recordmydesktop.h>
 
 #ifdef HAVE_JACK_H
-int JackCapture(jack_nframes_t nframes,void *jdata_t){
+
+
+#define CHECK_DLERRORS_FATAL(__error_p)\
+    if((__error_p=dlerror())!=NULL){\
+        fprintf(stderr,"%s\n",__error_p);\
+        return 1;\
+    }
+
+#define DLSYM_AND_CHECK(lib_handle,__call_name__,__error_p)\
+    __call_name__##_p=dlsym(lib_handle,#__call_name__);\
+    CHECK_DLERRORS_FATAL(__error_p)
+
+
+/**
+*
+*   Fuction Pointers To Jack API Calls (shouldn't a jack header provide these?)
+*
+*/
+jack_client_t *(*jack_client_new_p)(const char *client_name);
+jack_nframes_t (*jack_get_sample_rate_p)(jack_client_t * client);
+int (*jack_set_buffer_size_p)(jack_client_t *client, jack_nframes_t nframes);
+jack_nframes_t (*jack_get_buffer_size_p)(jack_client_t *client);
+int (*jack_set_process_callback_p)(jack_client_t *client,
+                                   JackProcessCallback process_callback,
+                                   void *arg);
+void (*jack_on_shutdown_p)(jack_client_t *client,
+                           void(*function)(void *arg),
+                           void *arg);
+int (*jack_activate_p)(jack_client_t *client);
+int (*jack_client_close_p)(jack_client_t *client);
+void *(*jack_port_get_buffer_p)(jack_port_t *port,jack_nframes_t);
+jack_port_t *(*jack_port_register_p)(jack_client_t *client,
+                                     const char *port_name,
+                                     const char *port_type,
+                                     unsigned long flags,
+                                     unsigned long buffer_size);
+int (*jack_connect_p)(jack_client_t *client,
+                      const char *source_port,
+                      const char *destination_port);
+const char *(*jack_port_name_p)(const jack_port_t *port);
+int (*jack_port_name_size_p)(void);
+jack_ringbuffer_t *(*jack_ringbuffer_create_p)(size_t sz);
+void (*jack_ringbuffer_free_p)(jack_ringbuffer_t *rb);
+size_t (*jack_ringbuffer_write_p)(jack_ringbuffer_t *rb,
+                                  const char *src,
+                                  size_t cnt);
+
+
+/**
+*   Callback for capture through jack
+*
+*   \param  nframes Number of frames captured
+*
+*   \param jdata_t  Pointer to JackData struct containing port
+*                   and client information
+*
+*   \returns Zero always
+*/
+static int JackCapture(jack_nframes_t nframes,void *jdata_t) {
     int i=0;
     JackData *jdata=(JackData *)jdata_t;
 
@@ -59,7 +117,15 @@ int JackCapture(jack_nframes_t nframes,void *jdata_t){
     return 0;
 }
 
-int SetupPorts(JackData *jdata){
+/**
+*   Register and Activate specified ports
+*
+*   \param jdata_t  Pointer to JackData struct containing port
+*                   and client information
+*
+*   \returns 0 on Success, 1 on failure
+*/
+static int SetupPorts(JackData *jdata) {
     int i=0;
     jdata->ports=malloc(sizeof(jack_port_t *)*
                                jdata->nports);
@@ -94,7 +160,14 @@ int SetupPorts(JackData *jdata){
     return 0;
 }
 
-int LoadJackLib(void *jack_lib_handle){
+/**
+*   dlopen libjack and dlsym all needed functions
+*
+*   \param jack_lib_handle  Pointer to handle for jack library
+*
+*   \returns 0 on Success, 1 on failure
+*/
+static int LoadJackLib(void *jack_lib_handle) {
     char *error;
     jack_lib_handle=dlopen("libjack.so",RTLD_LAZY);
     if(!jack_lib_handle){
@@ -126,6 +199,7 @@ int LoadJackLib(void *jack_lib_handle){
 
     return 0;
 }
+
 //in case the jack server shuts down
 //the program should stop recording,
 //encode the result(if not on the fly)

@@ -26,15 +26,35 @@
 
 
 #include <recordmydesktop.h>
-//return 1 and null if geom1 in geom2 ,2 and null if geom2 in geom1,
-//0 if they don't collide
-//-1 and two geoms if they collide and geom1 is broken.
-//-2 and one or two geoms if they collide and geom2 is broken.
-//-10 if group and replace is possible
-int CollideRects(WGeometry *wgeom1,
-                 WGeometry *wgeom2,
-                 WGeometry **wgeom_return,
-                 int *ngeoms){
+
+/**
+* Collide two rectangles and dictate most sane action for insertion,
+* as well as provide the updated rectangle(s)
+* \param wgeom1 resident rectangle
+*
+* \param wgeom2 New rectangle
+*
+* \param wgeom_return Pointer to rectangles to be inserted
+*
+* \param ngeoms number of entries in wgeom_return
+*
+* \retval 0 No collision
+*
+* \retval 1 wgeom1 is covered by wgeom2
+*
+* \retval 2 wgeom2 is covered by wgeom1
+*
+* \retval -1 wgeom1 was broken (new is picked up in wgeom_return)
+*
+* \retval -2 wgeom2 was broken (new is picked up in wgeom_return)
+*
+* \retval -10 Grouping the two geoms is possible
+*
+*/
+static int CollideRects(WGeometry *wgeom1,
+                        WGeometry *wgeom2,
+                        WGeometry **wgeom_return,
+                        int *ngeoms) {
     //1 fits in 2
     if((wgeom1->x>=wgeom2->x)&&
         (wgeom1->x+wgeom1->width<=wgeom2->x+wgeom2->width)&&

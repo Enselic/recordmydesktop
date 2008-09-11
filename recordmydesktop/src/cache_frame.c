@@ -27,6 +27,12 @@
 #include <recordmydesktop.h>
 
 
+//minimize hard disk access
+#define CACHE_OUT_BUFFER_SIZE 4096
+//500 mb file size
+#define CACHE_FILE_SIZE_LIMIT (500*1<<20)
+
+
 int FlushBlock(unsigned char *buf,
                int blockno,
                int width,

@@ -27,6 +27,43 @@
 
 #include <recordmydesktop.h>
 
+
+//The number of bytes for every
+//sub-block of the y,u and v planes.
+//Since the blocks are square
+//these are obviously the squares
+//of the widths(specified above),
+//but the definitions bellow are only
+//for convenience anyway.
+#define Y_UNIT_BYTES    0x0100
+#define UV_UNIT_BYTES   0x0040
+
+#define INIT_FRAME(frame_t,fheader_t,yuv_t,\
+                   YBlocks_t,UBlocks_t,VBlocks_t){\
+    (frame_t)->header=(fheader_t);\
+    (frame_t)->YBlocks=YBlocks_t;\
+    (frame_t)->UBlocks=UBlocks_t;\
+    (frame_t)->VBlocks=VBlocks_t;\
+    (frame_t)->YData=malloc((yuv_t)->y_width*(yuv_t)->y_height);\
+    (frame_t)->UData=malloc((yuv_t)->uv_width*(yuv_t)->uv_height);\
+    (frame_t)->VData=malloc((yuv_t)->uv_width*(yuv_t)->uv_height);\
+};
+
+
+//The frame after retrieval.
+//Based on the Header information
+//we can read the correct amount of bytes.
+typedef struct _CachedFrame{
+    FrameHeader *header;
+    u_int32_t     *YBlocks,     //identifying number on the grid,
+                  *UBlocks,     //starting at top left
+                  *VBlocks;     //       >>      >>
+    unsigned char *YData,   //pointer to data for the blocks that have changed,
+                  *UData,   //which have to be remapped
+                  *VData;   //on the buffer when reading
+}CachedFrame;
+
+
 void LoadBlock(unsigned char *dest,
                unsigned char *source,
                int blockno,
