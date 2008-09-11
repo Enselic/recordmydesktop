@@ -99,6 +99,11 @@ enum{
     __PXL_AVERAGE   //calculate the average of all four pixels
 };
 
+// Boolean type
+typedef int boolean;
+#define FALSE (0)
+#define TRUE  (!FALSE)
+
 typedef struct _DisplaySpecs{   //this struct holds some basic information
     int screen;                 //about the display,needed mostly for
     unsigned int width;                 //validity checks at startup
