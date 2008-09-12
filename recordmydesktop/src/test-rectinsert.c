@@ -20,8 +20,8 @@
 *                                                                             *
 ******************************************************************************/
 
-#include "recordmydesktop.h"
 
+#include "rmdtypes.h"
 #include "test-rectinsert-types.h"
 
 #include "rectinsert.h"
