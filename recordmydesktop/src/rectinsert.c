@@ -25,7 +25,7 @@
 ******************************************************************************/
 
 
-#include "recordmydesktop.h"
+#include "rmdtypes.h"
 #include "rectinsert.h"
 
 
@@ -532,42 +532,3 @@ void ClearList(RectArea **root){
         *root=NULL;
     }
 }
-
-void BlocksFromList(RectArea **root,
-                    unsigned int x_offset,
-                    unsigned int y_offset,
-                    unsigned int blocknum_x,
-                    unsigned int blocknum_y){
-
-    RectArea *temp;
-    unsigned int i,
-                 j,
-                 blockno,
-                 row_start,
-                 row_end,
-                 column_start,
-                 column_end;
-    temp=*root;
-    for(i=0;i<blocknum_x*blocknum_y;i++){
-        yblocks[i]=ublocks[i]=vblocks[i]=0;
-    }
-
-    while(temp!=NULL){
-        column_start=(temp->geom.x-x_offset)/Y_UNIT_WIDTH;
-        column_end=(temp->geom.x+(temp->geom.width-1)-x_offset)/Y_UNIT_WIDTH;
-        row_start=(temp->geom.y-y_offset)/Y_UNIT_WIDTH;
-        row_end=(temp->geom.y+(temp->geom.height-1)-y_offset)/Y_UNIT_WIDTH;
-        for(i=row_start;i<row_end+1;i++){
-            for(j=column_start;j<column_end+1;j++){
-                blockno=i*blocknum_x+j;
-                yblocks[blockno]=1;
-                ublocks[blockno]=1;
-                vblocks[blockno]=1;
-            }
-        }
-        temp=temp->next;
-    }
-
-}
-
-
