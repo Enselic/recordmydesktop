@@ -27,6 +27,8 @@
 
 #include <recordmydesktop.h>
 
+#include "rectinsert.h"
+
 
 #define CLIP_DUMMY_POINTER_AREA(dummy_p_area,brwin,wgeom){\
     (wgeom)->x=((((dummy_p_area).x+\

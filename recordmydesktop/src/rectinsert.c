@@ -27,6 +27,9 @@
 
 #include <recordmydesktop.h>
 
+#include "rectinsert.h"
+
+
 /**
 * Collide two rectangles and dictate most sane action for insertion,
 * as well as provide the updated rectangle(s)

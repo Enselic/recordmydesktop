@@ -38,6 +38,7 @@
 #include <rmdfunc.h>
 #include <rmdtypes.h>
 #include <rmdmacro.h>
+#include "rectinsert.h"
 
 
 #define CLIP_EVENT_AREA(e,brwin,wgeom){\

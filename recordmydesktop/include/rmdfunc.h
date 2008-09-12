@@ -89,20 +89,6 @@ void *FlushToOgg(ProgData *pdata);
 void ClearList(RectArea **root);
 
 /**
-* Insert a new rectangle on the list, making sure it doesn't overlap
-* with the existing ones
-* \param root Root entry of the list
-*
-* \param wgeom New area to be inserted
-*
-* \returns Number of insertions during operation
-*
-* \note This function is reentrant and recursive. The number
-* of insertions takes this into account.
-*/
-int RectInsert(RectArea **root,WGeometry *wgeom);
-
-/**
 * Set up all callbacks and signal handlers
 * \param pdata ProgData struct containing all program data
 */

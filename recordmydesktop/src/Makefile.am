@@ -21,6 +21,7 @@ recordmydesktop_SOURCES = \
 	queryextensions.c	\
 	recordmydesktop.c	\
 	rectinsert.c		\
+	rectinsert.h		\
 	register_callbacks.c	\
 	rmd_cache.c		\
 	rmd_error.c		\
