@@ -23,11 +23,13 @@
 #ifndef TEST_RECTINSERT_TYPES_H
 #define TEST_RECTINSERT_TYPES_H
 
-// FIXME: Include recordmydesktop-types.h when available
-#include "recordmydesktop.h"
+
+#include "rmdtypes.h"
+
 
 #define STATE_WIDTH  20
 #define STATE_HEIGHT 20
+
 
 typedef struct RectInsertTestdataEntry {
     const char *description;
