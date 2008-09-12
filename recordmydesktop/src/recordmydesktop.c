@@ -30,8 +30,7 @@
 
 int main(int argc,char **argv){
     ProgData pdata;
-
-    exit_status=0;
+    int exit_status = 0;
     
     DEFAULT_ARGS(&pdata.args);
     if(ParseArgs(argc,argv,&pdata.args)){
@@ -177,6 +176,7 @@ int main(int argc,char **argv){
             CleanUp();
         }
     }
+
     return exit_status;
 }
 
