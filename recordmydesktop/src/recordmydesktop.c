@@ -28,19 +28,6 @@
 #include <recordmydesktop.h>
 
 
-#define QUERY_DISPLAY_SPECS(display,specstruct){\
-    (specstruct)->screen=DefaultScreen(display);\
-    (specstruct)->width=DisplayWidth(display,(specstruct)->screen);\
-    (specstruct)->height=DisplayHeight(display,(specstruct)->screen);\
-    (specstruct)->root=RootWindow(display,(specstruct)->screen);\
-    (specstruct)->visual=DefaultVisual(display,(specstruct)->screen);\
-    (specstruct)->gc=DefaultGC(display,(specstruct)->screen);\
-    (specstruct)->depth=DefaultDepth(display,(specstruct)->screen);\
-    (specstruct)->bpixel=XBlackPixel(display,(specstruct)->screen);\
-    (specstruct)->wpixel=XWhitePixel(display,(specstruct)->screen);\
-}
-
-
 int main(int argc,char **argv){
     ProgData pdata;
 
@@ -73,7 +60,18 @@ int main(int argc,char **argv){
         JackData jdata;
         pdata.jdata=&jdata;
 #endif
-        QUERY_DISPLAY_SPECS(pdata.dpy,&pdata.specs);
+
+        // Query display specs
+        pdata.specs.screen = DefaultScreen(pdata.dpy);
+        pdata.specs.width  = DisplayWidth(pdata.dpy, pdata.specs.screen);
+        pdata.specs.height = DisplayHeight(pdata.dpy, pdata.specs.screen);
+        pdata.specs.root   = RootWindow(pdata.dpy, pdata.specs.screen);
+        pdata.specs.visual = DefaultVisual(pdata.dpy, pdata.specs.screen);
+        pdata.specs.gc     = DefaultGC(pdata.dpy, pdata.specs.screen);
+        pdata.specs.depth  = DefaultDepth(pdata.dpy, pdata.specs.screen);
+        pdata.specs.bpixel = XBlackPixel(pdata.dpy, pdata.specs.screen);
+        pdata.specs.wpixel = XWhitePixel(pdata.dpy, pdata.specs.screen);
+
         if((pdata.specs.depth!=32)&&
            (pdata.specs.depth!=24)&&
            (pdata.specs.depth!=16)){
