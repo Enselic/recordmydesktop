@@ -25,8 +25,10 @@
 ******************************************************************************/
 
 
-#include <recordmydesktop.h>
 #include <X11/extensions/shape.h>
+
+#include "recordmydesktop.h"
+
 
 void QueryExtensions(Display *dpy,
                      ProgArgs *args,

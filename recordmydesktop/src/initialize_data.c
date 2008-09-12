@@ -25,7 +25,8 @@
 ******************************************************************************/
 
 
-#include <recordmydesktop.h>
+#include "recordmydesktop.h"
+
 
 #ifdef HAVE_LIBASOUND
 void FixBufferSize(snd_pcm_uframes_t *buffsize){

@@ -25,7 +25,8 @@
 ******************************************************************************/
 
 
-#include <recordmydesktop.h>
+#include "recordmydesktop.h"
+
 
 char *rmdWMCheck(Display *dpy,Window root){
 

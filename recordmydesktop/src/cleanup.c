@@ -24,7 +24,7 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-#include <recordmydesktop.h>
+#include "recordmydesktop.h"
 
 void CleanUp(void){
 

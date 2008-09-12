@@ -25,7 +25,8 @@
 ******************************************************************************/
 
 
-#include <recordmydesktop.h>
+#include "recordmydesktop.h"
+
 
 int GetZPixmap(Display *dpy,
                Window root,

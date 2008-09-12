@@ -25,8 +25,7 @@
 ******************************************************************************/
 
 
-#include <recordmydesktop.h>
-
+#include "recordmydesktop.h"
 #include "rectinsert.h"
 
 

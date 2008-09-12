@@ -29,7 +29,7 @@
 #define RECORDMYDESKTOP_H 1
 
 #ifdef HAVE_CONFIG_H
-    #include <config.h>
+    #include "config.h"
 #endif
 
 //header inclusion is completely fucked up

@@ -25,7 +25,8 @@
 ******************************************************************************/
 
 
-#include <recordmydesktop.h>
+#include "recordmydesktop.h"
+
 
 void *EncodeSoundBuffer(ProgData *pdata){
     int sampread=pdata->periodsize;

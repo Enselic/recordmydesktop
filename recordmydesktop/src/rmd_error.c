@@ -26,14 +26,16 @@
 
 
 #ifdef HAVE_CONFIG_H
-    #include <config.h>
+    #include "config.h"
 #endif
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <X11/Xlib.h>
 #include <X11/Xlibint.h>
-#include <rmdfunc.h>
+
+#include "rmdfunc.h"
+
 
 int rmdErrorHandler( Display *dpy, XErrorEvent *e )
 {

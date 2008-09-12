@@ -26,7 +26,7 @@
 
 
 #ifdef HAVE_CONFIG_H
-    #include <config.h>
+    #include "config.h"
 #endif
 
 #include <stdio.h>
@@ -35,7 +35,8 @@
 #include <X11/Xlib.h>
 #include <X11/Xlibint.h>
 #include <X11/keysym.h> 
-#include <rmdtypes.h>
+
+#include "rmdtypes.h"
 
 int RegisterShortcut(Display *dpy,
                      Window root,

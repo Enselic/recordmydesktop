@@ -25,7 +25,7 @@
 ******************************************************************************/
 
 
-#include <recordmydesktop.h>
+#include "recordmydesktop.h"
 
 
 //The number of bytes for every

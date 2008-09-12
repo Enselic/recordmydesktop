@@ -25,7 +25,7 @@
 ******************************************************************************/
 
 
-#include <recordmydesktop.h>
+#include "recordmydesktop.h"
 
 
 int main(int argc,char **argv){

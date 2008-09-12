@@ -25,7 +25,8 @@
 ******************************************************************************/
 
 
-#include <recordmydesktop.h>
+#include "recordmydesktop.h"
+
 
 #ifdef HAVE_JACK_H
 

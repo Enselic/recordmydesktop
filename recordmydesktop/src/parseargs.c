@@ -25,7 +25,8 @@
 ******************************************************************************/
 
 
-#include <recordmydesktop.h>
+#include "recordmydesktop.h"
+
 
 void PrintConfig(void){
     fprintf(stderr,"\nrecordMyDesktop was compiled with"

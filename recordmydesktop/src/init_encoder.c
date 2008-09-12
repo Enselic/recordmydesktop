@@ -25,9 +25,11 @@
 ******************************************************************************/
 
 
-#include <recordmydesktop.h>
 #include <string.h>
-#include <skeleton.h>
+
+#include "recordmydesktop.h"
+#include "skeleton.h"
+
 
 void m_add_fishead_packet(ogg_stream_state *m_ogg_state){
 

@@ -24,7 +24,7 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-#include <recordmydesktop.h>
+#include "recordmydesktop.h"
 
 //we copy the page because the next call to ogg_stream_pageout
 //will invalidate it. But we must have pages from

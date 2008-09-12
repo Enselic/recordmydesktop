@@ -24,14 +24,16 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
+
 #ifndef RMDFUNC_H
 #define RMDFUNC_H 1
 
 #ifdef HAVE_CONFIG_H
-    #include <config.h>
+    #include "config.h"
 #endif
 
 #include "rmdtypes.h"
+
 
 /**Function prototypes*/
 

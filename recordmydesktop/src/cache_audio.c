@@ -24,7 +24,10 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-#include <recordmydesktop.h>
+
+#include "recordmydesktop.h"
+
+
 void *CacheSoundBuffer(ProgData *pdata){
 //We are simply going to throw sound on the disk.
 //It's sound is tiny compared to that of image, so

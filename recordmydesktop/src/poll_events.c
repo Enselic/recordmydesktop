@@ -26,7 +26,7 @@
 
 
 #ifdef HAVE_CONFIG_H
-    #include <config.h>
+    #include "config.h"
 #endif
 
 #include <stdio.h>
@@ -35,9 +35,10 @@
 #include <X11/Xlibint.h>
 #include <X11/extensions/Xdamage.h>
 #include <pthread.h>
-#include <rmdfunc.h>
-#include <rmdtypes.h>
-#include <rmdmacro.h>
+
+#include "rmdfunc.h"
+#include "rmdtypes.h"
+#include "rmdmacro.h"
 #include "rectinsert.h"
 
 

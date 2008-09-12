@@ -25,7 +25,7 @@
 ******************************************************************************/
 
 
-#include <recordmydesktop.h>
+#include "recordmydesktop.h"
 
 
 void EncodeCache(ProgData *pdata){

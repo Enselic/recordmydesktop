@@ -24,7 +24,9 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-#include <recordmydesktop.h>
+
+#include "recordmydesktop.h"
+
 
 unsigned char *MakeDummyPointer(DisplaySpecs *specs,
                                 int size,

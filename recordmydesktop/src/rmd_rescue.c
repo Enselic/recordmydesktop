@@ -26,7 +26,7 @@
 
 
 
-#include <recordmydesktop.h>
+#include "recordmydesktop.h"
 
 
 int rmdRescue(const char *path){

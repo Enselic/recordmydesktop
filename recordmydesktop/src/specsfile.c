@@ -24,15 +24,15 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-#ifdef HAVE_CONFIG_H
-    #include <config.h>
-#endif
 
+#ifdef HAVE_CONFIG_H
+    #include "config.h"
+#endif
 
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <rmdtypes.h>
+#include "rmdtypes.h"
 
 
 int WriteSpecsFile(ProgData *pdata){

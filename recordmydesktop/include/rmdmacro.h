@@ -24,14 +24,16 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
+
 #ifndef RMDMACRO_H
 #define RMDMACRO_H 1
 
 #ifdef HAVE_CONFIG_H
-    #include <config.h>
+    #include "config.h"
 #endif
 
 #include "rmdtypes.h"
+
 
 //define which way we are reading a pixmap
 #if __BYTE_ORDER == __LITTLE_ENDIAN
