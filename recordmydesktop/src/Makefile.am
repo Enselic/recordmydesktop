@@ -1,7 +1,6 @@
 bin_PROGRAMS = recordmydesktop
 
 recordmydesktop_SOURCES = \
-	bgr_to_yuv.c		\
 	cache_audio.c		\
 	cache_frame.c		\
 	capture_sound.c		\

@@ -361,11 +361,6 @@ int OpenDev( const char *pcm_dev,
 void InitEncoder(ProgData *pdata,EncData *enc_data_t,int buffer_ready);
 
 /**
-* Fill Yr,Yg,Yb,Ur,Ug.Ub,Vr,Vg,Vb arrays(globals) with values.
-*/
-void MakeMatrices();
-
-/**
 * Image caching thread. Copies the yuv buffer, compares with the last one and
 * caches the result.
 *

@@ -43,6 +43,32 @@ void FixBufferSize(u_int32_t *buffsize){
                    (int)buffsize_ret,(int)*buffsize);
 }
 
+/**
+* Fill Yr,Yg,Yb,Ur,Ug.Ub,Vr,Vg,Vb arrays(globals) with values.
+*/
+static void MakeMatrices () {
+    int i;
+
+    for (i = 0; i < 256; i++)
+        Yr[i] = (2104.0 * i) / 8192.0 + 8.0;
+    for (i = 0; i < 256; i++)
+        Yg[i] = (4130.0 * i) / 8192.0 + 8.0;
+    for (i = 0; i < 256; i++)
+        Yb[i] = (802.0 * i) / 8192.0;
+
+    for (i = 0; i < 256; i++)
+        Ur[i] = 37.8 - (1204.0 * i) / 8192.0 + 8.0;
+    for (i = 0; i < 256; i++)
+        Ug[i] = 74.2 - (2384.0 * i) / 8192.0 + 8.0;
+    for (i = 0; i < 256; i++)
+        UbVr[i] = (3598.0 * i) / 8192.0 ;
+
+    for (i = 0; i < 256; i++)
+        Vg[i] = 93.8 - (3013.0 * i) / 8192.0 + 8.0;
+    for (i = 0; i < 256; i++)
+        Vb[i] = 18.2 - (585.0 * i) / 8192.0 + 8.0;
+}
+
 int InitializeData(ProgData *pdata,
                    EncData *enc_data,
                    CacheData *cache_data){
