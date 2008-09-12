@@ -23,6 +23,8 @@
 #include "recordmydesktop.h"
 
 #include "test-rectinsert-types.h"
+
+#include "rectinsert.h"
 #include "test-rectinsert-data.h"
 
 
