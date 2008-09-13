@@ -36,6 +36,7 @@ recordmydesktop_SOURCES = \
 	queryextensions.c	\
 	queryextensions.h	\
 	recordmydesktop.c	\
+	recordmydesktop.h	\
 	rectinsert.c		\
 	rectinsert.h		\
 	register_callbacks.c	\
@@ -54,11 +55,14 @@ recordmydesktop_SOURCES = \
 	rmd_timer.h		\
 	rmdthreads.c		\
 	rmdthreads.h		\
+	rmdmacro.h		\
+	rmdtypes.h		\
 	setbrwindow.c		\
 	setbrwindow.h		\
 	shortcuts.c		\
 	shortcuts.h		\
 	skeleton.c		\
+	skeleton.h		\
 	specsfile.c		\
 	specsfile.h		\
 	update_image.c		\
@@ -68,17 +72,14 @@ recordmydesktop_SOURCES = \
 	wm_check.c		\
 	wm_check.h
 
-
-INCLUDES = $(all_includes) -I$(top_srcdir)/include
-
-recordmydesktop_LDFLAGS = @X_LIBS@ @X_EXTRA_LIBS@ @X_PRE_LIBS@
-recordmydesktop_CFLAGS = -D_THREAD_SAFE -pthread -Wall
+recordmydesktop_CPPFLAGS = -D_THREAD_SAFE -pthread -Wall
+recordmydesktop_LDFLAGS  = @X_LIBS@ @X_EXTRA_LIBS@ @X_PRE_LIBS@
 
 
 # RectInsert test
-TESTS = test-rectinsert
+TESTS          = test-rectinsert
 EXTRA_PROGRAMS = test-rectinsert
-CLEANFILES = $(EXTRA_PROGRAMS)
+CLEANFILES     = $(EXTRA_PROGRAMS)
 
 test_rectinsert_SOURCES = \
 	test-rectinsert.c	\
@@ -86,8 +87,5 @@ test_rectinsert_SOURCES = \
 	test-rectinsert-data.h	\
 	test-rectinsert-types.h	\
 	rectinsert.c
-
-test_rectinsert_CPPFLAGS = \
-	-I$(top_srcdir)/include
 
 test_rectinsert_CFLAGS = -Wall
