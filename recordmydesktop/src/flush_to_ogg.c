@@ -30,7 +30,7 @@
 //will invalidate it. But we must have pages from
 //both streams at every time in
 //order to do correct multiplexing
-void ogg_page_cp(ogg_page *new,ogg_page *old){
+static void ogg_page_cp(ogg_page *new, ogg_page *old) {
     int i=0;
     register unsigned char *newp,*oldp;
 
@@ -50,7 +50,7 @@ void ogg_page_cp(ogg_page *new,ogg_page *old){
 
 }
 //free our copy
-void ogg_page_cp_free(ogg_page *pg){
+static void ogg_page_cp_free(ogg_page *pg) {
     pg->header_len=pg->body_len=0;
     free(pg->header);
     free(pg->body);

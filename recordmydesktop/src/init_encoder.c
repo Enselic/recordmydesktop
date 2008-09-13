@@ -31,7 +31,7 @@
 #include "skeleton.h"
 
 
-void m_add_fishead_packet(ogg_stream_state *m_ogg_state){
+static void m_add_fishead_packet(ogg_stream_state *m_ogg_state) {
 
     fishead_packet skel_fp;
     
@@ -44,7 +44,7 @@ void m_add_fishead_packet(ogg_stream_state *m_ogg_state){
 }
 
 
-int IncrementalNaming(char **name){
+static int IncrementalNaming(char **name) {
     struct stat buff;
     char *base_name__;
     int i=0,

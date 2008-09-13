@@ -28,7 +28,7 @@
 #include "recordmydesktop.h"
 
 
-void PrintConfig(void){
+static void PrintConfig(void) {
     fprintf(stderr,"\nrecordMyDesktop was compiled with"
                    " the following options:\n\n");
 #ifdef HAVE_JACK_H

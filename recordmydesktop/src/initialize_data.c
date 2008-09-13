@@ -29,10 +29,10 @@
 
 
 #ifdef HAVE_LIBASOUND
-void FixBufferSize(snd_pcm_uframes_t *buffsize){
+static void FixBufferSize(snd_pcm_uframes_t *buffsize) {
     snd_pcm_uframes_t buffsize_t=*buffsize,
 #else
-void FixBufferSize(u_int32_t *buffsize){
+static void FixBufferSize(u_int32_t *buffsize) {
     u_int32_t buffsize_t=*buffsize,
 #endif
                           buffsize_ret=1;

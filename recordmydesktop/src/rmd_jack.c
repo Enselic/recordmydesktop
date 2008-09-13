@@ -205,7 +205,7 @@ static int LoadJackLib(void *jack_lib_handle) {
 //the program should stop recording,
 //encode the result(if not on the fly)
 //an exit cleanly.
-void JackShutdown(void *jdata_t){
+static void JackShutdown(void *jdata_t) {
     fprintf (stderr, "JACK shutdown\n");
     *Running=0;
 }

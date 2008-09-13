@@ -148,8 +148,10 @@
 
 //besides taking the first screenshot, this functions primary purpose is to 
 //initialize the structures and memory.
-int FirstFrame(ProgData *pdata,XImage **image,XShmSegmentInfo *shminfo,
-               char **pxl_data){
+static int FirstFrame(ProgData *pdata,
+                      XImage **image,
+                      XShmSegmentInfo *shminfo,
+                      char **pxl_data) {
 
     if((pdata->args.noshared)){
 
@@ -216,7 +218,7 @@ int FirstFrame(ProgData *pdata,XImage **image,XShmSegmentInfo *shminfo,
 }
 
 //make a deep copy
-void BRWinCpy(BRWindow *target,BRWindow *source){
+static void BRWinCpy(BRWindow *target, BRWindow *source) {
 
     target->geom.x=source->geom.x;
     target->geom.y=source->geom.y;
@@ -233,11 +235,11 @@ void BRWinCpy(BRWindow *target,BRWindow *source){
 
 //recenters the capture area to the mouse
 //without exiting the display bounding box
-void MoveCaptureArea(   BRWindow *brwin,
-                        int cursor_x,
-                        int cursor_y,
-                        int width,
-                        int height){
+static void MoveCaptureArea(BRWindow *brwin,
+                            int cursor_x,
+                            int cursor_y,
+                            int width,
+                            int height) {
     int t_x=0,t_y=0;
 
     t_x=cursor_x-brwin->rgeom.width/2;
@@ -263,11 +265,11 @@ void MoveCaptureArea(   BRWindow *brwin,
 *
 * \param blocknum_y Height of image in blocks
 */
-void BlocksFromList (RectArea   **root,
-                     unsigned int x_offset,
-                     unsigned int y_offset,
-                     unsigned int blocknum_x,
-                     unsigned int blocknum_y) {
+static void BlocksFromList (RectArea   **root,
+                            unsigned int x_offset,
+                            unsigned int y_offset,
+                            unsigned int blocknum_x,
+                            unsigned int blocknum_y) {
 
   RectArea    *temp;
   unsigned int i,

@@ -53,12 +53,12 @@ typedef struct _CachedFrame{
 }CachedFrame;
 
 
-void LoadBlock(unsigned char *dest,
-               unsigned char *source,
-               int blockno,
-               int width,
-               int height,
-               int blockwidth){
+static void LoadBlock(unsigned char *dest,
+                      unsigned char *source,
+                      int blockno,
+                      int width,
+                      int height,
+                      int blockwidth) {
     int j,
         block_i=blockno/(width/blockwidth),//place on the grid
         block_k=blockno%(width/blockwidth);
@@ -69,7 +69,7 @@ void LoadBlock(unsigned char *dest,
 }
 
 //returns number of bytes
-int ReadZF(void * buffer,size_t size,size_t nmemb,FILE *ucfp,gzFile *ifp){
+static int ReadZF(void * buffer, size_t size, size_t nmemb, FILE *ucfp, gzFile *ifp) {
     if((ifp!=NULL && ucfp!=NULL)||
        (ifp==NULL && ucfp==NULL))
         return -1;
@@ -80,7 +80,7 @@ int ReadZF(void * buffer,size_t size,size_t nmemb,FILE *ucfp,gzFile *ifp){
         return gzread(ifp,buffer,size*nmemb);
 }
 
-int ReadFrame(CachedFrame *frame,FILE *ucfp,gzFile *ifp){
+static int ReadFrame(CachedFrame *frame, FILE *ucfp, gzFile *ifp) {
     int index_entry_size=sizeof(u_int32_t);
     if(frame->header->Ynum>0){
         if(ReadZF(frame->YBlocks,

@@ -28,14 +28,14 @@
 #include "recordmydesktop.h"
 
 
-void SetPaused(int signum){
+static void SetPaused(int signum) {
 
     PauseStateChanged=1;
 
 }
 
 
-void SetRunning(int signum){
+static void SetRunning(int signum) {
     
     if(!Paused){
         *Running=0;

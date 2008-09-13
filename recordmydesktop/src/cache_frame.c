@@ -33,14 +33,14 @@
 #define CACHE_FILE_SIZE_LIMIT (500*1<<20)
 
 
-int FlushBlock(unsigned char *buf,
-               int blockno,
-               int width,
-               int height,
-               int blockwidth,
-               gzFile *fp,
-               FILE *ucfp,
-               int flush){
+static int FlushBlock(unsigned char *buf,
+                      int blockno,
+                      int width,
+                      int height,
+                      int blockwidth,
+                      gzFile *fp,
+                      FILE *ucfp,
+                      int flush) {
     int j,i,
         bytes_written=0,
         block_i=(!blockwidth)?0:(blockno/(width/blockwidth)),//place on the grid
