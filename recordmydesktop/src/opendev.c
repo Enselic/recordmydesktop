@@ -58,8 +58,10 @@ snd_pcm_t *OpenDev( const char *pcm_dev,
     snd_pcm_hw_params_t *hwparams;
     unsigned int periods=2;
     unsigned int exactrate = *frequency;
-    snd_pcm_hw_params_alloca(&hwparams);
 
+    // The compiler might warn us because the expansion starts with
+    // assert(&hwparams)
+    snd_pcm_hw_params_alloca(&hwparams);
 
     if (snd_pcm_open(&mhandle,pcm_dev,SND_PCM_STREAM_CAPTURE,SND_PCM_ASYNC)<0){
         fprintf(stderr, "Couldn't open PCM device %s\n", pcm_dev);
