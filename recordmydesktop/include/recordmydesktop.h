@@ -50,9 +50,6 @@ u_int32_t   *yblocks,
 /**Globals*/
 //I've read somewhere that I'll go to hell for using globals...
 
-unsigned char   Yr[256],Yg[256],Yb[256],
-                Ur[256],Ug[256],UbVr[256],
-                Vg[256],Vb[256];
 //the following values are of no effect
 //but they might be usefull later for profiling
 unsigned int    frames_total,   //frames calculated by total time expirations

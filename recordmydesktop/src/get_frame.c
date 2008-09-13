@@ -27,6 +27,7 @@
 
 #include "recordmydesktop.h"
 #include "rectinsert.h"
+#include "yuv_utils.h"
 
 
 #define CLIP_DUMMY_POINTER_AREA(dummy_p_area,brwin,wgeom){\

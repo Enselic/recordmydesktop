@@ -24,55 +24,32 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-
-#include "recordmydesktop.h"
 #include "yuv_utils.h"
 
+// Keep these global (for performance reasons I assume).
+unsigned char Yr[256], Yg[256], Yb[256],
+              Ur[256], Ug[256], UbVr[256],
+              Vg[256], Vb[256];
 
-void UpdateImage(Display * dpy,
-                yuv_buffer *yuv,
-                DisplaySpecs *specs,
-                RectArea **root,
-                BRWindow *brwin,
-                EncData *enc,
-                char *datatemp,
-                int noshmem,
-                XShmSegmentInfo *shminfo,
-                int shm_opcode,
-                int no_quick_subsample){
-    RectArea *temp;
-    unsigned char *dtap=(unsigned char*)datatemp;
-    temp=*root;
+void MakeMatrices (void) {
+    int i;
 
-    if(temp!=NULL){
-        do{
-            if(noshmem){
-                GetZPixmap( dpy,
-                            specs->root,
-                            datatemp,
-                            temp->geom.x,
-                            temp->geom.y,
-                            temp->geom.width,
-                            temp->geom.height);
-            }
-            else{
-                GetZPixmapSHM(dpy,
-                              specs->root,
-                              shminfo,
-                              shm_opcode,
-                              datatemp,temp->geom.x,
-                              temp->geom.y,
-                              temp->geom.width,
-                              temp->geom.height);
-            }
-            UPDATE_YUV_BUFFER(yuv,dtap,NULL,
-                                (temp->geom.x-brwin->rgeom.x+enc->x_offset),
-                                (temp->geom.y-brwin->rgeom.y+enc->y_offset),
-                                (temp->geom.width),(temp->geom.height),
-                                no_quick_subsample,
-                                specs->depth);
-            temp=temp->next;
-        }while(temp!=NULL);
-    }
+    for (i = 0; i < 256; i++)
+        Yr[i] = (2104.0 * i) / 8192.0 + 8.0;
+    for (i = 0; i < 256; i++)
+        Yg[i] = (4130.0 * i) / 8192.0 + 8.0;
+    for (i = 0; i < 256; i++)
+        Yb[i] = (802.0 * i) / 8192.0;
+
+    for (i = 0; i < 256; i++)
+        Ur[i] = 37.8 - (1204.0 * i) / 8192.0 + 8.0;
+    for (i = 0; i < 256; i++)
+        Ug[i] = 74.2 - (2384.0 * i) / 8192.0 + 8.0;
+    for (i = 0; i < 256; i++)
+        UbVr[i] = (3598.0 * i) / 8192.0 ;
+
+    for (i = 0; i < 256; i++)
+        Vg[i] = 93.8 - (3013.0 * i) / 8192.0 + 8.0;
+    for (i = 0; i < 256; i++)
+        Vb[i] = 18.2 - (585.0 * i) / 8192.0 + 8.0;
 }
-

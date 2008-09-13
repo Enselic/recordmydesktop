@@ -37,6 +37,8 @@ recordmydesktop_SOURCES = \
 	skeleton.c		\
 	specsfile.c		\
 	update_image.c		\
+	yuv_utils.c		\
+	yuv_utils.h		\
 	wm_check.c
 
 
