@@ -197,19 +197,6 @@ int GetZPixmapSHM(Display *dpy,
                   int height);
 
 /**
-* Fill ProgArgs struct with arguments entered at execution
-*
-* \param argc argc as entered  from main
-*
-* \param argv argv as entered  from main
-*
-* \param arg_return ProgArgs struct to be filled with the options
-*
-* \returns 0 on Success 1 on Failure
-*/
-boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return);
-
-/**
 * Check if needed extensions are present
 *
 * \param dpy Connection to the server

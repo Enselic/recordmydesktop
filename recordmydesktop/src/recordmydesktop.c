@@ -26,6 +26,7 @@
 
 
 #include "recordmydesktop.h"
+#include "parseargs.h"
 
 
 int main(int argc,char **argv){

@@ -17,6 +17,7 @@ recordmydesktop_SOURCES = \
 	make_dummy_pointer.c	\
 	opendev.c		\
 	parseargs.c		\
+	parseargs.h		\
 	poll_events.c		\
 	queryextensions.c	\
 	recordmydesktop.c	\
