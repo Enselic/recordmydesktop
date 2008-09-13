@@ -30,6 +30,12 @@
 #include "yuv_utils.h"
 
 
+#define AVG_4_PIXELS(data_array,width_img,k_tm,i_tm,offset)\
+    ((data_array[(k_tm*width_img+i_tm)*RMD_ULONG_SIZE_T+offset]+\
+    data_array[((k_tm-1)*width_img+i_tm)*RMD_ULONG_SIZE_T+offset]+\
+    data_array[(k_tm*width_img+i_tm-1)*RMD_ULONG_SIZE_T+offset]+\
+    data_array[((k_tm-1)*width_img+i_tm-1)*RMD_ULONG_SIZE_T+offset])/4)
+
 #define CLIP_DUMMY_POINTER_AREA(dummy_p_area,brwin,wgeom){\
     (wgeom)->x=((((dummy_p_area).x+\
                 (dummy_p_area).width>=(brwin)->rgeom.x)&&\
