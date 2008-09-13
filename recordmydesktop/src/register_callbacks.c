@@ -32,34 +32,39 @@
 
 static void SetPaused(int signum) {
 
-    PauseStateChanged=1;
-
+    PauseStateChanged = 1;
 }
-
 
 static void SetRunning(int signum) {
     
-    if(!Paused){
-        *Running=0;
-        if(signum==SIGABRT)
-            Aborted=1;
+    if (!Paused){
+
+        *Running = 0;
+
+        if (signum == SIGABRT) {
+            Aborted = 1;
+        }
     }
-
 }
 
+void RegisterCallbacks(ProgArgs *prog_data) {
 
-void RegisterCallbacks(ProgArgs *args){
+    struct sigaction pause_act;
+    struct sigaction end_act;
 
-    struct sigaction pause_act,end_act;
- 
-    pause_act.sa_handler=SetPaused;
-    end_act.sa_handler=SetRunning;
-    sigfillset(&(pause_act.sa_mask));
-    sigfillset(&(end_act.sa_mask));
-    pause_act.sa_flags=end_act.sa_flags=SA_RESTART;
-    sigaction(SIGUSR1,&pause_act,NULL);
-    sigaction(SIGINT,&end_act,NULL);
-    sigaction(SIGTERM,&end_act,NULL);
-    sigaction(SIGABRT,&end_act,NULL);
+    // Setup pause_act
+    sigfillset(&pause_act.sa_mask);
+    pause_act.sa_flags   = SA_RESTART;
+    pause_act.sa_handler = SetPaused;
+
+    sigaction(SIGUSR1, &pause_act, NULL);
+
+    // Setup end_act
+    sigfillset(&end_act.sa_mask);
+    end_act.sa_flags   = SA_RESTART;
+    end_act.sa_handler = SetRunning;
+
+    sigaction(SIGINT,  &end_act, NULL);
+    sigaction(SIGTERM, &end_act, NULL);
+    sigaction(SIGABRT, &end_act, NULL);
 }
-
