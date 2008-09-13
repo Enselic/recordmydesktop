@@ -37,7 +37,7 @@ void EncodeCache(ProgData *pdata){
     " (resuming will not be possible, but\n"
     "any portion of the video, which is already encoded won't be deleted).\n"
     "Please wait...\n");
-    pdata->running=1;
+    pdata->running = TRUE;
     InitEncoder(pdata,pdata->enc_data,1);
     //load encoding and flushing threads
     if(!pdata->args.nosound){

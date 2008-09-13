@@ -44,14 +44,14 @@ void *rmdTimer(ProgData *pdata){
     while(pdata->timer_alive){
 
         if (pdata->pause_state_changed) {
-            pdata->pause_state_changed = 0;
+            pdata->pause_state_changed = FALSE;
 
             if (!pdata->paused) {
-                pdata->paused = 1;
+                pdata->paused = TRUE;
                 fprintf(stderr,"STATE:PAUSED\n");fflush(stderr);
             }
             else{
-                pdata->paused = 0;
+                pdata->paused = FALSE;
                 fprintf(stderr,"STATE:RECORDING\n");fflush(stderr);
                 pthread_mutex_lock(&pause_mutex);
                 pthread_cond_broadcast(pause_cond);

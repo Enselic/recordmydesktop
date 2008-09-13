@@ -65,7 +65,7 @@ void *CaptureSound(ProgData *pdata){
                             );
                 if(pdata->sound_handle==NULL){
                     fprintf(stderr,"Couldn't reopen sound device.Exiting\n");
-                    pdata->running=0;
+                    pdata->running = FALSE;
                     errno=3;
                     pthread_exit(&errno);
                 }
@@ -81,7 +81,7 @@ void *CaptureSound(ProgData *pdata){
                         pdata->args.frequency);
             if(pdata->sound_handle<0){
                 fprintf(stderr,"Couldn't reopen sound device.Exiting\n");
-                pdata->running=0;
+                pdata->running = FALSE;
                 errno=3;
                 pthread_exit(&errno);
             }

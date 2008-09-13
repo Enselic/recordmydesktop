@@ -343,10 +343,10 @@ struct _ProgData {
         sound_framesize;    //size of each sound frame
 
     /** Progam state vars */
-    int running;            //1 while the program is capturing/paused/encoding
-    int paused;             //1 while the program is paused 
-    int aborted;            //1 if we should abort
-    int pause_state_changed;//1 if pause state changed
+    boolean running;             //1 while the program is capturing/paused/encoding
+    boolean paused;              //1 while the program is paused 
+    boolean aborted;             //1 if we should abort
+    boolean pause_state_changed; //1 if pause state changed
 
 #ifdef HAVE_LIBASOUND
     snd_pcm_t *sound_handle;

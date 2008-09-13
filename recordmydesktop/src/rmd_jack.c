@@ -210,7 +210,7 @@ static int LoadJackLib(void *jack_lib_handle) {
 static void JackShutdown(void *jdata_t) {
     JackData *jdata = (JackData *)jdata_t;
 
-    jdata->pdata->running = 0;
+    jdata->pdata->running = FALSE;
 
     fprintf (stderr, "JACK shutdown\n");
 }

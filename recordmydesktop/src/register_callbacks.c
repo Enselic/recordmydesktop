@@ -40,17 +40,17 @@ static int *pdata_pause_state_changed = NULL;
 
 static void SetPaused(int signum) {
 
-    *pdata_pause_state_changed = 1;
+    *pdata_pause_state_changed = TRUE;
 }
 
 static void SetRunning(int signum) {
 
     if (!*pdata_paused) {
 
-        *pdata_running = 0;
+        *pdata_running = FALSE;
 
         if (signum == SIGABRT) {
-            *pdata_aborted = 1;
+            *pdata_aborted = TRUE;
         }
     }
 }

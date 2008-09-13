@@ -109,10 +109,10 @@ int InitializeData(ProgData *pdata,
     pdata->th_encoding_clean=pdata->v_encoding_clean=1;
     pdata->avd=0;
     pdata->sound_buffer=NULL;
-    pdata->running=1;
-    pdata->paused=0;
-    pdata->aborted=0;
-    pdata->pause_state_changed=0;
+    pdata->running             = TRUE;
+    pdata->paused              = FALSE;
+    pdata->aborted             = FALSE;
+    pdata->pause_state_changed = FALSE;
     time_cond=&pdata->time_cond;
     pause_cond=&pdata->pause_cond;
 

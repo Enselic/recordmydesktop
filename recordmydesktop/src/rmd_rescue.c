@@ -110,8 +110,8 @@ int rmdRescue(const char *path){
     pdata.th_encoding_clean=pdata.v_encoding_clean=1;
     pdata.avd=0;
     pdata.sound_buffer=NULL;
-    pdata.running=1;
-    pdata.aborted=0;
+    pdata.running = TRUE;
+    pdata.aborted = FALSE;
 
     RegisterCallbacks(&pdata);
     fprintf(stderr,"Restoring %s!!!\n",path);
