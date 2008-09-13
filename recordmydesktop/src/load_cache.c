@@ -24,6 +24,7 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
+#include <signal.h>
 
 #include "recordmydesktop.h"
 

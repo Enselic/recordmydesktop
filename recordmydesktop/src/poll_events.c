@@ -24,7 +24,6 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-
 #ifdef HAVE_CONFIG_H
     #include "config.h"
 #endif
@@ -34,6 +33,7 @@
 #include <X11/Xlib.h>
 #include <X11/Xlibint.h>
 #include <X11/extensions/Xdamage.h>
+#include <signal.h>
 #include <pthread.h>
 
 #include "rmdfunc.h"

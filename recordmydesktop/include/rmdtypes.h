@@ -38,7 +38,6 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <time.h>
-#include <signal.h>
 #include <sys/time.h>
 #include <sys/types.h>
 #ifdef HAVE_MACHINE_ENDIAN_H
