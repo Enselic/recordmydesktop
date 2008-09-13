@@ -38,17 +38,6 @@
 #define Y_UNIT_BYTES    0x0100
 #define UV_UNIT_BYTES   0x0040
 
-#define INIT_FRAME(frame_t,fheader_t,yuv_t,\
-                   YBlocks_t,UBlocks_t,VBlocks_t){\
-    (frame_t)->header=(fheader_t);\
-    (frame_t)->YBlocks=YBlocks_t;\
-    (frame_t)->UBlocks=UBlocks_t;\
-    (frame_t)->VBlocks=VBlocks_t;\
-    (frame_t)->YData=malloc((yuv_t)->y_width*(yuv_t)->y_height);\
-    (frame_t)->UData=malloc((yuv_t)->uv_width*(yuv_t)->uv_height);\
-    (frame_t)->VData=malloc((yuv_t)->uv_width*(yuv_t)->uv_height);\
-};
-
 
 //The frame after retrieval.
 //Based on the Header information
@@ -175,9 +164,16 @@ void *LoadCache(ProgData *pdata){
     u_int32_t YBlocks[(yuv->y_width*yuv->y_height)/Y_UNIT_BYTES],
               UBlocks[(yuv->uv_width*yuv->uv_height)/UV_UNIT_BYTES],
               VBlocks[(yuv->uv_width*yuv->uv_height)/UV_UNIT_BYTES];
-    //we allocate the frame that we will use
-    INIT_FRAME(&frame,&fheader,yuv,
-                YBlocks,UBlocks,VBlocks);
+
+    // We allocate the frame that we will use
+    frame.header  = &fheader;
+    frame.YBlocks = YBlocks;
+    frame.UBlocks = UBlocks;
+    frame.VBlocks = VBlocks;
+    frame.YData   = malloc(yuv->y_width  * yuv->y_height);
+    frame.UData   = malloc(yuv->uv_width * yuv->uv_height);
+    frame.VData   = malloc(yuv->uv_width * yuv->uv_height);
+
     //and the we open our files
     if(!pdata->args.zerocompression){
         ifp=gzopen(pdata->cache_data->imgdata,"rb");
