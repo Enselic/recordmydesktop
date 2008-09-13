@@ -58,7 +58,10 @@ int main(int argc,char **argv){
         CacheData cache_data;
 #ifdef HAVE_JACK_H
         JackData jdata;
-        pdata.jdata=&jdata;
+
+        // Give jack access to program data, mainly for program state
+        jdata.pdata = &pdata;
+        pdata.jdata = &jdata;
 #endif
 
         // Query display specs

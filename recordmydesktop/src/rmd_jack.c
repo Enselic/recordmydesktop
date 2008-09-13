@@ -91,8 +91,10 @@ static int JackCapture(jack_nframes_t nframes,void *jdata_t) {
     int i=0;
     JackData *jdata=(JackData *)jdata_t;
 
-    if((!*Running)||(Paused) || (!jdata->capture_started))
+    if (!jdata->pdata->running || Paused || !jdata->capture_started) {
         return 0;
+    }
+
     for(i= 0;i<jdata->nports;i++)
         jdata->portbuf[i]=jack_port_get_buffer_p(jdata->ports[i],nframes);
 //vorbis analysis buffer wants uninterleaved data
@@ -206,8 +208,11 @@ static int LoadJackLib(void *jack_lib_handle) {
 //encode the result(if not on the fly)
 //an exit cleanly.
 static void JackShutdown(void *jdata_t) {
+    JackData *jdata = (JackData *)jdata_t;
+
+    jdata->pdata->running = 0;
+
     fprintf (stderr, "JACK shutdown\n");
-    *Running=0;
 }
 
 int StartJackClient(JackData *jdata){

@@ -111,9 +111,8 @@ int rmdRescue(const char *path){
     Aborted=pdata.avd=0;
     pdata.sound_buffer=NULL;
     pdata.running=1;
-    Running=&pdata.running;
 
-    RegisterCallbacks(NULL);
+    RegisterCallbacks(&pdata);
     fprintf(stderr,"Restoring %s!!!\n",path);
     
     EncodeCache(&pdata);

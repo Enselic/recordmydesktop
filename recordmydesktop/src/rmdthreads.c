@@ -92,7 +92,7 @@ void rmdThreads(ProgData *pdata){
                        (void *)FlushToOgg,
                        (void *)pdata);
 
-    RegisterCallbacks(&pdata->args);
+    RegisterCallbacks(pdata);
     pdata->timer_alive=1;
     pthread_create(&timer_t,
                    NULL,

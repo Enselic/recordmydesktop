@@ -103,6 +103,9 @@ typedef int boolean;
 #define FALSE (0)
 #define TRUE  (!FALSE)
 
+// Forward declarations 
+typedef struct _ProgData ProgData;
+
 typedef struct _DisplaySpecs{   //this struct holds some basic information
     int screen;                 //about the display,needed mostly for
     unsigned int width;                 //validity checks at startup
@@ -243,6 +246,7 @@ typedef struct _SndBuffer{
 
 #ifdef HAVE_JACK_H
 typedef struct _JackData{
+    ProgData *pdata;            //pointer to prog data
     void *jack_lib_handle;      //handle for jack library (loaded with dlopen).
     jack_client_t   *client;
     unsigned int    buffersize, //buffer size for every port in frames.
@@ -269,7 +273,7 @@ typedef struct _HotKey{     //Hold info about the shortcuts
 //It's usage is mostly to be given as an argument to the
 //threads,so they will have access to the program data, avoiding
 //at the same time usage of any globals.
-typedef struct _ProgData{
+struct _ProgData {
 /**recordMyDesktop specific structs*/
     ProgArgs args;          //the program arguments
     DisplaySpecs specs;     //Display specific information
@@ -345,7 +349,7 @@ typedef struct _ProgData{
     int sound_handle;
     u_int32_t periodsize;
 #endif
-}ProgData;
+};
 
 
 //This is the header of every frame.
