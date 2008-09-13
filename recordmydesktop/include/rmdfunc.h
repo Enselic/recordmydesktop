@@ -207,7 +207,7 @@ int GetZPixmapSHM(Display *dpy,
 *
 * \returns 0 on Success 1 on Failure
 */
-int ParseArgs(int argc,char **argv,ProgArgs *arg_return);
+boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return);
 
 /**
 * Check if needed extensions are present

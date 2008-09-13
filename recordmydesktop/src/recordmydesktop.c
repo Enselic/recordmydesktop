@@ -33,7 +33,7 @@ int main(int argc,char **argv){
     int exit_status = 0;
     
     DEFAULT_ARGS(&pdata.args);
-    if(ParseArgs(argc,argv,&pdata.args)){
+    if (!ParseArgs(argc, argv, &pdata.args)) {
         exit(1);
     }
     if(XInitThreads ()==0){

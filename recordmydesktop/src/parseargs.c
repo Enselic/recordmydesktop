@@ -44,7 +44,7 @@ void PrintConfig(void){
     fprintf(stderr,"\n\n");
 }
 
-int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
+boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
     int i;
     char *usage="\nUsage:\n"
     "\trecordmydesktop [OPTIONS]^filename\n\n\n"
@@ -131,7 +131,7 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
             free(arg_return->filename);
             arg_return->filename=malloc(strlen(argv[1])+1);
             strcpy(arg_return->filename,argv[1]);
-            return 0;
+            return TRUE;
         }
     }
     for(i=1;i<argc;i++){
@@ -155,13 +155,13 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
                 else{
                     fprintf(stderr,"Argument Usage: -delay n[H|h|M|m]\n"
                                    "where n is a float number\n");
-                    return 1;
+                    return FALSE;
                 }
             }
             else{
                 fprintf(stderr,"Argument Usage: -delay n[H|h|M|m]\n"
                                "where n is a float number\n");
-                return 1;
+                return FALSE;
             }
             i++;
         }
@@ -173,13 +173,13 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
                 else{
                     fprintf(stderr,"Argument Usage:"
                                    " -windowid id_of_window(number)\n");
-                    return 1;
+                    return FALSE;
                 }
             }
             else{
                 fprintf(stderr,"Argument Usage:"
                                " -windowid id_of_window(number)\n");
-                return 1;
+                return FALSE;
             }
             i++;
         }
@@ -192,7 +192,7 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
             }
             else{
                 fprintf(stderr,"Argument Usage: -display DISPLAY\n");
-                return 1;
+                return FALSE;
             }
             i++;
         }
@@ -203,12 +203,12 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
                     arg_return->x=num;
                 else{
                     fprintf(stderr,"Argument Usage: -x X(number>0)\n");
-                    return 1;
+                    return FALSE;
                 }
             }
             else{
                 fprintf(stderr,"Argument Usage: -x X(number>0)\n");
-                return 1;
+                return FALSE;
             }
             i++;
         }
@@ -219,12 +219,12 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
                     arg_return->y=num;
                 else{
                     fprintf(stderr,"Argument Usage: -y Y(number>0)\n");
-                    return 1;
+                    return FALSE;
                 }
             }
             else{
                 fprintf(stderr,"Argument Usage: -y Y(number>0)\n");
-                return 1;
+                return FALSE;
             }
             i++;
         }
@@ -235,12 +235,12 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
                     arg_return->width=num;
                 else{
                     fprintf(stderr,"Argument Usage: -width N(number>0)\n");
-                    return 1;
+                    return FALSE;
                 }
             }
             else{
                 fprintf(stderr,"Argument Usage: -width N(number>0)\n");
-                return 1;
+                return FALSE;
             }
             i++;
         }
@@ -251,12 +251,12 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
                     arg_return->height=num;
                 else{
                     fprintf(stderr,"Argument Usage: -height N(number>0)\n");
-                    return 1;
+                    return FALSE;
                 }
             }
             else{
                 fprintf(stderr,"Argument Usage: -height N(number>0)\n");
-                return 1;
+                return FALSE;
             }
             i++;
         }
@@ -268,7 +268,7 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
             }
             else{
                 fprintf(stderr,"Argument Usage: -o filename\n");
-                return 1;
+                return FALSE;
             }
             i++;
         }
@@ -279,12 +279,12 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
                     arg_return->fps=num;
                 else{
                     fprintf(stderr,"Argument Usage: -fps N(number>0)\n");
-                    return 1;
+                    return FALSE;
                 }
             }
             else{
                 fprintf(stderr,"Argument Usage: -fps N(number>0)\n");
-                return 1;
+                return FALSE;
             }
             i++;
         }
@@ -296,13 +296,13 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
                 else{
                     fprintf(stderr,"Argument Usage:"
                                    " -v_quality n(number 0-63)\n");
-                    return 1;
+                    return FALSE;
                 }
             }
             else{
                 fprintf(stderr,"Argument Usage:"
                                " -v_quality n(number 0-63)\n");
-                return 1;
+                return FALSE;
             }
             i++;
         }
@@ -314,13 +314,13 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
                 else{
                     fprintf(stderr,"Argument Usage:"
                                    " -v_bitrate n(number 45000-2000000)\n");
-                    return 1;
+                    return FALSE;
                 }
             }
             else{
                 fprintf(stderr,"Argument Usage:"
                                " -v_bitrate n(number 45000-2000000)\n");
-                return 1;
+                return FALSE;
             }
             i++;
         }
@@ -333,7 +333,7 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
                 else{
                     fprintf(stderr,"Argument Usage:"
                                    " -dummy-cursor [black|white]\n");
-                    return 1;
+                    return FALSE;
                 }
                 arg_return->have_dummy_cursor=1;
                 arg_return->xfixes_cursor=0;
@@ -341,7 +341,7 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
             else{
                 fprintf(stderr,"Argument Usage:"
                                " -dummy-cursor [black|white]\n");
-                return 1;
+                return FALSE;
             }
             i++;
         }
@@ -354,12 +354,12 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
                     arg_return->frequency=num;
                 else{
                     fprintf(stderr,"Argument Usage: -freq N(number>0)\n");
-                    return 1;
+                    return FALSE;
                 }
             }
             else{
                 fprintf(stderr,"Argument Usage: -freq N(number>0)\n");
-                return 1;
+                return FALSE;
             }
             i++;
         }
@@ -370,12 +370,12 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
                     arg_return->channels=num;
                 else{
                     fprintf(stderr,"Argument Usage: -channels N(number>0)\n");
-                    return 1;
+                    return FALSE;
                 }
             }
             else{
                 fprintf(stderr,"Argument Usage: -channels N(number>0)\n");
-                return 1;
+                return FALSE;
             }
             i++;
         }
@@ -387,13 +387,13 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
                 else{
                     fprintf(stderr,"Argument Usage:"
                                    " -s_quality n(number -1 to 10)\n");
-                    return 1;
+                    return FALSE;
                 }
             }
             else{
                 fprintf(stderr,"Argument Usage:"
                                " -s_quality n(number -1 to 10)\n");
-                return 1;
+                return FALSE;
             }
             i++;
         }
@@ -405,7 +405,7 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
             }
             else{
                 fprintf(stderr,"Argument Usage: -device SOUND_DEVICE\n");
-                return 1;
+                return FALSE;
             }
             i++;
         }
@@ -417,7 +417,7 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
             }
             else{
                 fprintf(stderr,"Argument Usage: -workdir DIR\n");
-                return 1;
+                return FALSE;
             }
             i++;
         }
@@ -429,7 +429,7 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
             }
             else{
                 fprintf(stderr,"Argument Usage: -pause-shortcut MOD+KEY\n");
-                return 1;
+                return FALSE;
             }
             i++;
         }
@@ -441,7 +441,7 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
             }
             else{
                 fprintf(stderr,"Argument Usage: -stop-shortcut MOD+KEY\n");
-                return 1;
+                return FALSE;
             }
             i++;
         }
@@ -453,12 +453,12 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
                 else{
                     fprintf(stderr,"Argument Usage:"
                                    " -buffer-size N(number>0)\n");
-                    return 1;
+                    return FALSE;
                 }
             }
             else{
                 fprintf(stderr,"Argument Usage: -buffer-size N(number>0)\n");
-                return 1;
+                return FALSE;
             }
             i++;
         }
@@ -486,18 +486,18 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
                 else{
                     fprintf(stderr,"Argument Usage: -use-jack port1"
                                    " port2... portn\n");
-                    return 1;
+                    return FALSE;
                 }
 #else
                 fprintf(stderr,"recordMyDesktop is not compiled"
                                " with Jack support!\n");
-                return 1;
+                return FALSE;
 #endif
             }
             else{
                 fprintf(stderr,"Argument Usage: -use-jack port1"
                                " port2... portn\n");
-                return 1;
+                return FALSE;
             }
         }
         else if(!strcmp(argv[i],"-ring-buffer-size")){
@@ -508,13 +508,13 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
                 else{
                     fprintf(stderr,"Argument Usage: --ring-buffer-size"
                                    " N(floating point number>0.0)\n");
-                    return 1;
+                    return FALSE;
                 }
             }
             else{
                 fprintf(stderr,"Argument Usage: --ring-buffer-size"
                                 " N(floating point number>0.0)\n");
-                return 1;
+                return FALSE;
             }
             i++;
         }
@@ -525,7 +525,7 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
             }
             else{
                 fprintf(stderr,"Argument Usage: -rescue path_to_data\n");
-                return 1;
+                return FALSE;
             }
             i++;
         }
@@ -574,8 +574,9 @@ int ParseArgs(int argc,char **argv,ProgArgs *arg_return){
         else{
             fprintf(stderr,"\n\tError parsing arguments.\n\t"
                            "Type --help or -h for usage.\n\n");
-            return 1;
+            return FALSE;
         }
     }
-    return 0;
+    
+    return TRUE;
 }
