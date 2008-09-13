@@ -26,6 +26,7 @@
 
 
 #include "recordmydesktop.h"
+#include "rmd_rescue.h"
 
 
 static void PrintConfig(void) {

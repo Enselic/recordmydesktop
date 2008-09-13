@@ -26,6 +26,11 @@
 
 #include "recordmydesktop.h"
 #include "yuv_utils.h"
+#include "make_dummy_pointer.h"
+#include "opendev.h"
+#include "rmd_jack.h"
+#include "init_encoder.h"
+#include "rmd_cache.h"
 
 
 #ifdef HAVE_LIBASOUND

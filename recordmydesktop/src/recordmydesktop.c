@@ -24,10 +24,17 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-
 #include "recordmydesktop.h"
 #include "initialize_data.h"
+#include "rmd_error.h"
 #include "parseargs.h"
+#include "setbrwindow.h"
+#include "wm_check.h"
+#include "queryextensions.h"
+#include "shortcuts.h"
+#include "rmdthreads.h"
+#include "rmd_cache.h"
+#include "encode_cache.h"
 
 
 int main(int argc,char **argv){

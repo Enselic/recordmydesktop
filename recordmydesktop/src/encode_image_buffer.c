@@ -24,8 +24,8 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-
 #include "recordmydesktop.h"
+#include "encode_image_buffer.h"
 
 
 void *EncodeImageBuffer(ProgData *pdata){
@@ -90,4 +90,3 @@ void SyncEncodeImageBuffer(ProgData *pdata){
         }
     }
 }
-

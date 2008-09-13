@@ -24,43 +24,35 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-#include "encode_cache.h"
-#include "flush_to_ogg.h"
-#include "init_encoder.h"
-#include "load_cache.h"
-#include "recordmydesktop.h"
+#ifndef MAKE_DUMMY_POINTER_H
+#define MAKE_DUMMY_POINTER_H 1
+
+#include "rmdtypes.h"
 
 
-void EncodeCache(ProgData *pdata){
-    pthread_t   flush_to_ogg_t,
-                load_cache_t;
-    fprintf(stderr,"STATE:ENCODING\n");fflush(stderr);
-    fprintf(stderr,"Encoding started!\nThis may take several minutes.\n"
-    "Pressing Ctrl-C will cancel the procedure"
-    " (resuming will not be possible, but\n"
-    "any portion of the video, which is already encoded won't be deleted).\n"
-    "Please wait...\n");
-    pdata->running = TRUE;
-    InitEncoder(pdata,pdata->enc_data,1);
-    //load encoding and flushing threads
-    if(!pdata->args.nosound){
-        //before we start loading again
-        //we need to free any left-overs
-        while(pdata->sound_buffer!=NULL){
-            free(pdata->sound_buffer->data);
-            pdata->sound_buffer=pdata->sound_buffer->next;
-        }
-    }
-    pthread_create(&flush_to_ogg_t,NULL,(void *)FlushToOgg,(void *)pdata);
-
-    //start loading image and audio
-    pthread_create(&load_cache_t,NULL,(void *)LoadCache,(void *)pdata);
-
-    //join and finish
-    pthread_join(load_cache_t,NULL);
-    fprintf(stderr,"Encoding finished!\nWait a moment please...\n");
-    pthread_join(flush_to_ogg_t,NULL);
-
-}
+/**
+* Create an array containing the data for the dummy pointer
+*
+* \param specs DisplaySpecs struct with
+*              information about the display to be recorded
+*
+* \param size  Pointer size, always square, always 16.(exists only
+*              for the possibility to create more dummy cursors)
+* \param color 0 white, 1 black
+*
+* \param type Always 0.(exists only for the possibility to create
+*               more dummy cursors)
+*
+* \param npxl Return of pixel value that denotes non-drawing, while
+*             applying the cursor on the target image
+*
+* \returns Pointer to pixel data of the cursor
+*/
+unsigned char *MakeDummyPointer(DisplaySpecs *specs,
+                                int size,
+                                int color,
+                                int type,
+                                unsigned char *npxl);
 
 
+#endif

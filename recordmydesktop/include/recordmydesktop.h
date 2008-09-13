@@ -43,7 +43,6 @@ u_int32_t   *yblocks,
             *vblocks;
 
 #include "rmdmacro.h"
-#include "rmdfunc.h"
 
 
 

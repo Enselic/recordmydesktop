@@ -24,9 +24,14 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-
+#include "get_frame.h"
+#include "getzpixmap.h"
+#include "poll_events.h"
 #include "recordmydesktop.h"
 #include "rectinsert.h"
+#include "rmd_cache.h"
+#include "rmd_frame.h"
+#include "update_image.h"
 #include "yuv_utils.h"
 
 

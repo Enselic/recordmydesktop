@@ -24,9 +24,12 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-#include "recordmydesktop.h"
+#include "encode_cache.h"
 #include "initialize_data.h"
+#include "recordmydesktop.h"
 #include "register_callbacks.h"
+#include "rmd_rescue.h"
+#include "specsfile.h"
 
 
 int rmdRescue(const char *path){

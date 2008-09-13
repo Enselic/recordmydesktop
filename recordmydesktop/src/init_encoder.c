@@ -27,6 +27,7 @@
 
 #include <string.h>
 
+#include "init_encoder.h"
 #include "recordmydesktop.h"
 #include "skeleton.h"
 

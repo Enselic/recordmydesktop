@@ -44,6 +44,8 @@
     #include <sys/soundcard.h>
 #endif
 
+#include "opendev.h"
+
 #ifdef HAVE_LIBASOUND
 
 snd_pcm_t *OpenDev( const char *pcm_dev,

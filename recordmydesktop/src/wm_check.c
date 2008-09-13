@@ -24,8 +24,8 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-
 #include "recordmydesktop.h"
+#include "wm_check.h"
 
 
 char *rmdWMCheck(Display *dpy,Window root){

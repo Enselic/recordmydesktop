@@ -24,43 +24,75 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-#include "encode_cache.h"
-#include "flush_to_ogg.h"
-#include "init_encoder.h"
-#include "load_cache.h"
-#include "recordmydesktop.h"
+#ifndef GETZPIXMAP_H
+#define GETZPIXMAP_H 1
+
+#include "rmdtypes.h"
 
 
-void EncodeCache(ProgData *pdata){
-    pthread_t   flush_to_ogg_t,
-                load_cache_t;
-    fprintf(stderr,"STATE:ENCODING\n");fflush(stderr);
-    fprintf(stderr,"Encoding started!\nThis may take several minutes.\n"
-    "Pressing Ctrl-C will cancel the procedure"
-    " (resuming will not be possible, but\n"
-    "any portion of the video, which is already encoded won't be deleted).\n"
-    "Please wait...\n");
-    pdata->running = TRUE;
-    InitEncoder(pdata,pdata->enc_data,1);
-    //load encoding and flushing threads
-    if(!pdata->args.nosound){
-        //before we start loading again
-        //we need to free any left-overs
-        while(pdata->sound_buffer!=NULL){
-            free(pdata->sound_buffer->data);
-            pdata->sound_buffer=pdata->sound_buffer->next;
-        }
-    }
-    pthread_create(&flush_to_ogg_t,NULL,(void *)FlushToOgg,(void *)pdata);
+/**
+* Rerieve pixmap data from xserver
+*
+* \param dpy Connection to the server
+*
+* \param root root window of the display
+*
+* \param data (preallocated)buffer to place the data
+*
+* \param x x position of the screenshot
+*
+* \param y y position of the screenshot
+*
+* \param x x position of the screenshot
+*
+* \param width width of the screenshot
+*
+* \param height height position of the screenshot
+*
+* \returns 0 on Success 1 on Failure
+*/
+int GetZPixmap(Display *dpy,
+               Window root,
+               char *data,
+               int x,
+               int y,
+               int width,
+               int height);
 
-    //start loading image and audio
-    pthread_create(&load_cache_t,NULL,(void *)LoadCache,(void *)pdata);
+/**
+* Rerieve pixmap data from xserver through the MIT-Shm extension
+*
+* \param dpy Connection to the server
+*
+* \param root root window of the display
+*
+* \param shminfo Info for the shared memory segment
+*
+* \param shm_opcode Opcode of Shm extension
+*
+* \param data (preallocated)buffer to place the data
+*
+* \param x x position of the screenshot
+*
+* \param y y position of the screenshot
+*
+* \param x x position of the screenshot
+*
+* \param width width of the screenshot
+*
+* \param height height position of the screenshot
+*
+* \returns 0 on Success 1 on Failure
+*/
+int GetZPixmapSHM(Display *dpy,
+                  Window root,
+                  XShmSegmentInfo *shminfo,
+                  int shm_opcode,
+                  char *data,
+                  int x,
+                  int y,
+                  int width,
+                  int height);
 
-    //join and finish
-    pthread_join(load_cache_t,NULL);
-    fprintf(stderr,"Encoding finished!\nWait a moment please...\n");
-    pthread_join(flush_to_ogg_t,NULL);
 
-}
-
-
+#endif

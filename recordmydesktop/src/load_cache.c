@@ -26,7 +26,11 @@
 
 #include <signal.h>
 
+#include "encode_image_buffer.h"
+#include "encode_sound_buffer.h"
+#include "load_cache.h"
 #include "recordmydesktop.h"
+#include "rmd_cache.h"
 
 
 //The number of bytes for every

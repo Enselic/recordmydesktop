@@ -33,9 +33,18 @@
 #include <pthread.h>
 #include <unistd.h>
 
-#include "rmdfunc.h"
-#include "rmdtypes.h"
+#include "cache_audio.h"
+#include "cache_frame.h"
+#include "capture_sound.h"
+#include "encode_image_buffer.h"
+#include "encode_sound_buffer.h"
+#include "flush_to_ogg.h"
+#include "get_frame.h"
 #include "register_callbacks.h"
+#include "rmd_jack.h"
+#include "rmd_timer.h"
+#include "rmdthreads.h"
+#include "rmdtypes.h"
 
 
 void rmdThreads(ProgData *pdata){

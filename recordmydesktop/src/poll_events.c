@@ -36,10 +36,11 @@
 #include <signal.h>
 #include <pthread.h>
 
-#include "rmdfunc.h"
-#include "rmdtypes.h"
-#include "rmdmacro.h"
+#include "poll_events.h"
 #include "rectinsert.h"
+#include "rmd_frame.h"
+#include "rmdmacro.h"
+#include "rmdtypes.h"
 
 
 #define CLIP_EVENT_AREA(e,brwin,wgeom){\

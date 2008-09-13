@@ -24,8 +24,13 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-
+#include "opendev.h"
 #include "recordmydesktop.h"
+#include "rmd_jack.h"
+
+#include "capture_sound.h"
+#include "recordmydesktop.h"
+#include "rmd_jack.h"
 
 
 void *CaptureSound(ProgData *pdata){

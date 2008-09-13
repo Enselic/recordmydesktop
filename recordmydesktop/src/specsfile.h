@@ -24,43 +24,36 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-#include "encode_cache.h"
-#include "flush_to_ogg.h"
-#include "init_encoder.h"
-#include "load_cache.h"
-#include "recordmydesktop.h"
+#ifndef SPECSFILE_H
+#define SPECSFILE_H 1
+
+#include "rmdtypes.h"
 
 
-void EncodeCache(ProgData *pdata){
-    pthread_t   flush_to_ogg_t,
-                load_cache_t;
-    fprintf(stderr,"STATE:ENCODING\n");fflush(stderr);
-    fprintf(stderr,"Encoding started!\nThis may take several minutes.\n"
-    "Pressing Ctrl-C will cancel the procedure"
-    " (resuming will not be possible, but\n"
-    "any portion of the video, which is already encoded won't be deleted).\n"
-    "Please wait...\n");
-    pdata->running = TRUE;
-    InitEncoder(pdata,pdata->enc_data,1);
-    //load encoding and flushing threads
-    if(!pdata->args.nosound){
-        //before we start loading again
-        //we need to free any left-overs
-        while(pdata->sound_buffer!=NULL){
-            free(pdata->sound_buffer->data);
-            pdata->sound_buffer=pdata->sound_buffer->next;
-        }
-    }
-    pthread_create(&flush_to_ogg_t,NULL,(void *)FlushToOgg,(void *)pdata);
-
-    //start loading image and audio
-    pthread_create(&load_cache_t,NULL,(void *)LoadCache,(void *)pdata);
-
-    //join and finish
-    pthread_join(load_cache_t,NULL);
-    fprintf(stderr,"Encoding finished!\nWait a moment please...\n");
-    pthread_join(flush_to_ogg_t,NULL);
-
-}
+/*
+ * Create a text file that holds the required
+ * capture attributes, in the cache directory.
+ *
+ * \param pdata ProgData struct containing all program data
+ *
+ * \returns 0 on Success, 1 on failure
+ *
+ */ 
+int WriteSpecsFile(ProgData *pdata);
 
 
+
+/*
+ * Read the  text file that holds the required
+ * capture attributes, in the cache directory.
+ *
+ * \param pdata ProgData struct that will be fille 
+ *        with  all program data
+ *
+ * \returns 0 on Success, 1 on failure
+ *
+ */ 
+int ReadSpecsFile(ProgData *pdata);
+
+
+#endif

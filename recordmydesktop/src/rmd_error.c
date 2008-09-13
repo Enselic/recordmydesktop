@@ -34,7 +34,7 @@
 #include <X11/Xlib.h>
 #include <X11/Xlibint.h>
 
-#include "rmdfunc.h"
+#include "rmd_error.h"
 
 
 int rmdErrorHandler( Display *dpy, XErrorEvent *e )

@@ -24,43 +24,26 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-#include "encode_cache.h"
-#include "flush_to_ogg.h"
-#include "init_encoder.h"
-#include "load_cache.h"
-#include "recordmydesktop.h"
+#ifndef RMD_ERROR_H
+#define RMD_ERROR_H 1
+
+#include "rmdtypes.h"
 
 
-void EncodeCache(ProgData *pdata){
-    pthread_t   flush_to_ogg_t,
-                load_cache_t;
-    fprintf(stderr,"STATE:ENCODING\n");fflush(stderr);
-    fprintf(stderr,"Encoding started!\nThis may take several minutes.\n"
-    "Pressing Ctrl-C will cancel the procedure"
-    " (resuming will not be possible, but\n"
-    "any portion of the video, which is already encoded won't be deleted).\n"
-    "Please wait...\n");
-    pdata->running = TRUE;
-    InitEncoder(pdata,pdata->enc_data,1);
-    //load encoding and flushing threads
-    if(!pdata->args.nosound){
-        //before we start loading again
-        //we need to free any left-overs
-        while(pdata->sound_buffer!=NULL){
-            free(pdata->sound_buffer->data);
-            pdata->sound_buffer=pdata->sound_buffer->next;
-        }
-    }
-    pthread_create(&flush_to_ogg_t,NULL,(void *)FlushToOgg,(void *)pdata);
-
-    //start loading image and audio
-    pthread_create(&load_cache_t,NULL,(void *)LoadCache,(void *)pdata);
-
-    //join and finish
-    pthread_join(load_cache_t,NULL);
-    fprintf(stderr,"Encoding finished!\nWait a moment please...\n");
-    pthread_join(flush_to_ogg_t,NULL);
-
-}
+/*
+ * Handling of X errors.
+ * Ignores, bad access when registering shortcuts
+ * and BadWindow on XQueryTree
+ *
+ * \param dpy Connection to the X Server
+ *
+ * \param e XErrorEvent struct containing error info
+ *
+ * \returns 0 on the two ignored cases, calls exit(1)
+ *            otherwise.
+ *
+ */
+int rmdErrorHandler(Display *dpy,XErrorEvent *e);
 
 
+#endif

@@ -26,7 +26,9 @@
 
 #include <signal.h>
 
+#include "cache_frame.h"
 #include "recordmydesktop.h"
+#include "rmd_cache.h"
 
 
 //minimize hard disk access

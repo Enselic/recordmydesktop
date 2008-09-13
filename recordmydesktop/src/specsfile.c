@@ -33,6 +33,7 @@
 #include <stdio.h>
 
 #include "rmdtypes.h"
+#include "specsfile.h"
 
 
 int WriteSpecsFile(ProgData *pdata){

@@ -33,6 +33,7 @@
 #include <stdlib.h>
 
 #include "recordmydesktop.h"
+#include "rmd_timer.h"
 
 
 void *rmdTimer(ProgData *pdata){

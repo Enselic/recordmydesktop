@@ -24,10 +24,10 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-
 #include <X11/extensions/shape.h>
 
 #include "recordmydesktop.h"
+#include "queryextensions.h"
 
 
 void QueryExtensions(Display *dpy,

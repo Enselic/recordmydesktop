@@ -24,43 +24,47 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-#include "encode_cache.h"
-#include "flush_to_ogg.h"
-#include "init_encoder.h"
-#include "load_cache.h"
-#include "recordmydesktop.h"
+#ifndef UPDATE_IMAGE_H
+#define UPDATE_IMAGE_H 1
+
+#include "rmdtypes.h"
 
 
-void EncodeCache(ProgData *pdata){
-    pthread_t   flush_to_ogg_t,
-                load_cache_t;
-    fprintf(stderr,"STATE:ENCODING\n");fflush(stderr);
-    fprintf(stderr,"Encoding started!\nThis may take several minutes.\n"
-    "Pressing Ctrl-C will cancel the procedure"
-    " (resuming will not be possible, but\n"
-    "any portion of the video, which is already encoded won't be deleted).\n"
-    "Please wait...\n");
-    pdata->running = TRUE;
-    InitEncoder(pdata,pdata->enc_data,1);
-    //load encoding and flushing threads
-    if(!pdata->args.nosound){
-        //before we start loading again
-        //we need to free any left-overs
-        while(pdata->sound_buffer!=NULL){
-            free(pdata->sound_buffer->data);
-            pdata->sound_buffer=pdata->sound_buffer->next;
-        }
-    }
-    pthread_create(&flush_to_ogg_t,NULL,(void *)FlushToOgg,(void *)pdata);
+/**
+* Retrieve and apply all changes, if xdamage is used.
+*
+* \param dpy Connection to the server
+*
+* \param yuv yuv_buffer that is to be modified
+*
+* \param specs DisplaySpecs struct with
+*              information about the display to be recorded
+*
+* \param root Root entry of the list with damaged areas
+*
+* \param brwin BRWindow struct contaning the recording window specs
+*
+* \param enc Encoding options
+*
+* \param datatemp Buffer for pixel data to be
+*                 retrieved before placed on the yuv buffer
+*
+* \param noshmem don't use MIT_Shm extension
+*
+* \param no_quick_subsample Don't do quick subsampling
+*
+*/
+void UpdateImage(Display * dpy,
+                yuv_buffer *yuv,
+                DisplaySpecs *specs,
+                RectArea **root,
+                BRWindow *brwin,
+                EncData *enc,
+                char *datatemp,
+                int noshmem,
+                XShmSegmentInfo *shminfo,
+                int shm_opcode,
+                int no_quick_subsample);
 
-    //start loading image and audio
-    pthread_create(&load_cache_t,NULL,(void *)LoadCache,(void *)pdata);
 
-    //join and finish
-    pthread_join(load_cache_t,NULL);
-    fprintf(stderr,"Encoding finished!\nWait a moment please...\n");
-    pthread_join(flush_to_ogg_t,NULL);
-
-}
-
-
+#endif

@@ -29,8 +29,12 @@
 #include <X11/Xlib.h>
 #include <X11/extensions/shape.h>
 
+#include "rmd_frame.h"
+
+
 #define BORDER_WIDTH 6
 #define OUTLINE_WIDTH 1
+
 
 void rmdDrawFrame(Display *dpy,
                   int screen,  

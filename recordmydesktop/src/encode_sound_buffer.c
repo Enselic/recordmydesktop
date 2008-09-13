@@ -24,8 +24,9 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-
+#include "encode_sound_buffer.h"
 #include "recordmydesktop.h"
+#include "rmd_jack.h"
 
 
 void *EncodeSoundBuffer(ProgData *pdata){

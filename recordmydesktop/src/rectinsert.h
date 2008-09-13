@@ -45,5 +45,11 @@
 */
 int RectInsert(RectArea **root, WGeometry *wgeom);
 
+/**
+* Clean up a list of areas marked for update.
+* \param root Root entry of the list
+*/
+void ClearList(RectArea **root);
+
 
 #endif

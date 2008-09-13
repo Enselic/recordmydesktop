@@ -24,43 +24,78 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-#include "encode_cache.h"
-#include "flush_to_ogg.h"
-#include "init_encoder.h"
-#include "load_cache.h"
-#include "recordmydesktop.h"
+#ifndef RMD_FRAME_H
+#define RMD_FRAME_H 1
+
+#include "rmdtypes.h"
 
 
-void EncodeCache(ProgData *pdata){
-    pthread_t   flush_to_ogg_t,
-                load_cache_t;
-    fprintf(stderr,"STATE:ENCODING\n");fflush(stderr);
-    fprintf(stderr,"Encoding started!\nThis may take several minutes.\n"
-    "Pressing Ctrl-C will cancel the procedure"
-    " (resuming will not be possible, but\n"
-    "any portion of the video, which is already encoded won't be deleted).\n"
-    "Please wait...\n");
-    pdata->running = TRUE;
-    InitEncoder(pdata,pdata->enc_data,1);
-    //load encoding and flushing threads
-    if(!pdata->args.nosound){
-        //before we start loading again
-        //we need to free any left-overs
-        while(pdata->sound_buffer!=NULL){
-            free(pdata->sound_buffer->data);
-            pdata->sound_buffer=pdata->sound_buffer->next;
-        }
-    }
-    pthread_create(&flush_to_ogg_t,NULL,(void *)FlushToOgg,(void *)pdata);
-
-    //start loading image and audio
-    pthread_create(&load_cache_t,NULL,(void *)LoadCache,(void *)pdata);
-
-    //join and finish
-    pthread_join(load_cache_t,NULL);
-    fprintf(stderr,"Encoding finished!\nWait a moment please...\n");
-    pthread_join(flush_to_ogg_t,NULL);
-
-}
+/*
+ * Create a frame that marks the recording area.
+ *
+ * \param dpy Connection to the X Server
+ *
+ * \param screen Recorded screen
+ *
+ * \param root Root window of the display
+ *
+ * \param x X pos of the recorded area
+ *
+ * \param y Y pos of the recorded area
+ *
+ * \param width Width of the recorded area
+ *
+ * \param height Height of the recorded area
+ *
+ * \returns The WindowID of the frame
+ *
+ */
+Window rmdFrameInit(Display *dpy,
+                    int screen,
+                    Window root,
+                    int x,
+                    int y,
+                    int width,
+                    int height);
 
 
+/*
+ * Move the frame (subtracts the borderwidth)
+ *
+ * \param dpy Connection to the X Server
+ *
+ * \param win WindowId of the frame
+ *
+ * \param x New X pos of the recorded area
+ *
+ * \param y New Y pos of the recorded area
+ *
+ */
+void rmdMoveFrame(Display *dpy,
+                  Window win,
+                  int x,
+                  int y);
+
+
+/*
+ * Redraw the frame that marks the recording area.
+ *
+ * \param dpy Connection to the X Server
+ *
+ * \param screen Recorded screen
+ *
+ * \param win WindoID of the frame
+ *
+ * \param width Width of the recorded area
+ *
+ * \param height Height of the recorded area
+ *
+ */
+void rmdDrawFrame(Display *dpy,
+                  int screen,
+                  Window win,
+                  int width,
+                  int height);
+
+
+#endif

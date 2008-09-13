@@ -37,6 +37,7 @@
 #include <X11/keysym.h> 
 
 #include "rmdtypes.h"
+#include "shortcuts.h"
 
 int RegisterShortcut(Display *dpy,
                      Window root,
