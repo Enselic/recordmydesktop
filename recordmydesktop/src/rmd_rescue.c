@@ -24,9 +24,8 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-
-
 #include "recordmydesktop.h"
+#include "register_callbacks.h"
 
 
 int rmdRescue(const char *path){

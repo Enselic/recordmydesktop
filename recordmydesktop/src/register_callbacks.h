@@ -24,42 +24,18 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-#include <signal.h>
-
-#include "recordmydesktop.h"
-#include "register_callbacks.h"
+#ifndef REGISTER_CALLBACKS_H
+#define REGISTER_CALLBACKS_H 1
 
 
-static void SetPaused(int signum) {
-
-    PauseStateChanged=1;
-
-}
+#include "rmdtypes.h"
 
 
-static void SetRunning(int signum) {
-    
-    if(!Paused){
-        *Running=0;
-        if(signum==SIGABRT)
-            Aborted=1;
-    }
-
-}
+/**
+* Set up all callbacks and signal handlers
+* \param pdata ProgData struct containing all program data
+*/
+void RegisterCallbacks(ProgArgs *args);
 
 
-void RegisterCallbacks(ProgArgs *args){
-
-    struct sigaction pause_act,end_act;
- 
-    pause_act.sa_handler=SetPaused;
-    end_act.sa_handler=SetRunning;
-    sigfillset(&(pause_act.sa_mask));
-    sigfillset(&(end_act.sa_mask));
-    pause_act.sa_flags=end_act.sa_flags=SA_RESTART;
-    sigaction(SIGUSR1,&pause_act,NULL);
-    sigaction(SIGINT,&end_act,NULL);
-    sigaction(SIGTERM,&end_act,NULL);
-    sigaction(SIGABRT,&end_act,NULL);
-}
-
+#endif

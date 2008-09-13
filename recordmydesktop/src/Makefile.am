@@ -24,6 +24,7 @@ recordmydesktop_SOURCES = \
 	rectinsert.c		\
 	rectinsert.h		\
 	register_callbacks.c	\
+	register_callbacks.h	\
 	rmd_cache.c		\
 	rmd_error.c		\
 	rmd_frame.c		\

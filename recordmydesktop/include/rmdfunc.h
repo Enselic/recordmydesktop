@@ -91,12 +91,6 @@ void *FlushToOgg(ProgData *pdata);
 void ClearList(RectArea **root);
 
 /**
-* Set up all callbacks and signal handlers
-* \param pdata ProgData struct containing all program data
-*/
-void RegisterCallbacks(ProgArgs *args);
-
-/**
 * Retrieve and apply all changes, if xdamage is used.
 *
 * \param dpy Connection to the server
