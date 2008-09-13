@@ -13,6 +13,7 @@ recordmydesktop_SOURCES = \
 	getzpixmap.c		\
 	init_encoder.c		\
 	initialize_data.c	\
+	initialize_data.h	\
 	load_cache.c		\
 	make_dummy_pointer.c	\
 	opendev.c		\

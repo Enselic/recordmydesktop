@@ -175,3 +175,61 @@ int InitializeData(ProgData *pdata,
     return 0;
 
 }
+
+void SetupDefaultArgs(ProgArgs *args) {
+    
+    args->delay                = 0;
+    args->windowid             = 0;
+    args->x                    = 0;
+    args->y                    = 0;
+    args->width                = 0;
+    args->height               = 0;
+    args->nosound              = 0;
+    args->full_shots           = 0;
+    args->follow_mouse         = 0;
+    args->encOnTheFly          = 0;
+    args->nowmcheck            = 0;
+    args->overwrite            = 0;
+    args->use_jack             = 0;
+    args->noshared             = 0;
+    args->no_encode            = 0;
+    args->noframe              = 0;
+    args->jack_nports          = 0;
+    args->jack_ringbuffer_secs = 3.0;
+    args->jack_port_names      = NULL;
+    args->zerocompression      = 1;
+    args->no_quick_subsample   = 1;
+    args->cursor_color         = 1;
+    args->have_dummy_cursor    = 0;
+    args->xfixes_cursor        = 1;
+    args->fps                  = 15;
+    args->channels             = 1;
+    args->frequency            = 22050;
+    args->buffsize             = 4096;
+    args->v_bitrate            = 45000;
+    args->v_quality            = 63;
+    args->s_quality            = 10;
+
+    if (getenv("DISPLAY") != NULL) {
+        args->display = (char *) malloc(strlen(getenv("DISPLAY")) + 1);
+        strcpy(args->display, getenv("DISPLAY"));
+    }
+    else {
+        args->display = NULL;
+    }
+
+    args->device = (char *) malloc(strlen(DEFAULT_AUDIO_DEVICE) + 1);
+    strcpy(args->device, DEFAULT_AUDIO_DEVICE);
+
+    args->workdir = (char *) malloc(5);
+    strcpy(args->workdir, "/tmp");
+
+    args->pause_shortcut = (char *) malloc(15);
+    strcpy(args->pause_shortcut, "Control+Mod1+p");
+
+    args->stop_shortcut = (char *) malloc(15);
+    strcpy(args->stop_shortcut, "Control+Mod1+s");
+
+    args->filename = (char *) malloc(8);
+    strcpy(args->filename, "out.ogv");
+}

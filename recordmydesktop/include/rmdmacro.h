@@ -94,57 +94,6 @@
 #endif
 
 
-
-#define DEFAULT_ARGS(args){\
-    (args)->delay=0;\
-    if(getenv("DISPLAY")!=NULL){\
-        (args)->display=(char *)malloc(strlen(getenv("DISPLAY"))+1);\
-        strcpy((args)->display,getenv("DISPLAY"));\
-    }\
-    else\
-        (args)->display=NULL;\
-    (args)->windowid=\
-    (args)->x=\
-    (args)->y=\
-    (args)->width=\
-    (args)->height=\
-    (args)->nosound=\
-    (args)->full_shots=\
-    (args)->follow_mouse=\
-    (args)->encOnTheFly=\
-    (args)->nowmcheck=\
-    (args)->overwrite=\
-    (args)->use_jack=\
-    (args)->noshared=\
-    (args)->no_encode=\
-    (args)->noframe=\
-    (args)->jack_nports=0;\
-    (args)->jack_ringbuffer_secs=3.0;\
-    (args)->jack_port_names=NULL;\
-    (args)->zerocompression=\
-    (args)->no_quick_subsample=1;\
-    (args)->filename=(char *)malloc(8);\
-    strcpy((args)->filename,"out.ogv");\
-    (args)->cursor_color=1;\
-    (args)->have_dummy_cursor=0;\
-    (args)->xfixes_cursor=1;\
-    (args)->device=(char *)malloc(strlen(DEFAULT_AUDIO_DEVICE)+1);\
-    strcpy((args)->device,DEFAULT_AUDIO_DEVICE);\
-    (args)->fps=15;\
-    (args)->channels=1;\
-    (args)->frequency=22050;\
-    (args)->buffsize=4096;\
-    (args)->v_bitrate=45000;\
-    (args)->v_quality=63;\
-    (args)->s_quality=10;\
-    (args)->workdir=(char *)malloc(5);\
-    strcpy((args)->workdir,"/tmp");\
-    (args)->pause_shortcut=(char *)malloc(15);\
-    strcpy((args)->pause_shortcut,"Control+Mod1+p");\
-    (args)->stop_shortcut=(char *)malloc(15);\
-    strcpy((args)->stop_shortcut,"Control+Mod1+s");\
-}
-
 #define AVG_4_PIXELS(data_array,width_img,k_tm,i_tm,offset)\
     ((data_array[(k_tm*width_img+i_tm)*RMD_ULONG_SIZE_T+offset]+\
     data_array[((k_tm-1)*width_img+i_tm)*RMD_ULONG_SIZE_T+offset]+\

@@ -26,6 +26,7 @@
 
 
 #include "recordmydesktop.h"
+#include "initialize_data.h"
 #include "parseargs.h"
 
 
@@ -33,7 +34,8 @@ int main(int argc,char **argv){
     ProgData pdata;
     int exit_status = 0;
     
-    DEFAULT_ARGS(&pdata.args);
+    SetupDefaultArgs(&pdata.args);
+
     if (!ParseArgs(argc, argv, &pdata.args)) {
         exit(1);
     }

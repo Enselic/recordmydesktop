@@ -25,6 +25,7 @@
 ******************************************************************************/
 
 #include "recordmydesktop.h"
+#include "initialize_data.h"
 #include "register_callbacks.h"
 
 
@@ -40,8 +41,7 @@ int rmdRescue(const char *path){
     EncData enc_data;
     CacheData cache_data;
 
-
-    DEFAULT_ARGS(&pdata.args);
+    SetupDefaultArgs(&pdata.args);
 
     pdata.enc_data=&enc_data;
     pdata.cache_data=&cache_data;
