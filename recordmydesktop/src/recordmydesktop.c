@@ -151,7 +151,7 @@ int main(int argc,char **argv){
 
             //encode and then cleanup cache
             if(!pdata.args.encOnTheFly && !pdata.args.no_encode){
-                if(!Aborted){
+                if (!pdata.aborted) {
                     EncodeCache(&pdata);
                 }
                 fprintf(stderr,"Cleanning up cache...\n");
@@ -162,7 +162,7 @@ int main(int argc,char **argv){
             }
 
 
-            if(Aborted && pdata.args.encOnTheFly){
+            if (pdata.aborted && pdata.args.encOnTheFly) {
                 if(remove(pdata.args.filename)){
                     perror("Error while removing file:\n");
                     return 1;

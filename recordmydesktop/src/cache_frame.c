@@ -115,7 +115,7 @@ void *CacheImageBuffer(ProgData *pdata){
         pthread_mutex_unlock(&pdata->img_buff_ready_mutex);
         pdata->th_enc_thread_waiting=0;
 
-        if(Paused){
+        if (pdata->paused) {
             pthread_mutex_lock(&pause_mutex);
             pthread_cond_wait(&pdata->pause_cond,&pause_mutex);
             pthread_mutex_unlock(&pause_mutex);

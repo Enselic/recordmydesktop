@@ -39,7 +39,7 @@ void *CaptureSound(ProgData *pdata){
     while(pdata->running){
         int sret=0;
         SndBuffer *newbuf,*tmp;
-        if(Paused){
+        if (pdata->paused) {
 #ifdef HAVE_LIBASOUND
             if(!pdata->hard_pause){
                 snd_pcm_pause(pdata->sound_handle,1);

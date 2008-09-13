@@ -108,9 +108,10 @@ int rmdRescue(const char *path){
     pthread_cond_init(&pdata.theora_lib_clean,NULL);
     pthread_cond_init(&pdata.vorbis_lib_clean,NULL);
     pdata.th_encoding_clean=pdata.v_encoding_clean=1;
-    Aborted=pdata.avd=0;
+    pdata.avd=0;
     pdata.sound_buffer=NULL;
     pdata.running=1;
+    pdata.aborted=0;
 
     RegisterCallbacks(&pdata);
     fprintf(stderr,"Restoring %s!!!\n",path);

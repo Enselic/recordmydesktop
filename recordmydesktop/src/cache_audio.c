@@ -42,7 +42,7 @@ void *CacheSoundBuffer(ProgData *pdata){
     while((pdata->running)){
         SndBuffer *buff=NULL;
 
-        if(Paused){
+        if (pdata->paused) {
             pthread_mutex_lock(&pause_mutex);
             pthread_cond_wait(&pdata->pause_cond,&pause_mutex);
             pthread_mutex_unlock(&pause_mutex);

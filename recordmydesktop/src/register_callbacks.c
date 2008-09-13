@@ -32,36 +32,40 @@
 
 // There seem to be no way of passing user data to the signal handler,
 // so hack around not being able to pass ProgData to them
-static int *pdata_running = NULL;
+static int *pdata_running             = NULL;
+static int *pdata_paused              = NULL;
+static int *pdata_aborted             = NULL;
+static int *pdata_pause_state_changed = NULL;
 
 
 static void SetPaused(int signum) {
 
-    PauseStateChanged = 1;
+    *pdata_pause_state_changed = 1;
 }
 
 static void SetRunning(int signum) {
-    
-    if (!Paused){
 
-        if (pdata_running != NULL) {
-            *pdata_running = 0;
-        }
+    if (!*pdata_paused) {
+
+        *pdata_running = 0;
 
         if (signum == SIGABRT) {
-            Aborted = 1;
+            *pdata_aborted = 1;
         }
     }
 }
 
-void RegisterCallbacks(ProgData *pata) {
+void RegisterCallbacks(ProgData *pdata) {
 
     struct sigaction pause_act;
     struct sigaction end_act;
 
-    // Is there some way to pass pata to the signal handlers?
-    pdata_running = &pata->running;
-
+    // Is there some way to pass pdata to the signal handlers?
+    pdata_running             = &pdata->running;
+    pdata_paused              = &pdata->paused;
+    pdata_aborted             = &pdata->aborted;
+    pdata_pause_state_changed = &pdata->pause_state_changed;
+    
     // Setup pause_act
     sigfillset(&pause_act.sa_mask);
     pause_act.sa_flags   = SA_RESTART;

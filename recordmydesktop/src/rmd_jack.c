@@ -91,7 +91,7 @@ static int JackCapture(jack_nframes_t nframes,void *jdata_t) {
     int i=0;
     JackData *jdata=(JackData *)jdata_t;
 
-    if (!jdata->pdata->running || Paused || !jdata->capture_started) {
+    if (!jdata->pdata->running  || jdata->pdata->paused || !jdata->capture_started) {
         return 0;
     }
 

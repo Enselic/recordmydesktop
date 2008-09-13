@@ -331,7 +331,6 @@ struct _ProgData {
     int damage_event,       //damage event base code
         damage_error,       //damage error base code
         shm_opcode,         //MIT-Shm opcode
-        running,            //1 while the program is capturing/paused/encoding
         dummy_p_size,       //dummy pointer size,initially 16x16,always square
         th_encoding_clean,      //thread exit inidcator
         v_encoding_clean,       //  >>  >>
@@ -342,6 +341,13 @@ struct _ProgData {
                             //we have to close and reopen
         avd,                //syncronization among audio and video
         sound_framesize;    //size of each sound frame
+
+    /** Progam state vars */
+    int running;            //1 while the program is capturing/paused/encoding
+    int paused;             //1 while the program is paused 
+    int aborted;            //1 if we should abort
+    int pause_state_changed;//1 if pause state changed
+
 #ifdef HAVE_LIBASOUND
     snd_pcm_t *sound_handle;
     snd_pcm_uframes_t periodsize;

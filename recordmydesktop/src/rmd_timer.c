@@ -43,15 +43,15 @@ void *rmdTimer(ProgData *pdata){
 
     while(pdata->timer_alive){
 
-        if(PauseStateChanged){
-            PauseStateChanged=0;
+        if (pdata->pause_state_changed) {
+            pdata->pause_state_changed = 0;
 
-            if(!Paused){
-                Paused=1;
+            if (!pdata->paused) {
+                pdata->paused = 1;
                 fprintf(stderr,"STATE:PAUSED\n");fflush(stderr);
             }
             else{
-                Paused=0;
+                pdata->paused = 0;
                 fprintf(stderr,"STATE:RECORDING\n");fflush(stderr);
                 pthread_mutex_lock(&pause_mutex);
                 pthread_cond_broadcast(pause_cond);
@@ -60,7 +60,7 @@ void *rmdTimer(ProgData *pdata){
 
         }
 
-        if(!Paused){
+        if (!pdata->paused) {
             frames_total++;
             if(capture_busy){
                 frames_lost++;

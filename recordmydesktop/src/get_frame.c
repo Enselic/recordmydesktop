@@ -393,7 +393,7 @@ void *GetFrame(ProgData *pdata){
             pthread_mutex_lock(&time_mutex);
             pthread_cond_wait(&pdata->time_cond,&time_mutex);
             pthread_mutex_unlock(&time_mutex);
-            if(Paused){
+            if (pdata->paused) {
                 //this is necessary since event loop processes
                 //the shortcuts which will unpause the program
                 EventLoop(pdata);

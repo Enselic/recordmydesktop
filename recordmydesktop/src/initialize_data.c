@@ -107,12 +107,14 @@ int InitializeData(ProgData *pdata,
     pthread_cond_init(&pdata->theora_lib_clean,NULL);
     pthread_cond_init(&pdata->vorbis_lib_clean,NULL);
     pdata->th_encoding_clean=pdata->v_encoding_clean=1;
-    Paused=Aborted=pdata->avd=0;
+    pdata->avd=0;
     pdata->sound_buffer=NULL;
     pdata->running=1;
+    pdata->paused=0;
+    pdata->aborted=0;
+    pdata->pause_state_changed=0;
     time_cond=&pdata->time_cond;
     pause_cond=&pdata->pause_cond;
-    PauseStateChanged=0;
 
     if(!pdata->args.nosound){
         if(!pdata->args.use_jack){
