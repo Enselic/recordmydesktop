@@ -484,16 +484,6 @@ int StopJackClient(JackData *jdata);
 
 #endif
 
-
-/**
-*   Currently only frees some memory
-*   (y,u,v blocks)
-*
-*
-*/
-void CleanUp(void);
-
-
 /*
  * Check a shortcut combination and if valid, 
  * register it, on the root window.

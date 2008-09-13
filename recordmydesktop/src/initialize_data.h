@@ -51,5 +51,12 @@ int InitializeData(ProgData *pdata,
 */
 void SetupDefaultArgs(ProgArgs *args);
 
+/**
+*   Currently only frees some memory
+*   (y,u,v blocks)
+*
+*/
+void CleanUp(void);
+
 
 #endif

@@ -4,7 +4,6 @@ recordmydesktop_SOURCES = \
 	cache_audio.c		\
 	cache_frame.c		\
 	capture_sound.c		\
-	cleanup.c		\
 	encode_cache.c		\
 	encode_image_buffer.c	\
 	encode_sound_buffer.c	\

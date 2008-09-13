@@ -233,3 +233,11 @@ void SetupDefaultArgs(ProgArgs *args) {
     args->filename = (char *) malloc(8);
     strcpy(args->filename, "out.ogv");
 }
+
+void CleanUp(void){
+
+    free(yblocks);
+    free(ublocks);
+    free(vblocks);
+
+}
