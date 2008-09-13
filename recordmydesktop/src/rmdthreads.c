@@ -40,8 +40,7 @@
 
 
 void rmdThreads(ProgData *pdata){
-    pthread_t   poll_events_t,
-                image_capture_t,
+    pthread_t   image_capture_t,
                 image_encode_t,
                 image_cache_t,
                 sound_capture_t,
