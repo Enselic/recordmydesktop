@@ -390,9 +390,9 @@ void *GetFrame(ProgData *pdata){
         //also before actually pausing we must make sure the streams
         //are synced. sound stops so this should only happen quickly.
         if(pdata->avd>0 || pdata->args.nosound){
-            pthread_mutex_lock(&time_mutex);
-            pthread_cond_wait(&pdata->time_cond,&time_mutex);
-            pthread_mutex_unlock(&time_mutex);
+            pthread_mutex_lock(&pdata->time_mutex);
+            pthread_cond_wait(&pdata->time_cond, &pdata->time_mutex);
+            pthread_mutex_unlock(&pdata->time_mutex);
             if (pdata->paused) {
                 //this is necessary since event loop processes
                 //the shortcuts which will unpause the program

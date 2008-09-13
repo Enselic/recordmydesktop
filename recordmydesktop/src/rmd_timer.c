@@ -53,9 +53,9 @@ void *rmdTimer(ProgData *pdata){
             else{
                 pdata->paused = FALSE;
                 fprintf(stderr,"STATE:RECORDING\n");fflush(stderr);
-                pthread_mutex_lock(&pause_mutex);
+                pthread_mutex_lock(&pdata->pause_mutex);
                 pthread_cond_broadcast(&pdata->pause_cond);
-                pthread_mutex_unlock(&pause_mutex);
+                pthread_mutex_unlock(&pdata->pause_mutex);
             }
 
         }
@@ -67,9 +67,9 @@ void *rmdTimer(ProgData *pdata){
             }
         }
         
-        pthread_mutex_lock(&time_mutex);
+        pthread_mutex_lock(&pdata->time_mutex);
         pthread_cond_broadcast(&pdata->time_cond);
-        pthread_mutex_unlock(&time_mutex);
+        pthread_mutex_unlock(&pdata->time_mutex);
         
 
         if(secs_tw)

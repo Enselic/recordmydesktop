@@ -97,8 +97,8 @@ int InitializeData(ProgData *pdata,
     pthread_mutex_init(&pdata->vorbis_lib_mutex,NULL);
     pthread_mutex_init(&pdata->libogg_mutex,NULL);
     pthread_mutex_init(&pdata->yuv_mutex,NULL);
-    pthread_mutex_init(&pause_mutex,NULL);
-    pthread_mutex_init(&time_mutex,NULL);
+    pthread_mutex_init(&pdata->pause_mutex, NULL);
+    pthread_mutex_init(&pdata->time_mutex, NULL);
     pthread_cond_init(&pdata->time_cond,NULL);
     pthread_cond_init(&pdata->pause_cond,NULL);
     pthread_cond_init(&pdata->image_buffer_ready,NULL);

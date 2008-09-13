@@ -348,6 +348,9 @@ struct _ProgData {
     boolean aborted;             //1 if we should abort
     boolean pause_state_changed; //1 if pause state changed
 
+    pthread_mutex_t pause_mutex;
+    pthread_mutex_t time_mutex;
+
 #ifdef HAVE_LIBASOUND
     snd_pcm_t *sound_handle;
     snd_pcm_uframes_t periodsize;

@@ -43,16 +43,16 @@ void *CaptureSound(ProgData *pdata){
 #ifdef HAVE_LIBASOUND
             if(!pdata->hard_pause){
                 snd_pcm_pause(pdata->sound_handle,1);
-                pthread_mutex_lock(&pause_mutex);
-                pthread_cond_wait(&pdata->pause_cond,&pause_mutex);
-                pthread_mutex_unlock(&pause_mutex);
+                pthread_mutex_lock(&pdata->pause_mutex);
+                pthread_cond_wait(&pdata->pause_cond, &pdata->pause_mutex);
+                pthread_mutex_unlock(&pdata->pause_mutex);
                 snd_pcm_pause(pdata->sound_handle,0);
             }
             else{//device doesn't support pause(is this the norm?mine doesn't)
                 snd_pcm_close(pdata->sound_handle);
-                pthread_mutex_lock(&pause_mutex);
-                pthread_cond_wait(&pdata->pause_cond,&pause_mutex);
-                pthread_mutex_unlock(&pause_mutex);
+                pthread_mutex_lock(&pdata->pause_mutex);
+                pthread_cond_wait(&pdata->pause_cond, &pdata->pause_mutex);
+                pthread_mutex_unlock(&pdata->pause_mutex);
                 pdata->sound_handle=
                     OpenDev(pdata->args.device,
                             &pdata->args.channels,
@@ -72,9 +72,9 @@ void *CaptureSound(ProgData *pdata){
             }
 #else
             close(pdata->sound_handle);
-            pthread_mutex_lock(&pause_mutex);
-            pthread_cond_wait(&pdata->pause_cond,&pause_mutex);
-            pthread_mutex_unlock(&pause_mutex);
+            pthread_mutex_lock(&pdata->pause_mutex);
+            pthread_cond_wait(&pdata->pause_cond, &pdata->pause_mutex);
+            pthread_mutex_unlock(&pdata->pause_mutex);
             pdata->sound_handle=
                 OpenDev(pdata->args.device,
                         pdata->args.channels,

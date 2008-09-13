@@ -43,9 +43,9 @@ void *EncodeSoundBuffer(ProgData *pdata){
         SndBuffer *buff=NULL;
 
         if (pdata->paused) {
-            pthread_mutex_lock(&pause_mutex);
-            pthread_cond_wait(&pdata->pause_cond,&pause_mutex);
-            pthread_mutex_unlock(&pause_mutex);
+            pthread_mutex_lock(&pdata->pause_mutex);
+            pthread_cond_wait(&pdata->pause_cond, &pdata->pause_mutex);
+            pthread_mutex_unlock(&pdata->pause_mutex);
         }
         if(!pdata->args.use_jack){
             if(pdata->sound_buffer==NULL){
