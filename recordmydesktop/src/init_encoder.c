@@ -24,6 +24,7 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
+#include "config.h"
 
 #include <string.h>
 #include <sys/stat.h>

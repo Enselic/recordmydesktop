@@ -24,6 +24,8 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
+#include "config.h"
+
 #include "yuv_utils.h"
 
 // Keep these global (for performance reasons I assume).

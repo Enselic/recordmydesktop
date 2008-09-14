@@ -24,6 +24,8 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
+#include "config.h"
+
 #include <limits.h>
 #include <pthread.h>
 #include <sys/shm.h>

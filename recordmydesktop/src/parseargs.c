@@ -24,6 +24,8 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
+#include "config.h"
+
 #include "rmdtypes.h"
 
 #include "rmd_rescue.h"

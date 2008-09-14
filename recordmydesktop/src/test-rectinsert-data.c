@@ -20,6 +20,8 @@
 *                                                                             *
 ******************************************************************************/
 
+#include "config.h"
+
 #include "test-rectinsert-types.h"
 #include "test-rectinsert-data.h"
 

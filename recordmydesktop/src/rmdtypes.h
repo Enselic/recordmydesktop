@@ -25,9 +25,7 @@
 #ifndef RMDTYPES_H
 #define RMDTYPES_H 1
 
-#ifdef HAVE_CONFIG_H
-    #include "config.h"
-#endif
+#include "config.h"
 
 #include <pthread.h>
 #include <zlib.h>
