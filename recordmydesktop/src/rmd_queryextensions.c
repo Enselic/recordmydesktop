@@ -24,66 +24,60 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-#ifndef RMD_CACHE_H
-#define RMD_CACHE_H 1
+#include "config.h"
+
+#include <X11/extensions/shape.h>
+#include <X11/extensions/Xfixes.h>
+#include <X11/extensions/Xdamage.h>
 
 #include "rmd_types.h"
 
-
-/**
-* Change file pointer to a new file while writting
-* (file name is incremented with CacheFileN)
-*
-* \param name base file name
-*
-* \param n number to be used as a postfix
-*
-* \param fp File pointer if compression is used(must be NULL otherwise)
-*
-* \param ucfp File pointer if compression is NOT used(must be NULL otherwise)
-*
-* \returns 0 on Success 1 on Failure
-*/
-int SwapCacheFilesWrite(char *name,int n,gzFile **fp,FILE **ucfp);
-
-/**
-* Change file pointer to a new file while reading
-* (file name is incremented with CacheFileN)
-*
-* \param name base file name
-*
-* \param n number to be used as a postfix
-*
-* \param fp File pointer if compression is used(must be NULL otherwise)
-*
-* \param ucfp File pointer if compression is NOT used(must be NULL otherwise)
-*
-* \returns 0 on Success 1 on Failure
-*/
-int SwapCacheFilesRead(char *name,int n,gzFile **fp,FILE **ucfp);
-
-/**
-* Delete all cache files
-*
-* \param cache_data_t Caching options(file names etc.)
-*
-* \returns 0 if all files and folders where deleted, 1 otherwise
-*/
-int PurgeCache(CacheData *cache_data_t,int sound);
-
-/**
-* Initializes paths and everything else needed to start caching
-*
-* \param pdata ProgData struct containing all program data
-*
-* \param enc_data_t Encoding options
-*
-* \param cache_data_t Caching options
-*
-*/
-void InitCacheData(ProgData *pdata,
-                   EncData *enc_data_t,
-                   CacheData *cache_data_t);
+#include "rmd_queryextensions.h"
 
 
-#endif
+void QueryExtensions(Display *dpy,
+                     ProgArgs *args,
+                     int *damage_event,
+                     int *damage_error,
+                     int *shm_opcode){
+    int xf_event_basep,
+        xf_error_basep,
+        shm_event_base,
+        shm_error_base,
+        shape_event_base,
+        shape_error_base;
+
+    if((!(args->full_shots))&&(!XDamageQueryExtension( dpy, damage_event, damage_error))){
+        fprintf(stderr,"XDamage extension not found!!!\n"
+                       "Try again using the --full-shots option, though\n"
+                       "enabling XDamage is highly recommended,\n"
+                       "for performance reasons.\n");
+        exit(4);
+    }
+    if((!args->noshared)&&(!XQueryExtension(dpy,
+                                           "MIT-SHM",
+                                           shm_opcode,
+                                           &shm_event_base,
+                                           &shm_error_base))){
+        args->noshared=1;
+        fprintf(stderr,"Shared Memory extension not present!\n"
+                       "Try again using the --no-shared option\n");
+        exit(5);
+    }
+    if((args->xfixes_cursor)&&
+       (XFixesQueryExtension(dpy,&xf_event_basep,&xf_error_basep)==False)){
+        args->xfixes_cursor=0;
+        fprintf(stderr,"Xfixes extension not present!\n"
+                       "Please run with the -dummy-cursor or"
+                       " --no-cursor option.\n");
+        exit(6);
+    }
+    if((!args->noframe)&&
+       (!XShapeQueryExtension(dpy,&shape_event_base,&shape_error_base))){
+        fprintf(stderr,"XShape Not Found!!!\n"
+                       "Frame won't be available.\n");
+
+        args->noframe=1;
+    }
+
+}

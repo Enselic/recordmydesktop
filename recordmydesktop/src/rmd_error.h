@@ -27,7 +27,7 @@
 #ifndef RMD_ERROR_H
 #define RMD_ERROR_H 1
 
-#include "rmdtypes.h"
+#include "rmd_types.h"
 
 
 /*

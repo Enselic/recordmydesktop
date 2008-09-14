@@ -24,66 +24,30 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-#ifndef RMD_CACHE_H
-#define RMD_CACHE_H 1
+#ifndef QUERYEXTENSIONS_H
+#define QUERYEXTENSIONS_H 1
 
 #include "rmd_types.h"
 
 
 /**
-* Change file pointer to a new file while writting
-* (file name is incremented with CacheFileN)
+* Check if needed extensions are present
 *
-* \param name base file name
+* \param dpy Connection to the server
 *
-* \param n number to be used as a postfix
+* \param args ProgArgs struct containing the user-set options
 *
-* \param fp File pointer if compression is used(must be NULL otherwise)
+* \param damage_event gets filled with damage event number
 *
-* \param ucfp File pointer if compression is NOT used(must be NULL otherwise)
+* \param damage_error gets filled with damage error number
 *
-* \returns 0 on Success 1 on Failure
+* \note Can be an exit point if extensions are not found
 */
-int SwapCacheFilesWrite(char *name,int n,gzFile **fp,FILE **ucfp);
-
-/**
-* Change file pointer to a new file while reading
-* (file name is incremented with CacheFileN)
-*
-* \param name base file name
-*
-* \param n number to be used as a postfix
-*
-* \param fp File pointer if compression is used(must be NULL otherwise)
-*
-* \param ucfp File pointer if compression is NOT used(must be NULL otherwise)
-*
-* \returns 0 on Success 1 on Failure
-*/
-int SwapCacheFilesRead(char *name,int n,gzFile **fp,FILE **ucfp);
-
-/**
-* Delete all cache files
-*
-* \param cache_data_t Caching options(file names etc.)
-*
-* \returns 0 if all files and folders where deleted, 1 otherwise
-*/
-int PurgeCache(CacheData *cache_data_t,int sound);
-
-/**
-* Initializes paths and everything else needed to start caching
-*
-* \param pdata ProgData struct containing all program data
-*
-* \param enc_data_t Encoding options
-*
-* \param cache_data_t Caching options
-*
-*/
-void InitCacheData(ProgData *pdata,
-                   EncData *enc_data_t,
-                   CacheData *cache_data_t);
+void QueryExtensions(Display *dpy,
+                     ProgArgs *args,
+                     int *damage_event,
+                     int *damage_error,
+                     int *shm_opcode);
 
 
 #endif

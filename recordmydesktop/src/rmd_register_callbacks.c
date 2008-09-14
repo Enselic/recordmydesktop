@@ -24,66 +24,64 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-#ifndef RMD_CACHE_H
-#define RMD_CACHE_H 1
+#include "config.h"
+
+#include <signal.h>
 
 #include "rmd_types.h"
 
-
-/**
-* Change file pointer to a new file while writting
-* (file name is incremented with CacheFileN)
-*
-* \param name base file name
-*
-* \param n number to be used as a postfix
-*
-* \param fp File pointer if compression is used(must be NULL otherwise)
-*
-* \param ucfp File pointer if compression is NOT used(must be NULL otherwise)
-*
-* \returns 0 on Success 1 on Failure
-*/
-int SwapCacheFilesWrite(char *name,int n,gzFile **fp,FILE **ucfp);
-
-/**
-* Change file pointer to a new file while reading
-* (file name is incremented with CacheFileN)
-*
-* \param name base file name
-*
-* \param n number to be used as a postfix
-*
-* \param fp File pointer if compression is used(must be NULL otherwise)
-*
-* \param ucfp File pointer if compression is NOT used(must be NULL otherwise)
-*
-* \returns 0 on Success 1 on Failure
-*/
-int SwapCacheFilesRead(char *name,int n,gzFile **fp,FILE **ucfp);
-
-/**
-* Delete all cache files
-*
-* \param cache_data_t Caching options(file names etc.)
-*
-* \returns 0 if all files and folders where deleted, 1 otherwise
-*/
-int PurgeCache(CacheData *cache_data_t,int sound);
-
-/**
-* Initializes paths and everything else needed to start caching
-*
-* \param pdata ProgData struct containing all program data
-*
-* \param enc_data_t Encoding options
-*
-* \param cache_data_t Caching options
-*
-*/
-void InitCacheData(ProgData *pdata,
-                   EncData *enc_data_t,
-                   CacheData *cache_data_t);
+#include "rmd_register_callbacks.h"
 
 
-#endif
+// There seem to be no way of passing user data to the signal handler,
+// so hack around not being able to pass ProgData to them
+static int *pdata_running             = NULL;
+static int *pdata_paused              = NULL;
+static int *pdata_aborted             = NULL;
+static int *pdata_pause_state_changed = NULL;
+
+
+static void SetPaused(int signum) {
+
+    *pdata_pause_state_changed = TRUE;
+}
+
+static void SetRunning(int signum) {
+
+    if (!*pdata_paused) {
+
+        *pdata_running = FALSE;
+
+        if (signum == SIGABRT) {
+            *pdata_aborted = TRUE;
+        }
+    }
+}
+
+void RegisterCallbacks(ProgData *pdata) {
+
+    struct sigaction pause_act;
+    struct sigaction end_act;
+
+    // Is there some way to pass pdata to the signal handlers?
+    pdata_running             = &pdata->running;
+    pdata_paused              = &pdata->paused;
+    pdata_aborted             = &pdata->aborted;
+    pdata_pause_state_changed = &pdata->pause_state_changed;
+    
+    // Setup pause_act
+    sigfillset(&pause_act.sa_mask);
+    pause_act.sa_flags   = SA_RESTART;
+    pause_act.sa_handler = SetPaused;
+
+    sigaction(SIGUSR1, &pause_act, NULL);
+
+    // Setup end_act
+    sigfillset(&end_act.sa_mask);
+    end_act.sa_flags   = SA_RESTART;
+    end_act.sa_handler = SetRunning;
+
+    sigaction(SIGINT,  &end_act, NULL);
+    sigaction(SIGTERM, &end_act, NULL);
+    sigaction(SIGABRT, &end_act, NULL);
+}

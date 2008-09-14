@@ -28,14 +28,14 @@
 
 #include <pthread.h>
 
-#include "rmdtypes.h"
+#include "rmd_types.h"
 
-#include "block_utils.h"
-#include "encode_cache.h"
-#include "initialize_data.h"
-#include "register_callbacks.h"
+#include "rmd_block_utils.h"
+#include "rmd_encode_cache.h"
+#include "rmd_initialize_data.h"
+#include "rmd_register_callbacks.h"
 #include "rmd_rescue.h"
-#include "specsfile.h"
+#include "rmd_specsfile.h"
 
 
 int rmdRescue(const char *path){

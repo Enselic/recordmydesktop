@@ -27,7 +27,7 @@
 #ifndef RMD_JACK_H
 #define RMD_JACK_H 1
 
-#include "rmdtypes.h"
+#include "rmd_types.h"
 
 
 #ifdef HAVE_JACK_H

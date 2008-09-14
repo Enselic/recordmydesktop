@@ -28,10 +28,10 @@
 
 #include <pthread.h>
 
-#include "rmdtypes.h"
+#include "rmd_types.h"
 
 #include "rmd_jack.h"
-#include "rmdmacro.h"
+#include "rmd_macro.h"
 
 
 #ifdef HAVE_JACK_H

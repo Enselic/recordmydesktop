@@ -24,66 +24,88 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-#ifndef RMD_CACHE_H
-#define RMD_CACHE_H 1
+#ifndef RMDMACRO_H
+#define RMDMACRO_H 1
+
+#include "config.h"
+
+#include <limits.h>
 
 #include "rmd_types.h"
 
 
-/**
-* Change file pointer to a new file while writting
-* (file name is incremented with CacheFileN)
-*
-* \param name base file name
-*
-* \param n number to be used as a postfix
-*
-* \param fp File pointer if compression is used(must be NULL otherwise)
-*
-* \param ucfp File pointer if compression is NOT used(must be NULL otherwise)
-*
-* \returns 0 on Success 1 on Failure
-*/
-int SwapCacheFilesWrite(char *name,int n,gzFile **fp,FILE **ucfp);
+//define which way we are reading a pixmap
+#if __BYTE_ORDER == __LITTLE_ENDIAN
+#define __ABYTE 3
+#define __RBYTE 2
+#define __GBYTE 1
+#define __BBYTE 0
 
-/**
-* Change file pointer to a new file while reading
-* (file name is incremented with CacheFileN)
-*
-* \param name base file name
-*
-* \param n number to be used as a postfix
-*
-* \param fp File pointer if compression is used(must be NULL otherwise)
-*
-* \param ucfp File pointer if compression is NOT used(must be NULL otherwise)
-*
-* \returns 0 on Success 1 on Failure
-*/
-int SwapCacheFilesRead(char *name,int n,gzFile **fp,FILE **ucfp);
+#elif __BYTE_ORDER == __BIG_ENDIAN
 
-/**
-* Delete all cache files
-*
-* \param cache_data_t Caching options(file names etc.)
-*
-* \returns 0 if all files and folders where deleted, 1 otherwise
-*/
-int PurgeCache(CacheData *cache_data_t,int sound);
+#define __ABYTE 0
+#define __RBYTE 1
+#define __GBYTE 2
+#define __BBYTE 3
 
-/**
-* Initializes paths and everything else needed to start caching
-*
-* \param pdata ProgData struct containing all program data
-*
-* \param enc_data_t Encoding options
-*
-* \param cache_data_t Caching options
-*
-*/
-void InitCacheData(ProgData *pdata,
-                   EncData *enc_data_t,
-                   CacheData *cache_data_t);
+#else
+#error Only little-endian and big-endian systems are supported
+#endif
+
+#define __RVALUE_32(tmp_val) (((tmp_val)&0x00ff0000)>>16)
+#define __GVALUE_32(tmp_val) (((tmp_val)&0x0000ff00)>>8)
+#define __BVALUE_32(tmp_val) (((tmp_val)&0x000000ff))
+
+#define __R16_MASK  0xf800
+#define __G16_MASK  0x7e0
+#define __B16_MASK  0x1f
+
+#define __RVALUE_16(tmp_val) ((((tmp_val)&__R16_MASK)>>11)*8)
+#define __GVALUE_16(tmp_val) ((((tmp_val)&__G16_MASK)>>5)*4)
+#define __BVALUE_16(tmp_val) ((((tmp_val)&__B16_MASK))*8)
+
+//xfixes pointer data are written as unsigned long
+//(even though the server returns CARD32)
+//so we need to set the step accordingly to
+//avoid problems (amd64 has 8byte ulong)
+#define RMD_ULONG_SIZE_T (sizeof(unsigned long))
+
+//size of stride when comparing planes(depending on type)
+//this is just to avoid thousands of sizeof's
+#ifdef HAVE_U_INT64_T
+    #define COMPARE_STRIDE  8
+#else
+    #define COMPARE_STRIDE  4
+#endif
+
+//The width, in bytes, of the blocks
+//on which the y,u and v planes are broken.
+//These blocks are square.
+#define Y_UNIT_WIDTH    0x0010
+#define UV_UNIT_WIDTH   0x0008
+
+#ifdef HAVE_LIBASOUND
+    #define DEFAULT_AUDIO_DEVICE "hw:0,0"
+#else
+    #define DEFAULT_AUDIO_DEVICE "/dev/dsp"
+#endif
+
+#define I16TOA(number,buffer){\
+    int t_num=(number),__k=0,__i=0;\
+    char *t_buf=malloc(8);\
+    t_num=t_num&((2<<15)-1);\
+    while(t_num>0){\
+        int digit=t_num%10;\
+        t_buf[__k]=digit+48;\
+        t_num-=digit;\
+        t_num/=10;\
+        __k++;\
+    }\
+    while(__k>0)\
+        (buffer)[__i++]=t_buf[--__k];\
+    (buffer)[__i]='\0';\
+    free(t_buf);\
+};\
 
 
 #endif

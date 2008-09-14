@@ -24,66 +24,61 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-#ifndef RMD_CACHE_H
-#define RMD_CACHE_H 1
+#ifndef OPENDEV_H
+#define OPENDEV_H 1
 
 #include "rmd_types.h"
 
 
+#ifdef HAVE_LIBASOUND
 /**
-* Change file pointer to a new file while writting
-* (file name is incremented with CacheFileN)
+* Try to open (alsa) sound device, with the desired parameters,
+* and place the obtained ones on their place
 *
-* \param name base file name
+* \param pcm_dev name of the device
 *
-* \param n number to be used as a postfix
+* \param channels desired number of channels
+*                 (gets modified with the acieved value)
 *
-* \param fp File pointer if compression is used(must be NULL otherwise)
+* \param frequency desired frequency(gets modified with the acieved value)
 *
-* \param ucfp File pointer if compression is NOT used(must be NULL otherwise)
+* \param buffsize Size of buffer
 *
-* \returns 0 on Success 1 on Failure
+* \param periodsize Size of a period(can be NULL)
+*
+* \param periodtime Duration of a period(can be NULL)
+*
+* \param hardpause Set to 1 when the device has to be stopped during pause
+*                  and to 0 when it supports pausing
+*                  (can be NULL)
+*
+* \returns snd_pcm_t handle on success, NULL on failure
 */
-int SwapCacheFilesWrite(char *name,int n,gzFile **fp,FILE **ucfp);
-
+snd_pcm_t *OpenDev( const char *pcm_dev,
+                    unsigned int *channels,
+                    unsigned int *frequency,
+                    snd_pcm_uframes_t *buffsize,
+                    snd_pcm_uframes_t *periodsize,
+                    unsigned int *periodtime,
+                    int *hardpause);
+#else
 /**
-* Change file pointer to a new file while reading
-* (file name is incremented with CacheFileN)
+* Try to open (OSS) sound device, with the desired parameters.
 *
-* \param name base file name
 *
-* \param n number to be used as a postfix
+* \param pcm_dev name of the device
 *
-* \param fp File pointer if compression is used(must be NULL otherwise)
+* \param channels desired number of channels
 *
-* \param ucfp File pointer if compression is NOT used(must be NULL otherwise)
+* \param frequency desired frequency
 *
-* \returns 0 on Success 1 on Failure
+*
+* \returns file descriptor of open device,-1 on failure
 */
-int SwapCacheFilesRead(char *name,int n,gzFile **fp,FILE **ucfp);
-
-/**
-* Delete all cache files
-*
-* \param cache_data_t Caching options(file names etc.)
-*
-* \returns 0 if all files and folders where deleted, 1 otherwise
-*/
-int PurgeCache(CacheData *cache_data_t,int sound);
-
-/**
-* Initializes paths and everything else needed to start caching
-*
-* \param pdata ProgData struct containing all program data
-*
-* \param enc_data_t Encoding options
-*
-* \param cache_data_t Caching options
-*
-*/
-void InitCacheData(ProgData *pdata,
-                   EncData *enc_data_t,
-                   CacheData *cache_data_t);
+int OpenDev( const char *pcm_dev,
+             unsigned int channels,
+             unsigned int frequency);
+#endif
 
 
 #endif

@@ -24,66 +24,30 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-#ifndef RMD_CACHE_H
-#define RMD_CACHE_H 1
+#ifndef SETBRWINDOW_H
+#define SETBRWINDOW_H 1
 
 #include "rmd_types.h"
 
 
 /**
-* Change file pointer to a new file while writting
-* (file name is incremented with CacheFileN)
+* Check and align window size
 *
-* \param name base file name
+* \param dpy Connection to the server
 *
-* \param n number to be used as a postfix
+* \param brwin BRWindow struct contaning the initial and final window
 *
-* \param fp File pointer if compression is used(must be NULL otherwise)
+* \param specs DisplaySpecs struct with
+*              information about the display to be recorded
 *
-* \param ucfp File pointer if compression is NOT used(must be NULL otherwise)
-*
-* \returns 0 on Success 1 on Failure
-*/
-int SwapCacheFilesWrite(char *name,int n,gzFile **fp,FILE **ucfp);
-
-/**
-* Change file pointer to a new file while reading
-* (file name is incremented with CacheFileN)
-*
-* \param name base file name
-*
-* \param n number to be used as a postfix
-*
-* \param fp File pointer if compression is used(must be NULL otherwise)
-*
-* \param ucfp File pointer if compression is NOT used(must be NULL otherwise)
+* \param args ProgArgs struct containing the user-set options
 *
 * \returns 0 on Success 1 on Failure
 */
-int SwapCacheFilesRead(char *name,int n,gzFile **fp,FILE **ucfp);
-
-/**
-* Delete all cache files
-*
-* \param cache_data_t Caching options(file names etc.)
-*
-* \returns 0 if all files and folders where deleted, 1 otherwise
-*/
-int PurgeCache(CacheData *cache_data_t,int sound);
-
-/**
-* Initializes paths and everything else needed to start caching
-*
-* \param pdata ProgData struct containing all program data
-*
-* \param enc_data_t Encoding options
-*
-* \param cache_data_t Caching options
-*
-*/
-void InitCacheData(ProgData *pdata,
-                   EncData *enc_data_t,
-                   CacheData *cache_data_t);
+int SetBRWindow(Display *dpy,
+                BRWindow *brwin,
+                DisplaySpecs *specs,
+                ProgArgs *args);
 
 
 #endif

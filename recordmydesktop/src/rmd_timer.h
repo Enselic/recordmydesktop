@@ -27,7 +27,7 @@
 #ifndef RMD_TIMER_H
 #define RMD_TIMER_H 1
 
-#include "rmdtypes.h"
+#include "rmd_types.h"
 
 
 /**

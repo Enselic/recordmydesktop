@@ -24,7 +24,7 @@
 #define TEST_RECTINSERT_TYPES_H
 
 
-#include "rmdtypes.h"
+#include "rmd_types.h"
 
 
 #define STATE_WIDTH  20

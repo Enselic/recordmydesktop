@@ -24,66 +24,56 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-#ifndef RMD_CACHE_H
-#define RMD_CACHE_H 1
+#include "config.h"
+
+#include <X11/Xatom.h>
 
 #include "rmd_types.h"
 
-
-/**
-* Change file pointer to a new file while writting
-* (file name is incremented with CacheFileN)
-*
-* \param name base file name
-*
-* \param n number to be used as a postfix
-*
-* \param fp File pointer if compression is used(must be NULL otherwise)
-*
-* \param ucfp File pointer if compression is NOT used(must be NULL otherwise)
-*
-* \returns 0 on Success 1 on Failure
-*/
-int SwapCacheFilesWrite(char *name,int n,gzFile **fp,FILE **ucfp);
-
-/**
-* Change file pointer to a new file while reading
-* (file name is incremented with CacheFileN)
-*
-* \param name base file name
-*
-* \param n number to be used as a postfix
-*
-* \param fp File pointer if compression is used(must be NULL otherwise)
-*
-* \param ucfp File pointer if compression is NOT used(must be NULL otherwise)
-*
-* \returns 0 on Success 1 on Failure
-*/
-int SwapCacheFilesRead(char *name,int n,gzFile **fp,FILE **ucfp);
-
-/**
-* Delete all cache files
-*
-* \param cache_data_t Caching options(file names etc.)
-*
-* \returns 0 if all files and folders where deleted, 1 otherwise
-*/
-int PurgeCache(CacheData *cache_data_t,int sound);
-
-/**
-* Initializes paths and everything else needed to start caching
-*
-* \param pdata ProgData struct containing all program data
-*
-* \param enc_data_t Encoding options
-*
-* \param cache_data_t Caching options
-*
-*/
-void InitCacheData(ProgData *pdata,
-                   EncData *enc_data_t,
-                   CacheData *cache_data_t);
+#include "rmd_wm_check.h"
 
 
-#endif
+char *rmdWMCheck(Display *dpy,Window root){
+
+    Window  *wm_child=NULL;
+    Atom    nwm_atom,
+            utf8_string,
+            wm_name_atom,
+            rt;
+    unsigned long   nbytes,
+                    nitems;
+
+    char *wm_name_str=NULL;
+    int fmt;
+
+    utf8_string = XInternAtom(dpy, "UTF8_STRING", False);
+
+    nwm_atom =XInternAtom(dpy,"_NET_SUPPORTING_WM_CHECK",True);
+    wm_name_atom =XInternAtom(dpy,"_NET_WM_NAME",True);
+
+    if(nwm_atom!=None && wm_name_atom!=None){
+        if(XGetWindowProperty(  dpy,root,nwm_atom,0,100,
+                                False,XA_WINDOW,
+                                &rt,&fmt,&nitems, &nbytes,
+                                (unsigned char **)((void*)&wm_child))
+                            != Success ){
+            fprintf(stderr,"Error while trying to get a"
+                           " window to identify the window manager.\n");
+        }
+        if((wm_child == NULL)||
+           (XGetWindowProperty(dpy,*wm_child,wm_name_atom,0,100,
+                               False,utf8_string,&rt,
+                               &fmt,&nitems, &nbytes,
+                               (unsigned char **)((void*)&wm_name_str))
+            !=Success)){
+            fprintf(stderr,"Warning!!!\nYour window manager appears"
+                           " to be non-compliant!\n");
+        }
+    }
+    fprintf(stderr,"Your window manager appears to be %s\n\n",
+                    ((wm_name_str!=NULL)?wm_name_str:"Unknown"));
+
+
+    return wm_name_str;
+}
+

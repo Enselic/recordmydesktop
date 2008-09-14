@@ -24,66 +24,63 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-#ifndef RMD_CACHE_H
-#define RMD_CACHE_H 1
+#include "config.h"
+
+#include <X11/Xlibint.h>
+#include <X11/extensions/shmstr.h>
+#include <X11/extensions/XShm.h>
 
 #include "rmd_types.h"
 
-
-/**
-* Change file pointer to a new file while writting
-* (file name is incremented with CacheFileN)
-*
-* \param name base file name
-*
-* \param n number to be used as a postfix
-*
-* \param fp File pointer if compression is used(must be NULL otherwise)
-*
-* \param ucfp File pointer if compression is NOT used(must be NULL otherwise)
-*
-* \returns 0 on Success 1 on Failure
-*/
-int SwapCacheFilesWrite(char *name,int n,gzFile **fp,FILE **ucfp);
-
-/**
-* Change file pointer to a new file while reading
-* (file name is incremented with CacheFileN)
-*
-* \param name base file name
-*
-* \param n number to be used as a postfix
-*
-* \param fp File pointer if compression is used(must be NULL otherwise)
-*
-* \param ucfp File pointer if compression is NOT used(must be NULL otherwise)
-*
-* \returns 0 on Success 1 on Failure
-*/
-int SwapCacheFilesRead(char *name,int n,gzFile **fp,FILE **ucfp);
-
-/**
-* Delete all cache files
-*
-* \param cache_data_t Caching options(file names etc.)
-*
-* \returns 0 if all files and folders where deleted, 1 otherwise
-*/
-int PurgeCache(CacheData *cache_data_t,int sound);
-
-/**
-* Initializes paths and everything else needed to start caching
-*
-* \param pdata ProgData struct containing all program data
-*
-* \param enc_data_t Encoding options
-*
-* \param cache_data_t Caching options
-*
-*/
-void InitCacheData(ProgData *pdata,
-                   EncData *enc_data_t,
-                   CacheData *cache_data_t);
+#include "rmd_getzpixmap.h"
+#include "rmd_update_image.h"
+#include "rmd_yuv_utils.h"
 
 
-#endif
+void UpdateImage(Display * dpy,
+                yuv_buffer *yuv,
+                DisplaySpecs *specs,
+                RectArea **root,
+                BRWindow *brwin,
+                EncData *enc,
+                char *datatemp,
+                int noshmem,
+                XShmSegmentInfo *shminfo,
+                int shm_opcode,
+                int no_quick_subsample){
+    RectArea *temp;
+    unsigned char *dtap=(unsigned char*)datatemp;
+    temp=*root;
+
+    if(temp!=NULL){
+        do{
+            if(noshmem){
+                GetZPixmap( dpy,
+                            specs->root,
+                            datatemp,
+                            temp->geom.x,
+                            temp->geom.y,
+                            temp->geom.width,
+                            temp->geom.height);
+            }
+            else{
+                GetZPixmapSHM(dpy,
+                              specs->root,
+                              shminfo,
+                              shm_opcode,
+                              datatemp,temp->geom.x,
+                              temp->geom.y,
+                              temp->geom.width,
+                              temp->geom.height);
+            }
+            UPDATE_YUV_BUFFER(yuv,dtap,NULL,
+                                (temp->geom.x-brwin->rgeom.x+enc->x_offset),
+                                (temp->geom.y-brwin->rgeom.y+enc->y_offset),
+                                (temp->geom.width),(temp->geom.height),
+                                no_quick_subsample,
+                                specs->depth);
+            temp=temp->next;
+        }while(temp!=NULL);
+    }
+}
+

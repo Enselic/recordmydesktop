@@ -30,7 +30,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "rmdtypes.h"
+#include "rmd_types.h"
 
 #include "rmd_timer.h"
 

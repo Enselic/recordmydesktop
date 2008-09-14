@@ -24,66 +24,35 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-#ifndef RMD_CACHE_H
-#define RMD_CACHE_H 1
+#ifndef MAKE_DUMMY_POINTER_H
+#define MAKE_DUMMY_POINTER_H 1
 
 #include "rmd_types.h"
 
 
 /**
-* Change file pointer to a new file while writting
-* (file name is incremented with CacheFileN)
+* Create an array containing the data for the dummy pointer
 *
-* \param name base file name
+* \param specs DisplaySpecs struct with
+*              information about the display to be recorded
 *
-* \param n number to be used as a postfix
+* \param size  Pointer size, always square, always 16.(exists only
+*              for the possibility to create more dummy cursors)
+* \param color 0 white, 1 black
 *
-* \param fp File pointer if compression is used(must be NULL otherwise)
+* \param type Always 0.(exists only for the possibility to create
+*               more dummy cursors)
 *
-* \param ucfp File pointer if compression is NOT used(must be NULL otherwise)
+* \param npxl Return of pixel value that denotes non-drawing, while
+*             applying the cursor on the target image
 *
-* \returns 0 on Success 1 on Failure
+* \returns Pointer to pixel data of the cursor
 */
-int SwapCacheFilesWrite(char *name,int n,gzFile **fp,FILE **ucfp);
-
-/**
-* Change file pointer to a new file while reading
-* (file name is incremented with CacheFileN)
-*
-* \param name base file name
-*
-* \param n number to be used as a postfix
-*
-* \param fp File pointer if compression is used(must be NULL otherwise)
-*
-* \param ucfp File pointer if compression is NOT used(must be NULL otherwise)
-*
-* \returns 0 on Success 1 on Failure
-*/
-int SwapCacheFilesRead(char *name,int n,gzFile **fp,FILE **ucfp);
-
-/**
-* Delete all cache files
-*
-* \param cache_data_t Caching options(file names etc.)
-*
-* \returns 0 if all files and folders where deleted, 1 otherwise
-*/
-int PurgeCache(CacheData *cache_data_t,int sound);
-
-/**
-* Initializes paths and everything else needed to start caching
-*
-* \param pdata ProgData struct containing all program data
-*
-* \param enc_data_t Encoding options
-*
-* \param cache_data_t Caching options
-*
-*/
-void InitCacheData(ProgData *pdata,
-                   EncData *enc_data_t,
-                   CacheData *cache_data_t);
+unsigned char *MakeDummyPointer(DisplaySpecs *specs,
+                                int size,
+                                int color,
+                                int type,
+                                unsigned char *npxl);
 
 
 #endif

@@ -24,66 +24,32 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-#ifndef RMD_CACHE_H
-#define RMD_CACHE_H 1
+#ifndef RECTINSERT_H
+#define RECTINSERT_H 1
+
 
 #include "rmd_types.h"
 
 
 /**
-* Change file pointer to a new file while writting
-* (file name is incremented with CacheFileN)
+* Insert a new rectangle on the list, making sure it doesn't overlap
+* with the existing ones
+* \param root Root entry of the list
 *
-* \param name base file name
+* \param wgeom New area to be inserted
 *
-* \param n number to be used as a postfix
+* \returns Number of insertions during operation
 *
-* \param fp File pointer if compression is used(must be NULL otherwise)
-*
-* \param ucfp File pointer if compression is NOT used(must be NULL otherwise)
-*
-* \returns 0 on Success 1 on Failure
+* \note This function is reentrant and recursive. The number
+* of insertions takes this into account.
 */
-int SwapCacheFilesWrite(char *name,int n,gzFile **fp,FILE **ucfp);
+int RectInsert(RectArea **root, WGeometry *wgeom);
 
 /**
-* Change file pointer to a new file while reading
-* (file name is incremented with CacheFileN)
-*
-* \param name base file name
-*
-* \param n number to be used as a postfix
-*
-* \param fp File pointer if compression is used(must be NULL otherwise)
-*
-* \param ucfp File pointer if compression is NOT used(must be NULL otherwise)
-*
-* \returns 0 on Success 1 on Failure
+* Clean up a list of areas marked for update.
+* \param root Root entry of the list
 */
-int SwapCacheFilesRead(char *name,int n,gzFile **fp,FILE **ucfp);
-
-/**
-* Delete all cache files
-*
-* \param cache_data_t Caching options(file names etc.)
-*
-* \returns 0 if all files and folders where deleted, 1 otherwise
-*/
-int PurgeCache(CacheData *cache_data_t,int sound);
-
-/**
-* Initializes paths and everything else needed to start caching
-*
-* \param pdata ProgData struct containing all program data
-*
-* \param enc_data_t Encoding options
-*
-* \param cache_data_t Caching options
-*
-*/
-void InitCacheData(ProgData *pdata,
-                   EncData *enc_data_t,
-                   CacheData *cache_data_t);
+void ClearList(RectArea **root);
 
 
 #endif

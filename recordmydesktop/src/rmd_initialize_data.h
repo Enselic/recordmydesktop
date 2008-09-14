@@ -24,66 +24,39 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-#ifndef RMD_CACHE_H
-#define RMD_CACHE_H 1
+#ifndef INITIALIZE_DATA_H
+#define INITIALIZE_DATA_H 1
 
 #include "rmd_types.h"
 
 
 /**
-* Change file pointer to a new file while writting
-* (file name is incremented with CacheFileN)
-*
-* \param name base file name
-*
-* \param n number to be used as a postfix
-*
-* \param fp File pointer if compression is used(must be NULL otherwise)
-*
-* \param ucfp File pointer if compression is NOT used(must be NULL otherwise)
-*
-* \returns 0 on Success 1 on Failure
-*/
-int SwapCacheFilesWrite(char *name,int n,gzFile **fp,FILE **ucfp);
-
-/**
-* Change file pointer to a new file while reading
-* (file name is incremented with CacheFileN)
-*
-* \param name base file name
-*
-* \param n number to be used as a postfix
-*
-* \param fp File pointer if compression is used(must be NULL otherwise)
-*
-* \param ucfp File pointer if compression is NOT used(must be NULL otherwise)
-*
-* \returns 0 on Success 1 on Failure
-*/
-int SwapCacheFilesRead(char *name,int n,gzFile **fp,FILE **ucfp);
-
-/**
-* Delete all cache files
-*
-* \param cache_data_t Caching options(file names etc.)
-*
-* \returns 0 if all files and folders where deleted, 1 otherwise
-*/
-int PurgeCache(CacheData *cache_data_t,int sound);
-
-/**
-* Initializes paths and everything else needed to start caching
+* initialize lists,mutexes,image buffers, take first screenshot,
+* and anything else needed before launching the capture threads.
 *
 * \param pdata ProgData struct containing all program data
 *
-* \param enc_data_t Encoding options
+* \param enc_data reference to enc_data structure
 *
-* \param cache_data_t Caching options
+* \param cache_data reference to cache_data structure
+*
+* \returns 0 on success, other values must cause the program to exit
+*/
+int InitializeData(ProgData *pdata,
+                   EncData *enc_data,
+                   CacheData *cache_data);
+
+/**
+* Sets up the ProgArgs structure to default values.
+*/
+void SetupDefaultArgs(ProgArgs *args);
+
+/**
+*   Currently only frees some memory
+*   (y,u,v blocks)
 *
 */
-void InitCacheData(ProgData *pdata,
-                   EncData *enc_data_t,
-                   CacheData *cache_data_t);
+void CleanUp(void);
 
 
 #endif

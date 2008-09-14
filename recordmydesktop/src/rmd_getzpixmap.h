@@ -24,66 +24,75 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-#ifndef RMD_CACHE_H
-#define RMD_CACHE_H 1
+#ifndef GETZPIXMAP_H
+#define GETZPIXMAP_H 1
 
 #include "rmd_types.h"
 
 
 /**
-* Change file pointer to a new file while writting
-* (file name is incremented with CacheFileN)
+* Rerieve pixmap data from xserver
 *
-* \param name base file name
+* \param dpy Connection to the server
 *
-* \param n number to be used as a postfix
+* \param root root window of the display
 *
-* \param fp File pointer if compression is used(must be NULL otherwise)
+* \param data (preallocated)buffer to place the data
 *
-* \param ucfp File pointer if compression is NOT used(must be NULL otherwise)
+* \param x x position of the screenshot
 *
-* \returns 0 on Success 1 on Failure
-*/
-int SwapCacheFilesWrite(char *name,int n,gzFile **fp,FILE **ucfp);
-
-/**
-* Change file pointer to a new file while reading
-* (file name is incremented with CacheFileN)
+* \param y y position of the screenshot
 *
-* \param name base file name
+* \param x x position of the screenshot
 *
-* \param n number to be used as a postfix
+* \param width width of the screenshot
 *
-* \param fp File pointer if compression is used(must be NULL otherwise)
-*
-* \param ucfp File pointer if compression is NOT used(must be NULL otherwise)
+* \param height height position of the screenshot
 *
 * \returns 0 on Success 1 on Failure
 */
-int SwapCacheFilesRead(char *name,int n,gzFile **fp,FILE **ucfp);
+int GetZPixmap(Display *dpy,
+               Window root,
+               char *data,
+               int x,
+               int y,
+               int width,
+               int height);
 
 /**
-* Delete all cache files
+* Rerieve pixmap data from xserver through the MIT-Shm extension
 *
-* \param cache_data_t Caching options(file names etc.)
+* \param dpy Connection to the server
 *
-* \returns 0 if all files and folders where deleted, 1 otherwise
+* \param root root window of the display
+*
+* \param shminfo Info for the shared memory segment
+*
+* \param shm_opcode Opcode of Shm extension
+*
+* \param data (preallocated)buffer to place the data
+*
+* \param x x position of the screenshot
+*
+* \param y y position of the screenshot
+*
+* \param x x position of the screenshot
+*
+* \param width width of the screenshot
+*
+* \param height height position of the screenshot
+*
+* \returns 0 on Success 1 on Failure
 */
-int PurgeCache(CacheData *cache_data_t,int sound);
-
-/**
-* Initializes paths and everything else needed to start caching
-*
-* \param pdata ProgData struct containing all program data
-*
-* \param enc_data_t Encoding options
-*
-* \param cache_data_t Caching options
-*
-*/
-void InitCacheData(ProgData *pdata,
-                   EncData *enc_data_t,
-                   CacheData *cache_data_t);
+int GetZPixmapSHM(Display *dpy,
+                  Window root,
+                  XShmSegmentInfo *shminfo,
+                  int shm_opcode,
+                  char *data,
+                  int x,
+                  int y,
+                  int width,
+                  int height);
 
 
 #endif

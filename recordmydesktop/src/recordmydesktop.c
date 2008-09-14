@@ -26,18 +26,18 @@
 
 #include "config.h"
 
-#include "rmdtypes.h"
+#include "rmd_types.h"
 
-#include "encode_cache.h"
-#include "initialize_data.h"
-#include "parseargs.h"
-#include "queryextensions.h"
+#include "rmd_encode_cache.h"
+#include "rmd_initialize_data.h"
+#include "rmd_parseargs.h"
+#include "rmd_queryextensions.h"
 #include "rmd_cache.h"
 #include "rmd_error.h"
-#include "rmdthreads.h"
-#include "setbrwindow.h"
-#include "shortcuts.h"
-#include "wm_check.h"
+#include "rmd_threads.h"
+#include "rmd_setbrwindow.h"
+#include "rmd_shortcuts.h"
+#include "rmd_wm_check.h"
 
 
 int main(int argc,char **argv){

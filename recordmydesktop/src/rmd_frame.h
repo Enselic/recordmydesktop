@@ -27,7 +27,7 @@
 #ifndef RMD_FRAME_H
 #define RMD_FRAME_H 1
 
-#include "rmdtypes.h"
+#include "rmd_types.h"
 
 
 /*

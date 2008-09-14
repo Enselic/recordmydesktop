@@ -24,66 +24,34 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-#ifndef RMD_CACHE_H
-#define RMD_CACHE_H 1
+#include "config.h"
 
-#include "rmd_types.h"
+#include "rmd_yuv_utils.h"
 
+// Keep these global (for performance reasons I assume).
+unsigned char Yr[256], Yg[256], Yb[256],
+              Ur[256], Ug[256], UbVr[256],
+              Vg[256], Vb[256];
 
-/**
-* Change file pointer to a new file while writting
-* (file name is incremented with CacheFileN)
-*
-* \param name base file name
-*
-* \param n number to be used as a postfix
-*
-* \param fp File pointer if compression is used(must be NULL otherwise)
-*
-* \param ucfp File pointer if compression is NOT used(must be NULL otherwise)
-*
-* \returns 0 on Success 1 on Failure
-*/
-int SwapCacheFilesWrite(char *name,int n,gzFile **fp,FILE **ucfp);
+void MakeMatrices (void) {
+    int i;
 
-/**
-* Change file pointer to a new file while reading
-* (file name is incremented with CacheFileN)
-*
-* \param name base file name
-*
-* \param n number to be used as a postfix
-*
-* \param fp File pointer if compression is used(must be NULL otherwise)
-*
-* \param ucfp File pointer if compression is NOT used(must be NULL otherwise)
-*
-* \returns 0 on Success 1 on Failure
-*/
-int SwapCacheFilesRead(char *name,int n,gzFile **fp,FILE **ucfp);
+    for (i = 0; i < 256; i++)
+        Yr[i] = (2104.0 * i) / 8192.0 + 8.0;
+    for (i = 0; i < 256; i++)
+        Yg[i] = (4130.0 * i) / 8192.0 + 8.0;
+    for (i = 0; i < 256; i++)
+        Yb[i] = (802.0 * i) / 8192.0;
 
-/**
-* Delete all cache files
-*
-* \param cache_data_t Caching options(file names etc.)
-*
-* \returns 0 if all files and folders where deleted, 1 otherwise
-*/
-int PurgeCache(CacheData *cache_data_t,int sound);
+    for (i = 0; i < 256; i++)
+        Ur[i] = 37.8 - (1204.0 * i) / 8192.0 + 8.0;
+    for (i = 0; i < 256; i++)
+        Ug[i] = 74.2 - (2384.0 * i) / 8192.0 + 8.0;
+    for (i = 0; i < 256; i++)
+        UbVr[i] = (3598.0 * i) / 8192.0 ;
 
-/**
-* Initializes paths and everything else needed to start caching
-*
-* \param pdata ProgData struct containing all program data
-*
-* \param enc_data_t Encoding options
-*
-* \param cache_data_t Caching options
-*
-*/
-void InitCacheData(ProgData *pdata,
-                   EncData *enc_data_t,
-                   CacheData *cache_data_t);
-
-
-#endif
+    for (i = 0; i < 256; i++)
+        Vg[i] = 93.8 - (3013.0 * i) / 8192.0 + 8.0;
+    for (i = 0; i < 256; i++)
+        Vb[i] = 18.2 - (585.0 * i) / 8192.0 + 8.0;
+}

@@ -24,66 +24,89 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-#ifndef RMD_CACHE_H
-#define RMD_CACHE_H 1
+#include "config.h"
+
+#include <X11/Xlib.h>
+#include <X11/Xlibint.h>
+#include <X11/extensions/shmstr.h>
+#include <X11/extensions/XShm.h>
 
 #include "rmd_types.h"
 
-
-/**
-* Change file pointer to a new file while writting
-* (file name is incremented with CacheFileN)
-*
-* \param name base file name
-*
-* \param n number to be used as a postfix
-*
-* \param fp File pointer if compression is used(must be NULL otherwise)
-*
-* \param ucfp File pointer if compression is NOT used(must be NULL otherwise)
-*
-* \returns 0 on Success 1 on Failure
-*/
-int SwapCacheFilesWrite(char *name,int n,gzFile **fp,FILE **ucfp);
-
-/**
-* Change file pointer to a new file while reading
-* (file name is incremented with CacheFileN)
-*
-* \param name base file name
-*
-* \param n number to be used as a postfix
-*
-* \param fp File pointer if compression is used(must be NULL otherwise)
-*
-* \param ucfp File pointer if compression is NOT used(must be NULL otherwise)
-*
-* \returns 0 on Success 1 on Failure
-*/
-int SwapCacheFilesRead(char *name,int n,gzFile **fp,FILE **ucfp);
-
-/**
-* Delete all cache files
-*
-* \param cache_data_t Caching options(file names etc.)
-*
-* \returns 0 if all files and folders where deleted, 1 otherwise
-*/
-int PurgeCache(CacheData *cache_data_t,int sound);
-
-/**
-* Initializes paths and everything else needed to start caching
-*
-* \param pdata ProgData struct containing all program data
-*
-* \param enc_data_t Encoding options
-*
-* \param cache_data_t Caching options
-*
-*/
-void InitCacheData(ProgData *pdata,
-                   EncData *enc_data_t,
-                   CacheData *cache_data_t);
+#include "rmd_getzpixmap.h"
 
 
-#endif
+int GetZPixmap(Display *dpy,
+               Window root,
+               char *data,
+               int x,
+               int y,
+               int width,
+               int height){
+    xGetImageReply reply;
+    xGetImageReq *request;
+    long nbytes;
+
+    LockDisplay(dpy);
+    GetReq(GetImage,request);
+    request->drawable=root;
+    request->x=x;
+    request->y=y;
+    request->width=width;
+    request->height=height;
+    request->planeMask=AllPlanes;
+    request->format=ZPixmap;
+    if((!_XReply(dpy,(xReply *)&reply,0,xFalse))||(!reply.length)){
+        UnlockDisplay(dpy);
+        SyncHandle();
+        return 1;
+    }
+    nbytes=(long)reply.length<<2;
+    _XReadPad(dpy,data,nbytes);
+    UnlockDisplay(dpy);
+    SyncHandle();
+    return 0;
+}
+
+int GetZPixmapSHM(Display *dpy,
+                  Window root,
+                  XShmSegmentInfo *shminfo,
+                  int shm_opcode,
+                  char *data,
+                  int x,
+                  int y,
+                  int width,
+                  int height){
+    xShmGetImageReply reply;
+    xShmGetImageReq *request=NULL;
+    long nbytes;
+
+    LockDisplay(dpy);
+    GetReq(ShmGetImage,request);
+
+    request->reqType=shm_opcode;
+    request->shmReqType=X_ShmGetImage;
+    request->shmseg=shminfo->shmseg;
+
+    request->drawable=root;
+    request->x=x;
+    request->y=y;
+    request->width=width;
+    request->height=height;
+    request->planeMask=AllPlanes;
+    request->format=ZPixmap;
+    request->offset=data-shminfo->shmaddr;
+
+    if((!_XReply(dpy,(xReply *)&reply,0,xFalse))||(!reply.length)){
+        UnlockDisplay(dpy);
+        SyncHandle();
+        return 1;
+    }
+
+    nbytes=(long)reply.length << 2;
+    _XReadPad(dpy,data,nbytes);
+    UnlockDisplay(dpy);
+    SyncHandle();
+
+    return 0;
+}

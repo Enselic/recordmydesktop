@@ -24,66 +24,47 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-#ifndef RMD_CACHE_H
-#define RMD_CACHE_H 1
+#ifndef UPDATE_IMAGE_H
+#define UPDATE_IMAGE_H 1
 
 #include "rmd_types.h"
 
 
 /**
-* Change file pointer to a new file while writting
-* (file name is incremented with CacheFileN)
+* Retrieve and apply all changes, if xdamage is used.
 *
-* \param name base file name
+* \param dpy Connection to the server
 *
-* \param n number to be used as a postfix
+* \param yuv yuv_buffer that is to be modified
 *
-* \param fp File pointer if compression is used(must be NULL otherwise)
+* \param specs DisplaySpecs struct with
+*              information about the display to be recorded
 *
-* \param ucfp File pointer if compression is NOT used(must be NULL otherwise)
+* \param root Root entry of the list with damaged areas
 *
-* \returns 0 on Success 1 on Failure
-*/
-int SwapCacheFilesWrite(char *name,int n,gzFile **fp,FILE **ucfp);
-
-/**
-* Change file pointer to a new file while reading
-* (file name is incremented with CacheFileN)
+* \param brwin BRWindow struct contaning the recording window specs
 *
-* \param name base file name
+* \param enc Encoding options
 *
-* \param n number to be used as a postfix
+* \param datatemp Buffer for pixel data to be
+*                 retrieved before placed on the yuv buffer
 *
-* \param fp File pointer if compression is used(must be NULL otherwise)
+* \param noshmem don't use MIT_Shm extension
 *
-* \param ucfp File pointer if compression is NOT used(must be NULL otherwise)
-*
-* \returns 0 on Success 1 on Failure
-*/
-int SwapCacheFilesRead(char *name,int n,gzFile **fp,FILE **ucfp);
-
-/**
-* Delete all cache files
-*
-* \param cache_data_t Caching options(file names etc.)
-*
-* \returns 0 if all files and folders where deleted, 1 otherwise
-*/
-int PurgeCache(CacheData *cache_data_t,int sound);
-
-/**
-* Initializes paths and everything else needed to start caching
-*
-* \param pdata ProgData struct containing all program data
-*
-* \param enc_data_t Encoding options
-*
-* \param cache_data_t Caching options
+* \param no_quick_subsample Don't do quick subsampling
 *
 */
-void InitCacheData(ProgData *pdata,
-                   EncData *enc_data_t,
-                   CacheData *cache_data_t);
+void UpdateImage(Display * dpy,
+                yuv_buffer *yuv,
+                DisplaySpecs *specs,
+                RectArea **root,
+                BRWindow *brwin,
+                EncData *enc,
+                char *datatemp,
+                int noshmem,
+                XShmSegmentInfo *shminfo,
+                int shm_opcode,
+                int no_quick_subsample);
 
 
 #endif

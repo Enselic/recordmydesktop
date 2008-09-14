@@ -22,10 +22,10 @@
 
 #include "config.h"
 
-#include "rmdtypes.h"
-#include "test-rectinsert-types.h"
+#include "rmd_types.h"
+#include "rmd_rectinsert.h"
 
-#include "rectinsert.h"
+#include "test-rectinsert-types.h"
 #include "test-rectinsert-data.h"
 
 
