@@ -1,6 +1,8 @@
 bin_PROGRAMS = recordmydesktop
 
 recordmydesktop_SOURCES = \
+	block_utils.c		\
+	block_utils.h		\
 	cache_audio.c		\
 	cache_audio.h		\
 	cache_frame.c		\

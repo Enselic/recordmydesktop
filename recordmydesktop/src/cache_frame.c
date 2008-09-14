@@ -29,6 +29,7 @@
 #include "cache_frame.h"
 #include "recordmydesktop.h"
 #include "rmd_cache.h"
+#include "block_utils.h"
 
 
 //minimize hard disk access

@@ -130,6 +130,26 @@
     }\
 }
 
+#define MARK_BACK_BUFFER_C( data,\
+                            x_tm,\
+                            y_tm,\
+                            width_tm,\
+                            height_tm,\
+                            buffer_width,\
+                            __bit_depth__){\
+    int k,i;\
+    register u_int##__bit_depth__##_t\
+        *datapi=\
+            ((u_int##__bit_depth__##_t *)data)+y_tm*buffer_width+x_tm;\
+    for(k=0;k<height_tm;k++){\
+        for(i=0;i<width_tm;i++){\
+            *datapi+=1;\
+            datapi++;\
+        }\
+        datapi+=buffer_width-width_tm;\
+    }\
+}
+
 #define MARK_BACK_BUFFER(   data,\
                             x_tm,\
                             y_tm,\

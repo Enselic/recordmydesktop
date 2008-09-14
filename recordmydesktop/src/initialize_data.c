@@ -24,13 +24,14 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-#include "recordmydesktop.h"
-#include "yuv_utils.h"
+#include "block_utils.h"
+#include "init_encoder.h"
 #include "make_dummy_pointer.h"
 #include "opendev.h"
-#include "rmd_jack.h"
-#include "init_encoder.h"
+#include "recordmydesktop.h"
 #include "rmd_cache.h"
+#include "rmd_jack.h"
+#include "yuv_utils.h"
 
 
 #ifdef HAVE_LIBASOUND

@@ -30,6 +30,7 @@
 #include "register_callbacks.h"
 #include "rmd_rescue.h"
 #include "specsfile.h"
+#include "block_utils.h"
 
 
 int rmdRescue(const char *path){
