@@ -27,8 +27,10 @@
 
 #include <string.h>
 
+#include "rmdtypes.h"
+
 #include "init_encoder.h"
-#include "recordmydesktop.h"
+#include "rmdmacro.h"
 #include "skeleton.h"
 
 

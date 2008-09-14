@@ -24,10 +24,11 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
+#include "rmdtypes.h"
+
 #include "encode_image_buffer.h"
 #include "encode_sound_buffer.h"
 #include "flush_to_ogg.h"
-#include "recordmydesktop.h"
 
 
 //we copy the page because the next call to ogg_stream_pageout

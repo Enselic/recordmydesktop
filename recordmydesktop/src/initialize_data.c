@@ -24,11 +24,12 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
+#include "rmdtypes.h"
+
 #include "block_utils.h"
 #include "init_encoder.h"
 #include "make_dummy_pointer.h"
 #include "opendev.h"
-#include "recordmydesktop.h"
 #include "rmd_cache.h"
 #include "rmd_jack.h"
 #include "yuv_utils.h"
@@ -54,8 +55,6 @@ int InitializeData(ProgData *pdata,
                    EncData *enc_data,
                    CacheData *cache_data){
     int i;
-    //these are globals, look for them at the header
-    frames_total=frames_lost=encoder_busy=capture_busy=0;
 
     fprintf(stderr,"Initializing...\n");
     MakeMatrices();
@@ -93,6 +92,10 @@ int InitializeData(ProgData *pdata,
     pdata->paused              = FALSE;
     pdata->aborted             = FALSE;
     pdata->pause_state_changed = FALSE;
+    pdata->frames_total        = 0;
+    pdata->frames_lost         = 0;
+    pdata->encoder_busy        = 0;
+    pdata->capture_busy        = 0;
 
     if(!pdata->args.nosound){
         if(!pdata->args.use_jack){

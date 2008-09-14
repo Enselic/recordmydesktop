@@ -24,9 +24,10 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
+#include "rmdtypes.h"
 
-#include "recordmydesktop.h"
 #include "rmd_rescue.h"
+#include "rmdmacro.h"
 
 
 static void PrintConfig(void) {

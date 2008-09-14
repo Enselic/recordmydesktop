@@ -24,9 +24,11 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-#include "recordmydesktop.h"
+#include "rmdtypes.h"
+
 #include "rmd_cache.h"
 #include "specsfile.h"
+#include "rmdmacro.h"
 
 
 /**

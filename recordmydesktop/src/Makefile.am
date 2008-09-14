@@ -38,7 +38,6 @@ recordmydesktop_SOURCES = \
 	queryextensions.c	\
 	queryextensions.h	\
 	recordmydesktop.c	\
-	recordmydesktop.h	\
 	rectinsert.c		\
 	rectinsert.h		\
 	register_callbacks.c	\

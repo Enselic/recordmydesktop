@@ -24,11 +24,12 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
+#include "rmdtypes.h"
+
 #include "encode_cache.h"
 #include "flush_to_ogg.h"
 #include "init_encoder.h"
 #include "load_cache.h"
-#include "recordmydesktop.h"
 
 
 void EncodeCache(ProgData *pdata){

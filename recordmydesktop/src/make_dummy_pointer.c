@@ -24,8 +24,10 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-#include "recordmydesktop.h"
+#include "rmdtypes.h"
+
 #include "make_dummy_pointer.h"
+#include "rmdmacro.h"
 
 
 unsigned char *MakeDummyPointer(DisplaySpecs *specs,

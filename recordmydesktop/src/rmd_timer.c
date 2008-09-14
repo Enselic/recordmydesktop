@@ -32,7 +32,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "recordmydesktop.h"
+#include "rmdtypes.h"
+
 #include "rmd_timer.h"
 
 
@@ -62,9 +63,9 @@ void *rmdTimer(ProgData *pdata){
         }
 
         if (!pdata->paused) {
-            frames_total++;
-            if(capture_busy){
-                frames_lost++;
+            pdata->frames_total++;
+            if (pdata->capture_busy) {
+                pdata->frames_lost++;
             }
         }
         

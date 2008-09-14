@@ -24,10 +24,11 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
+#include "rmdtypes.h"
+
 #include "get_frame.h"
 #include "getzpixmap.h"
 #include "poll_events.h"
-#include "recordmydesktop.h"
 #include "rectinsert.h"
 #include "rmd_cache.h"
 #include "rmd_frame.h"
@@ -439,7 +440,7 @@ void *GetFrame(ProgData *pdata){
         //switch back and front buffers (full_shots only)
         if(d_buff)
             img_sel=(img_sel)?0:1;
-        capture_busy=1;
+        pdata->capture_busy = 1;
 
         BRWinCpy(&temp_brwin,&pdata->brwin);
 
@@ -627,13 +628,13 @@ void *GetFrame(ProgData *pdata){
         if(!pdata->args.full_shots){
             ClearList(&pdata->rect_root);
         }
-        if(encoder_busy){
-            frames_lost++;
+        if (pdata->encoder_busy) {
+            pdata->frames_lost++;
         }
         pthread_mutex_lock(&pdata->img_buff_ready_mutex);
         pthread_cond_broadcast(&pdata->image_buffer_ready);
         pthread_mutex_unlock(&pdata->img_buff_ready_mutex);
-        capture_busy=0;
+        pdata->capture_busy = 0;
     }
 
     if(!pdata->args.noframe){

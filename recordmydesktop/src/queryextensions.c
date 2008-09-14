@@ -26,7 +26,8 @@
 
 #include <X11/extensions/shape.h>
 
-#include "recordmydesktop.h"
+#include "rmdtypes.h"
+
 #include "queryextensions.h"
 
 

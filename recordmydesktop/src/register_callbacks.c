@@ -26,7 +26,8 @@
 
 #include <signal.h>
 
-#include "recordmydesktop.h"
+#include "rmdtypes.h"
+
 #include "register_callbacks.h"
 
 

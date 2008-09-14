@@ -26,11 +26,13 @@
 
 #include <signal.h>
 
+#include "rmdtypes.h"
+
 #include "encode_image_buffer.h"
 #include "encode_sound_buffer.h"
 #include "load_cache.h"
-#include "recordmydesktop.h"
 #include "rmd_cache.h"
+#include "rmdmacro.h"
 
 
 //The number of bytes for every
@@ -225,9 +227,11 @@ void *LoadCache(ProgData *pdata){
                 //sync
                 missing_frames+=frame.header->current_total-
                                 (extra_frames+frame.header->frameno);
-                if(frames_total)
-                    fprintf(stdout,"\r[%d%%] ",
-                    ((frame.header->frameno+extra_frames)*100)/frames_total);
+                if (pdata->frames_total) {
+                    fprintf(stdout,
+                            "\r[%d%%] ",
+                            ((frame.header->frameno + extra_frames) * 100) / pdata->frames_total);
+                }
                 else
                     fprintf(stdout,"\r[%d frames rendered] ",
                             (frame.header->frameno+extra_frames));

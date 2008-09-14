@@ -24,8 +24,9 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
+#include "rmdtypes.h"
+
 #include "getzpixmap.h"
-#include "recordmydesktop.h"
 #include "update_image.h"
 #include "yuv_utils.h"
 

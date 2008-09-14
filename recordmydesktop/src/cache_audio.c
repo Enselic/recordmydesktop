@@ -24,8 +24,9 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
+#include "rmdtypes.h"
+
 #include "cache_audio.h"
-#include "recordmydesktop.h"
 #include "rmd_jack.h"
 
 

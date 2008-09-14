@@ -24,7 +24,8 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-#include "recordmydesktop.h"
+#include "rmdtypes.h"
+
 #include "encode_image_buffer.h"
 
 
@@ -37,7 +38,7 @@ void *EncodeImageBuffer(ProgData *pdata){
                           &pdata->img_buff_ready_mutex);
         pthread_mutex_unlock(&pdata->img_buff_ready_mutex);
         pdata->th_enc_thread_waiting=0;
-        encoder_busy=1;
+        pdata->encoder_busy = 1;
         if (pdata->paused) {
             pthread_mutex_lock(&pdata->pause_mutex);
             pthread_cond_wait(&pdata->pause_cond, &pdata->pause_mutex);
@@ -61,7 +62,7 @@ void *EncodeImageBuffer(ProgData *pdata){
                 pdata->avd+=pdata->frametime;
             }
         }
-        encoder_busy=0;
+        pdata->encoder_busy = 0;
     }
     //last packet
     pdata->th_encoding_clean=1;

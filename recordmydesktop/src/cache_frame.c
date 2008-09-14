@@ -26,8 +26,9 @@
 
 #include <signal.h>
 
+#include "rmdtypes.h"
+
 #include "cache_frame.h"
-#include "recordmydesktop.h"
 #include "rmd_cache.h"
 #include "block_utils.h"
 
@@ -169,7 +170,7 @@ void *CacheImageBuffer(ProgData *pdata){
 
         strncpy(fheader.frame_prefix,"FRAM",4);
         fheader.frameno=++frameno;
-        fheader.current_total=frames_total;
+        fheader.current_total = pdata->frames_total;
 
         fheader.Ynum=ynum;
         fheader.Unum=unum;
@@ -273,8 +274,12 @@ void *CacheImageBuffer(ProgData *pdata){
 
     }
 
-    fprintf(stderr,"Saved %d frames in a total of %d requests\n",
-                   frameno,frames_total);fflush(stderr);
+    fprintf(stderr,
+            "Saved %d frames in a total of %d requests\n",
+            frameno,
+            pdata->frames_total);
+    fflush(stderr);
+
     if(!pdata->args.zerocompression){
         gzflush(fp,Z_FINISH);
         gzclose(fp);

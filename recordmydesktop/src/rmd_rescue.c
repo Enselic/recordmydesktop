@@ -24,13 +24,14 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
+#include "rmdtypes.h"
+
+#include "block_utils.h"
 #include "encode_cache.h"
 #include "initialize_data.h"
-#include "recordmydesktop.h"
 #include "register_callbacks.h"
 #include "rmd_rescue.h"
 #include "specsfile.h"
-#include "block_utils.h"
 
 
 int rmdRescue(const char *path){

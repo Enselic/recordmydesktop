@@ -24,8 +24,10 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-#include "recordmydesktop.h"
+#include "rmdtypes.h"
+
 #include "rmd_jack.h"
+#include "rmdmacro.h"
 
 
 #ifdef HAVE_JACK_H
