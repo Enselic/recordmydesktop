@@ -440,7 +440,7 @@ void *GetFrame(ProgData *pdata){
         //switch back and front buffers (full_shots only)
         if(d_buff)
             img_sel=(img_sel)?0:1;
-        pdata->capture_busy = 1;
+        pdata->capture_busy = TRUE;
 
         BRWinCpy(&temp_brwin,&pdata->brwin);
 
@@ -634,7 +634,7 @@ void *GetFrame(ProgData *pdata){
         pthread_mutex_lock(&pdata->img_buff_ready_mutex);
         pthread_cond_broadcast(&pdata->image_buffer_ready);
         pthread_mutex_unlock(&pdata->img_buff_ready_mutex);
-        pdata->capture_busy = 0;
+        pdata->capture_busy = FALSE;
     }
 
     if(!pdata->args.noframe){

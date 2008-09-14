@@ -94,8 +94,8 @@ int InitializeData(ProgData *pdata,
     pdata->pause_state_changed = FALSE;
     pdata->frames_total        = 0;
     pdata->frames_lost         = 0;
-    pdata->encoder_busy        = 0;
-    pdata->capture_busy        = 0;
+    pdata->encoder_busy        = FALSE;
+    pdata->capture_busy        = FALSE;
 
     if(!pdata->args.nosound){
         if(!pdata->args.use_jack){

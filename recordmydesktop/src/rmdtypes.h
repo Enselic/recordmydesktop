@@ -355,8 +355,8 @@ struct _ProgData {
 
     //used to determine frame drop which can
     //happen on failure to receive a signal over a condition variable
-    int capture_busy,
-        encoder_busy;
+    boolean capture_busy,
+            encoder_busy;
 
     pthread_mutex_t pause_mutex;
     pthread_mutex_t time_mutex;
