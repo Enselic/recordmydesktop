@@ -31,6 +31,8 @@
     #include "config.h"
 #endif
 
+#include <limits.h>
+
 #include "rmdtypes.h"
 
 

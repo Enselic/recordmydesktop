@@ -24,6 +24,8 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
+#include <X11/Xatom.h>
+
 #include "rmdtypes.h"
 
 #include "wm_check.h"

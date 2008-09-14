@@ -24,6 +24,7 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
+#include <pthread.h>
 #include <signal.h>
 
 #include "rmdtypes.h"

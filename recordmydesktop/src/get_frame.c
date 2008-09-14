@@ -24,6 +24,13 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
+#include <limits.h>
+#include <pthread.h>
+#include <sys/shm.h>
+
+#include <X11/extensions/Xfixes.h>
+#include <X11/extensions/XShm.h>
+
 #include "rmdtypes.h"
 
 #include "get_frame.h"

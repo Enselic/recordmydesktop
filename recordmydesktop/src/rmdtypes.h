@@ -29,35 +29,9 @@
     #include "config.h"
 #endif
 
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <errno.h>
-#include <math.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <time.h>
-#include <sys/time.h>
-#include <sys/types.h>
-#ifdef HAVE_MACHINE_ENDIAN_H
-    #include <machine/endian.h>
-#else
-    #include <endian.h>
-#endif
-#include <limits.h>
-#include <sys/stat.h>
-#include <sys/ipc.h>
-#include <sys/shm.h>
 #include <pthread.h>
 #include <zlib.h>
 #include <X11/Xlib.h>
-#include <X11/Xlibint.h>
-#include <X11/Xatom.h>
-#include <X11/extensions/Xfixes.h>
-#include <X11/extensions/Xdamage.h>
-#include <X11/extensions/XShm.h>
-#include <X11/extensions/shmstr.h>
 #include <theora/theora.h>
 #include <vorbis/codec.h>
 #include <vorbis/vorbisenc.h>

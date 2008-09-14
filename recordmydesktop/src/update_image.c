@@ -24,6 +24,10 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
+#include <X11/Xlibint.h>
+#include <X11/extensions/shmstr.h>
+#include <X11/extensions/XShm.h>
+
 #include "rmdtypes.h"
 
 #include "getzpixmap.h"

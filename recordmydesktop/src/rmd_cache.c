@@ -24,6 +24,8 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
+#include <sys/stat.h>
+
 #include "rmdtypes.h"
 
 #include "rmd_cache.h"

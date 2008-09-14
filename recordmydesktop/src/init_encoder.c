@@ -26,6 +26,7 @@
 
 
 #include <string.h>
+#include <sys/stat.h>
 
 #include "rmdtypes.h"
 

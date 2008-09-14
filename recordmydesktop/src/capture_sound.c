@@ -24,6 +24,8 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
+#include <pthread.h>
+
 #include "rmdtypes.h"
 
 #include "capture_sound.h"
