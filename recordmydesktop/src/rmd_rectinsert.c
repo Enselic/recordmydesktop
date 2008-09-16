@@ -56,7 +56,7 @@
 */
 static int CollideRects(WGeometry *wgeom1,
                         WGeometry *wgeom2,
-                        WGeometry **wgeom_return,
+                        WGeometry wgeom_return[],
                         int *ngeoms) {
     //1 fits in 2
     if((wgeom1->x>=wgeom2->x)&&
@@ -118,89 +118,88 @@ static int CollideRects(WGeometry *wgeom1,
             //group
             if((enclosed[1][0]&&enclosed[1][1])&&
                (wgeom1->width==wgeom2->width)){
-                wgeom_return[0]=(WGeometry *)malloc(sizeof(WGeometry));
                 *ngeoms=1;
-                wgeom_return[0]->x=wgeom1->x;
-                wgeom_return[0]->y=wgeom1->y;
-                wgeom_return[0]->width=wgeom1->width;
-                wgeom_return[0]->height=wgeom2->height+wgeom2->y-wgeom1->y;
+                wgeom_return[0].x = wgeom1->x;
+                wgeom_return[0].y = wgeom1->y;
+                wgeom_return[0].width = wgeom1->width;
+                wgeom_return[0].height = wgeom2->height + wgeom2->y - wgeom1->y;
                 return -10;
             }
             else if((enclosed[1][0]&&enclosed[1][2])&&
                     (wgeom1->height==wgeom2->height)){
                 *ngeoms=1;
-                wgeom_return[0]->x=wgeom1->x;
-                wgeom_return[0]->y=wgeom1->y;
-                wgeom_return[0]->width=wgeom2->width+wgeom2->x-wgeom1->x;
-                wgeom_return[0]->height=wgeom1->height;
+                wgeom_return[0].x = wgeom1->x;
+                wgeom_return[0].y = wgeom1->y;
+                wgeom_return[0].width = wgeom2->width + wgeom2->x - wgeom1->x;
+                wgeom_return[0].height = wgeom1->height;
                 return -10;
             }
             else if((enclosed[1][3]&&enclosed[1][1])&&
                     (wgeom1->height==wgeom2->height)){
                 *ngeoms=1;
-                wgeom_return[0]->x=wgeom2->x;
-                wgeom_return[0]->y=wgeom2->y;
-                wgeom_return[0]->width=wgeom1->width+wgeom1->x-wgeom2->x;
-                wgeom_return[0]->height=wgeom2->height;
+                wgeom_return[0].x = wgeom2->x;
+                wgeom_return[0].y = wgeom2->y;
+                wgeom_return[0].width = wgeom1->width + wgeom1->x - wgeom2->x;
+                wgeom_return[0].height = wgeom2->height;
                 return -10;
             }
             else if((enclosed[1][3]&&enclosed[1][2])&&
                     (wgeom1->width==wgeom2->width)){
                 *ngeoms=1;
-                wgeom_return[0]->x=wgeom2->x;
-                wgeom_return[0]->y=wgeom2->y;
-                wgeom_return[0]->width=wgeom2->width;
-                wgeom_return[0]->height=wgeom1->height+wgeom1->y-wgeom2->y;
+                wgeom_return[0].x = wgeom2->x;
+                wgeom_return[0].y = wgeom2->y;
+                wgeom_return[0].width = wgeom2->width;
+                wgeom_return[0].height = wgeom1->height + wgeom1->y - wgeom2->y;
                 return -10;
             }
             //if control reaches here therewasn't a group and we go on
         }
         if(tot2==2){
             //break geom2
-            wgeom_return[0]->x=wgeom2->x;
-            wgeom_return[0]->y=wgeom2->y;
-            wgeom_return[0]->width=wgeom2->width;
-            wgeom_return[0]->height=wgeom2->height;
+            wgeom_return[0].x = wgeom2->x;
+            wgeom_return[0].y = wgeom2->y;
+            wgeom_return[0].width = wgeom2->width;
+            wgeom_return[0].height = wgeom2->height;
             *ngeoms=1;
             if(enclosed[1][0]&&enclosed[1][1]){
-                wgeom_return[0]->y=y1[1];
-                wgeom_return[0]->height-=y1[1]-y2[0];
+                wgeom_return[0].y = y1[1];
+                wgeom_return[0].height -= y1[1] - y2[0];
             }
             else if(enclosed[1][0]&&enclosed[1][2]){
-                wgeom_return[0]->x=x1[1];
-                wgeom_return[0]->width-=x1[1]-x2[0];
+                wgeom_return[0].x = x1[1];
+                wgeom_return[0].width -= x1[1] - x2[0];
             }
             else if(enclosed[1][3]&&enclosed[1][1])
-                wgeom_return[0]->width-=x2[1]-x1[0];
+                wgeom_return[0].width -= x2[1] - x1[0];
             else if(enclosed[1][3]&&enclosed[1][2])
-                wgeom_return[0]->height-=y2[1]-y1[0];
+                wgeom_return[0].height -= y2[1] - y1[0];
             return -2;
         }
         else if(tot1==2){
             //if the first one breaks(which is already inserted)
             //then we reenter the part that was left and the one
             //that was to be inserted
-            wgeom_return[1]->x=wgeom2->x;
-            wgeom_return[1]->y=wgeom2->y;
-            wgeom_return[1]->width=wgeom2->width;
-            wgeom_return[1]->height=wgeom2->height;
-            wgeom_return[0]->x=wgeom1->x;
-            wgeom_return[0]->y=wgeom1->y;
-            wgeom_return[0]->width=wgeom1->width;
-            wgeom_return[0]->height=wgeom1->height;
+            wgeom_return[1].x = wgeom2->x;
+            wgeom_return[1].y = wgeom2->y;
+            wgeom_return[1].width = wgeom2->width;
+            wgeom_return[1].height = wgeom2->height;
+            wgeom_return[0].x = wgeom1->x;
+            wgeom_return[0].y = wgeom1->y;
+            wgeom_return[0].width = wgeom1->width;
+            wgeom_return[0].height = wgeom1->height;
             *ngeoms=1;
             if(enclosed[0][0]&&enclosed[0][1]){
-                wgeom_return[0]->y=y2[1];
-                wgeom_return[0]->height-=y2[1]-y1[0];
+                wgeom_return[0].y = y2[1];
+                wgeom_return[0].height -= y2[1] - y1[0];
             }
             else if(enclosed[0][0]&&enclosed[0][2]){
-                wgeom_return[0]->x=x2[1];
-                wgeom_return[0]->width-=x2[1]-x1[0];
+                wgeom_return[0].x = x2[1];
+                wgeom_return[0].width -= x2[1] - x1[0];
             }
             else if(enclosed[0][3]&&enclosed[0][1])
-                wgeom_return[0]->width-=x1[1]-x2[0];
+                wgeom_return[0].width -= x1[1] - x2[0];
             else if(enclosed[0][3]&&enclosed[0][2])
-                wgeom_return[0]->height-=y1[1]-y2[0];
+                wgeom_return[0].height -= y1[1] - y2[0];
             return -1;
 
         }
@@ -210,51 +209,51 @@ static int CollideRects(WGeometry *wgeom1,
             *ngeoms=2;
             if(enclosed[1][0]){
 //first
-                wgeom_return[0]->x=x1[1];
-                wgeom_return[0]->y=y2[0];
-                wgeom_return[0]->width=wgeom2->width-x1[1]+x2[0];
-                wgeom_return[0]->height=wgeom2->height;
+                wgeom_return[0].x = x1[1];
+                wgeom_return[0].y = y2[0];
+                wgeom_return[0].width = wgeom2->width - x1[1] + x2[0];
+                wgeom_return[0].height = wgeom2->height;
 //second
-                wgeom_return[1]->x=x2[0];
-                wgeom_return[1]->y=y1[1];
-                wgeom_return[1]->width=x1[1]-x2[0];
-                wgeom_return[1]->height=wgeom2->height-y1[1]+y2[0];
+                wgeom_return[1].x = x2[0];
+                wgeom_return[1].y = y1[1];
+                wgeom_return[1].width = x1[1] - x2[0];
+                wgeom_return[1].height = wgeom2->height - y1[1] + y2[0];
             }
             else if(enclosed[1][1]){
 //first
-                wgeom_return[0]->x=x2[0];
-                wgeom_return[0]->y=y2[0];
-                wgeom_return[0]->width=wgeom2->width-x2[1]+x1[0];
-                wgeom_return[0]->height=wgeom2->height;
+                wgeom_return[0].x = x2[0];
+                wgeom_return[0].y = y2[0];
+                wgeom_return[0].width = wgeom2->width - x2[1] + x1[0];
+                wgeom_return[0].height = wgeom2->height;
 //second
-                wgeom_return[1]->x=x1[0];
-                wgeom_return[1]->y=y1[1];
-                wgeom_return[1]->width=x2[1]-x1[0];
-                wgeom_return[1]->height=wgeom2->height-y1[1]+y2[0];
+                wgeom_return[1].x = x1[0];
+                wgeom_return[1].y = y1[1];
+                wgeom_return[1].width = x2[1] - x1[0];
+                wgeom_return[1].height = wgeom2->height - y1[1] + y2[0];
             }
             else if(enclosed[1][2]){
 //first(same as [1][0])
-                wgeom_return[0]->x=x1[1];
-                wgeom_return[0]->y=y2[0];
-                wgeom_return[0]->width=wgeom2->width-x1[1]+x2[0];
-                wgeom_return[0]->height=wgeom2->height;
+                wgeom_return[0].x = x1[1];
+                wgeom_return[0].y = y2[0];
+                wgeom_return[0].width = wgeom2->width - x1[1] + x2[0];
+                wgeom_return[0].height = wgeom2->height;
 //second
-                wgeom_return[1]->x=x2[0];
-                wgeom_return[1]->y=y2[0];
-                wgeom_return[1]->width=x1[1]-x2[0];
-                wgeom_return[1]->height=wgeom2->height-y2[1]+y1[0];
+                wgeom_return[1].x = x2[0];
+                wgeom_return[1].y = y2[0];
+                wgeom_return[1].width = x1[1] - x2[0];
+                wgeom_return[1].height = wgeom2->height - y2[1] + y1[0];
             }
             else if(enclosed[1][3]){
 //first(same as [1][1])
-                wgeom_return[0]->x=x2[0];
-                wgeom_return[0]->y=y2[0];
-                wgeom_return[0]->width=wgeom2->width-x2[1]+x1[0];
-                wgeom_return[0]->height=wgeom2->height;
+                wgeom_return[0].x = x2[0];
+                wgeom_return[0].y = y2[0];
+                wgeom_return[0].width = wgeom2->width - x2[1] + x1[0];
+                wgeom_return[0].height = wgeom2->height;
 //second
-                wgeom_return[1]->x=x1[0];
-                wgeom_return[1]->y=y2[0];
-                wgeom_return[1]->width=x2[1]-x1[0];
-                wgeom_return[1]->height=wgeom2->height-y2[1]+y1[0];
+                wgeom_return[1].x = x1[0];
+                wgeom_return[1].y = y2[0];
+                wgeom_return[1].width = x2[1] - x1[0];
+                wgeom_return[1].height = wgeom2->height - y2[1] + y1[0];
             }
             return -2;
         }
@@ -269,23 +268,23 @@ static int CollideRects(WGeometry *wgeom1,
             *ngeoms=2;
             if(wgeom2->y<wgeom1->y){
                 //common
-                wgeom_return[0]->x=wgeom_return[1]->x=x2[0];
-                wgeom_return[0]->width=wgeom_return[1]->width=wgeom2->width;
+                wgeom_return[0].x = wgeom_return[1].x = x2[0];
+                wgeom_return[0].width  = wgeom_return[1].width = wgeom2->width;
 
-                wgeom_return[0]->y=y2[0];
-                wgeom_return[0]->height=wgeom2->height-y2[1]+y1[0];
-                wgeom_return[1]->y=y1[1];
-                wgeom_return[1]->height=y2[1]-y1[1];
+                wgeom_return[0].y = y2[0];
+                wgeom_return[0].height = wgeom2->height - y2[1] + y1[0];
+                wgeom_return[1].y = y1[1];
+                wgeom_return[1].height = y2[1] - y1[1];
             }
             else{
                 //common
-                wgeom_return[0]->y=wgeom_return[1]->y=y2[0];
-                wgeom_return[0]->height=wgeom_return[1]->height=wgeom2->height;
+                wgeom_return[0].y = wgeom_return[1].y = y2[0];
+                wgeom_return[0].height = wgeom_return[1].height = wgeom2->height;
 
-                wgeom_return[0]->x=x2[0];
-                wgeom_return[0]->width=wgeom2->width-x2[1]+x1[0];
-                wgeom_return[1]->x=x1[1];
-                wgeom_return[1]->width=x2[1]-x1[1];
+                wgeom_return[0].x = x2[0];
+                wgeom_return[0].width = wgeom2->width - x2[1] + x1[0];
+                wgeom_return[1].x = x1[1];
+                wgeom_return[1].width = x2[1] - x1[1];
             }
             return -2;
         }
@@ -316,27 +315,25 @@ int RectInsert(RectArea **root,WGeometry *wgeom){
         total_insertions=1;
     }
     else{
-        WGeometry *wgeom_return[2];
-        wgeom_return[0]=(WGeometry *)malloc(sizeof(WGeometry));
-        wgeom_return[1]=(WGeometry *)malloc(sizeof(WGeometry));
+        WGeometry wgeom_return[2];
 
         int ngeoms=0,insert_ok=1,i=0;
         temp=*root;
         while(insert_ok){   //if something is broken list does not procceed
                             //(except on -1 collres case)
-            int collres=CollideRects(&(temp->geom),wgeom,wgeom_return,&ngeoms);
+            int collres = CollideRects(&temp->geom, wgeom, &wgeom_return[0], &ngeoms);
             if((!collres))
                 insert_ok=1;
             else{
                 for(i=0;i<ngeoms;i++){
-                    wgeom_return[i]->width+=(wgeom_return[i]->width%2)|
-                                            (wgeom_return[i]->x%2);
-                    wgeom_return[i]->height+=(wgeom_return[i]->height%2)|
-                                             (wgeom_return[i]->y%2);
-                    wgeom_return[i]->width+=(wgeom_return[i]->width%2);
-                    wgeom_return[i]->height+=(wgeom_return[i]->height%2);
-                    wgeom_return[i]->x-=wgeom_return[i]->x%2;
-                    wgeom_return[i]->y-=wgeom_return[i]->y%2;
+                    wgeom_return[i].width += (wgeom_return[i].width % 2) |
+                                             (wgeom_return[i].x % 2);
+                    wgeom_return[i].height += (wgeom_return[i].height % 2) |
+                                              (wgeom_return[i].y % 2);
+                    wgeom_return[i].width += (wgeom_return[i].width % 2);
+                    wgeom_return[i].height += (wgeom_return[i].height % 2);
+                    wgeom_return[i].x -= wgeom_return[i].x % 2;
+                    wgeom_return[i].y -= wgeom_return[i].y % 2;
                 }
                 insert_ok=0;
                 switch(collres){
@@ -382,12 +379,12 @@ int RectInsert(RectArea **root,WGeometry *wgeom){
                     case -1://current node is broken and reinserted
                             //(in same pos)
                             //newnode is also reinserted
-                        if((wgeom_return[0]->width>0)&&
-                           (wgeom_return[0]->height>0)){
-                            temp->geom.x=wgeom_return[0]->x;
-                            temp->geom.y=wgeom_return[0]->y;
-                            temp->geom.width=wgeom_return[0]->width;
-                            temp->geom.height=wgeom_return[0]->height;
+                        if (wgeom_return[0].width > 0 &&
+                            wgeom_return[0].height > 0) {
+                            temp->geom.x = wgeom_return[0].x;
+                            temp->geom.y = wgeom_return[0].y;
+                            temp->geom.width = wgeom_return[0].width;
+                            temp->geom.height = wgeom_return[0].height;
                             if(temp->next==NULL){
                                 temp->next=newnode;
                                 newnode->prev=temp;
@@ -423,20 +420,20 @@ int RectInsert(RectArea **root,WGeometry *wgeom){
                     case -2://new is broken and reinserted
                         if(temp->next==NULL){
                             total_insertions+=ngeoms;
-                            newnode->geom.x=wgeom_return[0]->x;
-                            newnode->geom.y=wgeom_return[0]->y;
-                            newnode->geom.width=wgeom_return[0]->width;
-                            newnode->geom.height=wgeom_return[0]->height;
+                            newnode->geom.x = wgeom_return[0].x;
+                            newnode->geom.y = wgeom_return[0].y;
+                            newnode->geom.width = wgeom_return[0].width;
+                            newnode->geom.height = wgeom_return[0].height;
                             temp->next=newnode;
                             newnode->prev=temp;
                             if(ngeoms>1){
                                 RectArea *newnode1=
                                 (RectArea *)malloc(sizeof(RectArea));
 
-                                newnode1->geom.x=wgeom_return[1]->x;
-                                newnode1->geom.y=wgeom_return[1]->y;
-                                newnode1->geom.width=wgeom_return[1]->width;
-                                newnode1->geom.height=wgeom_return[1]->height;
+                                newnode1->geom.x = wgeom_return[1].x;
+                                newnode1->geom.y = wgeom_return[1].y;
+                                newnode1->geom.width = wgeom_return[1].width;
+                                newnode1->geom.height = wgeom_return[1].height;
                                 newnode->next=newnode1;
                                 newnode1->prev=newnode;
                                 newnode1->next=NULL;
@@ -444,21 +441,20 @@ int RectInsert(RectArea **root,WGeometry *wgeom){
                         }
                         else{
                             for(i=0;i<ngeoms;i++){
-                                if((wgeom_return[i]->width>0)&&
-                                   (wgeom_return[i]->height>0))
+                                if(wgeom_return[i].width > 0 &&
+                                   wgeom_return[i].height > 0)
                                     total_insertions+=
-                                    RectInsert(&temp->next,wgeom_return[i]);
+                                    RectInsert(&temp->next, &wgeom_return[i]);
                             }
                         }
                         break;
                     case -10://grouped
                         if(temp->prev==NULL){
                             if(temp->next==NULL){//empty list
-                                    newnode->geom.x=wgeom_return[0]->x;
-                                    newnode->geom.y=wgeom_return[0]->y;
-                                    newnode->geom.width=wgeom_return[0]->width;
-                                    newnode->geom.height=
-                                    wgeom_return[0]->height;
+                                    newnode->geom.x = wgeom_return[0].x;
+                                    newnode->geom.y = wgeom_return[0].y;
+                                    newnode->geom.width = wgeom_return[0].width;
+                                    newnode->geom.height = wgeom_return[0].height;
 
                                     *root=newnode;
                                     free(temp);
@@ -468,17 +464,17 @@ int RectInsert(RectArea **root,WGeometry *wgeom){
                                 *root=temp->next;
                                 (*root)->prev=NULL;
                                 free(temp);
-                                if((wgeom_return[0]->width>0)&&
-                                   (wgeom_return[0]->height>0))
+                                if(wgeom_return[0].width > 0 &&
+                                   wgeom_return[0].height > 0)
                                     total_insertions+=
-                                    RectInsert(root,wgeom_return[0]);
+                                    RectInsert(root, &wgeom_return[0]);
                             }
                         }
                         else if(temp->next==NULL){//last, enter anyway
-                            newnode->geom.x=wgeom_return[0]->x;
-                            newnode->geom.y=wgeom_return[0]->y;
-                            newnode->geom.width=wgeom_return[0]->width;
-                            newnode->geom.height=wgeom_return[0]->height;
+                            newnode->geom.x = wgeom_return[0].x;
+                            newnode->geom.y = wgeom_return[0].y;
+                            newnode->geom.width = wgeom_return[0].width;
+                            newnode->geom.height = wgeom_return[0].height;
                             temp->prev->next=newnode;
                             newnode->prev=temp->prev;
                             free(temp);
@@ -489,10 +485,10 @@ int RectInsert(RectArea **root,WGeometry *wgeom){
                             temp->prev->next=temp->next;
                             temp->next->prev=temp->prev;
                             free(temp);
-                            if((wgeom_return[0]->width>0)&&
-                               (wgeom_return[0]->height>0))
+                            if(wgeom_return[0].width > 0 &&
+                               wgeom_return[0].height > 0)
                                 total_insertions+=
-                                RectInsert(&temp1,wgeom_return[0]);
+                                RectInsert(&temp1, &wgeom_return[0]);
                         }
                         break;
                 }
@@ -512,9 +508,6 @@ int RectInsert(RectArea **root,WGeometry *wgeom){
                 break;
             }
         };
-
-        free(wgeom_return[0]);
-        free(wgeom_return[1]);
     }
     return total_insertions;
 }
