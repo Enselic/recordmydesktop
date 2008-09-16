@@ -28,15 +28,16 @@
 
 #include "rmd_types.h"
 
+#include "rmd_cache.h"
 #include "rmd_encode_cache.h"
+#include "rmd_error.h"
 #include "rmd_initialize_data.h"
 #include "rmd_parseargs.h"
 #include "rmd_queryextensions.h"
-#include "rmd_cache.h"
-#include "rmd_error.h"
-#include "rmd_threads.h"
+#include "rmd_rescue.h"
 #include "rmd_setbrwindow.h"
 #include "rmd_shortcuts.h"
+#include "rmd_threads.h"
 #include "rmd_wm_check.h"
 
 
@@ -48,6 +49,9 @@ int main(int argc,char **argv){
 
     if (!ParseArgs(argc, argv, &pdata.args)) {
         exit(1);
+    }
+    if (pdata.args.rescue_path != NULL) {
+        exit(rmdRescue(pdata.args.rescue_path));
     }
     if(XInitThreads ()==0){
         fprintf(stderr,"Couldn't initialize thread support!\n");

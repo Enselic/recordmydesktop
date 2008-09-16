@@ -29,7 +29,6 @@
 #include "rmd_types.h"
 
 #include "rmd_macro.h"
-#include "rmd_rescue.h"
 
 
 static void PrintConfig(void) {
@@ -524,8 +523,7 @@ boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
         }
         else if(!strcmp(argv[i],"-rescue")){
             if(i+1<argc){
-                int ex_st=rmdRescue(argv[i+1]);
-                exit(ex_st);
+                arg_return->rescue_path = argv[i + 1];
             }
             else{
                 fprintf(stderr,"Argument Usage: -rescue path_to_data\n");

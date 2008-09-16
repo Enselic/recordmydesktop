@@ -129,6 +129,7 @@ typedef struct _ProgArgs{
 #else
     u_int32_t buffsize;
 #endif
+    const char* rescue_path;
     int nosound;        //do not record sound(default 0)
     int noshared;       //do not use shared memory extension(default 0)
     int nowmcheck;      //do not check if there's a 3d comp window manager
