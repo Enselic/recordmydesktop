@@ -70,14 +70,6 @@
 //avoid problems (amd64 has 8byte ulong)
 #define RMD_ULONG_SIZE_T (sizeof(unsigned long))
 
-//size of stride when comparing planes(depending on type)
-//this is just to avoid thousands of sizeof's
-#ifdef HAVE_U_INT64_T
-    #define COMPARE_STRIDE  8
-#else
-    #define COMPARE_STRIDE  4
-#endif
-
 //The width, in bytes, of the blocks
 //on which the y,u and v planes are broken.
 //These blocks are square.
