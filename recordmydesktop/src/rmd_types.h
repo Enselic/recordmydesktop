@@ -282,7 +282,6 @@ struct _ProgData {
                                 //whenever it's time to get a screenshot
                     pause_cond, //this is blocks execution,
                                 //when program is paused
-                    sound_buffer_ready, //sound encoding finished
                     sound_data_read,    //a buffer is ready for proccessing
                     image_buffer_ready, //image encoding finished
                     theora_lib_clean,   //the flush_ogg thread cannot

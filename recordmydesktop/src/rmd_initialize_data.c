@@ -85,7 +85,6 @@ int InitializeData(ProgData *pdata,
     pthread_cond_init(&pdata->time_cond,NULL);
     pthread_cond_init(&pdata->pause_cond,NULL);
     pthread_cond_init(&pdata->image_buffer_ready,NULL);
-    pthread_cond_init(&pdata->sound_buffer_ready,NULL);
     pthread_cond_init(&pdata->sound_data_read,NULL);
     pthread_cond_init(&pdata->theora_lib_clean,NULL);
     pthread_cond_init(&pdata->vorbis_lib_clean,NULL);
