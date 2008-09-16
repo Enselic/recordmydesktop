@@ -76,22 +76,5 @@
 #define Y_UNIT_WIDTH    0x0010
 #define UV_UNIT_WIDTH   0x0008
 
-#define I16TOA(number,buffer){\
-    int t_num=(number),__k=0,__i=0;\
-    char *t_buf=malloc(8);\
-    t_num=t_num&((2<<15)-1);\
-    while(t_num>0){\
-        int digit=t_num%10;\
-        t_buf[__k]=digit+48;\
-        t_num-=digit;\
-        t_num/=10;\
-        __k++;\
-    }\
-    while(__k>0)\
-        (buffer)[__i++]=t_buf[--__k];\
-    (buffer)[__i]='\0';\
-    free(t_buf);\
-};\
-
-
 #endif
+

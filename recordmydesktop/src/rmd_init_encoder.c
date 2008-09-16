@@ -35,7 +35,6 @@
 #include "rmd_types.h"
 
 #include "rmd_init_encoder.h"
-#include "rmd_macro.h"
 
 
 static void m_add_fishead_packet(ogg_stream_state *m_ogg_state) {
@@ -73,7 +72,7 @@ static int IncrementalNaming(char **name) {
         strcpy(tname,base_name__);
         strcat(tname,"-");
         i++;
-        I16TOA((i),numbuf)
+        snprintf( numbuf, 8, "%d", i );
         strcat(tname,numbuf);
         strcat(tname,".ogv");
         //save new name

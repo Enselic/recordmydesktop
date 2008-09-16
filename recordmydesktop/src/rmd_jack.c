@@ -31,7 +31,6 @@
 #include "rmd_types.h"
 
 #include "rmd_jack.h"
-#include "rmd_macro.h"
 
 
 #ifdef HAVE_JACK_H
@@ -147,7 +146,7 @@ static int SetupPorts(JackData *jdata) {
         char name[64];//recordMyDesktop:input_n<64 is enough for full name
         char num[8];
         strcpy(name,"input_");
-        I16TOA((i+1),num);
+        snprintf( num, 8, "%d", i+1 );
         strcat(name,num);
         if((jdata->ports[i]=jack_port_register_p(jdata->client,
                                                  name,
@@ -234,7 +233,7 @@ int StartJackClient(JackData *jdata){
     //to connetc to a Jack Server
     strcpy(rmd_client_name,"recordMyDesktop-");
     pid=getpid();
-    I16TOA(pid,pidbuf)
+    snprintf( pidbuf, 8, "%d", pid );
     strcat(rmd_client_name,pidbuf);
 
     if(LoadJackLib(jdata->jack_lib_handle)){

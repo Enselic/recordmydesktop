@@ -31,7 +31,7 @@
 #include "rmd_types.h"
 
 #include "rmd_cache.h"
-#include "rmd_macro.h"
+
 #include "rmd_specsfile.h"
 
 
@@ -49,7 +49,7 @@ static void CacheFileN(char *name, char **newname, int n) { // Nth cache file
     char numbuf[8];
     strcpy(*newname,name);
     strcat(*newname,".");
-    I16TOA((n),numbuf)
+    snprintf( numbuf, 8, "%d", n );
     strcat(*newname,numbuf);
 }
 
@@ -159,7 +159,7 @@ void InitCacheData(ProgData *pdata,
     cache_data_t->workdir=(pdata->args).workdir;
     pid=getpid();
 
-    I16TOA(pid,pidbuf)
+    snprintf( pidbuf, 8, "%d", pid );
     //names are stored relatively to current dir(i.e. no chdir)
     cache_data_t->projname=malloc(strlen(cache_data_t->workdir)+
                            12+strlen(pidbuf)+3);
