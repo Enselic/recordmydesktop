@@ -108,7 +108,7 @@ typedef struct _BRWindow{   //'basic recorded window' specs
 }BRWindow;
 
 //defaults in the following comment lines may be out of sync with reality
-//check DEFAULT_ARGS macro further bellow
+//check the SetupDefaultArgs() function further bellow
 typedef struct _ProgArgs{
     int delay;          //start up delay
     Window windowid;    //window to record(default root)
