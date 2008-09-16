@@ -26,17 +26,22 @@
 
 #include "config.h"
 
+#include <X11/Xlib.h>
+
 #include "rmd_types.h"
 
 #include "rmd_macro.h"
 #include "rmd_make_dummy_pointer.h"
 
 
-unsigned char *MakeDummyPointer(DisplaySpecs *specs,
+unsigned char *MakeDummyPointer(Display *display,
+                                DisplaySpecs *specs,
                                 int size,
                                 int color,
                                 int type,
                                 unsigned char *npxl){
+    unsigned long bpixel = XBlackPixel(display, specs->screen);
+    unsigned long wpixel = XWhitePixel(display, specs->screen);
     int i,k,o='.';
     unsigned long   b=(color)?'w':'b',
                     w=(color)?'b':'w';
@@ -59,18 +64,15 @@ unsigned char *MakeDummyPointer(DisplaySpecs *specs,
         {o,o,o,o,o,o,w,w,o,o,o,o,o,o,o,o}}
     };
     unsigned char *ret=malloc(size*sizeof(char[size*4]));
-    unsigned char wp[4]={
-        ((specs->wpixel^0xff000000)>>24),
-        ((specs->wpixel^0x00ff0000)>>16),
-        ((specs->wpixel^0x0000ff00)>>8),
-        ((specs->wpixel^0x000000ff))
-    };
-    unsigned char bp[4]={
-        ((specs->bpixel^0xff000000)>>24),
-        ((specs->bpixel^0x00ff0000)>>16),
-        ((specs->bpixel^0x0000ff00)>>8),
-        ((specs->bpixel^0x000000ff))
-    };
+    unsigned char wp[4]={ (wpixel ^ 0xff000000) >> 24,
+                          (wpixel ^ 0x00ff0000) >> 16,
+                          (wpixel ^ 0x0000ff00) >> 8,
+                          (wpixel ^ 0x000000ff) };
+    unsigned char bp[4]={ (bpixel ^ 0xff000000) >> 24,
+                          (bpixel ^ 0x00ff0000) >> 16,
+                          (bpixel ^ 0x0000ff00) >> 8,
+                          (bpixel ^ 0x000000ff) };
+
     *npxl=((wp[0]-1)!=bp[0])?wp[0]-100:wp[0]-102;
     for(i=0;i<size;i++){
         for(k=0;k<size;k++){

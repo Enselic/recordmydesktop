@@ -86,8 +86,6 @@ typedef struct _DisplaySpecs{   //this struct holds some basic information
     Visual *visual;
     GC gc;
     int depth;
-    unsigned long bpixel;
-    unsigned long wpixel;
 }DisplaySpecs;
 
 typedef struct _WGeometry{  //basic geometry of a window or area

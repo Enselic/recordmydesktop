@@ -84,8 +84,6 @@ int main(int argc,char **argv){
         pdata.specs.visual = DefaultVisual(pdata.dpy, pdata.specs.screen);
         pdata.specs.gc     = DefaultGC(pdata.dpy, pdata.specs.screen);
         pdata.specs.depth  = DefaultDepth(pdata.dpy, pdata.specs.screen);
-        pdata.specs.bpixel = XBlackPixel(pdata.dpy, pdata.specs.screen);
-        pdata.specs.wpixel = XWhitePixel(pdata.dpy, pdata.specs.screen);
 
         if((pdata.specs.depth!=32)&&
            (pdata.specs.depth!=24)&&

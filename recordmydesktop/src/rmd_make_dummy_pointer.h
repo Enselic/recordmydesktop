@@ -48,7 +48,8 @@
 *
 * \returns Pointer to pixel data of the cursor
 */
-unsigned char *MakeDummyPointer(DisplaySpecs *specs,
+unsigned char *MakeDummyPointer(Display *display,
+                                DisplaySpecs *specs,
                                 int size,
                                 int color,
                                 int type,
