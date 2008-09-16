@@ -1,7 +1,7 @@
 bin_PROGRAMS = recordmydesktop
 
 recordmydesktop_SOURCES = \
-	recordmydesktop.c \
+	rmd.c \
 	rmd_block_utils.c \
 	rmd_block_utils.h \
 	rmd_cache.c \
