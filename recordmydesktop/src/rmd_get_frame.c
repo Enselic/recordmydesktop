@@ -106,9 +106,10 @@
                 yuv->y[x_tm+(i-x_offset)+(k+y_tm-y_offset)*yuv->y_width]=\
                     (yuv->y[x_tm+(i-x_offset)+(k-y_offset+y_tm)*yuv->y_width]*\
                     (UCHAR_MAX-data[(j*RMD_ULONG_SIZE_T)+__ABYTE])+\
-                    (Yr[data[(j*RMD_ULONG_SIZE_T)+__RBYTE]]+\
-                    Yg[data[(j*RMD_ULONG_SIZE_T)+__GBYTE]] +\
-                    Yb[data[(j*RMD_ULONG_SIZE_T)+__BBYTE]])*\
+                    ( ( Yr[data[(j*RMD_ULONG_SIZE_T)+__RBYTE]]+\
+                        Yg[data[(j*RMD_ULONG_SIZE_T)+__GBYTE]] +\
+                        Yb[data[(j*RMD_ULONG_SIZE_T)+__BBYTE]] ) % \
+                      ( UCHAR_MAX + 1 ) ) * \
                 data[(j*RMD_ULONG_SIZE_T)+__ABYTE])/UCHAR_MAX ;\
                 if((k%2)&&(i%2)){\
                     avg3=AVG_4_PIXELS(data,\
@@ -128,13 +129,17 @@
                     (yuv->u[x_2+(i-x_offset)/2+((k-y_offset)/2+y_2)*\
                             yuv->uv_width]*\
                     (UCHAR_MAX-avg3)+\
-                    (Ur[avg2] + Ug[avg1] +UbVr[avg0])*avg3)/UCHAR_MAX;\
+                    ( (Ur[avg2] + Ug[avg1] + UbVr[avg0]) % \
+                      ( UCHAR_MAX + 1 ) ) * avg3 ) / \
+                        UCHAR_MAX;\
                     yuv->v[x_2+(i-x_offset)/2+((k-y_offset)/2+y_2)*\
                            yuv->uv_width]=\
                     (yuv->v[x_2+(i-x_offset)/2+((k-y_offset)/2+y_2)*\
                             yuv->uv_width]*\
                     (UCHAR_MAX-avg3)+\
-                    (UbVr[avg2] + Vg[avg1] +Vb[avg0])*avg3)/UCHAR_MAX;\
+                    ( ( UbVr[avg2] + Vg[avg1] + Vb[avg0] ) % \
+                      ( UCHAR_MAX + 1 ) ) * avg3 ) / \
+                        UCHAR_MAX; \
                 }\
         }\
     }\

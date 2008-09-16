@@ -1,9 +1,9 @@
 /******************************************************************************
-*                            recordMyDesktop                                  *
+*                      recordMyDesktop - rmd_yuv_utils.c                      *
 *******************************************************************************
 *                                                                             *
 *            Copyright (C) 2006,2007,2008 John Varouhakis                     *
-*                                                                             *
+*            Copyright (C) 2008 Luca Bonavita                                 * 
 *                                                                             *
 *   This program is free software; you can redistribute it and/or modify      *
 *   it under the terms of the GNU General Public License as published by      *
@@ -34,24 +34,52 @@ unsigned char Yr[256], Yg[256], Yb[256],
               Vg[256], Vb[256];
 
 void MakeMatrices (void) {
+    
     int i;
+ 
+ 	/* assuming 8-bit precision */
+ 	float Yscale = 219.0, Yoffset = 16.0;
+ 	float Cscale = 224.0, Coffset = 128.0;
+ 	float RGBscale = 255.0;
+ 
+ 	float r, g, b;
+ 	float yr, yg, yb;
+ 	float ur, ug, ub;
+ 	float     vg, vb;	/* vr intentionally missing */
+ 
+ 	/* as for ITU-R BT-601-6 specifications: */
+ 	r = 0.299;
+ 	b = 0.114;
+ 	g = 1.0 - r - b;
+ 
+ 	/*	as a note, here are the coefficients
+ 		as for ITU-R BT-709 specifications:
+ 		r=0.2126;	b=0.0722;	g=1.0-r-b; */
+ 
+ 	yr = r * Yscale / RGBscale;
+ 	yg = g * Yscale / RGBscale;
+ 	yb = b * Yscale / RGBscale;
+ 	ur = ( -0.5 * r / ( 1 - b ) ) * Cscale / RGBscale;
+ 	ug = ( -0.5 * g / ( 1 - b ) ) * Cscale / RGBscale;
+ 	ub = ( 0.5 * Cscale / RGBscale);
+ 	/* vr = ub so UbVr = ub*i = vr*i */
+ 	vg = ( -0.5 * g / ( 1 - r ) ) * Cscale / RGBscale;
+ 	vb = ( -0.5 * b / ( 1 - r ) ) * Cscale / RGBscale;
+ 
+     for( i = 0 ; i < 256 ; i++ ) {
 
-    for (i = 0; i < 256; i++)
-        Yr[i] = (2104.0 * i) / 8192.0 + 8.0;
-    for (i = 0; i < 256; i++)
-        Yg[i] = (4130.0 * i) / 8192.0 + 8.0;
-    for (i = 0; i < 256; i++)
-        Yb[i] = (802.0 * i) / 8192.0;
+         Yr[i] = (unsigned char) roundf( Yoffset + yr * i );
+         Yg[i] = (unsigned char) roundf( yg * i );
+         Yb[i] = (unsigned char) roundf( yb * i );
 
-    for (i = 0; i < 256; i++)
-        Ur[i] = 37.8 - (1204.0 * i) / 8192.0 + 8.0;
-    for (i = 0; i < 256; i++)
-        Ug[i] = 74.2 - (2384.0 * i) / 8192.0 + 8.0;
-    for (i = 0; i < 256; i++)
-        UbVr[i] = (3598.0 * i) / 8192.0 ;
+         Ur[i] = (unsigned char) roundf( Coffset + ur * i );
+         Ug[i] = (unsigned char) roundf( ug * i );
+         UbVr[i] = (unsigned char) roundf( ub * i );
 
-    for (i = 0; i < 256; i++)
-        Vg[i] = 93.8 - (3013.0 * i) / 8192.0 + 8.0;
-    for (i = 0; i < 256; i++)
-        Vb[i] = 18.2 - (585.0 * i) / 8192.0 + 8.0;
+         Vg[i] = (unsigned char) roundf( vg * i );
+         Vb[i] = (unsigned char) roundf( Coffset + vb * i );
+
+    }
+
 }
+
