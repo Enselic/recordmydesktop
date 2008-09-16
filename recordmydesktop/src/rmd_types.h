@@ -37,9 +37,13 @@
 
 #ifdef HAVE_LIBASOUND
     #include <alsa/asoundlib.h>
+
+    #define DEFAULT_AUDIO_DEVICE "hw:0,0"
 #else
     #include <sys/ioctl.h>
     #include <sys/soundcard.h>
+
+    #define DEFAULT_AUDIO_DEVICE "/dev/dsp"
 #endif
 
 #ifdef HAVE_JACK_H

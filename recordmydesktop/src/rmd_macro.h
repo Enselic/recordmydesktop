@@ -84,12 +84,6 @@
 #define Y_UNIT_WIDTH    0x0010
 #define UV_UNIT_WIDTH   0x0008
 
-#ifdef HAVE_LIBASOUND
-    #define DEFAULT_AUDIO_DEVICE "hw:0,0"
-#else
-    #define DEFAULT_AUDIO_DEVICE "/dev/dsp"
-#endif
-
 #define I16TOA(number,buffer){\
     int t_num=(number),__k=0,__i=0;\
     char *t_buf=malloc(8);\

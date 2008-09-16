@@ -26,9 +26,9 @@
 
 #include "config.h"
 
-#include "rmd_types.h"
+#include <stdio.h>
 
-#include "rmd_macro.h"
+#include "rmd_types.h"
 
 
 static void PrintConfig(void) {
