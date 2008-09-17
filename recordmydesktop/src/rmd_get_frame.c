@@ -462,22 +462,28 @@ void *GetFrame(ProgData *pdata){
         if(pdata->args.xfixes_cursor ||
            pdata->args.have_dummy_cursor||
            pdata->args.follow_mouse){
+
+
+            // ==Old comment== (not sure how to interpret):
             //pointer sequence
             //update previous_position
             //(if full_shots is enabled the new cursor is
             //entered on the list for update.
             //When taking full shots we keep it for further
             //bellow, to mark the area as dirty when dbuffering.
-            CLIP_DUMMY_POINTER_AREA(mouse_pos_abs,&temp_brwin,
-                                    &mouse_pos_temp);
-            if(!pdata->args.full_shots){
-                if((mouse_pos_temp.x>=0)&&
-                    (mouse_pos_temp.y>=0)&&
-                    (mouse_pos_temp.width>0)&&
-                    (mouse_pos_temp.height>0))
-                    RectInsert(&pdata->rect_root,&mouse_pos_temp);
+            //
+            // ==New comment==
+            // Pointer sequence:
+            // * Mark previous position as dirty with RectInsert()
+            // * Update to new position
+            // * Mark new position as dirty with RectInsert()
+            if (!pdata->args.full_shots &&
+                mouse_pos_temp.x >=0 &&
+                mouse_pos_temp.y >=0 &&
+                mouse_pos_temp.width > 0 &&
+                mouse_pos_temp.height > 0) {
+                RectInsert(&pdata->rect_root,&mouse_pos_temp);
             }
-            //find new one
             if(pdata->args.xfixes_cursor){
                 xcim=XFixesGetCursorImage(pdata->dpy);
                 mouse_pos_abs.x=xcim->x-xcim->xhot;
@@ -491,6 +497,14 @@ void *GetFrame(ProgData *pdata){
                               &root_ret,&child_ret,
                               &mouse_pos_abs.x,&mouse_pos_abs.y,
                               &mouse_pos_rel.x,&mouse_pos_rel.y,&msk_ret);
+            }
+            CLIP_DUMMY_POINTER_AREA(mouse_pos_abs, &temp_brwin, &mouse_pos_temp);
+            if (!pdata->args.full_shots &&
+                mouse_pos_temp.x >=0 &&
+                mouse_pos_temp.y >=0 &&
+                mouse_pos_temp.width > 0 &&
+                mouse_pos_temp.height > 0) {
+                RectInsert(&pdata->rect_root,&mouse_pos_temp);
             }
         }
         if(pdata->args.follow_mouse){
