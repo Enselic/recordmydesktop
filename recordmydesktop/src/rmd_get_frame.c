@@ -145,7 +145,7 @@
     }\
 }
 
-#define MARK_BACK_BUFFER_C( data,\
+#define MARK_BUFFER_AREA_C( data,\
                             x_tm,\
                             y_tm,\
                             width_tm,\
@@ -165,7 +165,7 @@
     }\
 }
 
-#define MARK_BACK_BUFFER(   data,\
+#define MARK_BUFFER_AREA(   data,\
                             x_tm,\
                             y_tm,\
                             width_tm,\
@@ -173,7 +173,7 @@
                             buffer_width,\
                             __bit_depth__){\
     if((__bit_depth__==24)||(__bit_depth__==32)){\
-        MARK_BACK_BUFFER_C( data,\
+        MARK_BUFFER_AREA_C( data,\
                             x_tm,\
                             y_tm,\
                             width_tm,\
@@ -182,7 +182,7 @@
                             32)\
     }\
     else{\
-        MARK_BACK_BUFFER_C( data,\
+        MARK_BUFFER_AREA_C( data,\
                             x_tm,\
                             y_tm,\
                             width_tm,\
@@ -464,15 +464,6 @@ void *GetFrame(ProgData *pdata){
            pdata->args.follow_mouse){
 
 
-            // ==Old comment== (not sure how to interpret):
-            //pointer sequence
-            //update previous_position
-            //(if full_shots is enabled the new cursor is
-            //entered on the list for update.
-            //When taking full shots we keep it for further
-            //bellow, to mark the area as dirty when dbuffering.
-            //
-            // ==New comment==
             // Pointer sequence:
             // * Mark previous position as dirty with RectInsert()
             // * Update to new position
@@ -498,13 +489,45 @@ void *GetFrame(ProgData *pdata){
                               &mouse_pos_abs.x,&mouse_pos_abs.y,
                               &mouse_pos_rel.x,&mouse_pos_rel.y,&msk_ret);
             }
+            
             CLIP_DUMMY_POINTER_AREA(mouse_pos_abs, &temp_brwin, &mouse_pos_temp);
-            if (!pdata->args.full_shots &&
-                mouse_pos_temp.x >=0 &&
+            if( mouse_pos_temp.x >=0 &&
                 mouse_pos_temp.y >=0 &&
                 mouse_pos_temp.width > 0 &&
                 mouse_pos_temp.height > 0) {
-                RectInsert(&pdata->rect_root,&mouse_pos_temp);
+
+                //there are 3 capture scenarios:
+                // * Xdamage
+                // * full-shots with double buffering 
+                // * full-shots on a single buffer
+                //The last one cannot be reached through
+                //this code (see above how the d_buf variable is set), but 
+                //even if it could, it would not be of interest regarding the 
+                //marking of the cursor area. Single buffer means full repaint 
+                //on every frame so there is no need for marking at all.
+
+                if (!pdata->args.full_shots) { 
+
+                    RectInsert(&pdata->rect_root,&mouse_pos_temp);
+
+                }
+                else if(d_buff){
+                        unsigned char *back_buff=
+                                        (img_sel)?((unsigned char*)image->data):
+                                        ((unsigned char*)image_back->data);
+
+                        MARK_BUFFER_AREA(   back_buff,
+                                            (mouse_pos_temp.x-
+                                            temp_brwin.rgeom.x+
+                                            pdata->enc_data->x_offset),
+                                            (mouse_pos_temp.y-
+                                            temp_brwin.rgeom.y+
+                                            pdata->enc_data->y_offset),
+                                            mouse_pos_temp.width,
+                                            mouse_pos_temp.height,
+                                            (temp_brwin.rgeom.width),
+                                            pdata->specs.depth)
+                }
             }
         }
         if(pdata->args.follow_mouse){
@@ -629,12 +652,15 @@ void *GetFrame(ProgData *pdata){
                                             pdata->npxl);
                     }
                 if(d_buff){
-                //make previous cursor position dirty
+                    //make previous cursor position dirty
+                    //on the currently front buffer (which 
+                    //will be the back buffer next time it's 
+                    //used) 
                     unsigned char *front_buff=
                                     (!img_sel)?((unsigned char*)image->data):
                                     ((unsigned char*)image_back->data);
 
-                    MARK_BACK_BUFFER(   front_buff,
+                    MARK_BUFFER_AREA(   front_buff,
                                         (mouse_pos_temp.x-
                                         temp_brwin.rgeom.x+
                                         pdata->enc_data->x_offset),
