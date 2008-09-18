@@ -47,6 +47,10 @@ static void PrintConfig(void) {
     fprintf(stderr,"\n\n");
 }
 
+/**
+ * Still has backwards compatible options like -this, but --this is
+ * what is documented.
+ */
 boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
     int i;
     char *usage="\nUsage:\n"
@@ -59,14 +63,14 @@ boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
     "selected during compilation and exit.\n\n"
 
     "Image Options:\n"
-    "\t-windowid id_of_window\tid of window to be recorded.\n"
-    "\t-display DISPLAY\tDisplay to connect to.\n"
+    "\t--windowid id_of_window\tid of window to be recorded.\n"
+    "\t--display DISPLAY\tDisplay to connect to.\n"
     "\t-x X\t\t\tOffset in x direction.\n"
     "\t-y Y\t\t\tOffset in y direction.\n"
-    "\t-width N\t\tWidth of recorded window.\n"
-    "\t-height N\t\tHeight of recorded window.\n\n"
+    "\t--width N\t\tWidth of recorded window.\n"
+    "\t--height N\t\tHeight of recorded window.\n\n"
 
-    "\t-dummy-cursor color\tColor of the dummy cursor [black|white]\n"
+    "\t--dummy-cursor color\tColor of the dummy cursor [black|white]\n"
     "\t--no-cursor\t\tDisable drawing of the cursor.\n"
     "\t--no-shared\t\tDisable usage of"
     " MIT-shared memory extension(Not Recommended!).\n"
@@ -75,50 +79,50 @@ boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
     "\t--quick-subsampling\tDo subsampling"
     " of the chroma planes by discarding,not averaging.\n"
 
-    "\t-fps N(number>0.0)\tA positive number denoting desired framerate.\n\n"
+    "\t--fps N(number>0.0)\tA positive number denoting desired framerate.\n\n"
 
     "Sound Options:\n"
-    "\t-channels N\t\t\tA positive number denoting"
+    "\t--channels N\t\t\tA positive number denoting"
     " desired sound channels in recording.\n"
 
-    "\t-freq N\t\t\t\tA positive number denoting desired sound frequency.\n"
-    "\t-buffer-size N\t\t\tA positive number denoting the desired"
+    "\t--freq N\t\t\t\tA positive number denoting desired sound frequency.\n"
+    "\t--buffer-size N\t\t\tA positive number denoting the desired"
     " sound buffer size (in frames,when using ALSA or OSS)\n"
-    "\t-ring-buffer-size N\t\tA float number denoting the desired"
+    "\t--ring-buffer-size N\t\tA float number denoting the desired"
     " ring buffer size (in seconds,when using JACK only).\n"
 
-    "\t-device SOUND_DEVICE\t\tSound device(default "
+    "\t--device SOUND_DEVICE\t\tSound device(default "
     DEFAULT_AUDIO_DEVICE
     ").\n"
-    "\t-use-jack port1 port2... portn\tRecord audio from the specified\n"
+    "\t--use-jack port1 port2... portn\tRecord audio from the specified\n"
     "\t\t\t\t\tlist of space-separated jack ports.\n"
     "\t--no-sound\t\t\tDo not record sound.\n\n"
 
     "Encoding Options\n"
     "\t--on-the-fly-encoding\tEncode the audio-video data, while recording.\n"
-    "\t-v_quality n\t\tA number from 0 to 63 for"
+    "\t--v_quality n\t\tA number from 0 to 63 for"
     " desired encoded video quality(default 63).\n"
 
-    "\t-v_bitrate n\t\tA number from 45000 to 2000000"
+    "\t--v_bitrate n\t\tA number from 45000 to 2000000"
     " for desired encoded video bitrate(default 45000).\n"
 
-    "\t-s_quality n\t\tDesired audio quality(-1 to 10).\n\n"
+    "\t--s_quality n\t\tDesired audio quality(-1 to 10).\n\n"
 
     "Misc Options:\n"
-    "\t-rescue path_to_data\tEncode data from a previous, crashed, session.\n"
+    "\t--rescue path_to_data\tEncode data from a previous, crashed, session.\n"
     "\t--no-wm-check\t\tDo not try to detect"
     " the window manager(and set options according to it)\n"
 
-    "\t-pause-shortcut MOD+KEY\tShortcut that will be used for (un)pausing" 
+    "\t--pause-shortcut MOD+KEY\tShortcut that will be used for (un)pausing" 
     "(default Control+Mod1+p).\n"
-    "\t-stop-shortcut MOD+KEY\tShortcut that will be used to stop the "
+    "\t--stop-shortcut MOD+KEY\tShortcut that will be used to stop the "
     "recording (default Control+Mod1+s).\n" 
 
     "\t--compress-cache\tImage data are cached with light compression.\n"
-    "\t-workdir DIR\t\tLocation where a temporary directory"
+    "\t--workdir DIR\t\tLocation where a temporary directory"
     " will be created to hold project files(default $HOME).\n"
 
-    "\t-delay n[H|h|M|m]\tNumber of secs(default),minutes or hours"
+    "\t--delay n[H|h|M|m]\tNumber of secs(default),minutes or hours"
     " before capture starts(number can be float)\n"
 
     "\t--overwrite\t\tIf there is already a file with the same name,"
@@ -138,7 +142,8 @@ boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
         }
     }
     for(i=1;i<argc;i++){
-        if(!strcmp(argv[i],"-delay")){
+        if (strcmp(argv[i], "--delay") == 0 ||
+            strcmp(argv[i], "-delay")  == 0) {
             if(i+1<argc){
                 float num=atof(argv[i+1]);
                 if(num>0.0){
@@ -156,37 +161,39 @@ boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
                     arg_return->delay=(int)num;
                 }
                 else{
-                    fprintf(stderr,"Argument Usage: -delay n[H|h|M|m]\n"
+                    fprintf(stderr,"Argument Usage: --delay n[H|h|M|m]\n"
                                    "where n is a float number\n");
                     return FALSE;
                 }
             }
             else{
-                fprintf(stderr,"Argument Usage: -delay n[H|h|M|m]\n"
+                fprintf(stderr,"Argument Usage: --delay n[H|h|M|m]\n"
                                "where n is a float number\n");
                 return FALSE;
             }
             i++;
         }
-        else if(!strcmp(argv[i],"-windowid")){
+        else if (strcmp(argv[i], "--windowid") == 0 ||
+                 strcmp(argv[i], "-windowid")  == 0) {
             if(i+1<argc){
                 Window num=strtod(argv[i+1],NULL);
                 if(num>0)
                     arg_return->windowid=num;
                 else{
                     fprintf(stderr,"Argument Usage:"
-                                   " -windowid id_of_window(number)\n");
+                                   " --windowid id_of_window(number)\n");
                     return FALSE;
                 }
             }
             else{
                 fprintf(stderr,"Argument Usage:"
-                               " -windowid id_of_window(number)\n");
+                               " --windowid id_of_window(number)\n");
                 return FALSE;
             }
             i++;
         }
-        else if(!strcmp(argv[i],"-display")){
+        else if (strcmp(argv[i], "--display") == 0 ||
+                 strcmp(argv[i], "-display")  == 0) {
             if(i+1<argc){
                 if(arg_return->display!=NULL)
                     free(arg_return->display);
@@ -194,7 +201,7 @@ boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
                 strcpy(arg_return->display,argv[i+1]);
             }
             else{
-                fprintf(stderr,"Argument Usage: -display DISPLAY\n");
+                fprintf(stderr,"Argument Usage: --display DISPLAY\n");
                 return FALSE;
             }
             i++;
@@ -231,34 +238,36 @@ boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
             }
             i++;
         }
-        else if(!strcmp(argv[i],"-width")){
+        else if (strcmp(argv[i], "--width") == 0 ||
+                 strcmp(argv[i], "-width")  == 0) {
             if(i+1<argc){
                 int num=atoi(argv[i+1]);
                 if(num>0)
                     arg_return->width=num;
                 else{
-                    fprintf(stderr,"Argument Usage: -width N(number>0)\n");
+                    fprintf(stderr,"Argument Usage: --width N(number>0)\n");
                     return FALSE;
                 }
             }
             else{
-                fprintf(stderr,"Argument Usage: -width N(number>0)\n");
+                fprintf(stderr,"Argument Usage: --width N(number>0)\n");
                 return FALSE;
             }
             i++;
         }
-        else if(!strcmp(argv[i],"-height")){
+        else if (strcmp(argv[i], "--height") == 0 ||
+                 strcmp(argv[i], "-height")  == 0) {
             if(i+1<argc){
                 int num=atoi(argv[i+1]);
                 if(num>0)
                     arg_return->height=num;
                 else{
-                    fprintf(stderr,"Argument Usage: -height N(number>0)\n");
+                    fprintf(stderr,"Argument Usage: --height N(number>0)\n");
                     return FALSE;
                 }
             }
             else{
-                fprintf(stderr,"Argument Usage: -height N(number>0)\n");
+                fprintf(stderr,"Argument Usage: --height N(number>0)\n");
                 return FALSE;
             }
             i++;
@@ -275,59 +284,63 @@ boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
             }
             i++;
         }
-        else if(!strcmp(argv[i],"-fps")){
+        else if (strcmp(argv[i], "--fps") == 0 ||
+                 strcmp(argv[i], "-fps")  == 0) {
             if(i+1<argc){
                 float num=atof(argv[i+1]);
                 if(num>0.0)
                     arg_return->fps=num;
                 else{
-                    fprintf(stderr,"Argument Usage: -fps N(number>0)\n");
+                    fprintf(stderr,"Argument Usage: --fps N(number>0)\n");
                     return FALSE;
                 }
             }
             else{
-                fprintf(stderr,"Argument Usage: -fps N(number>0)\n");
+                fprintf(stderr,"Argument Usage: --fps N(number>0)\n");
                 return FALSE;
             }
             i++;
         }
-        else if(!strcmp(argv[i],"-v_quality")){
+        else if (strcmp(argv[i], "--v_quality") == 0 ||
+                 strcmp(argv[i], "-v_quality")  == 0) {
             if(i+1<argc){
                 int num=atoi(argv[i+1]);
                 if((num>=0)&&(num<64))
                     arg_return->v_quality=num;
                 else{
                     fprintf(stderr,"Argument Usage:"
-                                   " -v_quality n(number 0-63)\n");
+                                   " --v_quality n(number 0-63)\n");
                     return FALSE;
                 }
             }
             else{
                 fprintf(stderr,"Argument Usage:"
-                               " -v_quality n(number 0-63)\n");
+                               " --v_quality n(number 0-63)\n");
                 return FALSE;
             }
             i++;
         }
-        else if(!strcmp(argv[i],"-v_bitrate")){
+        else if (strcmp(argv[i], "--v_bitrate") == 0 ||
+                 strcmp(argv[i], "-v_bitrate")  == 0) {
             if(i+1<argc){
                 int num=atoi(argv[i+1]);
                 if((num>=45000)&&(num<=2000000))
                     arg_return->v_bitrate=num;
                 else{
                     fprintf(stderr,"Argument Usage:"
-                                   " -v_bitrate n(number 45000-2000000)\n");
+                                   " --v_bitrate n(number 45000-2000000)\n");
                     return FALSE;
                 }
             }
             else{
                 fprintf(stderr,"Argument Usage:"
-                               " -v_bitrate n(number 45000-2000000)\n");
+                               " --v_bitrate n(number 45000-2000000)\n");
                 return FALSE;
             }
             i++;
         }
-        else if(!strcmp(argv[i],"-dummy-cursor")){
+        else if (strcmp(argv[i], "--dummy-cursor") == 0 ||
+                 strcmp(argv[i], "-dummy-cursor")  == 0) {
             if(i+1<argc){
                 if(!strcmp(argv[i+1],"white"))
                     arg_return->cursor_color=0;
@@ -335,7 +348,7 @@ boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
                     arg_return->cursor_color=1;
                 else{
                     fprintf(stderr,"Argument Usage:"
-                                   " -dummy-cursor [black|white]\n");
+                                   " --dummy-cursor [black|white]\n");
                     return FALSE;
                 }
                 arg_return->have_dummy_cursor=1;
@@ -343,64 +356,68 @@ boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
             }
             else{
                 fprintf(stderr,"Argument Usage:"
-                               " -dummy-cursor [black|white]\n");
+                               " --dummy-cursor [black|white]\n");
                 return FALSE;
             }
             i++;
         }
         else if(!strcmp(argv[i],"--no-cursor"))
             arg_return->xfixes_cursor=0;
-        else if(!strcmp(argv[i],"-freq")){
+        else if (strcmp(argv[i], "--freq") == 0 ||
+                 strcmp(argv[i], "-freq")  == 0) {
             if(i+1<argc){
                 int num=atoi(argv[i+1]);
                 if(num>0)
                     arg_return->frequency=num;
                 else{
-                    fprintf(stderr,"Argument Usage: -freq N(number>0)\n");
+                    fprintf(stderr,"Argument Usage: --freq N(number>0)\n");
                     return FALSE;
                 }
             }
             else{
-                fprintf(stderr,"Argument Usage: -freq N(number>0)\n");
+                fprintf(stderr,"Argument Usage: --freq N(number>0)\n");
                 return FALSE;
             }
             i++;
         }
-        else if(!strcmp(argv[i],"-channels")){
+        else if (strcmp(argv[i], "--channels") == 0 ||
+                 strcmp(argv[i], "-channels")  == 0) {
             if(i+1<argc){
                 int num=atoi(argv[i+1]);
                 if(num>0)
                     arg_return->channels=num;
                 else{
-                    fprintf(stderr,"Argument Usage: -channels N(number>0)\n");
+                    fprintf(stderr,"Argument Usage: --channels N(number>0)\n");
                     return FALSE;
                 }
             }
             else{
-                fprintf(stderr,"Argument Usage: -channels N(number>0)\n");
+                fprintf(stderr,"Argument Usage: --channels N(number>0)\n");
                 return FALSE;
             }
             i++;
         }
-        else if(!strcmp(argv[i],"-s_quality")){
+        else if (strcmp(argv[i], "--s_quality") == 0 ||
+                 strcmp(argv[i], "-s_quality")  == 0) {
             if(i+1<argc){
                 int num=atoi(argv[i+1]);
                 if((num>=-1)&&(num<=10))
                     arg_return->s_quality=num;
                 else{
                     fprintf(stderr,"Argument Usage:"
-                                   " -s_quality n(number -1 to 10)\n");
+                                   " --s_quality n(number -1 to 10)\n");
                     return FALSE;
                 }
             }
             else{
                 fprintf(stderr,"Argument Usage:"
-                               " -s_quality n(number -1 to 10)\n");
+                               " --s_quality n(number -1 to 10)\n");
                 return FALSE;
             }
             i++;
         }
-        else if(!strcmp(argv[i],"-device")){
+        else if (strcmp(argv[i], "--device") == 0 ||
+                 strcmp(argv[i], "-device")  == 0) {
             if(i+1<argc){
                 free(arg_return->device);
                 arg_return->device=malloc(strlen(argv[i+1])+1);
@@ -412,60 +429,65 @@ boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
             }
             i++;
         }
-        else if(!strcmp(argv[i],"-workdir")){
+        else if (strcmp(argv[i], "--workdir") == 0 ||
+                 strcmp(argv[i], "-workdir")  == 0) {
             if(i+1<argc){
                 free(arg_return->workdir);
                 arg_return->workdir=malloc(strlen(argv[i+1])+1);
                 strcpy(arg_return->workdir,argv[i+1]);
             }
             else{
-                fprintf(stderr,"Argument Usage: -workdir DIR\n");
+                fprintf(stderr,"Argument Usage: --workdir DIR\n");
                 return FALSE;
             }
             i++;
         }
-        else if(!strcmp(argv[i],"-pause-shortcut")){
+        else if (strcmp(argv[i], "--pause-shortcut") == 0 ||
+                 strcmp(argv[i], "-pause-shortcut")  == 0) {
             if(i+1<argc){
                 free(arg_return->pause_shortcut);
                 arg_return->pause_shortcut=malloc(strlen(argv[i+1])+1);
                 strcpy(arg_return->pause_shortcut,argv[i+1]);
             }
             else{
-                fprintf(stderr,"Argument Usage: -pause-shortcut MOD+KEY\n");
+                fprintf(stderr,"Argument Usage: --pause-shortcut MOD+KEY\n");
                 return FALSE;
             }
             i++;
         }
-        else if(!strcmp(argv[i],"-stop-shortcut")){
+        else if (strcmp(argv[i], "--stop-shortcut") == 0 ||
+                 strcmp(argv[i], "-stop-shortcut")  == 0) {
             if(i+1<argc){
                 free(arg_return->stop_shortcut);
                 arg_return->stop_shortcut=malloc(strlen(argv[i+1])+1);
                 strcpy(arg_return->stop_shortcut,argv[i+1]);
             }
             else{
-                fprintf(stderr,"Argument Usage: -stop-shortcut MOD+KEY\n");
+                fprintf(stderr,"Argument Usage: --stop-shortcut MOD+KEY\n");
                 return FALSE;
             }
             i++;
         }
-        else if(!strcmp(argv[i],"-buffer-size")){
+        else if (strcmp(argv[i], "--buffer-size") == 0 ||
+                 strcmp(argv[i], "-buffer-size")  == 0) {
             if(i+1<argc){
                 int num=atoi(argv[i+1]);
                 if(num>0)
                     arg_return->buffsize=num;
                 else{
                     fprintf(stderr,"Argument Usage:"
-                                   " -buffer-size N(number>0)\n");
+                                   " --buffer-size N(number>0)\n");
                     return FALSE;
                 }
             }
             else{
-                fprintf(stderr,"Argument Usage: -buffer-size N(number>0)\n");
+                fprintf(stderr,"Argument Usage: --buffer-size N(number>0)\n");
                 return FALSE;
             }
             i++;
         }
-        else if(!strcmp(argv[i],"-use-jack")){
+        else if (strcmp(argv[i], "--use-jack") == 0 ||
+                 strcmp(argv[i], "-use-jack")  == 0) {
             if(i+1<argc){
 #ifdef HAVE_JACK_H
                 int k=i+1;
@@ -487,7 +509,7 @@ boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
                     arg_return->use_jack=1;
                 }
                 else{
-                    fprintf(stderr,"Argument Usage: -use-jack port1"
+                    fprintf(stderr,"Argument Usage: --use-jack port1"
                                    " port2... portn\n");
                     return FALSE;
                 }
@@ -498,12 +520,13 @@ boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
 #endif
             }
             else{
-                fprintf(stderr,"Argument Usage: -use-jack port1"
+                fprintf(stderr,"Argument Usage: --use-jack port1"
                                " port2... portn\n");
                 return FALSE;
             }
         }
-        else if(!strcmp(argv[i],"-ring-buffer-size")){
+        else if (strcmp(argv[i], "--ring-buffer-size") == 0 ||
+                 strcmp(argv[i], "-ring-buffer-size")  == 0) {
             if(i+1<argc){
                 float num=atof(argv[i+1]);
                 if(num>0.0)
@@ -521,12 +544,13 @@ boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
             }
             i++;
         }
-        else if(!strcmp(argv[i],"-rescue")){
+        else if (strcmp(argv[i], "--rescue") == 0 ||
+                 strcmp(argv[i], "-rescue") == 0) {
             if(i+1<argc){
                 arg_return->rescue_path = argv[i + 1];
             }
             else{
-                fprintf(stderr,"Argument Usage: -rescue path_to_data\n");
+                fprintf(stderr,"Argument Usage: --rescue path_to_data\n");
                 return FALSE;
             }
             i++;

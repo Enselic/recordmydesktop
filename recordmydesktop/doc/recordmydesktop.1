@@ -58,10 +58,10 @@ shortcuts.
 .br
 See 
 .B
-\-pause\-shortcut
+\-\-pause\-shortcut
 and
 .B
-\-stop\-shortcut
+\-\-stop\-shortcut
 , on the 
 .B
 Misc.
@@ -99,7 +99,7 @@ While this behavior saves a lot of CPU, you can revert to the old one by enterin
 To specify a region for recording you can type this:
 .br
 .B
-~$ recordmydesktop \-x X_pos \-y Y_pos \-width WIDTH \-height HEIGHT \-o foo.ogv
+~$ recordmydesktop \-x X_pos \-y Y_pos \-\-width WIDTH \-\-height HEIGHT \-o foo.ogv
 .br
 where X_pos and Y_pos specify the offset in pixels from the upper left
 .br
@@ -201,12 +201,12 @@ Image Options:
 .br
 .TP
 .B
-    \-windowid id_of_window
+    \-\-windowid id_of_window
     id of window to be recorded.
 .br
 .TP
 .B
-    \-display DISPLAY
+    \-\-display DISPLAY
     Display to connect to.
 .br
 .TP
@@ -221,12 +221,12 @@ Image Options:
 .br
 .TP
 .B
-    \-width N
+    \-\-width N
     Width of recorded window.
 .br
 .TP
 .B
-    \-height N
+    \-\-height N
     Height of recorded window.
 .br
 .TP
@@ -235,7 +235,7 @@ Image Options:
 .br
 .TP
 .B
-    \-dummy\-cursor color
+    \-\-dummy\-cursor color
     Draw a dummy cursor, instead of the normal one.Value of color can be "black" or "white".
 .br
 .TP
@@ -270,7 +270,7 @@ Image Options:
 .br
 .TP
 .B
-    \-fps N(number>0.0)
+    \-\-fps N(number>0.0)
     A positive number denoting desired framerate.
 .br
 .br
@@ -280,22 +280,22 @@ Sound Options:
 .br
 .TP
 .B
-    \-channels N(number>0)
+    \-\-channels N(number>0)
     A positive number denoting desired sound channels in recording.
 .br
 .TP
 .B
-    \-freq N(number>0)
+    \-\-freq N(number>0)
     A positive number denoting desired sound frequency.
 .br
 .TP
 .B
-    \-buffer\-size N(number>0)
+    \-\-buffer\-size N(number>0)
     A positive number denoting the desired sound buffer size(in frames, when using ALSA or OSS).
 .br
 .TP
 .B
-    \-ring\-buffer\-size N(float number>0)
+    \-\-ring\-buffer\-size N(float number>0)
     A float number denoting the desired ring buffer size (in seconds,when using JACK only).
     The overall size of the buffer in bytes will be:
     ring_buffer_size * samplerate * number_of_ports * sizeof(jack_default_audio_sample_t),
@@ -303,12 +303,12 @@ Sound Options:
 .br
 .TP
 .B
-    \-device SOUND_DEVICE
+    \-\-device SOUND_DEVICE
     Sound device(default hw:0,0 or /dev/dsp, depending on whether ALSA or OSS is used).
 .br
 .TP
 .B
-    \-use\-jack port1 port2... portn
+    \-\-use\-jack port1 port2... portn
     Record audio from the specified list of
 .B
 space-separated
@@ -332,17 +332,17 @@ Encoding Options:
 .br
 .TP
 .B
-    \-v_quality n
+    \-\-v_quality n
     A number from 0 to 63 for desired encoded video quality(default 63).
 .br
 .TP
 .B
-    \-v_bitrate n
+    \-\-v_bitrate n
     A number from 45000 to 2000000 for desired encoded video bitrate(default 45000).
 .br
 .TP
 .B
-    \-s_quality n
+    \-\-s_quality n
     Desired audio quality(\-1 to 10).
 .br
 .PP
@@ -352,7 +352,7 @@ Misc Options:
 .br
 .TP
 .B
-    \-rescue path_to_data   
+    \-\-rescue path_to_data   
     Encode cache data from a previous session, into an Ogg/Theora+Vorbis
     file. The filename will be the one that was chosen initially.
     Any other option specified with this one will be implicitly ignored
@@ -387,7 +387,7 @@ Misc Options:
 .br
 .TP
 .B
-    \-pause\-shortcut MOD+KEY
+    \-\-pause\-shortcut MOD+KEY
     Shortcut that will be used for pausing or unpausing the recording.
     MOD can be any combination of the following modifier keys:
     Control, Shift and Mod1 to Mod5. The modifiers can be separated 
@@ -403,7 +403,7 @@ except SPACE
 .br
 .TP
 .B
-    \-stop\-shortcut MOD+KEY
+    \-\-stop\-shortcut MOD+KEY
     Shortcut that will be used to stop the recording.
     For more, see \-pause\-shortcut above.
     Default is Control+Mod1+s. 
@@ -415,12 +415,12 @@ except SPACE
 .br
 .TP
 .B
-    \-workdir DIR
+    \-\-workdir DIR
     Location where a temporary directory will be created to hold project files(default /tmp).
 .br
 .TP
 .B
-    \-delay n[H|h|M|m]
+    \-\-delay n[H|h|M|m]
     Number of secs(default),minutes or hours before capture starts(number can be float).
 .br
 .TP
@@ -460,9 +460,9 @@ Display environment variable, specifying X server to connect to.
 .br
 .SH NOTES
 .br
-    Recording a window using the \-windowid option, doesn't track the window itself, but the region that it covers.
+    Recording a window using the \-\-windowid option, doesn't track the window itself, but the region that it covers.
 .br
-Also when using that option the \-x,\-y,\-width and \-height options are relative to the specified window area.
+Also when using that option the \-x,\-y,\-\-width and \-\-height options are relative to the specified window area.
 .br
 An easy way to find out the id of a window, is by using the
 .B
@@ -479,7 +479,7 @@ will give you only the id of the window(which should look like this: 0x4800005)
 More conviniently you can put all that in the command that launches recordMyDesktop like this:
 .br
 .B
-~$recordmydesktop \-windowid $(xwininfo | awk \'/Window id:/ {print $4}\')
+~$recordmydesktop \-\-windowid $(xwininfo | awk \'/Window id:/ {print $4}\')
 .br
 .br
     Also, the lower quality you select on a video recording (
