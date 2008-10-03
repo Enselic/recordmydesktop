@@ -120,8 +120,11 @@ void InitEncoder(ProgData *pdata,EncData *enc_data_t,int buffer_ready){
 
     }
         
-    if(!pdata->args.overwrite)
+    if (!pdata->args.overwrite) {
         IncrementalNaming(&(pdata)->args.filename);
+        fprintf(stderr, "Output file: %s\n", pdata->args.filename);
+    }
+        
     enc_data_t->fp=fopen((pdata)->args.filename,"w");
     if(enc_data_t->fp==NULL){
         fprintf(stderr,"Cannot open file %s for writting!\n",
