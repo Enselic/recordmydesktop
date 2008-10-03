@@ -96,7 +96,7 @@ int main(int argc,char **argv){
                            " color depth modes are currently supported.\n");
             exit(10);
         }
-        if(SetBRWindow(pdata.dpy,&pdata.brwin,&pdata.specs,&pdata.args))
+        if (!SetBRWindow(pdata.dpy, &pdata.brwin, &pdata.specs, &pdata.args))
             exit(11);
 
         //check if we are under compiz or beryl,

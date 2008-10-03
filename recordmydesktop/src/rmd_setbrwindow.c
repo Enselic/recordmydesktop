@@ -124,10 +124,10 @@ static void SizePack2_8_16(int *start, int *size, int limit) {
 
 
 
-int SetBRWindow(Display *dpy,
-                BRWindow *brwin,
-                DisplaySpecs *specs,
-                ProgArgs *args){
+boolean SetBRWindow(Display *dpy,
+                    BRWindow *brwin,
+                    DisplaySpecs *specs,
+                    ProgArgs *args) {
     //before we start recording we have to make sure the ranges are valid
     if(args->windowid==0){//root window
         //first set it up
@@ -147,7 +147,7 @@ int SetBRWindow(Display *dpy,
             fprintf(stderr,"Window size specification out of bounds!"
                            "(current resolution:%dx%d)\n",
                            specs->width,specs->height);
-            return 1;
+            return FALSE;
         }
     }
     else{
@@ -158,7 +158,7 @@ int SetBRWindow(Display *dpy,
         XGetWindowAttributes(dpy,args->windowid,&attribs);
         if((attribs.map_state==IsUnviewable)||(attribs.map_state==IsUnmapped)){
             fprintf(stderr,"Window must be mapped and visible!\n");
-            return 1;
+            return FALSE;
         }
         XTranslateCoordinates(dpy,
                               specs->root,
@@ -176,7 +176,7 @@ int SetBRWindow(Display *dpy,
         if((brwin->geom.x+brwin->geom.width>specs->width)||
             (brwin->geom.y+brwin->geom.height>specs->height)){
             fprintf(stderr,"Window must be on visible screen area!\n");
-            return 1;
+            return FALSE;
         }
 
         brwin->rgeom.x=brwin->geom.x+args->x;
@@ -188,7 +188,7 @@ int SetBRWindow(Display *dpy,
         if((args->x+brwin->rgeom.width>brwin->geom.width)||
             (args->y+brwin->rgeom.height>brwin->geom.height)){
             fprintf(stderr,"Specified Area is larger than window!\n");
-            return 1;
+            return FALSE;
         }
     }
     fprintf(stderr, "Initial recording window is set to:\n"
@@ -209,5 +209,5 @@ int SetBRWindow(Display *dpy,
                   (((brwin->rgeom.height+15)>>4)<<4)*
                   ((specs->depth==16)?2:4);
 
-    return 0;
+    return TRUE;
 }
