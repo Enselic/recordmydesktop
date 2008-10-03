@@ -36,6 +36,7 @@
 #include "rmd_cache_frame.h"
 
 
+#define BYTES_PER_MB          (1024 * 1024)
 #define CACHE_OUT_BUFFER_SIZE (4 * 1024)
 #define CACHE_FILE_SIZE_LIMIT (5 * 1024 * 1024)
 
@@ -91,12 +92,12 @@ void *CacheImageBuffer(ProgData *pdata){
         frameno=0,
         nbytes=0,
         nth_cache=1;
-    unsigned int total_bytes=0,
-                 total_received_bytes=0;
     u_int32_t   ynum,unum,vnum,
                 y_short_blocks[blocknum_x*blocknum_y],
                 u_short_blocks[blocknum_x*blocknum_y],
                 v_short_blocks[blocknum_x*blocknum_y];
+    unsigned long long int total_bytes          = 0;
+    unsigned long long int total_received_bytes = 0;
 
     if(!pdata->args.zerocompression){
         fp=pdata->cache_data->ifp;
@@ -256,22 +257,34 @@ void *CacheImageBuffer(ProgData *pdata){
                                 //space is freed the recording
                                 //can be proccessed later.
             }
-            total_bytes+=(nbytes>>20);
+            total_bytes += nbytes;
             nth_cache++;
             nbytes=0;
         }
     }
-    total_bytes+=(nbytes>>20);
-    total_received_bytes=((frameno*((pdata->specs.depth>=24)?4:2)*
-                   pdata->brwin.rgeom.width*pdata->brwin.rgeom.height)>>20);
+    total_bytes += nbytes;
+
+    {
+      unsigned int bytes_per_pixel  = pdata->specs.depth >= 24 ? 4 : 2;
+      unsigned int pixels_per_frame = pdata->brwin.rgeom.width * pdata->brwin.rgeom.height;
+      
+      total_received_bytes = ((unsigned int)frameno) * bytes_per_pixel * pixels_per_frame;
+    }
+
     if(total_received_bytes){
-        fprintf(stderr,"\n*********************************************\n"
-                       "\nCached %u MB, from %u MB that were received.\n"
-                       "Average cache compression ratio: %u %%\n"
-                       "\n*********************************************\n",
-                       total_bytes,
-                       total_received_bytes,
-                       (total_bytes*100)/total_received_bytes);
+        double percent_of_data_left = (total_bytes / (double)total_received_bytes) * 100;
+
+        fprintf(stderr,
+                "\n"
+                "*********************************************\n"
+                "\n"
+                "Cached %llu MB, from %llu MB that were received.\n"
+                "Average cache compression ratio: %.1f %%\n"
+                "\n"
+                "*********************************************\n",
+                total_bytes / BYTES_PER_MB,
+                total_received_bytes / BYTES_PER_MB,
+                100 - percent_of_data_left);
 
     }
 
