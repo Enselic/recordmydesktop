@@ -76,8 +76,12 @@ enum{
 
 // Boolean type
 typedef int boolean;
+#ifndef FALSE
 #define FALSE (0)
+#endif
+#ifndef TRUE
 #define TRUE  (!FALSE)
+#endif
 
 // Forward declarations 
 typedef struct _ProgData ProgData;
