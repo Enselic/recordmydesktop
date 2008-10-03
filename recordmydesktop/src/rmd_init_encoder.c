@@ -158,39 +158,36 @@ void InitEncoder(ProgData *pdata,EncData *enc_data_t,int buffer_ready){
         ogg_stream_init(&enc_data_t->m_ogg_vs,y2);
 
 
-
     theora_info_init(&enc_data_t->m_th_inf);
-    enc_data_t->m_th_inf.frame_width=(pdata)->brwin.rgeom.width;
-    enc_data_t->m_th_inf.frame_height=(pdata)->brwin.rgeom.height;
-    enc_data_t->m_th_inf.width=((enc_data_t->m_th_inf.frame_width+15)>>4)<<4;
-    enc_data_t->m_th_inf.height=((enc_data_t->m_th_inf.frame_height+15)>>4)<<4;
-    enc_data_t->m_th_inf.offset_x=((enc_data_t->m_th_inf.width-
-                                     enc_data_t->m_th_inf.frame_width)/2)&~1;
-    enc_data_t->m_th_inf.offset_y=((enc_data_t->m_th_inf.height-
-                                     enc_data_t->m_th_inf.frame_height)/2)&~1;
-    enc_data_t->m_th_inf.fps_numerator=((pdata)->args.fps*100.0);
-    enc_data_t->m_th_inf.fps_denominator=100;
-    enc_data_t->m_th_inf.aspect_numerator=1;//(pdata)->brwin.rgeom.width;
-    enc_data_t->m_th_inf.aspect_denominator=1;//(pdata)->brwin.rgeom.height;
-    enc_data_t->m_th_inf.colorspace=OC_CS_UNSPECIFIED;
-    enc_data_t->m_th_inf.pixelformat=OC_PF_420;
-    enc_data_t->m_th_inf.target_bitrate=(pdata)->args.v_bitrate;
-    enc_data_t->m_th_inf.quality=(pdata)->args.v_quality;
-    enc_data_t->m_th_inf.dropframes_p=0;
-    enc_data_t->m_th_inf.quick_p=1;
-    enc_data_t->m_th_inf.keyframe_auto_p=1;
-    enc_data_t->m_th_inf.keyframe_frequency=64;
-    enc_data_t->m_th_inf.keyframe_frequency_force=64;
-    enc_data_t->m_th_inf.keyframe_data_target_bitrate=
-    enc_data_t->m_th_inf.quality*1.5;
+    enc_data_t->m_th_inf.frame_width                  = pdata->brwin.rgeom.width;
+    enc_data_t->m_th_inf.frame_height                 = pdata->brwin.rgeom.height;
+    enc_data_t->m_th_inf.width                        = ((enc_data_t->m_th_inf.frame_width + 15) >> 4) << 4;
+    enc_data_t->m_th_inf.height                       = ((enc_data_t->m_th_inf.frame_height + 15) >> 4) << 4;
+    enc_data_t->m_th_inf.offset_x                     = 0;
+    enc_data_t->m_th_inf.offset_y                     = 0;
 
-    enc_data_t->m_th_inf.keyframe_auto_threshold=80;
-    enc_data_t->m_th_inf.keyframe_mindistance=8;
-    enc_data_t->m_th_inf.noise_sensitivity=1;
-    enc_data_t->m_th_inf.sharpness=2;
+    enc_data_t->m_th_inf.fps_numerator                = pdata->args.fps * 100.0;
+    enc_data_t->m_th_inf.fps_denominator              = 100;
+    enc_data_t->m_th_inf.aspect_numerator             = 1;
+    enc_data_t->m_th_inf.aspect_denominator           = 1;
+
+    enc_data_t->m_th_inf.colorspace                   = OC_CS_UNSPECIFIED;
+    enc_data_t->m_th_inf.pixelformat                  = OC_PF_420;
+
+    enc_data_t->m_th_inf.target_bitrate               = pdata->args.v_bitrate;
+    enc_data_t->m_th_inf.quality                      = pdata->args.v_quality;
+    enc_data_t->m_th_inf.dropframes_p                 = 0;
+    enc_data_t->m_th_inf.quick_p                      = 1;
+    enc_data_t->m_th_inf.keyframe_auto_p              = 1;
+    enc_data_t->m_th_inf.keyframe_frequency           = 64;
+    enc_data_t->m_th_inf.keyframe_frequency_force     = 64;
+    enc_data_t->m_th_inf.keyframe_data_target_bitrate = enc_data_t->m_th_inf.quality * 1.5;
+    enc_data_t->m_th_inf.keyframe_auto_threshold      = 80;
+    enc_data_t->m_th_inf.keyframe_mindistance         = 8;
+    enc_data_t->m_th_inf.noise_sensitivity            = 1;
+    enc_data_t->m_th_inf.sharpness                    = 2;
 
     theora_encode_init(&enc_data_t->m_th_st,&enc_data_t->m_th_inf);
-
 
 
     if(!pdata->args.nosound){
