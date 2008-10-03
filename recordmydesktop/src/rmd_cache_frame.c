@@ -36,10 +36,8 @@
 #include "rmd_cache_frame.h"
 
 
-//minimize hard disk access
-#define CACHE_OUT_BUFFER_SIZE 4096
-//500 mb file size
-#define CACHE_FILE_SIZE_LIMIT (500*1<<20)
+#define CACHE_OUT_BUFFER_SIZE (4 * 1024)
+#define CACHE_FILE_SIZE_LIMIT (5 * 1024 * 1024)
 
 
 static int FlushBlock(unsigned char *buf,
