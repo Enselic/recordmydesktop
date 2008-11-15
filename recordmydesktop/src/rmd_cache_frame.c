@@ -38,7 +38,7 @@
 
 #define BYTES_PER_MB          (1024 * 1024)
 #define CACHE_OUT_BUFFER_SIZE (4 * 1024)
-#define CACHE_FILE_SIZE_LIMIT (5 * 1024 * 1024)
+#define CACHE_FILE_SIZE_LIMIT (500 * 1024 * 1024)
 
 
 static int FlushBlock(unsigned char *buf,
