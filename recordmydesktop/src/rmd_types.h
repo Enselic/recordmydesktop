@@ -304,7 +304,6 @@ struct _ProgData {
                             //when drawing the dummy pointer
     unsigned int periodtime,//time that a sound buffer lasts (microsecs)
                 frametime;  //time that a frame lasts (microsecs)
-    char    *window_manager;   //name of the window manager at program launch
     Window  shaped_w;       //frame
     int damage_event,       //damage event base code
         damage_error,       //damage error base code

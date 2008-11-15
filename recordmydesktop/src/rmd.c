@@ -38,7 +38,7 @@
 #include "rmd_setbrwindow.h"
 #include "rmd_shortcuts.h"
 #include "rmd_threads.h"
-#include "rmd_wm_check.h"
+#include "rmd_wm_is_compositing.h"
 
 
 int main(int argc,char **argv){
@@ -99,28 +99,17 @@ int main(int argc,char **argv){
         if (!SetBRWindow(pdata.dpy, &pdata.brwin, &pdata.specs, &pdata.args))
             exit(11);
 
-        //check if we are under compiz or beryl,
-        //in which case we must enable full-shots
-        //and with it use of shared memory.User can override this
-        pdata.window_manager=((pdata.args.nowmcheck)?
-                              NULL:rmdWMCheck(pdata.dpy,pdata.specs.root));
-        if(pdata.window_manager==NULL){
-            fprintf(stderr,"Not taking window manager into account.\n");
-        }
-        //Right now only wm's that I know of performing
-        //3d compositing are beryl and compiz.
-        //No, the blue screen in metacity doesn't count :)
-        //names can be compiz for compiz and beryl/beryl-co/beryl-core
-        //for beryl(so it's strncmp )
-        else if(!strcmp(pdata.window_manager,"compiz") ||
-                !strncmp(pdata.window_manager,"beryl",5)){
-            fprintf(stderr,"\nDetected 3d compositing window manager.\n"
+        if( !pdata.args.nowmcheck && 
+            rmdWMIsCompositing( pdata.dpy, pdata.specs.screen ) ) {
+
+            fprintf(stderr,"\nDetected compositing window manager.\n"
                            "Reverting to full screen capture at every frame.\n"
                            "To disable this check run with --no-wm-check\n"
                            "(though that is not advised, since it will "
                            "probably produce faulty results).\n\n");
             pdata.args.full_shots=1;
             pdata.args.noshared=0;
+        
         }
 
         QueryExtensions(pdata.dpy,

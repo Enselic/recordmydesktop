@@ -68,6 +68,8 @@ recordmydesktop_SOURCES = \
 	rmd_update_image.h \
 	rmd_wm_check.c \
 	rmd_wm_check.h \
+	rmd_wm_is_compositing.c \
+	rmd_wm_is_compositing.h \
 	rmd_yuv_utils.c \
 	rmd_yuv_utils.h \
 	skeleton.c \
