@@ -138,7 +138,7 @@ int InitializeData(ProgData *pdata,
             }
         }
         else{
-#ifdef HAVE_JACK_H
+#ifdef HAVE_LIBJACK
             int jack_error=0;
             pdata->jdata->port_names=pdata->args.jack_port_names;
             pdata->jdata->nports=pdata->args.jack_nports;

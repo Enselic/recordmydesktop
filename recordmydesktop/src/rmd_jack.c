@@ -33,53 +33,7 @@
 #include "rmd_jack.h"
 
 
-#ifdef HAVE_JACK_H
-
-
-#define CHECK_DLERRORS_FATAL(__error_p)\
-    if((__error_p=dlerror())!=NULL){\
-        fprintf(stderr,"%s\n",__error_p);\
-        return 1;\
-    }
-
-#define DLSYM_AND_CHECK(lib_handle,__call_name__,__error_p)\
-    __call_name__##_p=dlsym(lib_handle,#__call_name__);\
-    CHECK_DLERRORS_FATAL(__error_p)
-
-
-/**
-*
-*   Fuction Pointers To Jack API Calls (shouldn't a jack header provide these?)
-*
-*/
-jack_client_t *(*jack_client_new_p)(const char *client_name);
-jack_nframes_t (*jack_get_sample_rate_p)(jack_client_t * client);
-int (*jack_set_buffer_size_p)(jack_client_t *client, jack_nframes_t nframes);
-jack_nframes_t (*jack_get_buffer_size_p)(jack_client_t *client);
-int (*jack_set_process_callback_p)(jack_client_t *client,
-                                   JackProcessCallback process_callback,
-                                   void *arg);
-void (*jack_on_shutdown_p)(jack_client_t *client,
-                           void(*function)(void *arg),
-                           void *arg);
-int (*jack_activate_p)(jack_client_t *client);
-int (*jack_client_close_p)(jack_client_t *client);
-void *(*jack_port_get_buffer_p)(jack_port_t *port,jack_nframes_t);
-jack_port_t *(*jack_port_register_p)(jack_client_t *client,
-                                     const char *port_name,
-                                     const char *port_type,
-                                     unsigned long flags,
-                                     unsigned long buffer_size);
-int (*jack_connect_p)(jack_client_t *client,
-                      const char *source_port,
-                      const char *destination_port);
-const char *(*jack_port_name_p)(const jack_port_t *port);
-int (*jack_port_name_size_p)(void);
-jack_ringbuffer_t *(*jack_ringbuffer_create_p)(size_t sz);
-void (*jack_ringbuffer_free_p)(jack_ringbuffer_t *rb);
-size_t (*jack_ringbuffer_write_p)(jack_ringbuffer_t *rb,
-                                  const char *src,
-                                  size_t cnt);
+#ifdef HAVE_LIBJACK
 
 
 /**
@@ -101,12 +55,12 @@ static int JackCapture(jack_nframes_t nframes,void *jdata_t) {
     }
 
     for(i= 0;i<jdata->nports;i++)
-        jdata->portbuf[i]=jack_port_get_buffer_p(jdata->ports[i],nframes);
+        jdata->portbuf[i]=jack_port_get_buffer(jdata->ports[i],nframes);
 //vorbis analysis buffer wants uninterleaved data
 //so we are simply placing the buffers for every channel
 //sequentially on the ringbuffer
     for(i=0;i<jdata->nports;i++)
-        (*jack_ringbuffer_write_p)(jdata->sound_buffer,
+        (*jack_ringbuffer_write)(jdata->sound_buffer,
                                    (void *)(jdata->portbuf[i]),
                                    nframes*
                                    sizeof(jack_default_audio_sample_t));
@@ -148,7 +102,7 @@ static int SetupPorts(JackData *jdata) {
         strcpy(name,"input_");
         snprintf( num, 8, "%d", i+1 );
         strcat(name,num);
-        if((jdata->ports[i]=jack_port_register_p(jdata->client,
+        if((jdata->ports[i]=jack_port_register(jdata->client,
                                                  name,
                                                  JACK_DEFAULT_AUDIO_TYPE,
                                                  JackPortIsInput,
@@ -156,55 +110,15 @@ static int SetupPorts(JackData *jdata) {
             fprintf(stderr,"Cannot register input port \"%s\"!\n",name);
             return 1;
         }
-        if(jack_connect_p(jdata->client,
+        if(jack_connect(jdata->client,
                           jdata->port_names[i],
-                          jack_port_name_p(jdata->ports[i]))){
+                          jack_port_name(jdata->ports[i]))){
             fprintf(stderr,"Cannot connect input port %s to %s\n",
-                           jack_port_name_p(jdata->ports[i]),
+                           jack_port_name(jdata->ports[i]),
                            jdata->port_names[i]);
             return 1;
         }
     }
-    return 0;
-}
-
-/**
-*   dlopen libjack and dlsym all needed functions
-*
-*   \param jack_lib_handle  Pointer to handle for jack library
-*
-*   \returns 0 on Success, 1 on failure
-*/
-static int LoadJackLib(void *jack_lib_handle) {
-    char *error;
-    jack_lib_handle=dlopen("libjack.so",RTLD_LAZY);
-    if(!jack_lib_handle){
-        fprintf(stderr,"%s\n",dlerror());
-        return 1;
-    }
-    if((error=dlerror())!=NULL){
-        fprintf(stderr,"%s\n",dlerror());
-    }
-//this macro will call return with status 1 on failure
-    DLSYM_AND_CHECK(jack_lib_handle,jack_client_new,error)
-    DLSYM_AND_CHECK(jack_lib_handle,jack_get_sample_rate,error)
-    DLSYM_AND_CHECK(jack_lib_handle,jack_set_buffer_size,error)
-    DLSYM_AND_CHECK(jack_lib_handle,jack_get_buffer_size,error)
-    DLSYM_AND_CHECK(jack_lib_handle,jack_set_process_callback,error)
-    DLSYM_AND_CHECK(jack_lib_handle,jack_on_shutdown,error)
-    DLSYM_AND_CHECK(jack_lib_handle,jack_activate,error)
-    DLSYM_AND_CHECK(jack_lib_handle,jack_client_close,error)
-    DLSYM_AND_CHECK(jack_lib_handle,jack_port_get_buffer,error)
-    DLSYM_AND_CHECK(jack_lib_handle,jack_port_register,error)
-    DLSYM_AND_CHECK(jack_lib_handle,jack_connect,error)
-    DLSYM_AND_CHECK(jack_lib_handle,jack_port_name,error)
-    DLSYM_AND_CHECK(jack_lib_handle,jack_port_name_size,error)
-    DLSYM_AND_CHECK(jack_lib_handle,jack_ringbuffer_create,error)
-    DLSYM_AND_CHECK(jack_lib_handle,jack_ringbuffer_free,error)
-    DLSYM_AND_CHECK(jack_lib_handle,jack_ringbuffer_read,error)
-    DLSYM_AND_CHECK(jack_lib_handle,jack_ringbuffer_read_space,error)
-    DLSYM_AND_CHECK(jack_lib_handle,jack_ringbuffer_write,error)
-
     return 0;
 }
 
@@ -236,11 +150,7 @@ int StartJackClient(JackData *jdata){
     snprintf( pidbuf, 8, "%d", pid );
     strcat(rmd_client_name,pidbuf);
 
-    if(LoadJackLib(jdata->jack_lib_handle)){
-        fprintf (stderr,"Couldn't load the Jack library (libjack.so)!\n");
-        return 14;
-    }
-    if ((jdata->client=(*jack_client_new_p)(rmd_client_name))==0){
+    if ((jdata->client=(*jack_client_new)(rmd_client_name))==0){
         fprintf(stderr,"Could not create new client!\n"
                        "Make sure that Jack server is running!\n");
         return 15;
@@ -258,23 +168,23 @@ int StartJackClient(JackData *jdata){
 //(it might be in some cases, but it will certainly be the cause
 //of unpredicted problems). A clean exit is preferable
 //and any recording up to that point will be encoded and saved.
-    jdata->frequency=jack_get_sample_rate_p(jdata->client);
-    jdata->buffersize=jack_get_buffer_size_p(jdata->client);
+    jdata->frequency=jack_get_sample_rate(jdata->client);
+    jdata->buffersize=jack_get_buffer_size(jdata->client);
     ring_buffer_size=(jdata->ringbuffer_secs*
                       jdata->frequency*
                       sizeof(jack_default_audio_sample_t)*
                       jdata->nports);
     jdata->sound_buffer=
-        (*jack_ringbuffer_create_p)((int)(ring_buffer_size+0.5));//round up
-    jack_set_process_callback_p(jdata->client,JackCapture,jdata);
-    jack_on_shutdown_p(jdata->client,JackShutdown,jdata);
+        (*jack_ringbuffer_create)((int)(ring_buffer_size+0.5));//round up
+    jack_set_process_callback(jdata->client,JackCapture,jdata);
+    jack_on_shutdown(jdata->client,JackShutdown,jdata);
 
-    if (jack_activate_p(jdata->client)) {
+    if (jack_activate(jdata->client)) {
         fprintf(stderr,"cannot activate client!\n");
         return 16;
     }
     if(SetupPorts(jdata)){
-        jack_client_close_p(jdata->client);
+        jack_client_close(jdata->client);
         return 17;
     }
 
@@ -284,8 +194,8 @@ int StartJackClient(JackData *jdata){
 int StopJackClient(JackData *jdata){
     int ret=0;
 
-    (*jack_ringbuffer_free_p)(jdata->sound_buffer);
-    if(jack_client_close_p(jdata->client)){
+    (*jack_ringbuffer_free)(jdata->sound_buffer);
+    if(jack_client_close(jdata->client)){
         fprintf(stderr,"Cannot close Jack client!\n");
         ret=1;
     }

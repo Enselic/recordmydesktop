@@ -46,10 +46,9 @@
     #define DEFAULT_AUDIO_DEVICE "/dev/dsp"
 #endif
 
-#ifdef HAVE_JACK_H
+#ifdef HAVE_LIBJACK
     #include <jack/jack.h>
     #include <jack/ringbuffer.h>
-    #include <dlfcn.h>
 #endif
 
 
@@ -223,10 +222,9 @@ typedef struct _SndBuffer{
     struct _SndBuffer *next;
 }SndBuffer;
 
-#ifdef HAVE_JACK_H
+#ifdef HAVE_LIBJACK
 typedef struct _JackData{
     ProgData *pdata;            //pointer to prog data
-    void *jack_lib_handle;      //handle for jack library (loaded with dlopen).
     jack_client_t   *client;
     unsigned int    buffersize, //buffer size for every port in frames.
                     frequency,  //samplerate with which jack server was started.
@@ -264,7 +262,7 @@ struct _ProgData {
     CacheData   *cache_data;
     HotKey      pause_key,  //Shortcuts
                 stop_key;
-#ifdef HAVE_JACK_H
+#ifdef HAVE_LIBJACK
     JackData    *jdata;
 #endif
 /**X related info*/

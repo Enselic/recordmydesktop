@@ -72,7 +72,7 @@ int main(int argc,char **argv){
     else{
         EncData enc_data;
         CacheData cache_data;
-#ifdef HAVE_JACK_H
+#ifdef HAVE_LIBJACK
         JackData jdata;
 
         // Give jack access to program data, mainly for program state

@@ -107,7 +107,7 @@ void rmdThreads(ProgData *pdata){
                    (void *)rmdTimer,
                    (void *)pdata);
     fprintf(stderr,"Capturing!\n");
-#ifdef HAVE_JACK_H
+#ifdef HAVE_LIBJACK
     if(pdata->args.use_jack){
         pdata->jdata->capture_started=1;
     }
@@ -132,7 +132,7 @@ void rmdThreads(ProgData *pdata){
     fprintf(stderr,".");
 
     if(!pdata->args.nosound){
-#ifdef HAVE_JACK_H
+#ifdef HAVE_LIBJACK
         if(pdata->args.use_jack)
             StopJackClient(pdata->jdata);
 #endif

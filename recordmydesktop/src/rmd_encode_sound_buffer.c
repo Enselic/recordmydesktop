@@ -36,7 +36,7 @@
 
 void *EncodeSoundBuffer(ProgData *pdata){
     int sampread=pdata->periodsize;
-#ifdef HAVE_JACK_H
+#ifdef HAVE_LIBJACK
     void *jackbuf=NULL;
     if(pdata->args.use_jack){
         jackbuf=malloc(pdata->sound_framesize*pdata->jdata->buffersize);
@@ -85,10 +85,10 @@ void *EncodeSoundBuffer(ProgData *pdata){
             free(buff);
         }
         else{
-#ifdef HAVE_JACK_H
-            if((*jack_ringbuffer_read_space_p)(pdata->jdata->sound_buffer)>=
+#ifdef HAVE_LIBJACK
+            if((*jack_ringbuffer_read_space)(pdata->jdata->sound_buffer)>=
                (pdata->sound_framesize*pdata->jdata->buffersize)){
-                (*jack_ringbuffer_read_p)(pdata->jdata->sound_buffer,
+                (*jack_ringbuffer_read)(pdata->jdata->sound_buffer,
                                           jackbuf,
                                           (pdata->sound_framesize*
                                            pdata->jdata->buffersize));

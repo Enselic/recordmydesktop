@@ -60,12 +60,7 @@ AC_CHECK_HEADER([machine/endian.h],
 fi
 
 AC_CHECK_HEADER([sys/soundcard.h])
-AC_CHECK_HEADER([dlfcn.h],[dlfcn_header=true])
 
-if test x$jack = xtrue && test x$dlfcn_header = xtrue; then
-AC_CHECK_HEADER([jack/jack.h],
-                jack_headers_present=true)
-fi
 AC_CHECK_HEADERS([sys/time.h unistd.h vorbis/vorbisfile.h fcntl.h])
 
 
@@ -99,29 +94,17 @@ AC_CHECK_LIB([theora],[theora_encode_YUVin],,
 AC_CHECK_LIB([pthread],[pthread_mutex_lock],,
              AC_MSG_ERROR([Can't find libpthread]))
 
+if test x$jack = xtrue ; then
+AC_CHECK_LIB([jack],[jack_activate],,
+             jack_lib_found=false)
+fi
+
 if test x$oss = xfalse; then
     AC_CHECK_LIB([asound],[snd_pcm_drain],,
                 audio_backend="OSS")
 else
     audio_backend="OSS"
 fi
-
-if test x$jack_headers_present = xtrue; then
-    case "$host_os" in
-    *bsd*)
-            AC_CHECK_LIB([c], [dlopen],,libdl_np=true)
-    ;;
-    *)
-            AC_CHECK_LIB([dl],[dlopen],,libdl_np=true)
-    ;;
-    esac
-
-    if test x$libdl_np != xtrue; then
-        AC_DEFINE([HAVE_JACK_H],1,
-                define to 1 if <jack/jack.h> exists)
-    fi
-fi
-
 
 # Checks for typedefs, structures, and compiler characteristics.
 
@@ -137,7 +120,8 @@ AC_OUTPUT
 if test x$audio_backend != xOSS; then
     audio_backend="ALSA"
 fi
-if test x$jack_headers_present = xtrue && test x$libdl_np != xtrue; then
+if test x$jack_lib_found != xfalse ; then
+#    AC_DEFINE([HAVE_JACK_H],1,define to 1 if libjack is found) ,
     jack_support="Enabled"
 else
     jack_support="Disabled"

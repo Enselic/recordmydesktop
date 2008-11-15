@@ -30,14 +30,10 @@
 #include "rmd_types.h"
 
 
-#ifdef HAVE_JACK_H
-
-size_t (*jack_ringbuffer_read_p)(jack_ringbuffer_t *rb,
-                                 char *dest, size_t cnt);
-size_t (*jack_ringbuffer_read_space_p)(const jack_ringbuffer_t *rb);
+#ifdef HAVE_LIBJACK
 
 /**
-*   Load libjack, create and activate client,register ports
+*   create and activate client,register ports
 *
 *   \param jdata_t  Pointer to JackData struct containing port
 *                   and client information

@@ -34,7 +34,7 @@
 static void PrintConfig(void) {
     fprintf(stderr,"\nrecordMyDesktop was compiled with"
                    " the following options:\n\n");
-#ifdef HAVE_JACK_H
+#ifdef HAVE_LIBJACK
     fprintf(stdout,"Jack\t\t\t:Enabled\n");
 #else
     fprintf(stdout,"Jack\t\t\t:Disabled\n");
@@ -489,7 +489,7 @@ boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
         else if (strcmp(argv[i], "--use-jack") == 0 ||
                  strcmp(argv[i], "-use-jack")  == 0) {
             if(i+1<argc){
-#ifdef HAVE_JACK_H
+#ifdef HAVE_LIBJACK
                 int k=i+1;
                 arg_return->jack_nports=0;
                 while((k<argc)&&(argv[k][0]!='-')){
