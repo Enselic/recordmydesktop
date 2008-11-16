@@ -1,5 +1,3 @@
-include $(top_srcdir)/m4/python.mk
-
 bin_SCRIPTS=gtk-recordMyDesktop
 
 gtk_recordMyDesktopdir=$(pythondir)/recordMyDesktop

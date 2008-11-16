@@ -1,7 +1,7 @@
 AC_PREREQ(2.59)
-AC_INIT(src/rmdSimple.py)
 
-AM_INIT_AUTOMAKE(gtk-recordmydesktop, 0.3.7.2)
+AC_INIT([gtk-recordmydesktop], [0.3.7.2])
+AM_INIT_AUTOMAKE
 
 AS_AC_EXPAND(LIBDIR, $libdir)
 AC_MSG_NOTICE(Storing library files in $LIBDIR)
