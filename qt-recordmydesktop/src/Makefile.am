@@ -1,4 +1,3 @@
-include $(top_srcdir)/m4/python.mk
 
 bin_SCRIPTS=qt-recordMyDesktop
 
