@@ -125,14 +125,14 @@ class trayIcon(object):
         self.parent.update()
         self.ch_err=""
         self.execargs=["recordmydesktop","-o",'%s'%self.parent.values[4],
-                  "-fps","%d"%self.parent.values[0]]
+                  "--fps","%d"%self.parent.values[0]]
         if self.parent.values[2]==False :
             self.execargs.append("--no-sound")
         if self.parent.values[1] == 1:
-            self.execargs.append("-dummy-cursor")
+            self.execargs.append("--dummy-cursor")
             self.execargs.append("white")
         elif self.parent.values[1] == 2:
-            self.execargs.append("-dummy-cursor")
+            self.execargs.append("--dummy-cursor")
             self.execargs.append("black")
         elif self.parent.values[1] == 3:
             self.execargs.append("--no-cursor")
@@ -150,33 +150,33 @@ class trayIcon(object):
                 self.execargs.append('-y')
                 self.execargs.append('%d'%self.parent.values[5][1])
         if self.parent.values[5][2]>0 and self.parent.values[5][3]>0:
-            self.execargs.append('-width')
+            self.execargs.append('--width')
             self.execargs.append('%d'%(self.parent.values[5][2]-self.parent.values[5][0]))
-            self.execargs.append('-height')
+            self.execargs.append('--height')
             self.execargs.append('%d'%(self.parent.values[5][3]-self.parent.values[5][1]))
             if(not self.parent.values[14]):
                 for i in range(4):
                     self.parent.values[5][i]=-1
         if self.parent.values[6]>0:
-            self.execargs.append('-delay')
+            self.execargs.append('--delay')
             self.execargs.append('%d'%self.parent.values[6])
-        self.execargs.append('-channels')
+        self.execargs.append('--channels')
         self.execargs.append('%d'%self.parent.values[7])
-        self.execargs.append('-freq')
+        self.execargs.append('--freq')
         self.execargs.append('%d'%self.parent.values[8])
         if self.parent.values[9]!='DEFAULT':
-            self.execargs.append('-device')
+            self.execargs.append('--device')
             self.execargs.append('%s'%self.parent.values[9])
-        self.execargs.append('-v_quality')
+        self.execargs.append('--v_quality')
         self.execargs.append('%d'%self.parent.values[10])
-        self.execargs.append('-s_quality')
+        self.execargs.append('--s_quality')
         self.execargs.append('%d'%self.parent.values[11])
         if self.parent.values[12] != "$DISPLAY":
-            self.execargs.append('-display')
+            self.execargs.append('--display')
             self.execargs.append('%s'%self.parent.values[12])
         if self.parent.values[16] == 0:
             self.execargs.append('--quick-subsampling')
-        self.execargs.append('-workdir')
+        self.execargs.append('--workdir')
         self.execargs.append('%s'%self.parent.values[17])
         if self.parent.values[18] == 0:
             self.execargs.append('--on-the-fly-encoding')
@@ -187,7 +187,7 @@ class trayIcon(object):
         if self.parent.values[15] == 0:
             self.execargs.append('--follow-mouse')
         if self.parent.values[22] == True:
-            self.execargs.append('-use-jack')
+            self.execargs.append('--use-jack')
             for i in self.parent.values[23]:
                 self.execargs.append(i)
         if self.parent.values[25] == 1:
