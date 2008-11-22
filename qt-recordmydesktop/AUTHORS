@@ -15,3 +15,16 @@ Italian:        Giovanni Scafora
 Brazilian:      Caio Alonso
 Spanish:        José "L. Redrejo" Rodríguez
 
+
+
+The icons media-playback-pause.svg, media-playback-stop.svg and
+media-record.svg, in the src/ directory, are part of the Oxygen
+project and are licenced under the GNU-LGPL version 3 or (at your option) 
+any later version.  
+( The icons have been copied and uncompressed, at 22/11/2008 from 
+http://websvn.kde.org/trunk/KDE/kdebase/runtime/pics/oxygen/scalable/actions/ 
+where they existed in a compressed form, under the same names but with svgz 
+extensions )
+
+Author information about these exists in COPYING.icons. 
+
