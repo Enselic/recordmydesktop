@@ -41,42 +41,42 @@
 #include "rmd_types.h"
 
 
-#define CLIP_EVENT_AREA(e,brwin,wgeom){\
-    if(((e)->area.x<=(brwin)->rgeom.x)&&((e)->area.y<=(brwin)->rgeom.y)&&\
-        ((e)->area.width>=(brwin)->rgeom.width)&&\
-        ((e)->area.height<(brwin)->rgeom.height)){\
-        (wgeom)->x=(brwin)->rgeom.x;\
-        (wgeom)->y=(brwin)->rgeom.y;\
-        (wgeom)->width=(brwin)->rgeom.width;\
-        (wgeom)->height=(brwin)->rgeom.height;\
+#define CLIP_EVENT_AREA(e,brwin,xrect){\
+    if(((e)->area.x<=(brwin)->rrect.x)&&((e)->area.y<=(brwin)->rrect.y)&&\
+        ((e)->area.width>=(brwin)->rrect.width)&&\
+        ((e)->area.height<(brwin)->rrect.height)){\
+        (xrect)->x=(brwin)->rrect.x;\
+        (xrect)->y=(brwin)->rrect.y;\
+        (xrect)->width=(brwin)->rrect.width;\
+        (xrect)->height=(brwin)->rrect.height;\
     }\
     else{\
-        (wgeom)->x=((((e)->area.x+(e)->area.width>=(brwin)->rgeom.x)&&\
-        ((e)->area.x<=(brwin)->rgeom.x+(brwin)->rgeom.width))?\
-        (((e)->area.x<=(brwin)->rgeom.x)?(brwin)->rgeom.x:(e)->area.x):-1);\
+        (xrect)->x=((((e)->area.x+(e)->area.width>=(brwin)->rrect.x)&&\
+        ((e)->area.x<=(brwin)->rrect.x+(brwin)->rrect.width))?\
+        (((e)->area.x<=(brwin)->rrect.x)?(brwin)->rrect.x:(e)->area.x):-1);\
     \
-        (wgeom)->y=((((e)->area.y+(e)->area.height>=(brwin)->rgeom.y)&&\
-        ((e)->area.y<=(brwin)->rgeom.y+(brwin)->rgeom.height))?\
-        (((e)->area.y<=(brwin)->rgeom.y)?(brwin)->rgeom.y:(e)->area.y):-1);\
+        (xrect)->y=((((e)->area.y+(e)->area.height>=(brwin)->rrect.y)&&\
+        ((e)->area.y<=(brwin)->rrect.y+(brwin)->rrect.height))?\
+        (((e)->area.y<=(brwin)->rrect.y)?(brwin)->rrect.y:(e)->area.y):-1);\
     \
-        (wgeom)->width=((e)->area.x<=(brwin)->rgeom.x)?\
-        (e)->area.width-((brwin)->rgeom.x-(e)->area.x):\
-        ((e)->area.x<=(brwin)->rgeom.x+(brwin)->rgeom.width)?\
-        (((brwin)->rgeom.width-(e)->area.x+(brwin)->rgeom.x<(e)->area.width)?\
-        (brwin)->rgeom.width-(e)->area.x+(brwin)->rgeom.x:e->area.width):-1;\
+        (xrect)->width=((e)->area.x<=(brwin)->rrect.x)?\
+        (e)->area.width-((brwin)->rrect.x-(e)->area.x):\
+        ((e)->area.x<=(brwin)->rrect.x+(brwin)->rrect.width)?\
+        (((brwin)->rrect.width-(e)->area.x+(brwin)->rrect.x<(e)->area.width)?\
+        (brwin)->rrect.width-(e)->area.x+(brwin)->rrect.x:e->area.width):0;\
     \
-        (wgeom)->height=((e)->area.y<=(brwin)->rgeom.y)?\
-        (e)->area.height-((brwin)->rgeom.y-(e)->area.y):\
-        ((e)->area.y<=(brwin)->rgeom.y+(brwin)->rgeom.height)?\
-        (((brwin)->rgeom.height-(e)->area.y+\
-         (brwin)->rgeom.y<(e)->area.height)?\
-         (brwin)->rgeom.height-(e)->area.y+\
-         (brwin)->rgeom.y:(e)->area.height):-1;\
+        (xrect)->height=((e)->area.y<=(brwin)->rrect.y)?\
+        (e)->area.height-((brwin)->rrect.y-(e)->area.y):\
+        ((e)->area.y<=(brwin)->rrect.y+(brwin)->rrect.height)?\
+        (((brwin)->rrect.height-(e)->area.y+\
+         (brwin)->rrect.y<(e)->area.height)?\
+         (brwin)->rrect.height-(e)->area.y+\
+         (brwin)->rrect.y:(e)->area.height):0;\
     \
-        if((wgeom)->width>(brwin)->rgeom.width)\
-            (wgeom)->width=(brwin)->rgeom.width;\
-        if((wgeom)->height>(brwin)->rgeom.height)\
-            (wgeom)->height=(brwin)->rgeom.height;\
+        if((xrect)->width>(brwin)->rrect.width)\
+            (xrect)->width=(brwin)->rrect.width;\
+        if((xrect)->height>(brwin)->rrect.height)\
+            (xrect)->height=(brwin)->rrect.height;\
     }\
 }
 
@@ -167,8 +167,8 @@ void EventLoop(ProgData *pdata){
                 rmdDrawFrame(pdata->dpy,
                              pdata->specs.screen,  
                              pdata->shaped_w,
-                             pdata->brwin.rgeom.width,
-                             pdata->brwin.rgeom.height);
+                             pdata->brwin.rrect.width,
+                             pdata->brwin.rrect.height);
                 
             }
 
@@ -189,12 +189,12 @@ void EventLoop(ProgData *pdata){
             }
             else if(event.type == pdata->damage_event + XDamageNotify ){
                 XDamageNotifyEvent *e =(XDamageNotifyEvent *)( &event );
-                WGeometry wgeom;
-                CLIP_EVENT_AREA(e,&(pdata->brwin),&wgeom);
-                if((wgeom.x>=0)&&(wgeom.y>=0)&&
-                   (wgeom.width>0)&&(wgeom.height>0)){
+                XRectangle xrect;
+                CLIP_EVENT_AREA(e,&(pdata->brwin),&xrect);
+                if((xrect.x>=0)&&(xrect.y>=0)&&
+                   (xrect.width>0)&&(xrect.height>0)){
 
-                    inserts+=RectInsert(&pdata->rect_root,&wgeom);
+                    inserts+=RectInsert(&pdata->rect_root,&xrect);
 
                 }
             }

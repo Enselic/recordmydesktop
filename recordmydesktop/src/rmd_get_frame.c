@@ -51,41 +51,41 @@
     data_array[(k_tm*width_img+i_tm-1)*RMD_ULONG_SIZE_T+offset]+\
     data_array[((k_tm-1)*width_img+i_tm-1)*RMD_ULONG_SIZE_T+offset])/4)
 
-#define CLIP_DUMMY_POINTER_AREA(dummy_p_area,brwin,wgeom){\
-    (wgeom)->x=((((dummy_p_area).x+\
-                (dummy_p_area).width>=(brwin)->rgeom.x)&&\
-                ((dummy_p_area).x<=(brwin)->rgeom.x+\
-                (brwin)->rgeom.width))?\
-                (((dummy_p_area).x<=(brwin)->rgeom.x)?\
-                (brwin)->rgeom.x:(dummy_p_area).x):-1);\
-    (wgeom)->y=((((dummy_p_area).y+\
-                (dummy_p_area).height>=(brwin)->rgeom.y)&&\
-                ((dummy_p_area).y<=(brwin)->rgeom.y+\
-                (brwin)->rgeom.height))?\
-                (((dummy_p_area).y<=(brwin)->rgeom.y)?\
-                (brwin)->rgeom.y:(dummy_p_area).y):-1);\
-    (wgeom)->width=((dummy_p_area).x<=(brwin)->rgeom.x)?\
+#define CLIP_DUMMY_POINTER_AREA(dummy_p_area,brwin,xrect){\
+    (xrect)->x=((((dummy_p_area).x+\
+                (dummy_p_area).width>=(brwin)->rrect.x)&&\
+                ((dummy_p_area).x<=(brwin)->rrect.x+\
+                (brwin)->rrect.width))?\
+                (((dummy_p_area).x<=(brwin)->rrect.x)?\
+                (brwin)->rrect.x:(dummy_p_area).x):-1);\
+    (xrect)->y=((((dummy_p_area).y+\
+                (dummy_p_area).height>=(brwin)->rrect.y)&&\
+                ((dummy_p_area).y<=(brwin)->rrect.y+\
+                (brwin)->rrect.height))?\
+                (((dummy_p_area).y<=(brwin)->rrect.y)?\
+                (brwin)->rrect.y:(dummy_p_area).y):-1);\
+    (xrect)->width=((dummy_p_area).x<=(brwin)->rrect.x)?\
                 (dummy_p_area).width-\
-                ((brwin)->rgeom.x-(dummy_p_area).x):\
-                ((dummy_p_area).x<=(brwin)->rgeom.x+\
-                (brwin)->rgeom.width)?\
-                ((brwin)->rgeom.width-(dummy_p_area).x+\
-                (brwin)->rgeom.x<(dummy_p_area).width)?\
-                (brwin)->rgeom.width-(dummy_p_area).x+\
-                (brwin)->rgeom.x:(dummy_p_area).width:-1;\
-    (wgeom)->height=((dummy_p_area).y<=(brwin)->rgeom.y)?\
+                ((brwin)->rrect.x-(dummy_p_area).x):\
+                ((dummy_p_area).x<=(brwin)->rrect.x+\
+                (brwin)->rrect.width)?\
+                ((brwin)->rrect.width-(dummy_p_area).x+\
+                (brwin)->rrect.x<(dummy_p_area).width)?\
+                (brwin)->rrect.width-(dummy_p_area).x+\
+                (brwin)->rrect.x:(dummy_p_area).width:0;\
+    (xrect)->height=((dummy_p_area).y<=(brwin)->rrect.y)?\
                 (dummy_p_area).height-\
-                ((brwin)->rgeom.y-(dummy_p_area).y):\
-                ((dummy_p_area).y<=(brwin)->rgeom.y+\
-                (brwin)->rgeom.height)?\
-                ((brwin)->rgeom.height-(dummy_p_area).y+\
-                (brwin)->rgeom.y<(dummy_p_area).height)?\
-                (brwin)->rgeom.height-(dummy_p_area).y+\
-                (brwin)->rgeom.y:(dummy_p_area).height:-1;\
-    if((wgeom)->width>(brwin)->rgeom.width)\
-        (wgeom)->width=(brwin)->rgeom.width;\
-    if((wgeom)->height>(brwin)->rgeom.height)\
-        (wgeom)->height=(brwin)->rgeom.height;\
+                ((brwin)->rrect.y-(dummy_p_area).y):\
+                ((dummy_p_area).y<=(brwin)->rrect.y+\
+                (brwin)->rrect.height)?\
+                ((brwin)->rrect.height-(dummy_p_area).y+\
+                (brwin)->rrect.y<(dummy_p_area).height)?\
+                (brwin)->rrect.height-(dummy_p_area).y+\
+                (brwin)->rrect.y:(dummy_p_area).height:0;\
+    if((xrect)->width>(brwin)->rrect.width)\
+        (xrect)->width=(brwin)->rrect.width;\
+    if((xrect)->height>(brwin)->rrect.height)\
+        (xrect)->height=(brwin)->rrect.height;\
 }
 
 #define XFIXES_POINTER_TO_YUV(yuv,\
@@ -210,17 +210,17 @@ static int FirstFrame(ProgData *pdata,
                             ZPixmap,
                             0,
                             *pxl_data,
-                            pdata->brwin.rgeom.width,
-                            pdata->brwin.rgeom.height,
+                            pdata->brwin.rrect.width,
+                            pdata->brwin.rrect.height,
                             8,
                             0);
         XInitImage((*image));
         GetZPixmap(pdata->dpy,pdata->specs.root,
                    (*image)->data,
-                   pdata->brwin.rgeom.x,
-                   pdata->brwin.rgeom.y,
-                   pdata->brwin.rgeom.width,
-                   pdata->brwin.rgeom.height);
+                   pdata->brwin.rrect.x,
+                   pdata->brwin.rrect.y,
+                   pdata->brwin.rrect.width,
+                   pdata->brwin.rrect.height);
     }
     else{
         (*image)=XShmCreateImage(pdata->dpy,
@@ -229,8 +229,8 @@ static int FirstFrame(ProgData *pdata,
                                      ZPixmap,
                                      *pxl_data,
                                      shminfo,
-                                     pdata->brwin.rgeom.width,
-                                     pdata->brwin.rgeom.height);
+                                     pdata->brwin.rrect.width,
+                                     pdata->brwin.rrect.height);
         (*shminfo).shmid=shmget(IPC_PRIVATE,
                                     (*image)->bytes_per_line*
                                     (*image)->height,
@@ -249,15 +249,15 @@ static int FirstFrame(ProgData *pdata,
         XShmGetImage(pdata->dpy,
                      pdata->specs.root,
                      (*image),
-                     pdata->brwin.rgeom.x,
-                     pdata->brwin.rgeom.y,
+                     pdata->brwin.rrect.x,
+                     pdata->brwin.rrect.y,
                      AllPlanes);
     }
 
     UPDATE_YUV_BUFFER((&pdata->enc_data->yuv),
             ((unsigned char*)((*image))->data),NULL,
             (pdata->enc_data->x_offset),(pdata->enc_data->y_offset),
-            (pdata->brwin.rgeom.width),(pdata->brwin.rgeom.height),
+            (pdata->brwin.rrect.width),(pdata->brwin.rrect.height),
             (pdata->args.no_quick_subsample),
             pdata->specs.depth);
 
@@ -267,14 +267,14 @@ static int FirstFrame(ProgData *pdata,
 //make a deep copy
 static void BRWinCpy(BRWindow *target, BRWindow *source) {
 
-    target->geom.x=source->geom.x;
-    target->geom.y=source->geom.y;
-    target->geom.width=source->geom.width;
-    target->geom.height=source->geom.height;
-    target->rgeom.x=source->rgeom.x;
-    target->rgeom.y=source->rgeom.y;
-    target->rgeom.width=source->rgeom.width;
-    target->rgeom.height=source->rgeom.height;
+    target->rect.x=source->rect.x;
+    target->rect.y=source->rect.y;
+    target->rect.width=source->rect.width;
+    target->rect.height=source->rect.height;
+    target->rrect.x=source->rrect.x;
+    target->rrect.y=source->rrect.y;
+    target->rrect.width=source->rrect.width;
+    target->rrect.height=source->rrect.height;
     target->nbytes=source->nbytes;
     target->windowid=source->windowid;
 
@@ -289,14 +289,14 @@ static void MoveCaptureArea(BRWindow *brwin,
                             int height) {
     int t_x=0,t_y=0;
 
-    t_x=cursor_x-brwin->rgeom.width/2;
+    t_x=cursor_x-brwin->rrect.width/2;
     t_x=(t_x>>1)<<1;
-    brwin->rgeom.x=(t_x<0)?0:((t_x+brwin->rgeom.width>width)?
-                               width-brwin->rgeom.width:t_x);
-    t_y=cursor_y-brwin->rgeom.height/2;
+    brwin->rrect.x=(t_x<0)?0:((t_x+brwin->rrect.width>width)?
+                               width-brwin->rrect.width:t_x);
+    t_y=cursor_y-brwin->rrect.height/2;
     t_y=(t_y>>1)<<1;
-    brwin->rgeom.y=(t_y<0)?0:((t_y+brwin->rgeom.height>height)?
-                               height-brwin->rgeom.height:t_y);
+    brwin->rrect.y=(t_y<0)?0:((t_y+brwin->rrect.height>height)?
+                               height-brwin->rrect.height:t_y);
 }
 
 /**
@@ -335,10 +335,10 @@ static void BlocksFromList (RectArea   **root,
 
   while (temp != NULL) {
 
-    column_start = (temp->geom.x - x_offset) / Y_UNIT_WIDTH;
-    column_end   = (temp->geom.x + (temp->geom.width - 1) - x_offset) / Y_UNIT_WIDTH;
-    row_start    = (temp->geom.y - y_offset) / Y_UNIT_WIDTH;
-    row_end      = (temp->geom.y + (temp->geom.height - 1) - y_offset) / Y_UNIT_WIDTH;
+    column_start = (temp->rect.x - x_offset) / Y_UNIT_WIDTH;
+    column_end   = (temp->rect.x + (temp->rect.width - 1) - x_offset) / Y_UNIT_WIDTH;
+    row_start    = (temp->rect.y - y_offset) / Y_UNIT_WIDTH;
+    row_end      = (temp->rect.y + (temp->rect.height - 1) - y_offset) / Y_UNIT_WIDTH;
 
     for (i = row_start; i < row_end + 1; i++) {
       for (j = column_start; j < column_end + 1; j++) {
@@ -358,7 +358,7 @@ void *GetFrame(ProgData *pdata){
         blocknum_x=pdata->enc_data->yuv.y_width/Y_UNIT_WIDTH,
         blocknum_y=pdata->enc_data->yuv.y_height/Y_UNIT_WIDTH;
     unsigned int msk_ret;
-    WGeometry mouse_pos_abs,mouse_pos_rel,mouse_pos_temp;
+    XRectangle mouse_pos_abs,mouse_pos_rel,mouse_pos_temp;
     BRWindow temp_brwin;
     Window root_ret,
            child_ret; //Frame
@@ -414,10 +414,10 @@ void *GetFrame(ProgData *pdata){
         pdata->shaped_w=rmdFrameInit(pdata->dpy,
                               pdata->specs.screen,
                               pdata->specs.root,
-                              pdata->brwin.rgeom.x,
-                              pdata->brwin.rgeom.y,
-                              pdata->brwin.rgeom.width,
-                              pdata->brwin.rgeom.height);
+                              pdata->brwin.rrect.x,
+                              pdata->brwin.rrect.y,
+                              pdata->brwin.rrect.width,
+                              pdata->brwin.rrect.height);
         XSelectInput(pdata->dpy,pdata->shaped_w,ExposureMask);
     }
 
@@ -486,8 +486,8 @@ void *GetFrame(ProgData *pdata){
                 XQueryPointer(pdata->dpy,
                               pdata->specs.root,
                               &root_ret,&child_ret,
-                              &mouse_pos_abs.x,&mouse_pos_abs.y,
-                              &mouse_pos_rel.x,&mouse_pos_rel.y,&msk_ret);
+                              (int *)&mouse_pos_abs.x,(int *)&mouse_pos_abs.y,
+                              (int *)&mouse_pos_rel.x,(int *)&mouse_pos_rel.y,&msk_ret);
             }
             
             CLIP_DUMMY_POINTER_AREA(mouse_pos_abs, &temp_brwin, &mouse_pos_temp);
@@ -518,14 +518,14 @@ void *GetFrame(ProgData *pdata){
 
                         MARK_BUFFER_AREA(   back_buff,
                                             (mouse_pos_temp.x-
-                                            temp_brwin.rgeom.x+
+                                            temp_brwin.rrect.x+
                                             pdata->enc_data->x_offset),
                                             (mouse_pos_temp.y-
-                                            temp_brwin.rgeom.y+
+                                            temp_brwin.rrect.y+
                                             pdata->enc_data->y_offset),
                                             mouse_pos_temp.width,
                                             mouse_pos_temp.height,
-                                            (temp_brwin.rgeom.width),
+                                            (temp_brwin.rrect.width),
                                             pdata->specs.depth)
                 }
             }
@@ -541,8 +541,8 @@ void *GetFrame(ProgData *pdata){
             if(!pdata->args.noframe){
                 rmdMoveFrame(pdata->dpy,
                              pdata->shaped_w,
-                             temp_brwin.rgeom.x,
-                             temp_brwin.rgeom.y);
+                             temp_brwin.rrect.x,
+                             temp_brwin.rrect.y);
 
             }
         }
@@ -561,8 +561,8 @@ void *GetFrame(ProgData *pdata){
                         pdata->shm_opcode,
                         pdata->args.no_quick_subsample);
             BlocksFromList(&pdata->rect_root,
-                           temp_brwin.rgeom.x,
-                           temp_brwin.rgeom.y,
+                           temp_brwin.rrect.x,
+                           temp_brwin.rrect.y,
                            pdata->enc_data->yuv.y_width/Y_UNIT_WIDTH,
                            pdata->enc_data->yuv.y_height/Y_UNIT_WIDTH);
             pthread_mutex_unlock(&pdata->yuv_mutex);
@@ -577,17 +577,17 @@ void *GetFrame(ProgData *pdata){
             if(!pdata->args.noshared){
                 XShmGetImage(pdata->dpy,pdata->specs.root,
                             ((!img_sel)?image:image_back),
-                            (temp_brwin.rgeom.x),
-                            (temp_brwin.rgeom.y),AllPlanes);
+                            (temp_brwin.rrect.x),
+                            (temp_brwin.rrect.y),AllPlanes);
             }
             if(pdata->args.noshared){
                 GetZPixmap( pdata->dpy,
                             pdata->specs.root,
                             image->data,
-                            temp_brwin.rgeom.x,
-                            temp_brwin.rgeom.y,
-                            temp_brwin.rgeom.width,
-                            temp_brwin.rgeom.height);
+                            temp_brwin.rrect.x,
+                            temp_brwin.rrect.y,
+                            temp_brwin.rrect.width,
+                            temp_brwin.rrect.height);
             }
             pthread_mutex_lock(&pdata->yuv_mutex);
             for(i=0;i<blocknum_x*blocknum_y;i++){
@@ -597,8 +597,8 @@ void *GetFrame(ProgData *pdata){
                               front_buff,back_buff,
                               (pdata->enc_data->x_offset),
                               (pdata->enc_data->y_offset),
-                              (temp_brwin.rgeom.width),
-                              (temp_brwin.rgeom.height),
+                              (temp_brwin.rrect.width),
+                              (temp_brwin.rrect.height),
                               pdata->args.no_quick_subsample,
                               pdata->specs.depth);
             pthread_mutex_unlock(&pdata->yuv_mutex);
@@ -625,10 +625,10 @@ void *GetFrame(ProgData *pdata){
                         XFIXES_POINTER_TO_YUV((&pdata->enc_data->yuv),
                                             ((unsigned char*)xcim->pixels),
                                             (mouse_pos_temp.x-
-                                            temp_brwin.rgeom.x+
+                                            temp_brwin.rrect.x+
                                             pdata->enc_data->x_offset),
                                             (mouse_pos_temp.y-
-                                            temp_brwin.rgeom.y+
+                                            temp_brwin.rrect.y+
                                             pdata->enc_data->y_offset),
                                             mouse_pos_temp.width,
                                             mouse_pos_temp.height,
@@ -640,10 +640,10 @@ void *GetFrame(ProgData *pdata){
                         DUMMY_POINTER_TO_YUV((&pdata->enc_data->yuv),
                                             pdata->dummy_pointer,
                                             (mouse_pos_temp.x-
-                                            temp_brwin.rgeom.x+
+                                            temp_brwin.rrect.x+
                                             pdata->enc_data->x_offset),
                                             (mouse_pos_temp.y-
-                                            temp_brwin.rgeom.y+
+                                            temp_brwin.rrect.y+
                                             pdata->enc_data->y_offset),
                                             mouse_pos_temp.width,
                                             mouse_pos_temp.height,
@@ -662,14 +662,14 @@ void *GetFrame(ProgData *pdata){
 
                     MARK_BUFFER_AREA(   front_buff,
                                         (mouse_pos_temp.x-
-                                        temp_brwin.rgeom.x+
+                                        temp_brwin.rrect.x+
                                         pdata->enc_data->x_offset),
                                         (mouse_pos_temp.y-
-                                        temp_brwin.rgeom.y+
+                                        temp_brwin.rrect.y+
                                         pdata->enc_data->y_offset),
                                         mouse_pos_temp.width,
                                         mouse_pos_temp.height,
-                                        (temp_brwin.rgeom.width),
+                                        (temp_brwin.rrect.width),
                                         pdata->specs.depth)
                 }
 

@@ -35,7 +35,7 @@ RectInsertTestdataEntry rectinsert_test_data[] = {
 
     // Test #1
 
-    { "Put a geom in place",
+    { "Put a rect in place",
 
       { 2, 2, 2, 2 },
 
@@ -66,7 +66,7 @@ RectInsertTestdataEntry rectinsert_test_data[] = {
 
     // Test #2
 
-    { "Put a geom in place and make sure it gets an even size and position",
+    { "Put a rect in place and make sure it gets an even size and position",
       
       { 15, 2, 4, 3 },
 
@@ -97,7 +97,7 @@ RectInsertTestdataEntry rectinsert_test_data[] = {
 
     // Test #3
 
-    { "Put a new geom within an existing geom",
+    { "Put a new rect within an existing rect",
 
       { 14, 2, 4, 2 },
 
@@ -128,7 +128,7 @@ RectInsertTestdataEntry rectinsert_test_data[] = {
 
     // Test #4
 
-    { "Put a new geom over an existing geom and make sure it beocomes even",
+    { "Put a new rect over an existing rect and make sure it beocomes even",
 
       { 1, 1, 3, 3 },
 
@@ -160,7 +160,7 @@ RectInsertTestdataEntry rectinsert_test_data[] = {
 
     // Test #5
 
-    { "Put a new geom that partly covers an existing geom",
+    { "Put a new rect that partly covers an existing rect",
 
       { 10, 4, 6, 6 },
 
@@ -191,7 +191,7 @@ RectInsertTestdataEntry rectinsert_test_data[] = {
 
     // Test #6
 
-    { "Put new small heighted but wide geom over an existing geom area",
+    { "Put new small heighted but wide rect over an existing rect area",
 
       { 0, 8, 20, 2 },
 
@@ -222,7 +222,7 @@ RectInsertTestdataEntry rectinsert_test_data[] = {
 
     // Test #7
 
-    { "Put new small widthed but high geom over two existing geom areas",
+    { "Put new small widthed but high rect over two existing rect areas",
 
       { 2, 2, 2, 18 },
 
@@ -315,7 +315,7 @@ RectInsertTestdataEntry rectinsert_test_data[] = {
 
     // Test #10
 
-    { "Put a geom that covers two separate geoms",
+    { "Put a rect that covers two separate rects",
 
       { 6, 12, 14, 8 },
 

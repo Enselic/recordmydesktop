@@ -58,25 +58,25 @@ void UpdateImage(Display * dpy,
                 GetZPixmap( dpy,
                             specs->root,
                             datatemp,
-                            temp->geom.x,
-                            temp->geom.y,
-                            temp->geom.width,
-                            temp->geom.height);
+                            temp->rect.x,
+                            temp->rect.y,
+                            temp->rect.width,
+                            temp->rect.height);
             }
             else{
                 GetZPixmapSHM(dpy,
                               specs->root,
                               shminfo,
                               shm_opcode,
-                              datatemp,temp->geom.x,
-                              temp->geom.y,
-                              temp->geom.width,
-                              temp->geom.height);
+                              datatemp,temp->rect.x,
+                              temp->rect.y,
+                              temp->rect.width,
+                              temp->rect.height);
             }
             UPDATE_YUV_BUFFER(yuv,dtap,NULL,
-                                (temp->geom.x-brwin->rgeom.x+enc->x_offset),
-                                (temp->geom.y-brwin->rgeom.y+enc->y_offset),
-                                (temp->geom.width),(temp->geom.height),
+                                (temp->rect.x-brwin->rrect.x+enc->x_offset),
+                                (temp->rect.y-brwin->rrect.y+enc->y_offset),
+                                (temp->rect.width),(temp->rect.height),
                                 no_quick_subsample,
                                 specs->depth);
             temp=temp->next;

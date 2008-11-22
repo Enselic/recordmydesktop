@@ -36,14 +36,14 @@
 * with the existing ones
 * \param root Root entry of the list
 *
-* \param wgeom New area to be inserted
+* \param xrect New area to be inserted
 *
 * \returns Number of insertions during operation
 *
 * \note This function is reentrant and recursive. The number
 * of insertions takes this into account.
 */
-int RectInsert(RectArea **root, WGeometry *wgeom);
+int RectInsert(RectArea **root, XRectangle *xrect);
 
 /**
 * Clean up a list of areas marked for update.

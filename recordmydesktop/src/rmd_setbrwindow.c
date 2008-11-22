@@ -43,7 +43,7 @@
 *
 * \note This is called separately for width and height.
 */
-static void SizePack2_8_16(int *start, int *size, int limit) {
+static void SizePack2_8_16(short *start, unsigned short *size, unsigned short limit) {
     int octoffset,hexoffset;
 
     //align in two
@@ -132,18 +132,18 @@ boolean SetBRWindow(Display *dpy,
     if(args->windowid==0){//root window
         //first set it up
         brwin->windowid=specs->root;
-        brwin->geom.x=brwin->geom.y=0;
-        brwin->geom.width=specs->width;
-        brwin->geom.height=specs->height;
-        brwin->rgeom.x=args->x;
-        brwin->rgeom.y=args->y;
-        brwin->rgeom.width=((args->width)?
-                            args->width:specs->width-brwin->rgeom.x);
-        brwin->rgeom.height=((args->height)?
-                             args->height:specs->height-brwin->rgeom.y);
+        brwin->rect.x=brwin->rect.y=0;
+        brwin->rect.width=specs->width;
+        brwin->rect.height=specs->height;
+        brwin->rrect.x=args->x;
+        brwin->rrect.y=args->y;
+        brwin->rrect.width=((args->width)?
+                            args->width:specs->width-brwin->rrect.x);
+        brwin->rrect.height=((args->height)?
+                             args->height:specs->height-brwin->rrect.y);
         //and then check validity
-        if((brwin->rgeom.x+brwin->rgeom.width>specs->width)||
-            (brwin->rgeom.y+brwin->rgeom.height>specs->height)){
+        if((brwin->rrect.x+brwin->rrect.width>specs->width)||
+            (brwin->rrect.y+brwin->rrect.height>specs->height)){
             fprintf(stderr,"Window size specification out of bounds!"
                            "(current resolution:%dx%d)\n",
                            specs->width,specs->height);
@@ -169,44 +169,44 @@ boolean SetBRWindow(Display *dpy,
                               &transl_y,
                               &wchid);
 
-        brwin->geom.x=attribs.x-transl_x;
-        brwin->geom.y=attribs.y-transl_y;
-        brwin->geom.width=attribs.width;
-        brwin->geom.height=attribs.height;
-        if((brwin->geom.x+brwin->geom.width>specs->width)||
-            (brwin->geom.y+brwin->geom.height>specs->height)){
+        brwin->rect.x=attribs.x-transl_x;
+        brwin->rect.y=attribs.y-transl_y;
+        brwin->rect.width=attribs.width;
+        brwin->rect.height=attribs.height;
+        if((brwin->rect.x+brwin->rect.width>specs->width)||
+            (brwin->rect.y+brwin->rect.height>specs->height)){
             fprintf(stderr,"Window must be on visible screen area!\n");
             return FALSE;
         }
 
-        brwin->rgeom.x=brwin->geom.x+args->x;
-        brwin->rgeom.y=brwin->geom.y+args->y;
-        brwin->rgeom.width=((args->width)?
-                            args->width:brwin->geom.width-args->x);
-        brwin->rgeom.height=((args->height)?
-                             args->height:brwin->geom.height-args->y);
-        if((args->x+brwin->rgeom.width>brwin->geom.width)||
-            (args->y+brwin->rgeom.height>brwin->geom.height)){
+        brwin->rrect.x=brwin->rect.x+args->x;
+        brwin->rrect.y=brwin->rect.y+args->y;
+        brwin->rrect.width=((args->width)?
+                            args->width:brwin->rect.width-args->x);
+        brwin->rrect.height=((args->height)?
+                             args->height:brwin->rect.height-args->y);
+        if((args->x+brwin->rrect.width>brwin->rect.width)||
+            (args->y+brwin->rrect.height>brwin->rect.height)){
             fprintf(stderr,"Specified Area is larger than window!\n");
             return FALSE;
         }
     }
     fprintf(stderr, "Initial recording window is set to:\n"
                     "X:%d   Y:%d    Width:%d    Height:%d\n",
-                    brwin->rgeom.x,brwin->rgeom.y,
-                    brwin->rgeom.width,brwin->rgeom.height);
-    SizePack2_8_16(&brwin->rgeom.x,&brwin->rgeom.width,specs->width);
-    SizePack2_8_16(&brwin->rgeom.y,&brwin->rgeom.height,specs->height);
+                    brwin->rrect.x,brwin->rrect.y,
+                    brwin->rrect.width,brwin->rrect.height);
+    SizePack2_8_16(&brwin->rrect.x,&brwin->rrect.width,specs->width);
+    SizePack2_8_16(&brwin->rrect.y,&brwin->rrect.height,specs->height);
 
     fprintf(stderr, "Adjusted recording window is set to:\n"
                     "X:%d   Y:%d    Width:%d    Height:%d\n",
-                    brwin->rgeom.x,brwin->rgeom.y,
-                    brwin->rgeom.width,brwin->rgeom.height);
+                    brwin->rrect.x,brwin->rrect.y,
+                    brwin->rrect.width,brwin->rrect.height);
 
 
 
-    brwin->nbytes=(((brwin->rgeom.width+15)>>4)<<4)*
-                  (((brwin->rgeom.height+15)>>4)<<4)*
+    brwin->nbytes=(((brwin->rrect.width+15)>>4)<<4)*
+                  (((brwin->rrect.height+15)>>4)<<4)*
                   ((specs->depth==16)?2:4);
 
     return TRUE;

@@ -44,8 +44,8 @@ int WriteSpecsFile(ProgData *pdata){
     else{
 
         fprintf(fp,"recordMyDesktop = %s\n",VERSION);
-        fprintf(fp,"Width = %d\n",pdata->brwin.rgeom.width);
-        fprintf(fp,"Height = %d\n",pdata->brwin.rgeom.height);
+        fprintf(fp,"Width = %hu\n",pdata->brwin.rrect.width);
+        fprintf(fp,"Height = %hu\n",pdata->brwin.rrect.height);
         fprintf(fp,"Filename = %s\n",pdata->args.filename);
         fprintf(fp,"FPS = %f\n",pdata->args.fps);
         fprintf(fp,"NoSound = %d\n",pdata->args.nosound);
@@ -91,11 +91,11 @@ int ReadSpecsFile(ProgData *pdata){
             fprintf(stderr,"Error reading VERSION attribute!!!\n");
             return 1;
         }
-        if(fscanf(fp,"Width = %d\n",&pdata->brwin.rgeom.width)!=1){
+        if(fscanf(fp,"Width = %hu\n",&pdata->brwin.rrect.width)!=1){
             fprintf(stderr,"Error reading Width attribute!!!\n");
             return 1;
         }
-        if(fscanf(fp,"Height = %d\n",&pdata->brwin.rgeom.height)!=1){
+        if(fscanf(fp,"Height = %hu\n",&pdata->brwin.rrect.height)!=1){
             fprintf(stderr,"Error reading Height attribute!!!\n");
             return 1;
         }

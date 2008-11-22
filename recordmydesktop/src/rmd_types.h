@@ -87,29 +87,21 @@ typedef struct _ProgData ProgData;
 
 typedef struct _DisplaySpecs{   //this struct holds some basic information
     int screen;                 //about the display,needed mostly for
-    unsigned int width;                 //validity checks at startup
-    unsigned int height;
+    unsigned int width, height; //validity checks at startup
     Window root;
     Visual *visual;
     GC gc;
     int depth;
 }DisplaySpecs;
 
-typedef struct _WGeometry{  //basic geometry of a window or area
-    int x;
-    int y;
-    int width;
-    int height;
-}WGeometry;
-
 typedef struct _RectArea{   //an area that has been damaged gets stored
-    WGeometry geom;         //in a list comprised of structs of this type
+    XRectangle rect;         //in a list comprised of structs of this type
     struct _RectArea *prev,*next;
 }RectArea;
 
 typedef struct _BRWindow{   //'basic recorded window' specs
-    WGeometry geom;         //window attributes
-    WGeometry rgeom;        //part of window that is recorded
+    XRectangle rect;         //window attributes
+    XRectangle rrect;        //part of window that is recorded
     int nbytes;             //size of zpixmap when screenshoting
     Window windowid;        //id
 }BRWindow;
@@ -121,7 +113,7 @@ typedef struct _ProgArgs{
     Window windowid;    //window to record(default root)
     char *display;      //display to connect(default :0)
     int x,y;            //x,y offset(default 0,0)
-    int width,height;   //defaults to window width and height
+    unsigned int width,height;   //defaults to window width and height
     char *filename;     //output file(default out.[ogg|*])
     int cursor_color;   //black or white=>1 or 0
     int have_dummy_cursor;  //disable/enable drawing of the dummy cursor

@@ -132,10 +132,10 @@ void InitCacheData(ProgData *pdata,
 
     //we set the buffer only since there's
     //no need to initialize the encoder from now.
-    width=((pdata->brwin.rgeom.width + 15) >>4)<<4;
-    height=((pdata->brwin.rgeom.height + 15) >>4)<<4;
-    offset_x=((width-pdata->brwin.rgeom.width)/2)&~1;
-    offset_y=((height-pdata->brwin.rgeom.height)/2)&~1;
+    width=((pdata->brwin.rrect.width + 15) >>4)<<4;
+    height=((pdata->brwin.rrect.height + 15) >>4)<<4;
+    offset_x=((width-pdata->brwin.rrect.width)/2)&~1;
+    offset_y=((height-pdata->brwin.rrect.height)/2)&~1;
 
     (pdata)->enc_data=enc_data_t;
 

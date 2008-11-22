@@ -39,12 +39,13 @@
 
 
 int rmdRescue(const char *path){
-
+    
     int i=0,
-        width,
-        height,
         offset_x,
         offset_y;
+
+    unsigned short  width,
+                    height;
 
     ProgData pdata;
     EncData enc_data;
@@ -77,10 +78,10 @@ int rmdRescue(const char *path){
         return 1;
 
         
-    width=((pdata.brwin.rgeom.width + 15) >>4)<<4;
-    height=((pdata.brwin.rgeom.height + 15) >>4)<<4;
-    offset_x=((width-pdata.brwin.rgeom.width)/2)&~1;
-    offset_y=((height-pdata.brwin.rgeom.height)/2)&~1;
+    width=((pdata.brwin.rrect.width + 15) >>4)<<4;
+    height=((pdata.brwin.rrect.height + 15) >>4)<<4;
+    offset_x=((width-pdata.brwin.rrect.width)/2)&~1;
+    offset_y=((height-pdata.brwin.rrect.height)/2)&~1;
 
     
     enc_data.yuv.y=(unsigned char *)malloc(height*width);

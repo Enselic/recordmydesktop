@@ -266,7 +266,7 @@ void *CacheImageBuffer(ProgData *pdata){
 
     {
       unsigned int bytes_per_pixel  = pdata->specs.depth >= 24 ? 4 : 2;
-      unsigned int pixels_per_frame = pdata->brwin.rgeom.width * pdata->brwin.rgeom.height;
+      unsigned int pixels_per_frame = pdata->brwin.rrect.width * pdata->brwin.rrect.height;
       
       total_received_bytes = ((unsigned int)frameno) * bytes_per_pixel * pixels_per_frame;
     }

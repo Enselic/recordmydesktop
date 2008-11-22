@@ -33,7 +33,7 @@
 
 typedef struct RectInsertTestdataEntry {
     const char *description;
-    WGeometry   new_geom;
+    XRectangle   new_rect;
     boolean     expected_state[STATE_WIDTH * STATE_HEIGHT];
 } RectInsertTestdataEntry;
 

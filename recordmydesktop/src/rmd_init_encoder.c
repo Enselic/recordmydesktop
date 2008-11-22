@@ -159,8 +159,8 @@ void InitEncoder(ProgData *pdata,EncData *enc_data_t,int buffer_ready){
 
 
     theora_info_init(&enc_data_t->m_th_inf);
-    enc_data_t->m_th_inf.frame_width                  = pdata->brwin.rgeom.width;
-    enc_data_t->m_th_inf.frame_height                 = pdata->brwin.rgeom.height;
+    enc_data_t->m_th_inf.frame_width                  = pdata->brwin.rrect.width;
+    enc_data_t->m_th_inf.frame_height                 = pdata->brwin.rrect.height;
     enc_data_t->m_th_inf.width                        = ((enc_data_t->m_th_inf.frame_width + 15) >> 4) << 4;
     enc_data_t->m_th_inf.height                       = ((enc_data_t->m_th_inf.frame_height + 15) >> 4) << 4;
     enc_data_t->m_th_inf.offset_x                     = 0;

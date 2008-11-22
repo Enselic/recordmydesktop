@@ -51,11 +51,11 @@ static boolean GetPixel(boolean *state, int x, int y) {
     return state[y * STATE_WIDTH + x];
 }
 
-static void WriteGeomToState(WGeometry *geom, boolean *state) {
+static void WriteGeomToState(XRectangle *rect, boolean *state) {
     int x, y;
 
-    for (y = geom->y; y < geom->y + geom->height; y++) {
-        for (x = geom->x; x < geom->x + geom->width; x++) {
+    for (y = rect->y; y < rect->y + rect->height; y++) {
+        for (x = rect->x; x < rect->x + rect->width; x++) {
             SetPixel(state, x, y, TRUE);
         }
     }
@@ -71,19 +71,19 @@ static void ClearState(boolean *state) {
     }
 }
 
-static void WarnIfNonOptimal(WGeometry *geom) {
-    if (geom->x      < 0 || geom->x      >= STATE_WIDTH  ||
-        geom->y      < 0 || geom->y      >= STATE_HEIGHT ||
-        geom->width  < 0 || geom->width  >  STATE_WIDTH  ||
-        geom->height < 0 || geom->height >  STATE_HEIGHT)
+static void WarnIfNonOptimal(XRectangle *rect) {
+    if (rect->x      < 0 || rect->x      >= STATE_WIDTH  ||
+        rect->y      < 0 || rect->y      >= STATE_HEIGHT ||
+        rect->width  == 0 || rect->width  >  STATE_WIDTH  ||
+        rect->height == 0 || rect->height >  STATE_HEIGHT)
     {
         // The RectInsert() implementation is not optimal
-        printf("  Non-optimal geom (and RectInsert() implementation) encountered!\n"
-               "    geom x = %d, y = %d, width = %d, height = %d\n",
-               geom->x,
-               geom->y,
-               geom->width,
-               geom->height);
+        printf("  Non-optimal rect (and RectInsert() implementation) encountered!\n"
+               "    rect x = %d, y = %d, width = %hu, height = %hu\n",
+               rect->x,
+               rect->y,
+               rect->width,
+               rect->height);
     }
 }
 
@@ -94,9 +94,9 @@ static void GetState(RectArea *root, boolean *state) {
 
     while (current)
     {
-        WarnIfNonOptimal(&current->geom);
+        WarnIfNonOptimal(&current->rect);
 
-        WriteGeomToState(&current->geom, state);
+        WriteGeomToState(&current->rect, state);
 
         current = current->next;
     }
@@ -150,7 +150,7 @@ int main(int argc, char **argv) {
     while (rectinsert_test_data[i].description != NULL) {
 
         printf("Test #%d: %s\n", i + 1, rectinsert_test_data[i].description);
-        RectInsert(&root, &rectinsert_test_data[i].new_geom);
+        RectInsert(&root, &rectinsert_test_data[i].new_rect);
         GetState(root, current_state);
 
         if (!StatesEqual(current_state, rectinsert_test_data[i].expected_state)) {
