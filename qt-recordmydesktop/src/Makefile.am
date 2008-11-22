@@ -30,6 +30,8 @@ pixmap_DATA = 	qt-recordmydesktop.png\
 
 EXTRA_DIST=	qt-recordMyDesktop.in\
 			qt-recordmydesktop.desktop\
+			qt-recordmydesktop.png\
+			qt-recordmydesktop.svg\
 			media-playback-pause.svg\
 			media-playback-stop.svg\
 			media-record.svg
