@@ -1,3 +1,18 @@
+/*Version 0.3.8*/
+* Extensive refactoring and cleanups of the code from Martin Nordholts.
+* Cursor-flickering bug has been fixed, by Martin.
+* Improved consistency on the format of the commandline options 
+and updated the manpage to reflect the changes (also by Martin ;) ).
+* Applied patch by Luca Bonavita, that corrects the rgb
+to yuv algorithm and provides near perfect colorspace conversion
+(fixes bug #1961505)
+* Compositing Window managers are now recognised through the _NET_WM_CM_Sn 
+hint instead of a simplistic namelist (which means that dual-mode wm's like 
+kwin or yet uknown ones will be handled correctly).
+* Changed the way Jack support is offered, from dlopening at runtime to normal
+linking at compilation.
+* other minor changes and bugfixes.
+
 /*Version 0.3.7.3*/
 * Fixed bug #1886713 (XCB related crash)
 

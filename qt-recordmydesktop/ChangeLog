@@ -1,3 +1,9 @@
+/*VERSION 0.3.8*/
+* Changed qt-recordMyDesktop's license to GPLV3 .
+* nl.po added Dutch translation by Jos Poortvliet
+* Oxygen icons are now used for record/pause/stop actions.
+* Synced to recordMyDesktop 0.3.8 (new format of options).
+
 /*VERSION 0.3.7.2*/
 *Updated Polish translation by Paweł Smoliński
 

@@ -1,3 +1,9 @@
+/*VERSION 0.3.8*/
+* nl.po added Dutch translation by Jos Poortvliet
+* Applied patch by freedo, to Replace GtkFileSelection with
+GtkFileChooserDialog.
+* Synced to recordMyDesktop 0.3.8 (new format of options).
+
 /*VERSION 0.3.7.2*/
 *Updated Polish translation by Paweł Smoliński
 *Added button/dialog for workdir selection.

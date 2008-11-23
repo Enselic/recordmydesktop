@@ -1,6 +1,6 @@
 AC_PREREQ(2.59)
 
-AC_INIT([gtk-recordmydesktop], [0.3.7.2])
+AC_INIT([gtk-recordmydesktop], [0.3.8])
 AM_INIT_AUTOMAKE
 
 AS_AC_EXPAND(LIBDIR, $libdir)
