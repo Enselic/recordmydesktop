@@ -21,9 +21,9 @@
 ******************************************************************************/
 
 #include "config.h"
+#include "test-rectinsert-data.h"
 
 #include "test-rectinsert-types.h"
-#include "test-rectinsert-data.h"
 
 
 // Defines to increase readability of test data

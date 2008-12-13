@@ -25,24 +25,24 @@
 ******************************************************************************/
 
 #include "config.h"
-
-#include <limits.h>
-#include <pthread.h>
-#include <sys/shm.h>
-
-#include <X11/extensions/Xfixes.h>
-#include <X11/extensions/XShm.h>
-
-#include "rmd_types.h"
+#include "rmd_get_frame.h"
 
 #include "rmd_cache.h"
 #include "rmd_frame.h"
-#include "rmd_get_frame.h"
 #include "rmd_getzpixmap.h"
 #include "rmd_poll_events.h"
 #include "rmd_rectinsert.h"
 #include "rmd_update_image.h"
 #include "rmd_yuv_utils.h"
+#include "rmd_types.h"
+
+#include <X11/extensions/Xfixes.h>
+#include <X11/extensions/XShm.h>
+
+#include <limits.h>
+#include <pthread.h>
+#include <sys/shm.h>
+#include <errno.h>
 
 
 #define AVG_4_PIXELS(data_array,width_img,k_tm,i_tm,offset)\

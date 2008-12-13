@@ -25,11 +25,7 @@
 ******************************************************************************/
 
 #include "config.h"
-
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <fcntl.h>
+#include "rmd_opendev.h"
 
 #ifdef HAVE_LIBASOUND
     #include <alsa/asoundlib.h>
@@ -38,7 +34,11 @@
     #include <sys/soundcard.h>
 #endif
 
-#include "rmd_opendev.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <fcntl.h>
+
 
 #ifdef HAVE_LIBASOUND
 

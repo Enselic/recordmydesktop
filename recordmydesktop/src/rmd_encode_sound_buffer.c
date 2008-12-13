@@ -25,13 +25,15 @@
 ******************************************************************************/
 
 #include "config.h"
+#include "rmd_encode_sound_buffer.h"
+
+#include "rmd_jack.h"
+#include "rmd_types.h"
 
 #include <pthread.h>
 
-#include "rmd_types.h"
-
-#include "rmd_encode_sound_buffer.h"
-#include "rmd_jack.h"
+#include <stdlib.h>
+#include <errno.h>
 
 
 void *EncodeSoundBuffer(ProgData *pdata){

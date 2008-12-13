@@ -25,17 +25,18 @@
 ******************************************************************************/
 
 #include "config.h"
+#include "rmd_rescue.h"
 
-#include <pthread.h>
-
-#include "rmd_types.h"
-
-#include "rmd_block_utils.h"
+#include "rmd_yuv_utils.h"
 #include "rmd_encode_cache.h"
 #include "rmd_initialize_data.h"
 #include "rmd_register_callbacks.h"
-#include "rmd_rescue.h"
 #include "rmd_specsfile.h"
+#include "rmd_types.h"
+
+#include <pthread.h>
+
+#include <string.h>
 
 
 int rmdRescue(const char *path){

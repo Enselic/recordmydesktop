@@ -10,6 +10,7 @@
 extern "C" {
 #endif
 
+#include <stdio.h>
 #include <ogg/ogg.h>
 
 #define SKELETON_VERSION_MAJOR 3

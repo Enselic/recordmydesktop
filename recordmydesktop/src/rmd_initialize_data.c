@@ -25,19 +25,21 @@
 ******************************************************************************/
 
 #include "config.h"
+#include "rmd_initialize_data.h"
 
-#include <pthread.h>
-
-#include "rmd_types.h"
-
-#include "rmd_block_utils.h"
 #include "rmd_cache.h"
 #include "rmd_init_encoder.h"
 #include "rmd_jack.h"
 #include "rmd_make_dummy_pointer.h"
 #include "rmd_opendev.h"
 #include "rmd_yuv_utils.h"
+#include "rmd_types.h"
 
+#include <pthread.h>
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
 #ifdef HAVE_LIBASOUND
 static void FixBufferSize(snd_pcm_uframes_t *buffsize) {

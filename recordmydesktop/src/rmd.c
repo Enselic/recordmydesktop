@@ -26,8 +26,6 @@
 
 #include "config.h"
 
-#include "rmd_types.h"
-
 #include "rmd_cache.h"
 #include "rmd_encode_cache.h"
 #include "rmd_error.h"
@@ -39,7 +37,13 @@
 #include "rmd_shortcuts.h"
 #include "rmd_threads.h"
 #include "rmd_wm_is_compositing.h"
+#include "rmd_types.h"
 
+#include <X11/Xlib.h>
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
 
 int main(int argc,char **argv){
     ProgData pdata;

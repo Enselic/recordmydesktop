@@ -25,13 +25,22 @@
 ******************************************************************************/
 
 #include "config.h"
-
 #include "rmd_yuv_utils.h"
+
+#include "rmd_math.h"
+
 
 // Keep these global (for performance reasons I assume).
 unsigned char Yr[256], Yg[256], Yb[256],
               Ur[256], Ug[256], UbVr[256],
               Vg[256], Vb[256];
+
+// FIXME: These globals are modified in other source files! We keep
+// thsee here for now. These are the cache blocks. They need to be
+// accesible in the dbuf macros
+u_int32_t *yblocks,
+          *ublocks,
+          *vblocks;
 
 void MakeMatrices (void) {
     
@@ -68,16 +77,16 @@ void MakeMatrices (void) {
  
      for( i = 0 ; i < 256 ; i++ ) {
 
-         Yr[i] = (unsigned char) roundf( Yoffset + yr * i );
-         Yg[i] = (unsigned char) roundf( yg * i );
-         Yb[i] = (unsigned char) roundf( yb * i );
+         Yr[i] = (unsigned char) rmdRoundf( Yoffset + yr * i );
+         Yg[i] = (unsigned char) rmdRoundf( yg * i );
+         Yb[i] = (unsigned char) rmdRoundf( yb * i );
 
-         Ur[i] = (unsigned char) roundf( Coffset + ur * i );
-         Ug[i] = (unsigned char) roundf( ug * i );
-         UbVr[i] = (unsigned char) roundf( ub * i );
+         Ur[i] = (unsigned char) rmdRoundf( Coffset + ur * i );
+         Ug[i] = (unsigned char) rmdRoundf( ug * i );
+         UbVr[i] = (unsigned char) rmdRoundf( ub * i );
 
-         Vg[i] = (unsigned char) roundf( vg * i );
-         Vb[i] = (unsigned char) roundf( Coffset + vb * i );
+         Vg[i] = (unsigned char) rmdRoundf( vg * i );
+         Vb[i] = (unsigned char) rmdRoundf( Coffset + vb * i );
 
     }
 

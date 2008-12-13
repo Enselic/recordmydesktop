@@ -2,8 +2,6 @@ bin_PROGRAMS = recordmydesktop
 
 recordmydesktop_SOURCES = \
 	rmd.c \
-	rmd_block_utils.c \
-	rmd_block_utils.h \
 	rmd_cache.c \
 	rmd_cache.h \
 	rmd_cache_audio.c \
@@ -39,6 +37,8 @@ recordmydesktop_SOURCES = \
 	rmd_macro.h \
 	rmd_make_dummy_pointer.c \
 	rmd_make_dummy_pointer.h \
+	rmd_math.c \
+	rmd_math.h \
 	rmd_opendev.c \
 	rmd_opendev.h \
 	rmd_parseargs.c \

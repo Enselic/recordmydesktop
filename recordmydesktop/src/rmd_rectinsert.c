@@ -25,9 +25,11 @@
 ******************************************************************************/
 
 #include "config.h"
-
 #include "rmd_rectinsert.h"
+
 #include "rmd_types.h"
+
+#include <stdlib.h>
 
 
 /**

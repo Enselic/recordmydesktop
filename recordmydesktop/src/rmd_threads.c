@@ -25,13 +25,7 @@
 ******************************************************************************/
 
 #include "config.h"
-
-#include <pthread.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-
-#include "rmd_types.h"
+#include "rmd_threads.h"
 
 #include "rmd_cache_audio.h"
 #include "rmd_cache_frame.h"
@@ -42,9 +36,14 @@
 #include "rmd_get_frame.h"
 #include "rmd_jack.h"
 #include "rmd_register_callbacks.h"
-#include "rmd_threads.h"
 #include "rmd_timer.h"
+#include "rmd_types.h"
 
+#include <pthread.h>
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 
 void rmdThreads(ProgData *pdata){
     pthread_t   image_capture_t,

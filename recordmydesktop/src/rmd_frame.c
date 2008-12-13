@@ -25,13 +25,13 @@
 ******************************************************************************/
 
 #include "config.h"
+#include "rmd_frame.h"
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <X11/Xlib.h>
 #include <X11/extensions/shape.h>
 
-#include "rmd_frame.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 
 #define BORDER_WIDTH 6

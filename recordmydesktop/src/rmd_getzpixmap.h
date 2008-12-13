@@ -29,6 +29,7 @@
 
 #include "rmd_types.h"
 
+#include <X11/extensions/XShm.h>
 
 /**
 * Rerieve pixmap data from xserver

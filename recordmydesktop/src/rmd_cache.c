@@ -25,14 +25,15 @@
 ******************************************************************************/
 
 #include "config.h"
-
-#include <sys/stat.h>
-
-#include "rmd_types.h"
-
 #include "rmd_cache.h"
 
 #include "rmd_specsfile.h"
+#include "rmd_types.h"
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <sys/stat.h>
 
 
 /**

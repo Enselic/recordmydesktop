@@ -25,16 +25,17 @@
 ******************************************************************************/
 
 #include "config.h"
+#include "rmd_shortcuts.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "rmd_types.h"
+
 #include <X11/Xlib.h>
 #include <X11/Xlibint.h>
 #include <X11/keysym.h> 
 
-#include "rmd_shortcuts.h"
-#include "rmd_types.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 int RegisterShortcut(Display *dpy,
                      Window root,

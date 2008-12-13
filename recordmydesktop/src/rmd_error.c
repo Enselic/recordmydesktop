@@ -25,13 +25,14 @@
 ******************************************************************************/
 
 #include "config.h"
+#include "rmd_error.h"
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <X11/Xlib.h>
 #include <X11/Xlibint.h>
 
-#include "rmd_error.h"
+#include <stdio.h>
+#include <stdlib.h>
+
 
 
 int rmdErrorHandler( Display *dpy, XErrorEvent *e )

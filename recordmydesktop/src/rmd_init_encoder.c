@@ -25,16 +25,19 @@
 ******************************************************************************/
 
 #include "config.h"
-
-#include <stdio.h>
-#include <string.h>
-#include <sys/stat.h>
-
-#include "skeleton.h"
+#include "rmd_init_encoder.h"
 
 #include "rmd_types.h"
 
-#include "rmd_init_encoder.h"
+#include "skeleton.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
+
+
+
 
 
 static void m_add_fishead_packet(ogg_stream_state *m_ogg_state) {

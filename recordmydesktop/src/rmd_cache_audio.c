@@ -25,13 +25,17 @@
 ******************************************************************************/
 
 #include "config.h"
+#include "rmd_cache_audio.h"
+
+#include "rmd_jack.h"
+#include "rmd_types.h"
 
 #include <pthread.h>
 
-#include "rmd_types.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
 
-#include "rmd_cache_audio.h"
-#include "rmd_jack.h"
 
 
 void *CacheSoundBuffer(ProgData *pdata){

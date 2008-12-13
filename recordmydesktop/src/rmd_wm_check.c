@@ -25,12 +25,12 @@
 ******************************************************************************/
 
 #include "config.h"
-
-#include <X11/Xatom.h>
+#include "rmd_wm_check.h"
 
 #include "rmd_types.h"
 
-#include "rmd_wm_check.h"
+#include <X11/Xatom.h>
+
 
 
 char *rmdWMCheck(Display *dpy,Window root){

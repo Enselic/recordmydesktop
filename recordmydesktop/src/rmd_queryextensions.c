@@ -25,14 +25,14 @@
 ******************************************************************************/
 
 #include "config.h"
+#include "rmd_queryextensions.h"
+
+#include "rmd_types.h"
 
 #include <X11/extensions/shape.h>
 #include <X11/extensions/Xfixes.h>
 #include <X11/extensions/Xdamage.h>
 
-#include "rmd_types.h"
-
-#include "rmd_queryextensions.h"
 
 
 void QueryExtensions(Display *dpy,

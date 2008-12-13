@@ -95,8 +95,7 @@ AC_CHECK_LIB([pthread],[pthread_mutex_lock],,
              AC_MSG_ERROR([Can't find libpthread]))
 
 if test x$jack = xtrue ; then
-AC_CHECK_LIB([jack],[jack_activate],,
-             jack_lib_found=false)
+AC_CHECK_LIB([jack],[jack_activate],jack_lib_found=true,)
 fi
 
 if test x$oss = xfalse; then
@@ -120,8 +119,7 @@ AC_OUTPUT
 if test x$audio_backend != xOSS; then
     audio_backend="ALSA"
 fi
-if test x$jack_lib_found != xfalse ; then
-#    AC_DEFINE([HAVE_JACK_H],1,define to 1 if libjack is found) ,
+if test x$jack_lib_found = xtrue ; then
     jack_support="Enabled"
 else
     jack_support="Disabled"

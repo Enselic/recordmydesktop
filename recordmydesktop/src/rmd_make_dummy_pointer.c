@@ -25,13 +25,12 @@
 ******************************************************************************/
 
 #include "config.h"
-
-#include <X11/Xlib.h>
-
-#include "rmd_types.h"
+#include "rmd_make_dummy_pointer.h"
 
 #include "rmd_macro.h"
-#include "rmd_make_dummy_pointer.h"
+#include "rmd_types.h"
+
+#include <X11/Xlib.h>
 
 
 unsigned char *MakeDummyPointer(Display *display,

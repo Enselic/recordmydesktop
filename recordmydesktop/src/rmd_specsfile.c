@@ -25,12 +25,12 @@
 ******************************************************************************/
 
 #include "config.h"
+#include "rmd_specsfile.h"
+
+#include "rmd_types.h"
 
 #include <stdlib.h>
 #include <stdio.h>
-
-#include "rmd_specsfile.h"
-#include "rmd_types.h"
 
 
 int WriteSpecsFile(ProgData *pdata){

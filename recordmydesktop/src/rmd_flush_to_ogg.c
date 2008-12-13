@@ -25,14 +25,18 @@
 ******************************************************************************/
 
 #include "config.h"
-
-#include <pthread.h>
-
-#include "rmd_types.h"
+#include "rmd_flush_to_ogg.h"
 
 #include "rmd_encode_image_buffer.h"
 #include "rmd_encode_sound_buffer.h"
-#include "rmd_flush_to_ogg.h"
+#include "rmd_types.h"
+
+#include <pthread.h>
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
+
 
 
 //we copy the page because the next call to ogg_stream_pageout

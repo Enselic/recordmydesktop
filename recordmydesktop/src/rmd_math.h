@@ -1,9 +1,8 @@
 /******************************************************************************
-*                            recordMyDesktop                                  *
+*                      recordMyDesktop - rmd_math.h                           *
 *******************************************************************************
 *                                                                             *
-*            Copyright (C) 2006,2007,2008 John Varouhakis                     *
-*                                                                             *
+*            Copyright (C) 2008 John Varouhakis                               *
 *                                                                             *
 *   This program is free software; you can redistribute it and/or modify      *
 *   it under the terms of the GNU General Public License as published by      *
@@ -24,14 +23,22 @@
 *   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
-#include "config.h"
+#ifndef RMD_MATH_H
+#define RMD_MATH_H 1
 
-#include "rmd_block_utils.h"
+/*
+ *  Since roundf depends on C99, using it might make
+ *  the code non-portable. rmdRoundf solves this
+ *  problem, by behaving identically with roundf
+ *  and being portable (floorf and ceilf, that are
+ *  used in the implementation, are defined in C89)
+ * 
+ *  \param val Number to be rounded
+ *
+ *  \returns val rounded
+ *
+ */
+double rmdRoundf( double val );
 
+#endif
 
-// FIXME: These globals are modified in other source files! We keep
-// thsee here for now. These are the cache blocks. They need to be
-// accesible in the dbuf macros
-u_int32_t *yblocks,
-          *ublocks,
-          *vblocks;

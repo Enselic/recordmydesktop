@@ -29,9 +29,9 @@
 
 #include "config.h"
 
-#include <limits.h>
-
 #include "rmd_types.h"
+
+#include <limits.h>
 
 
 //define which way we are reading a pixmap

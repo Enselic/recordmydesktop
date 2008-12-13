@@ -25,14 +25,15 @@
 ******************************************************************************/
 
 #include "config.h"
-
-#include <pthread.h>
-
-#include "rmd_types.h"
-
 #include "rmd_capture_sound.h"
+
 #include "rmd_jack.h"
 #include "rmd_opendev.h"
+#include "rmd_types.h"
+
+#include <pthread.h>
+#include <string.h>
+#include <errno.h>
 
 
 void *CaptureSound(ProgData *pdata){

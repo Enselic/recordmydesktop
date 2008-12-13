@@ -21,12 +21,12 @@
 ******************************************************************************/
 
 #include "config.h"
-
-#include "rmd_types.h"
 #include "rmd_rectinsert.h"
 
 #include "test-rectinsert-types.h"
 #include "test-rectinsert-data.h"
+#include "rmd_types.h"
+
 
 
 static void SetPixel(boolean *state, int x, int y, boolean value) {

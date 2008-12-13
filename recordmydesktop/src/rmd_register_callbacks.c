@@ -25,12 +25,11 @@
 ******************************************************************************/
 
 #include "config.h"
-
-#include <signal.h>
+#include "rmd_register_callbacks.h"
 
 #include "rmd_types.h"
 
-#include "rmd_register_callbacks.h"
+#include <signal.h>
 
 
 // There seem to be no way of passing user data to the signal handler,

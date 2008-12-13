@@ -25,14 +25,15 @@
 ******************************************************************************/
 
 #include "config.h"
+#include "rmd_wm_is_compositing.h"
+
+#include "rmd_wm_check.h"
+#include "rmd_types.h"
 
 #include <X11/Xatom.h>
 
-#include "rmd_types.h"
+#include <stdlib.h>
 
-#include "rmd_wm_check.h"
-
-#include "rmd_wm_is_compositing.h"
 
 boolean rmdWMIsCompositing( Display *dpy, int screen ) {
     

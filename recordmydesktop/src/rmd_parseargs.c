@@ -25,10 +25,13 @@
 ******************************************************************************/
 
 #include "config.h"
-
-#include <stdio.h>
+#include "rmd_parseargs.h"
 
 #include "rmd_types.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 
 static void PrintConfig(void) {

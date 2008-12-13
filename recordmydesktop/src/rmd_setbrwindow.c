@@ -25,10 +25,9 @@
 ******************************************************************************/
 
 #include "config.h"
+#include "rmd_setbrwindow.h"
 
 #include "rmd_types.h"
-
-#include "rmd_setbrwindow.h"
 
 
 /**

@@ -29,6 +29,11 @@
 
 #include "rmd_types.h"
 
+#include <zlib.h>
+
+#include <stdio.h>
+
+
 
 /**
 * Change file pointer to a new file while writting

@@ -25,14 +25,15 @@
 ******************************************************************************/
 
 #include "config.h"
-
-#include <pthread.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include "rmd_timer.h"
 
 #include "rmd_types.h"
 
-#include "rmd_timer.h"
+#include <pthread.h>
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
 
 
 void *rmdTimer(ProgData *pdata){

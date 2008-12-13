@@ -27,6 +27,7 @@
 
 #include "config.h"
 
+#include <stdio.h>
 #include <pthread.h>
 #include <zlib.h>
 #include <X11/Xlib.h>

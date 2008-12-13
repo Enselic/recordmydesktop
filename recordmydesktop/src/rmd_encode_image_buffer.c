@@ -25,10 +25,11 @@
 ******************************************************************************/
 
 #include "config.h"
+#include "rmd_encode_image_buffer.h"
 
 #include "rmd_types.h"
 
-#include "rmd_encode_image_buffer.h"
+#include <errno.h>
 
 
 void *EncodeImageBuffer(ProgData *pdata){

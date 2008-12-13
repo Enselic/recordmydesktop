@@ -25,16 +25,15 @@
 ******************************************************************************/
 
 #include "config.h"
+#include "rmd_update_image.h"
+
+#include "rmd_getzpixmap.h"
+#include "rmd_yuv_utils.h"
+#include "rmd_types.h"
 
 #include <X11/Xlibint.h>
 #include <X11/extensions/shmstr.h>
 #include <X11/extensions/XShm.h>
-
-#include "rmd_types.h"
-
-#include "rmd_getzpixmap.h"
-#include "rmd_update_image.h"
-#include "rmd_yuv_utils.h"
 
 
 void UpdateImage(Display * dpy,

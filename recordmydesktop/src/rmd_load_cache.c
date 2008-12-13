@@ -25,17 +25,20 @@
 ******************************************************************************/
 
 #include "config.h"
-
-#include <pthread.h>
-#include <signal.h>
-
-#include "rmd_types.h"
+#include "rmd_load_cache.h"
 
 #include "rmd_cache.h"
 #include "rmd_encode_image_buffer.h"
 #include "rmd_encode_sound_buffer.h"
-#include "rmd_load_cache.h"
 #include "rmd_macro.h"
+#include "rmd_types.h"
+
+#include <pthread.h>
+#include <signal.h>
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 
 //The number of bytes for every

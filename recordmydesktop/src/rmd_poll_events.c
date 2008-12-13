@@ -25,20 +25,21 @@
 ******************************************************************************/
 
 #include "config.h"
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <X11/Xlib.h>
-#include <X11/Xlibint.h>
-#include <X11/extensions/Xdamage.h>
-#include <signal.h>
-#include <pthread.h>
+#include "rmd_poll_events.h"
 
 #include "rmd_frame.h"
 #include "rmd_macro.h"
-#include "rmd_poll_events.h"
 #include "rmd_rectinsert.h"
 #include "rmd_types.h"
+
+#include <X11/Xlib.h>
+#include <X11/Xlibint.h>
+#include <X11/extensions/Xdamage.h>
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <signal.h>
+#include <pthread.h>
 
 
 #define CLIP_EVENT_AREA(e,brwin,xrect){\
