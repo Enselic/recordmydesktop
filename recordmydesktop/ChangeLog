@@ -1,3 +1,10 @@
+/*Version 0.3.8.1*/
+* Fixed a bug that caused compilation to fail on some platforms, due 
+to missing headers.
+* Minor code refactoring to assist maintainability and
+portability of the program.
+
+
 /*Version 0.3.8*/
 * Extensive refactoring and cleanups of the code from Martin Nordholts.
 * Cursor-flickering bug has been fixed, by Martin.
