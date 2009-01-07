@@ -56,85 +56,61 @@ static void PrintConfig(void) {
  */
 boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
     int i;
-    char *usage="\nUsage:\n"
-    "\trecordmydesktop [OPTIONS]^filename\n\n\n"
-
-    "General Options:\n"
-    "\t-h or --help\t\tPrint this help and exit.\n"
-    "\t--version\t\tPrint program version and exit.\n"
-    "\t--print-config\t\tPrint info about options "
-    "selected during compilation and exit.\n\n"
-
-    "Image Options:\n"
-    "\t--windowid id_of_window\tid of window to be recorded.\n"
-    "\t--display DISPLAY\tDisplay to connect to.\n"
-    "\t-x X\t\t\tOffset in x direction.\n"
-    "\t-y Y\t\t\tOffset in y direction.\n"
-    "\t--width N\t\tWidth of recorded window.\n"
-    "\t--height N\t\tHeight of recorded window.\n\n"
-
-    "\t--dummy-cursor color\tColor of the dummy cursor [black|white]\n"
-    "\t--no-cursor\t\tDisable drawing of the cursor.\n"
-    "\t--no-shared\t\tDisable usage of"
-    " MIT-shared memory extension(Not Recommended!).\n"
-
-    "\t--full-shots\t\tTake full screenshot at every frame(Not recomended!).\n"
-    "\t--quick-subsampling\tDo subsampling"
-    " of the chroma planes by discarding,not averaging.\n"
-
-    "\t--fps N(number>0.0)\tA positive number denoting desired framerate.\n\n"
-
-    "Sound Options:\n"
-    "\t--channels N\t\t\tA positive number denoting"
-    " desired sound channels in recording.\n"
-
-    "\t--freq N\t\t\t\tA positive number denoting desired sound frequency.\n"
-    "\t--buffer-size N\t\t\tA positive number denoting the desired"
-    " sound buffer size (in frames,when using ALSA or OSS)\n"
-    "\t--ring-buffer-size N\t\tA float number denoting the desired"
-    " ring buffer size (in seconds,when using JACK only).\n"
-
-    "\t--device SOUND_DEVICE\t\tSound device(default "
-    DEFAULT_AUDIO_DEVICE
-    ").\n"
-    "\t--use-jack port1 port2... portn\tRecord audio from the specified\n"
-    "\t\t\t\t\tlist of space-separated jack ports.\n"
-    "\t--no-sound\t\t\tDo not record sound.\n\n"
-
-    "Encoding Options\n"
-    "\t--on-the-fly-encoding\tEncode the audio-video data, while recording.\n"
-    "\t--v_quality n\t\tA number from 0 to 63 for"
-    " desired encoded video quality(default 63).\n"
-
-    "\t--v_bitrate n\t\tA number from 45000 to 2000000"
-    " for desired encoded video bitrate(default 45000).\n"
-
-    "\t--s_quality n\t\tDesired audio quality(-1 to 10).\n\n"
-
-    "Misc Options:\n"
-    "\t--rescue path_to_data\tEncode data from a previous, crashed, session.\n"
-    "\t--no-wm-check\t\tDo not try to detect"
-    " the window manager(and set options according to it)\n"
-
-    "\t--pause-shortcut MOD+KEY\tShortcut that will be used for (un)pausing" 
-    "(default Control+Mod1+p).\n"
-    "\t--stop-shortcut MOD+KEY\tShortcut that will be used to stop the "
-    "recording (default Control+Mod1+s).\n" 
-
-    "\t--compress-cache\tImage data are cached with light compression.\n"
-    "\t--workdir DIR\t\tLocation where a temporary directory"
-    " will be created to hold project files(default $HOME).\n"
-
-    "\t--delay n[H|h|M|m]\tNumber of secs(default),minutes or hours"
-    " before capture starts(number can be float)\n"
-
-    "\t--overwrite\t\tIf there is already a file with the same name,"
-    " delete it\n"
-
-    "\t\t\t\t(default is to add a number postfix to the new one).\n"
-    "\t-o filename\t\tName of recorded video(default out.ogv).\n"
-    "\n\tIf no other options are specified, filename can be given "
-    "without the -o switch.\n\n\n";
+    char *usage =
+        "\n"
+        "Usage:\n"
+        "\trecordmydesktop [OPTIONS]^filename\n"
+        "\n"
+        "\n"
+        "General Options:\n"
+        "\t-h or --help\t\tPrint this help and exit.\n"
+        "\t--version\t\tPrint program version and exit.\n"
+        "\t--print-config\t\tPrint info about options selected during compilation and exit.\n"
+        "\n"
+        "Image Options:\n"
+        "\t--windowid id_of_window\tid of window to be recorded.\n"
+        "\t--display DISPLAY\tDisplay to connect to.\n"
+        "\t-x X\t\t\tOffset in x direction.\n"
+        "\t-y Y\t\t\tOffset in y direction.\n"
+        "\t--width N\t\tWidth of recorded window.\n"
+        "\t--height N\t\tHeight of recorded window.\n"
+        "\n"
+        "\t--dummy-cursor color\tColor of the dummy cursor [black|white]\n"
+        "\t--no-cursor\t\tDisable drawing of the cursor.\n"
+        "\t--no-shared\t\tDisable usage of MIT-shared memory extension(Not Recommended!).\n"
+        "\t--full-shots\t\tTake full screenshot at every frame(Not recomended!).\n"
+        "\t--quick-subsampling\tDo subsampling of the chroma planes by discarding,not averaging.\n"
+        "\t--fps N(number>0.0)\tA positive number denoting desired framerate.\n"
+        "\n"
+        "Sound Options:\n"
+        "\t--channels N\t\t\tA positive number denoting desired sound channels in recording.\n"
+        "\t--freq N\t\t\tA positive number denoting desired sound frequency.\n"
+        "\t--buffer-size N\t\t\tA positive number denoting the desired sound buffer size (in frames,when using ALSA or OSS)\n"
+        "\t--ring-buffer-size N\t\tA float number denoting the desired ring buffer size (in seconds,when using JACK only).\n"
+        "\t--device SOUND_DEVICE\t\tSound device(default " DEFAULT_AUDIO_DEVICE ").\n"
+        "\t--use-jack port1 port2... portn\tRecord audio from the specified list of space-separated jack ports.\n"
+        "\t--no-sound\t\t\tDo not record sound.\n"
+        "\n"
+        "Encoding Options\n"
+        "\t--on-the-fly-encoding\tEncode the audio-video data, while recording.\n"
+        "\t--v_quality n\t\tA number from 0 to 63 for desired encoded video quality(default 63).\n"
+        "\t--v_bitrate n\t\tA number from 45000 to 2000000 for desired encoded video bitrate(default 45000).\n"
+        "\t--s_quality n\t\tDesired audio quality(-1 to 10).\n"
+        "\n"
+        "Misc Options:\n"
+        "\t--rescue path_to_data\t\tEncode data from a previous, crashed, session.\n"
+        "\t--no-wm-check\t\t\tDo not try to detect the window manager(and set options according to it)\n"
+        "\t--pause-shortcut MOD+KEY\tShortcut that will be used for (un)pausing (default Control+Mod1+p).\n"
+        "\t--stop-shortcut MOD+KEY\t\tShortcut that will be used to stop the recording (default Control+Mod1+s).\n"
+        "\t--compress-cache\t\tImage data are cached with light compression.\n"
+        "\t--workdir DIR\t\t\tLocation where a temporary directory will be created to hold project files(default $HOME).\n"
+        "\t--delay n[H|h|M|m]\t\tNumber of secs(default),minutes or hours before capture starts(number can be float)\n"
+        "\t--overwrite\t\t\tIf there is already a file with the same name, delete it (default is to add a number postfix to the new one).\n"
+        "\t-o filename\t\t\tName of recorded video(default out.ogv).\n"
+        "\n"
+        "\tIf no other options are specified, filename can be given without the -o switch.\n"
+        "\n"
+        "\n";
 
     if(argc==2){
         if(argv[1][0]!='-'){
