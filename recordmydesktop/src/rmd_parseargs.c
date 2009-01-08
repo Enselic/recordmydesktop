@@ -34,20 +34,27 @@
 #include <string.h>
 
 
-static void PrintConfig(void) {
-    fprintf(stderr,"\nrecordMyDesktop was compiled with"
-                   " the following options:\n\n");
 #ifdef HAVE_LIBJACK
-    fprintf(stdout,"Jack\t\t\t:Enabled\n");
+#define RMD_LIBJACK_STATUS "Enabled"
 #else
-    fprintf(stdout,"Jack\t\t\t:Disabled\n");
+#define RMD_LIBJACK_STATUS "Disabled"
 #endif
+
 #ifdef HAVE_LIBASOUND
-    fprintf(stdout,"Default Audio Backend\t:ALSA\n");
+#define RMD_LIBASOUND_STATUS "ALSA"
 #else
-    fprintf(stdout,"Default Audio Backend\t:OSS\n");
+#define RMD_LIBASOUND_STATUS "OSS"
 #endif
-    fprintf(stderr,"\n\n");
+
+static void PrintConfig(void) {
+    fprintf(stderr,
+            "\n"
+            "recordMyDesktop was compiled with the following options:\n"
+            "\n"
+            "Jack:\t\t\t" RMD_LIBJACK_STATUS "\n"
+            "Default Audio Backend:\t" RMD_LIBASOUND_STATUS "\n"
+            "\n"
+            "\n");
 }
 
 /**
