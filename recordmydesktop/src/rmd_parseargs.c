@@ -57,10 +57,6 @@ static void PrintConfig(void) {
             "\n");
 }
 
-/**
- * Still has backwards compatible options like -this, but --this is
- * what is documented.
- */
 boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
     int i;
     char *usage =
@@ -128,8 +124,7 @@ boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
         }
     }
     for(i=1;i<argc;i++){
-        if (strcmp(argv[i], "--delay") == 0 ||
-            strcmp(argv[i], "-delay")  == 0) {
+        if (strcmp(argv[i], "--delay") == 0) {
             if(i+1<argc){
                 float num=atof(argv[i+1]);
                 if(num>0.0){
@@ -159,8 +154,7 @@ boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
             }
             i++;
         }
-        else if (strcmp(argv[i], "--windowid") == 0 ||
-                 strcmp(argv[i], "-windowid")  == 0) {
+        else if (strcmp(argv[i], "--windowid") == 0) {
             if(i+1<argc){
                 Window num=strtod(argv[i+1],NULL);
                 if(num>0)
@@ -178,8 +172,7 @@ boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
             }
             i++;
         }
-        else if (strcmp(argv[i], "--display") == 0 ||
-                 strcmp(argv[i], "-display")  == 0) {
+        else if (strcmp(argv[i], "--display") == 0) {
             if(i+1<argc){
                 if(arg_return->display!=NULL)
                     free(arg_return->display);
@@ -224,8 +217,7 @@ boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
             }
             i++;
         }
-        else if (strcmp(argv[i], "--width") == 0 ||
-                 strcmp(argv[i], "-width")  == 0) {
+        else if (strcmp(argv[i], "--width") == 0) {
             if(i+1<argc){
                 int num=atoi(argv[i+1]);
                 if(num>0)
@@ -241,8 +233,7 @@ boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
             }
             i++;
         }
-        else if (strcmp(argv[i], "--height") == 0 ||
-                 strcmp(argv[i], "-height")  == 0) {
+        else if (strcmp(argv[i], "--height") == 0) {
             if(i+1<argc){
                 int num=atoi(argv[i+1]);
                 if(num>0)
@@ -270,8 +261,7 @@ boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
             }
             i++;
         }
-        else if (strcmp(argv[i], "--fps") == 0 ||
-                 strcmp(argv[i], "-fps")  == 0) {
+        else if (strcmp(argv[i], "--fps") == 0) {
             if(i+1<argc){
                 float num=atof(argv[i+1]);
                 if(num>0.0)
@@ -287,8 +277,7 @@ boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
             }
             i++;
         }
-        else if (strcmp(argv[i], "--v_quality") == 0 ||
-                 strcmp(argv[i], "-v_quality")  == 0) {
+        else if (strcmp(argv[i], "--v_quality") == 0) {
             if(i+1<argc){
                 int num=atoi(argv[i+1]);
                 if((num>=0)&&(num<64))
@@ -306,8 +295,7 @@ boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
             }
             i++;
         }
-        else if (strcmp(argv[i], "--v_bitrate") == 0 ||
-                 strcmp(argv[i], "-v_bitrate")  == 0) {
+        else if (strcmp(argv[i], "--v_bitrate") == 0) {
             if(i+1<argc){
                 int num=atoi(argv[i+1]);
                 if((num>=45000)&&(num<=2000000))
@@ -325,8 +313,7 @@ boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
             }
             i++;
         }
-        else if (strcmp(argv[i], "--dummy-cursor") == 0 ||
-                 strcmp(argv[i], "-dummy-cursor")  == 0) {
+        else if (strcmp(argv[i], "--dummy-cursor") == 0) {
             if(i+1<argc){
                 if(!strcmp(argv[i+1],"white"))
                     arg_return->cursor_color=0;
@@ -349,8 +336,7 @@ boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
         }
         else if(!strcmp(argv[i],"--no-cursor"))
             arg_return->xfixes_cursor=0;
-        else if (strcmp(argv[i], "--freq") == 0 ||
-                 strcmp(argv[i], "-freq")  == 0) {
+        else if (strcmp(argv[i], "--freq") == 0) {
             if(i+1<argc){
                 int num=atoi(argv[i+1]);
                 if(num>0)
@@ -366,8 +352,7 @@ boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
             }
             i++;
         }
-        else if (strcmp(argv[i], "--channels") == 0 ||
-                 strcmp(argv[i], "-channels")  == 0) {
+        else if (strcmp(argv[i], "--channels") == 0) {
             if(i+1<argc){
                 int num=atoi(argv[i+1]);
                 if(num>0)
@@ -383,8 +368,7 @@ boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
             }
             i++;
         }
-        else if (strcmp(argv[i], "--s_quality") == 0 ||
-                 strcmp(argv[i], "-s_quality")  == 0) {
+        else if (strcmp(argv[i], "--s_quality") == 0) {
             if(i+1<argc){
                 int num=atoi(argv[i+1]);
                 if((num>=-1)&&(num<=10))
@@ -402,8 +386,7 @@ boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
             }
             i++;
         }
-        else if (strcmp(argv[i], "--device") == 0 ||
-                 strcmp(argv[i], "-device")  == 0) {
+        else if (strcmp(argv[i], "--device") == 0) {
             if(i+1<argc){
                 free(arg_return->device);
                 arg_return->device=malloc(strlen(argv[i+1])+1);
@@ -415,8 +398,7 @@ boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
             }
             i++;
         }
-        else if (strcmp(argv[i], "--workdir") == 0 ||
-                 strcmp(argv[i], "-workdir")  == 0) {
+        else if (strcmp(argv[i], "--workdir") == 0) {
             if(i+1<argc){
                 free(arg_return->workdir);
                 arg_return->workdir=malloc(strlen(argv[i+1])+1);
@@ -428,8 +410,7 @@ boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
             }
             i++;
         }
-        else if (strcmp(argv[i], "--pause-shortcut") == 0 ||
-                 strcmp(argv[i], "-pause-shortcut")  == 0) {
+        else if (strcmp(argv[i], "--pause-shortcut") == 0) {
             if(i+1<argc){
                 free(arg_return->pause_shortcut);
                 arg_return->pause_shortcut=malloc(strlen(argv[i+1])+1);
@@ -441,8 +422,7 @@ boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
             }
             i++;
         }
-        else if (strcmp(argv[i], "--stop-shortcut") == 0 ||
-                 strcmp(argv[i], "-stop-shortcut")  == 0) {
+        else if (strcmp(argv[i], "--stop-shortcut") == 0) {
             if(i+1<argc){
                 free(arg_return->stop_shortcut);
                 arg_return->stop_shortcut=malloc(strlen(argv[i+1])+1);
@@ -454,8 +434,7 @@ boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
             }
             i++;
         }
-        else if (strcmp(argv[i], "--buffer-size") == 0 ||
-                 strcmp(argv[i], "-buffer-size")  == 0) {
+        else if (strcmp(argv[i], "--buffer-size") == 0) {
             if(i+1<argc){
                 int num=atoi(argv[i+1]);
                 if(num>0)
@@ -472,8 +451,7 @@ boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
             }
             i++;
         }
-        else if (strcmp(argv[i], "--use-jack") == 0 ||
-                 strcmp(argv[i], "-use-jack")  == 0) {
+        else if (strcmp(argv[i], "--use-jack") == 0) {
             if(i+1<argc){
 #ifdef HAVE_LIBJACK
                 int k=i+1;
@@ -508,8 +486,7 @@ boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
                 return FALSE;
             }
         }
-        else if (strcmp(argv[i], "--ring-buffer-size") == 0 ||
-                 strcmp(argv[i], "-ring-buffer-size")  == 0) {
+        else if (strcmp(argv[i], "--ring-buffer-size") == 0) {
             if(i+1<argc){
                 float num=atof(argv[i+1]);
                 if(num>0.0)
@@ -527,8 +504,7 @@ boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
             }
             i++;
         }
-        else if (strcmp(argv[i], "--rescue") == 0 ||
-                 strcmp(argv[i], "-rescue") == 0) {
+        else if (strcmp(argv[i], "--rescue") == 0) {
             if(i+1<argc){
                 arg_return->rescue_path = argv[i + 1];
             }
