@@ -95,7 +95,10 @@ AC_CHECK_LIB([pthread],[pthread_mutex_lock],,
              AC_MSG_ERROR([Can't find libpthread]))
 
 if test x$jack = xtrue ; then
-AC_CHECK_LIB([jack],[jack_activate],jack_lib_found=true,)
+AC_CHECK_LIB([jack],[jack_activate],
+             [LIBS="$LIBS -ljack"
+              AC_DEFINE([HAVE_LIBJACK], [1], [Define to 1 if you have libjack.])
+              jack_lib_found=true])
 fi
 
 if test x$oss = xfalse; then
