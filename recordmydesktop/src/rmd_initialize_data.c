@@ -214,7 +214,6 @@ void SetupDefaultArgs(ProgArgs *args) {
     args->noframe              = 0;
     args->jack_nports          = 0;
     args->jack_ringbuffer_secs = 3.0;
-    args->jack_port_names      = NULL;
     args->zerocompression      = 1;
     args->no_quick_subsample   = 1;
     args->cursor_color         = 1;
@@ -235,6 +234,8 @@ void SetupDefaultArgs(ProgArgs *args) {
     else {
         args->display = NULL;
     }
+
+    memset(args->jack_port_names, 0, sizeof(args->jack_port_names));
 
     args->device = (char *) malloc(strlen(DEFAULT_AUDIO_DEVICE) + 1);
     strcpy(args->device, DEFAULT_AUDIO_DEVICE);

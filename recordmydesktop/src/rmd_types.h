@@ -83,6 +83,8 @@ typedef int boolean;
 #define TRUE  (!FALSE)
 #endif
 
+#define RMD_MAX_JACK_PORTS (100)
+
 // Forward declarations 
 typedef struct _ProgData ProgData;
 
@@ -149,7 +151,7 @@ typedef struct _ProgArgs{
                             //(do not add a .number postfix)
     int use_jack;           //record audio with jack
     unsigned int jack_nports;
-    char **jack_port_names;
+    char *jack_port_names[RMD_MAX_JACK_PORTS];
     float jack_ringbuffer_secs;
 }ProgArgs;
 

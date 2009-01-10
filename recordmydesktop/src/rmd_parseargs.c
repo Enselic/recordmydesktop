@@ -478,23 +478,20 @@ boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
 #ifdef HAVE_LIBJACK
                 int k=i+1;
                 arg_return->jack_nports=0;
-                while((k<argc)&&(argv[k][0]!='-')){
+                while((k<argc)&&(argv[k][0]!='-')&&k-i-1<RMD_MAX_JACK_PORTS){
                     arg_return->jack_nports++;
+
+                    arg_return->jack_port_names[k-i-1]=malloc(strlen(argv[k])+1);
+                    strcpy(arg_return->jack_port_names[k-i-1],argv[k]);
+
+                    arg_return->use_jack=1;
+
                     k++;
                 }
-                if(arg_return->jack_nports>0){
-                    arg_return->jack_port_names=malloc(sizeof(char*)*
-                                                       arg_return->jack_nports);
-                    for(k=i+1;k<i+1+arg_return->jack_nports;k++){
-                        arg_return->jack_port_names[k-i-1]=
-                            malloc(strlen(argv[k])+1);
-                        strcpy(arg_return->jack_port_names[k-i-1],
-                               argv[k]);
-                    }
-                    i+=arg_return->jack_nports;
-                    arg_return->use_jack=1;
-                }
-                else{
+
+                i+=arg_return->jack_nports;
+                
+                if (arg_return->jack_nports==0) {
                     fprintf(stderr,"Argument Usage: --use-jack port1"
                                    " port2... portn\n");
                     return FALSE;
