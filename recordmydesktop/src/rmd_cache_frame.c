@@ -43,14 +43,14 @@
 #define CACHE_FILE_SIZE_LIMIT (500 * 1024 * 1024)
 
 
-static int FlushBlock(unsigned char *buf,
-                      int blockno,
-                      int width,
-                      int height,
-                      int blockwidth,
-                      gzFile *fp,
-                      FILE *ucfp,
-                      int flush) {
+static int rmdFlushBlock(unsigned char *buf,
+                         int blockno,
+                         int width,
+                         int height,
+                         int blockwidth,
+                         gzFile *fp,
+                         FILE *ucfp,
+                         int flush) {
     int j,i,
         bytes_written=0,
         block_i=(!blockwidth)?0:(blockno/(width/blockwidth)),//place on the grid
@@ -83,7 +83,7 @@ static int FlushBlock(unsigned char *buf,
     return bytes_written;
 }
 
-void *CacheImageBuffer(ProgData *pdata){
+void *rmdCacheImageBuffer(ProgData *pdata){
 
     gzFile *fp=NULL;
     FILE *ucfp=NULL;
@@ -206,42 +206,42 @@ void *CacheImageBuffer(ProgData *pdata){
         //flush the blocks for each buffer
         if(ynum){
             for(j=0;j<ynum;j++)
-                nbytes+=FlushBlock( pdata->enc_data->yuv.y,y_short_blocks[j],
-                                    pdata->enc_data->yuv.y_width,
-                                    pdata->enc_data->yuv.y_height,
-                                    Y_UNIT_WIDTH,
-                                    fp,
-                                    ucfp,
-                                    0);
+                nbytes+=rmdFlushBlock(pdata->enc_data->yuv.y,y_short_blocks[j],
+                                      pdata->enc_data->yuv.y_width,
+                                      pdata->enc_data->yuv.y_height,
+                                      Y_UNIT_WIDTH,
+                                      fp,
+                                      ucfp,
+                                      0);
         }
         if(unum){
             for(j=0;j<unum;j++)
-                nbytes+=FlushBlock( pdata->enc_data->yuv.u,u_short_blocks[j],
-                                    pdata->enc_data->yuv.uv_width,
-                                    pdata->enc_data->yuv.uv_height,
-                                    UV_UNIT_WIDTH,
-                                    fp,
-                                    ucfp,
-                                    0);
+                nbytes+=rmdFlushBlock(pdata->enc_data->yuv.u,u_short_blocks[j],
+                                      pdata->enc_data->yuv.uv_width,
+                                      pdata->enc_data->yuv.uv_height,
+                                      UV_UNIT_WIDTH,
+                                      fp,
+                                      ucfp,
+                                      0);
         }
         if(vnum){
             for(j=0;j<vnum;j++)
-                nbytes+=FlushBlock( pdata->enc_data->yuv.v,v_short_blocks[j],
-                                    pdata->enc_data->yuv.uv_width,
-                                    pdata->enc_data->yuv.uv_height,
-                                    UV_UNIT_WIDTH,
-                                    fp,
-                                    ucfp,
-                                    0);
+                nbytes+=rmdFlushBlock(pdata->enc_data->yuv.v,v_short_blocks[j],
+                                      pdata->enc_data->yuv.uv_width,
+                                      pdata->enc_data->yuv.uv_height,
+                                      UV_UNIT_WIDTH,
+                                      fp,
+                                      ucfp,
+                                      0);
         }
         //release main buffer
         pthread_mutex_unlock(&pdata->yuv_mutex);
 
-        nbytes+=FlushBlock(NULL,0,0,0,0,fp,ucfp,1);
+        nbytes+=rmdFlushBlock(NULL,0,0,0,0,fp,ucfp,1);
         /**@________________@**/
         pdata->avd+=pdata->frametime;
         if(nbytes>CACHE_FILE_SIZE_LIMIT){
-            if(SwapCacheFilesWrite(pdata->cache_data->imgdata,
+            if(rmdSwapCacheFilesWrite(pdata->cache_data->imgdata,
                                    nth_cache,&fp,&ucfp)){
                 fprintf(stderr,"New cache file could not be created.\n"
                                "Ending recording...\n");

@@ -69,7 +69,7 @@ static void ogg_page_cp_free(ogg_page *pg) {
     free(pg->body);
 }
 
-void *FlushToOgg(ProgData *pdata){
+void *rmdFlushToOgg(ProgData *pdata){
     int videoflag=0,audioflag=0;
     double video_bytesout=0,audio_bytesout=0;
     ogg_page    videopage,//owned by libogg
@@ -123,7 +123,7 @@ void *FlushToOgg(ProgData *pdata){
                                           &pdata->theora_lib_mutex);
                         pthread_mutex_unlock(&pdata->theora_lib_mutex);
                     }
-                    SyncEncodeImageBuffer(pdata);
+                    rmdSyncEncodeImageBuffer(pdata);
                 }
             }
             if(!pdata->args.nosound && !v_st_fin &&!audioflag){
@@ -143,7 +143,7 @@ void *FlushToOgg(ProgData *pdata){
                                           &pdata->vorbis_lib_mutex);
                         pthread_mutex_unlock(&pdata->vorbis_lib_mutex);
                     }
-                    SyncEncodeSoundBuffer(pdata,NULL);
+                    rmdSyncEncodeSoundBuffer(pdata,NULL);
                 }
             }
         }

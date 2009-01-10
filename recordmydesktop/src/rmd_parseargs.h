@@ -41,7 +41,7 @@
 *
 * \returns 0 on Success 1 on Failure
 */
-boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return);
+boolean rmdParseArgs(int argc, char **argv, ProgArgs *arg_return);
 
 
 #endif

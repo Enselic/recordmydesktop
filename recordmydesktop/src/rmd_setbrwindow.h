@@ -44,10 +44,10 @@
 *
 * \returns 0 on Success 1 on Failure
 */
-int SetBRWindow(Display *dpy,
-                BRWindow *brwin,
-                DisplaySpecs *specs,
-                ProgArgs *args);
+int rmdSetBRWindow(Display *dpy,
+                   BRWindow *brwin,
+                   DisplaySpecs *specs,
+                   ProgArgs *args);
 
 
 #endif

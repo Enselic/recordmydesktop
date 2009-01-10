@@ -55,17 +55,17 @@
 * \param no_quick_subsample Don't do quick subsampling
 *
 */
-void UpdateImage(Display * dpy,
-                yuv_buffer *yuv,
-                DisplaySpecs *specs,
-                RectArea **root,
-                BRWindow *brwin,
-                EncData *enc,
-                char *datatemp,
-                int noshmem,
-                XShmSegmentInfo *shminfo,
-                int shm_opcode,
-                int no_quick_subsample);
+void rmdUpdateImage(Display * dpy,
+                    yuv_buffer *yuv,
+                    DisplaySpecs *specs,
+                    RectArea **root,
+                    BRWindow *brwin,
+                    EncData *enc,
+                    char *datatemp,
+                    int noshmem,
+                    XShmSegmentInfo *shminfo,
+                    int shm_opcode,
+                    int no_quick_subsample);
 
 
 #endif

@@ -48,10 +48,10 @@
  *  \returns 0 on Success, 1 on Failure. 
  *
  */
-int RegisterShortcut(Display *dpy,
-                     Window root,
-                     const char *shortcut,
-                     HotKey *hotkey);
+int rmdRegisterShortcut(Display *dpy,
+                        Window root,
+                        const char *shortcut,
+                        HotKey *hotkey);
 
 
 #endif

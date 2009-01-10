@@ -49,7 +49,7 @@
 *
 * \returns 0 on Success 1 on Failure
 */
-int SwapCacheFilesWrite(char *name,int n,gzFile **fp,FILE **ucfp);
+int rmdSwapCacheFilesWrite(char *name,int n,gzFile **fp,FILE **ucfp);
 
 /**
 * Change file pointer to a new file while reading
@@ -65,7 +65,7 @@ int SwapCacheFilesWrite(char *name,int n,gzFile **fp,FILE **ucfp);
 *
 * \returns 0 on Success 1 on Failure
 */
-int SwapCacheFilesRead(char *name,int n,gzFile **fp,FILE **ucfp);
+int rmdSwapCacheFilesRead(char *name,int n,gzFile **fp,FILE **ucfp);
 
 /**
 * Delete all cache files
@@ -74,7 +74,7 @@ int SwapCacheFilesRead(char *name,int n,gzFile **fp,FILE **ucfp);
 *
 * \returns 0 if all files and folders where deleted, 1 otherwise
 */
-int PurgeCache(CacheData *cache_data_t,int sound);
+int rmdPurgeCache(CacheData *cache_data_t,int sound);
 
 /**
 * Initializes paths and everything else needed to start caching
@@ -86,9 +86,9 @@ int PurgeCache(CacheData *cache_data_t,int sound);
 * \param cache_data_t Caching options
 *
 */
-void InitCacheData(ProgData *pdata,
-                   EncData *enc_data_t,
-                   CacheData *cache_data_t);
+void rmdInitCacheData(ProgData *pdata,
+                      EncData *enc_data_t,
+                      CacheData *cache_data_t);
 
 
 #endif

@@ -36,16 +36,16 @@
 *
 * \param pdata ProgData struct containing all program data
 */
-void *EncodeSoundBuffer(ProgData *pdata);
+void *rmdEncodeSoundBuffer(ProgData *pdata);
 
 /**
-* As EncodeSoundBuffer, only with the assumption that
+* As rmdEncodeSoundBuffer, only with the assumption that
 * this is not a thread on it's own
 *
 * \param pdata ProgData struct containing all program data
 *
 */
-void SyncEncodeSoundBuffer(ProgData *pdata,signed char *buff);
+void rmdSyncEncodeSoundBuffer(ProgData *pdata,signed char *buff);
 
 
 #endif

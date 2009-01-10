@@ -39,7 +39,7 @@
  * \returns 0 on Success, 1 on failure
  *
  */ 
-int WriteSpecsFile(ProgData *pdata);
+int rmdWriteSpecsFile(ProgData *pdata);
 
 
 
@@ -53,7 +53,7 @@ int WriteSpecsFile(ProgData *pdata);
  * \returns 0 on Success, 1 on failure
  *
  */ 
-int ReadSpecsFile(ProgData *pdata);
+int rmdReadSpecsFile(ProgData *pdata);
 
 
 #endif

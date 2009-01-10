@@ -46,7 +46,7 @@
 * \n number to be used as a postfix
 *
 */
-static void CacheFileN(char *name, char **newname, int n) { // Nth cache file
+static void rmdCacheFileN(char *name, char **newname, int n) { // Nth cache file
     char numbuf[8];
     strcpy(*newname,name);
     strcat(*newname,".");
@@ -54,9 +54,9 @@ static void CacheFileN(char *name, char **newname, int n) { // Nth cache file
     strcat(*newname,numbuf);
 }
 
-int SwapCacheFilesWrite(char *name,int n,gzFile **fp,FILE **ucfp){
+int rmdSwapCacheFilesWrite(char *name,int n,gzFile **fp,FILE **ucfp){
     char *newname=malloc(strlen(name)+10);
-    CacheFileN(name,&newname,n);
+    rmdCacheFileN(name,&newname,n);
     if(*fp==NULL){
         fflush(*ucfp);
         fclose(*ucfp);
@@ -71,9 +71,9 @@ int SwapCacheFilesWrite(char *name,int n,gzFile **fp,FILE **ucfp){
     return ((*fp==NULL)&&(*ucfp==NULL));
 }
 
-int SwapCacheFilesRead(char *name,int n,gzFile **fp,FILE **ucfp){
+int rmdSwapCacheFilesRead(char *name,int n,gzFile **fp,FILE **ucfp){
     char *newname=malloc(strlen(name)+10);
-    CacheFileN(name,&newname,n);
+    rmdCacheFileN(name,&newname,n);
     if(*fp==NULL){
         fclose(*ucfp);
         *ucfp=fopen(newname,"rb");
@@ -87,7 +87,7 @@ int SwapCacheFilesRead(char *name,int n,gzFile **fp,FILE **ucfp){
     return ((*fp==NULL)&&(*ucfp==NULL));
 }
 
-int PurgeCache(CacheData *cache_data_t,int sound){
+int rmdPurgeCache(CacheData *cache_data_t,int sound){
     struct stat buff;
     char *fname;
     fname=malloc(strlen(cache_data_t->imgdata)+10);
@@ -101,7 +101,7 @@ int PurgeCache(CacheData *cache_data_t,int sound){
                            cache_data_t->imgdata);
             exit_value=1;
         }
-        CacheFileN(cache_data_t->imgdata,&fname,nth_cache);
+        rmdCacheFileN(cache_data_t->imgdata,&fname,nth_cache);
         nth_cache++;
     }
     free(fname);
@@ -125,9 +125,9 @@ int PurgeCache(CacheData *cache_data_t,int sound){
     return exit_value;
 }
 
-void InitCacheData(ProgData *pdata,
-                   EncData *enc_data_t,
-                   CacheData *cache_data_t){
+void rmdInitCacheData(ProgData *pdata,
+                      EncData *enc_data_t,
+                      CacheData *cache_data_t){
     int width,height,offset_x,offset_y,pid;
     char pidbuf[8];
 
@@ -215,7 +215,7 @@ void InitCacheData(ProgData *pdata,
            exit(13);
         }
     }
-    if(WriteSpecsFile(pdata)){
+    if(rmdWriteSpecsFile(pdata)){
         fprintf(stderr,"Could not write specsfile %s !!!\n",
                         cache_data_t->specsfile);
         exit(13);

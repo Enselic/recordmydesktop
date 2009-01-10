@@ -52,13 +52,13 @@
 *
 * \returns 0 on Success 1 on Failure
 */
-int GetZPixmap(Display *dpy,
-               Window root,
-               char *data,
-               int x,
-               int y,
-               int width,
-               int height);
+int rmdGetZPixmap(Display *dpy,
+                  Window root,
+                  char *data,
+                  int x,
+                  int y,
+                  int width,
+                  int height);
 
 /**
 * Rerieve pixmap data from xserver through the MIT-Shm extension
@@ -85,15 +85,15 @@ int GetZPixmap(Display *dpy,
 *
 * \returns 0 on Success 1 on Failure
 */
-int GetZPixmapSHM(Display *dpy,
-                  Window root,
-                  XShmSegmentInfo *shminfo,
-                  int shm_opcode,
-                  char *data,
-                  int x,
-                  int y,
-                  int width,
-                  int height);
+int rmdGetZPixmapSHM(Display *dpy,
+                     Window root,
+                     XShmSegmentInfo *shminfo,
+                     int shm_opcode,
+                     char *data,
+                     int x,
+                     int y,
+                     int width,
+                     int height);
 
 
 #endif

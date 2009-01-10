@@ -53,7 +53,7 @@ static void m_add_fishead_packet(ogg_stream_state *m_ogg_state) {
 }
 
 
-static int IncrementalNaming(char **name) {
+static int rmdIncrementalNaming(char **name) {
     struct stat buff;
     char *base_name__;
     int i=0,
@@ -90,7 +90,7 @@ static int IncrementalNaming(char **name) {
     return 0;
 }
 
-void InitEncoder(ProgData *pdata,EncData *enc_data_t,int buffer_ready){
+void rmdInitEncoder(ProgData *pdata,EncData *enc_data_t,int buffer_ready){
     
     int y0,
         y1,
@@ -124,7 +124,7 @@ void InitEncoder(ProgData *pdata,EncData *enc_data_t,int buffer_ready){
     }
         
     if (!pdata->args.overwrite) {
-        IncrementalNaming(&(pdata)->args.filename);
+        rmdIncrementalNaming(&(pdata)->args.filename);
         fprintf(stderr, "Output file: %s\n", pdata->args.filename);
     }
         

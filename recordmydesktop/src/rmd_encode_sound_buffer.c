@@ -36,7 +36,7 @@
 #include <errno.h>
 
 
-void *EncodeSoundBuffer(ProgData *pdata){
+void *rmdEncodeSoundBuffer(ProgData *pdata){
     int sampread=pdata->periodsize;
 #ifdef HAVE_LIBJACK
     void *jackbuf=NULL;
@@ -143,7 +143,7 @@ void *EncodeSoundBuffer(ProgData *pdata){
     pthread_exit(&errno);
 }
 
-void SyncEncodeSoundBuffer(ProgData *pdata,signed char *buff){
+void rmdSyncEncodeSoundBuffer(ProgData *pdata,signed char *buff){
     float **vorbis_buffer;
     int count=0,i,j;
     int sampread=(buff!=NULL)?pdata->periodsize:0;

@@ -35,11 +35,11 @@
 
 
 
-void QueryExtensions(Display *dpy,
-                     ProgArgs *args,
-                     int *damage_event,
-                     int *damage_error,
-                     int *shm_opcode){
+void rmdQueryExtensions(Display *dpy,
+                        ProgArgs *args,
+                        int *damage_event,
+                        int *damage_error,
+                        int *shm_opcode){
     int xf_event_basep,
         xf_error_basep,
         shm_event_base,

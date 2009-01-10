@@ -43,11 +43,11 @@
 *
 * \note Can be an exit point if extensions are not found
 */
-void QueryExtensions(Display *dpy,
-                     ProgArgs *args,
-                     int *damage_event,
-                     int *damage_error,
-                     int *shm_opcode);
+void rmdQueryExtensions(Display *dpy,
+                        ProgArgs *args,
+                        int *damage_event,
+                        int *damage_error,
+                        int *shm_opcode);
 
 
 #endif

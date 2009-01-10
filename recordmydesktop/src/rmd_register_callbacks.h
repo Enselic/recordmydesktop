@@ -35,7 +35,7 @@
 * Set up all callbacks and signal handlers
 * \param pdata ProgData struct containing all program data
 */
-void RegisterCallbacks(ProgData *prog_data);
+void rmdRegisterCallbacks(ProgData *prog_data);
 
 
 #endif

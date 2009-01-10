@@ -41,7 +41,7 @@
 *   \returns 0 on Success, error code on failure
 *            (depending on where the error occured)
 */
-int StartJackClient(JackData *jdata);
+int rmdStartJackClient(JackData *jdata);
 
 /**
 *   Close Jack Client
@@ -51,7 +51,7 @@ int StartJackClient(JackData *jdata);
 *
 *   \returns 0 on Success, 1 on failure
 */
-int StopJackClient(JackData *jdata);
+int rmdStopJackClient(JackData *jdata);
 
 #endif
 

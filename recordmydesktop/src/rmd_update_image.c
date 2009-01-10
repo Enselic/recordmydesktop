@@ -36,17 +36,17 @@
 #include <X11/extensions/XShm.h>
 
 
-void UpdateImage(Display * dpy,
-                yuv_buffer *yuv,
-                DisplaySpecs *specs,
-                RectArea **root,
-                BRWindow *brwin,
-                EncData *enc,
-                char *datatemp,
-                int noshmem,
-                XShmSegmentInfo *shminfo,
-                int shm_opcode,
-                int no_quick_subsample){
+void rmdUpdateImage(Display * dpy,
+                    yuv_buffer *yuv,
+                    DisplaySpecs *specs,
+                    RectArea **root,
+                    BRWindow *brwin,
+                    EncData *enc,
+                    char *datatemp,
+                    int noshmem,
+                    XShmSegmentInfo *shminfo,
+                    int shm_opcode,
+                    int no_quick_subsample){
     RectArea *temp;
     unsigned char *dtap=(unsigned char*)datatemp;
     temp=*root;
@@ -54,23 +54,23 @@ void UpdateImage(Display * dpy,
     if(temp!=NULL){
         do{
             if(noshmem){
-                GetZPixmap( dpy,
-                            specs->root,
-                            datatemp,
-                            temp->rect.x,
-                            temp->rect.y,
-                            temp->rect.width,
-                            temp->rect.height);
-            }
-            else{
-                GetZPixmapSHM(dpy,
+                rmdGetZPixmap(dpy,
                               specs->root,
-                              shminfo,
-                              shm_opcode,
-                              datatemp,temp->rect.x,
+                              datatemp,
+                              temp->rect.x,
                               temp->rect.y,
                               temp->rect.width,
                               temp->rect.height);
+            }
+            else{
+                rmdGetZPixmapSHM(dpy,
+                                 specs->root,
+                                 shminfo,
+                                 shm_opcode,
+                                 datatemp,temp->rect.x,
+                                 temp->rect.y,
+                                 temp->rect.width,
+                                 temp->rect.height);
             }
             UPDATE_YUV_BUFFER(yuv,dtap,NULL,
                                 (temp->rect.x-brwin->rrect.x+enc->x_offset),

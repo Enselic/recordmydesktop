@@ -37,13 +37,13 @@
 
 
 
-int GetZPixmap(Display *dpy,
-               Window root,
-               char *data,
-               int x,
-               int y,
-               int width,
-               int height){
+int rmdGetZPixmap(Display *dpy,
+                  Window root,
+                  char *data,
+                  int x,
+                  int y,
+                  int width,
+                  int height){
     xGetImageReply reply;
     xGetImageReq *request;
     long nbytes;
@@ -69,15 +69,15 @@ int GetZPixmap(Display *dpy,
     return 0;
 }
 
-int GetZPixmapSHM(Display *dpy,
-                  Window root,
-                  XShmSegmentInfo *shminfo,
-                  int shm_opcode,
-                  char *data,
-                  int x,
-                  int y,
-                  int width,
-                  int height){
+int rmdGetZPixmapSHM(Display *dpy,
+                     Window root,
+                     XShmSegmentInfo *shminfo,
+                     int shm_opcode,
+                     char *data,
+                     int x,
+                     int y,
+                     int width,
+                     int height){
     xShmGetImageReply reply;
     xShmGetImageReq *request=NULL;
     long nbytes;

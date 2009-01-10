@@ -42,7 +42,7 @@
 *
 * \note This is called separately for width and height.
 */
-static void SizePack2_8_16(short *start, unsigned short *size, unsigned short limit) {
+static void rmdSizePack2_8_16(short *start, unsigned short *size, unsigned short limit) {
     int octoffset,hexoffset;
 
     //align in two
@@ -123,10 +123,10 @@ static void SizePack2_8_16(short *start, unsigned short *size, unsigned short li
 
 
 
-boolean SetBRWindow(Display *dpy,
-                    BRWindow *brwin,
-                    DisplaySpecs *specs,
-                    ProgArgs *args) {
+boolean rmdSetBRWindow(Display *dpy,
+                       BRWindow *brwin,
+                       DisplaySpecs *specs,
+                       ProgArgs *args) {
     //before we start recording we have to make sure the ranges are valid
     if(args->windowid==0){//root window
         //first set it up
@@ -194,8 +194,8 @@ boolean SetBRWindow(Display *dpy,
                     "X:%d   Y:%d    Width:%d    Height:%d\n",
                     brwin->rrect.x,brwin->rrect.y,
                     brwin->rrect.width,brwin->rrect.height);
-    SizePack2_8_16(&brwin->rrect.x,&brwin->rrect.width,specs->width);
-    SizePack2_8_16(&brwin->rrect.y,&brwin->rrect.height,specs->height);
+    rmdSizePack2_8_16(&brwin->rrect.x,&brwin->rrect.width,specs->width);
+    rmdSizePack2_8_16(&brwin->rrect.y,&brwin->rrect.height,specs->height);
 
     fprintf(stderr, "Adjusted recording window is set to:\n"
                     "X:%d   Y:%d    Width:%d    Height:%d\n",

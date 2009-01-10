@@ -37,7 +37,7 @@
 * \param pdata ProgData struct containing all program data
 *
 */
-void *CacheImageBuffer(ProgData *pdata);
+void *rmdCacheImageBuffer(ProgData *pdata);
 
 
 #endif

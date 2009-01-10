@@ -49,9 +49,9 @@ int main(int argc,char **argv){
     ProgData pdata;
     int exit_status = 0;
     
-    SetupDefaultArgs(&pdata.args);
+    rmdSetupDefaultArgs(&pdata.args);
 
-    if (!ParseArgs(argc, argv, &pdata.args)) {
+    if (!rmdParseArgs(argc, argv, &pdata.args)) {
         exit(1);
     }
     if (pdata.args.rescue_path != NULL) {
@@ -100,7 +100,7 @@ int main(int argc,char **argv){
                            " color depth modes are currently supported.\n");
             exit(10);
         }
-        if (!SetBRWindow(pdata.dpy, &pdata.brwin, &pdata.specs, &pdata.args))
+        if (!rmdSetBRWindow(pdata.dpy, &pdata.brwin, &pdata.specs, &pdata.args))
             exit(11);
 
         if( !pdata.args.nowmcheck && 
@@ -116,38 +116,38 @@ int main(int argc,char **argv){
         
         }
 
-        QueryExtensions(pdata.dpy,
-                        &pdata.args,
-                        &pdata.damage_event,
-                        &pdata.damage_error,
-                        &pdata.shm_opcode);
+        rmdQueryExtensions(pdata.dpy,
+                           &pdata.args,
+                           &pdata.damage_event,
+                           &pdata.damage_error,
+                           &pdata.shm_opcode);
 
 
-        if((exit_status=InitializeData(&pdata,&enc_data,&cache_data))==0){
+        if((exit_status=rmdInitializeData(&pdata,&enc_data,&cache_data))==0){
 
             if(!strcmp(pdata.args.pause_shortcut,
                       pdata.args.stop_shortcut)||
-                RegisterShortcut(pdata.dpy,
-                                 pdata.specs.root,
-                                 pdata.args.pause_shortcut,
-                                 &(pdata.pause_key)) ||
-                RegisterShortcut(pdata.dpy,
-                                 pdata.specs.root,
-                                 pdata.args.stop_shortcut,
-                                 &(pdata.stop_key))){
+                rmdRegisterShortcut(pdata.dpy,
+                                    pdata.specs.root,
+                                    pdata.args.pause_shortcut,
+                                    &(pdata.pause_key)) ||
+                rmdRegisterShortcut(pdata.dpy,
+                                    pdata.specs.root,
+                                    pdata.args.stop_shortcut,
+                                    &(pdata.stop_key))){
 
                 fprintf(stderr,"Invalid shortcut,"
                                " or shortcuts are the same!\n\n"
                                "Using defaults.\n");
 
-                RegisterShortcut(pdata.dpy,
-                                 pdata.specs.root,
-                                 "Control+Mod1+p",
-                                 &(pdata.pause_key));
-                RegisterShortcut(pdata.dpy,
-                                 pdata.specs.root,
-                                 "Control+Mod1+s",
-                                 &(pdata.stop_key));
+                rmdRegisterShortcut(pdata.dpy,
+                                    pdata.specs.root,
+                                    "Control+Mod1+p",
+                                    &(pdata.pause_key));
+                rmdRegisterShortcut(pdata.dpy,
+                                    pdata.specs.root,
+                                    "Control+Mod1+s",
+                                    &(pdata.stop_key));
             }
 
             //this is where the capturing happens.
@@ -159,10 +159,10 @@ int main(int argc,char **argv){
             //encode and then cleanup cache
             if(!pdata.args.encOnTheFly && !pdata.args.no_encode){
                 if (!pdata.aborted) {
-                    EncodeCache(&pdata);
+                    rmdEncodeCache(&pdata);
                 }
                 fprintf(stderr,"Cleanning up cache...\n");
-                if(PurgeCache(pdata.cache_data,!pdata.args.nosound))
+                if(rmdPurgeCache(pdata.cache_data,!pdata.args.nosound))
                     fprintf(stderr,"Some error occured "
                                 "while cleaning up cache!\n");
                 fprintf(stderr,"Done!!!\n");
@@ -184,7 +184,7 @@ int main(int argc,char **argv){
                 fprintf(stderr,"Goodbye!\n");
 
 
-            CleanUp();
+            rmdCleanUp();
         }
     }
 

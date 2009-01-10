@@ -82,7 +82,7 @@
 }
 
 
-void InitEventsPolling(ProgData *pdata){
+void rmdInitEventsPolling(ProgData *pdata){
     Window root_return,
            parent_return,
            *children;
@@ -122,7 +122,7 @@ void InitEventsPolling(ProgData *pdata){
 }
 
 
-void EventLoop(ProgData *pdata){
+void rmdEventLoop(ProgData *pdata){
     int inserts=0;
 
     XEvent event;
@@ -195,7 +195,7 @@ void EventLoop(ProgData *pdata){
                 if((xrect.x>=0)&&(xrect.y>=0)&&
                    (xrect.width>0)&&(xrect.height>0)){
 
-                    inserts+=RectInsert(&pdata->rect_root,&xrect);
+                    inserts+=rmdRectInsert(&pdata->rect_root,&xrect);
 
                 }
             }

@@ -46,7 +46,7 @@
 *
 *   \returns Zero always
 */
-static int JackCapture(jack_nframes_t nframes,void *jdata_t) {
+static int rmdJackCapture(jack_nframes_t nframes,void *jdata_t) {
     int i=0;
     JackData *jdata=(JackData *)jdata_t;
 
@@ -67,7 +67,7 @@ static int JackCapture(jack_nframes_t nframes,void *jdata_t) {
 /*FIXME */
 //This is not safe.
 //cond_var signaling must move away from signal handlers
-//alltogether (JackCapture, SetExpired, SetPaused).
+//alltogether (rmdJackCapture, SetExpired, SetPaused).
 //Better would be a set of pipes for each of these.
 //The callback should write on the pipe and the main thread
 //should perform a select over the fd's, signaling afterwards the
@@ -87,7 +87,7 @@ static int JackCapture(jack_nframes_t nframes,void *jdata_t) {
 *
 *   \returns 0 on Success, 1 on failure
 */
-static int SetupPorts(JackData *jdata) {
+static int rmdSetupPorts(JackData *jdata) {
     int i=0;
     jdata->ports=malloc(sizeof(jack_port_t *)*
                                jdata->nports);
@@ -126,7 +126,7 @@ static int SetupPorts(JackData *jdata) {
 //the program should stop recording,
 //encode the result(if not on the fly)
 //an exit cleanly.
-static void JackShutdown(void *jdata_t) {
+static void rmdJackShutdown(void *jdata_t) {
     JackData *jdata = (JackData *)jdata_t;
 
     jdata->pdata->running = FALSE;
@@ -134,7 +134,7 @@ static void JackShutdown(void *jdata_t) {
     fprintf (stderr, "JACK shutdown\n");
 }
 
-int StartJackClient(JackData *jdata){
+int rmdStartJackClient(JackData *jdata){
     float ring_buffer_size=0.0;
     int pid;
     char pidbuf[8];
@@ -176,14 +176,14 @@ int StartJackClient(JackData *jdata){
                       jdata->nports);
     jdata->sound_buffer=
         (*jack_ringbuffer_create)((int)(ring_buffer_size+0.5));//round up
-    jack_set_process_callback(jdata->client,JackCapture,jdata);
-    jack_on_shutdown(jdata->client,JackShutdown,jdata);
+    jack_set_process_callback(jdata->client,rmdJackCapture,jdata);
+    jack_on_shutdown(jdata->client,rmdJackShutdown,jdata);
 
     if (jack_activate(jdata->client)) {
         fprintf(stderr,"cannot activate client!\n");
         return 16;
     }
-    if(SetupPorts(jdata)){
+    if(rmdSetupPorts(jdata)){
         jack_client_close(jdata->client);
         return 17;
     }
@@ -191,7 +191,7 @@ int StartJackClient(JackData *jdata){
     return 0;
 }
 
-int StopJackClient(JackData *jdata){
+int rmdStopJackClient(JackData *jdata){
     int ret=0;
 
     (*jack_ringbuffer_free)(jdata->sound_buffer);

@@ -35,7 +35,7 @@
 * either directly(full shots) or by calling UpdateImage.
 * \param pdata ProgData struct containing all program data
 */
-void *GetFrame(ProgData *pdata);
+void *rmdGetFrame(ProgData *pdata);
 
 
 #endif

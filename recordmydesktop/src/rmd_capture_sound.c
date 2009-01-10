@@ -36,7 +36,7 @@
 #include <errno.h>
 
 
-void *CaptureSound(ProgData *pdata){
+void *rmdCaptureSound(ProgData *pdata){
 
 #ifdef HAVE_LIBASOUND
     int frames=pdata->periodsize;
@@ -62,15 +62,15 @@ void *CaptureSound(ProgData *pdata){
                 pthread_cond_wait(&pdata->pause_cond, &pdata->pause_mutex);
                 pthread_mutex_unlock(&pdata->pause_mutex);
                 pdata->sound_handle=
-                    OpenDev(pdata->args.device,
-                            &pdata->args.channels,
-                            &pdata->args.frequency,
-                            &pdata->args.buffsize,
-                            NULL,
-                            NULL,
-                            NULL//let's hope that the device capabilities
-                                //didn't magically change
-                            );
+                    rmdOpenDev(pdata->args.device,
+                               &pdata->args.channels,
+                               &pdata->args.frequency,
+                               &pdata->args.buffsize,
+                               NULL,
+                               NULL,
+                               NULL//let's hope that the device capabilities
+                                   //didn't magically change
+                               );
                 if(pdata->sound_handle==NULL){
                     fprintf(stderr,"Couldn't reopen sound device.Exiting\n");
                     pdata->running = FALSE;
@@ -84,9 +84,9 @@ void *CaptureSound(ProgData *pdata){
             pthread_cond_wait(&pdata->pause_cond, &pdata->pause_mutex);
             pthread_mutex_unlock(&pdata->pause_mutex);
             pdata->sound_handle=
-                OpenDev(pdata->args.device,
-                        pdata->args.channels,
-                        pdata->args.frequency);
+                rmdOpenDev(pdata->args.device,
+                           pdata->args.channels,
+                           pdata->args.frequency);
             if(pdata->sound_handle<0){
                 fprintf(stderr,"Couldn't reopen sound device.Exiting\n");
                 pdata->running = FALSE;

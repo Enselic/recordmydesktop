@@ -46,7 +46,7 @@
 #define RMD_LIBASOUND_STATUS "OSS"
 #endif
 
-static void PrintConfig(void) {
+static void rmdPrintConfig(void) {
     fprintf(stderr,
             "\n"
             "recordMyDesktop was compiled with the following options:\n"
@@ -57,7 +57,7 @@ static void PrintConfig(void) {
             "\n");
 }
 
-boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
+boolean rmdParseArgs(int argc, char **argv, ProgArgs *arg_return) {
     int i;
     char *usage =
         "\n"
@@ -553,7 +553,7 @@ boolean ParseArgs(int argc, char **argv, ProgArgs *arg_return) {
             exit(0);
         }
         else if(!strcmp(argv[i],"--print-config")){
-            PrintConfig();
+            rmdPrintConfig();
             exit(0);
         }
         else{

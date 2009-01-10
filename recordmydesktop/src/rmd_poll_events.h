@@ -32,10 +32,10 @@
 
 /**
 * Start listening to damage and substructure notify events
-* (needed before EventLoop call)
+* (needed before rmdEventLoop call)
 * \param pdata ProgData struct containing all program data
 */
-void InitEventsPolling(ProgData *pdata);
+void rmdInitEventsPolling(ProgData *pdata);
 
 /**
 * Loop calling XNextEvent.Retrieve and place on
@@ -43,7 +43,7 @@ void InitEventsPolling(ProgData *pdata);
 * and pickup key events for shortcuts.
 * \param pdata ProgData struct containing all program data
 */
-void EventLoop(ProgData *pdata);
+void rmdEventLoop(ProgData *pdata);
 
 
 #endif

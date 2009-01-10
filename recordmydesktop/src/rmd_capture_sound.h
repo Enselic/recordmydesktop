@@ -36,7 +36,7 @@
 *
 * \param pdata ProgData struct containing all program data
 */
-void *CaptureSound(ProgData *pdata);
+void *rmdCaptureSound(ProgData *pdata);
 
 
 #endif

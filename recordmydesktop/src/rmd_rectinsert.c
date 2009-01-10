@@ -56,10 +56,10 @@
 * \retval -10 Grouping the two rects is possible
 *
 */
-static int CollideRects(XRectangle *xrect1,
-                        XRectangle *xrect2,
-                        XRectangle xrect_return[],
-                        int *nrects) {
+static int rmdCollideRects(XRectangle *xrect1,
+                           XRectangle *xrect2,
+                           XRectangle xrect_return[],
+                           int *nrects) {
     //1 fits in 2
     if((xrect1->x>=xrect2->x)&&
         (xrect1->x+xrect1->width<=xrect2->x+xrect2->width)&&
@@ -89,7 +89,7 @@ static int CollideRects(XRectangle *xrect1,
 //this happens because libxdamage may generate many events for one change
 //and some of them may be in the the exact same region
 //so identical rects would be considered not colliding
-//in order though to avoid endless recursion on the RectInsert
+//in order though to avoid endless recursion on the rmdRectInsert
 //function should always start at the next element(which is logical since
 //if any rect makes it to a points none of it's part collides with previous
 //nodes on the list, too)
@@ -293,7 +293,7 @@ static int CollideRects(XRectangle *xrect1,
     }
 }
 
-int RectInsert(RectArea **root,XRectangle *xrect){
+int rmdRectInsert(RectArea **root,XRectangle *xrect){
 
     int total_insertions=0;
     RectArea *temp=NULL,*newnode=(RectArea *)malloc(sizeof(RectArea));
@@ -323,7 +323,7 @@ int RectInsert(RectArea **root,XRectangle *xrect){
         temp=*root;
         while(insert_ok){   //if something is broken list does not procceed
                             //(except on -1 collres case)
-            int collres = CollideRects(&temp->rect, xrect, &xrect_return[0], &nrects);
+            int collres = rmdCollideRects(&temp->rect, xrect, &xrect_return[0], &nrects);
             if((!collres))
                 insert_ok=1;
             else{
@@ -348,7 +348,7 @@ int RectInsert(RectArea **root,XRectangle *xrect){
                                 temp->next->prev=temp->prev;
                                 free(temp);
                                 if((xrect->width>0)&&(xrect->height>0))
-                                    total_insertions+=RectInsert(&temp1,xrect);
+                                    total_insertions+=rmdRectInsert(&temp1,xrect);
                             }
                             else{
                                 temp->prev->next=newnode;
@@ -362,7 +362,7 @@ int RectInsert(RectArea **root,XRectangle *xrect){
                                 (*root)=(*root)->next;
                                 (*root)->prev=NULL;
                                 if((xrect->width>0)&&(xrect->height>0))
-                                    total_insertions+=RectInsert(root,xrect);
+                                    total_insertions+=rmdRectInsert(root,xrect);
                             }
                             else if((xrect->width>0)&&(xrect->height>0)){
                                 *root=newnode;
@@ -413,8 +413,8 @@ int RectInsert(RectArea **root,XRectangle *xrect){
                                 total_insertions--;
                                 temp->next->prev=temp->prev;
                                 temp->prev->next=temp->next;
-                                total_insertions+=RectInsert(&temp->next,
-                                                             xrect);
+                                total_insertions+=rmdRectInsert(&temp->next,
+                                                                xrect);
                             }
                             free(temp);
                         }
@@ -446,7 +446,7 @@ int RectInsert(RectArea **root,XRectangle *xrect){
                                 if(xrect_return[i].width > 0 &&
                                    xrect_return[i].height > 0)
                                     total_insertions+=
-                                    RectInsert(&temp->next, &xrect_return[i]);
+                                    rmdRectInsert(&temp->next, &xrect_return[i]);
                             }
                         }
                         break;
@@ -469,7 +469,7 @@ int RectInsert(RectArea **root,XRectangle *xrect){
                                 if(xrect_return[0].width > 0 &&
                                    xrect_return[0].height > 0)
                                     total_insertions+=
-                                    RectInsert(root, &xrect_return[0]);
+                                    rmdRectInsert(root, &xrect_return[0]);
                             }
                         }
                         else if(temp->next==NULL){//last, enter anyway
@@ -490,7 +490,7 @@ int RectInsert(RectArea **root,XRectangle *xrect){
                             if(xrect_return[0].width > 0 &&
                                xrect_return[0].height > 0)
                                 total_insertions+=
-                                RectInsert(&temp1, &xrect_return[0]);
+                                rmdRectInsert(&temp1, &xrect_return[0]);
                         }
                         break;
                 }
@@ -514,7 +514,7 @@ int RectInsert(RectArea **root,XRectangle *xrect){
     return total_insertions;
 }
 
-void ClearList(RectArea **root){
+void rmdClearList(RectArea **root){
 
     RectArea *temp;
     temp=*root;

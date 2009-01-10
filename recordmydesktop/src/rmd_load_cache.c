@@ -66,12 +66,12 @@ typedef struct _CachedFrame{
 }CachedFrame;
 
 
-static void LoadBlock(unsigned char *dest,
-                      unsigned char *source,
-                      int blockno,
-                      int width,
-                      int height,
-                      int blockwidth) {
+static void rmdLoadBlock(unsigned char *dest,
+                         unsigned char *source,
+                         int blockno,
+                         int width,
+                         int height,
+                         int blockwidth) {
     int j,
         block_i=blockno/(width/blockwidth),//place on the grid
         block_k=blockno%(width/blockwidth);
@@ -82,7 +82,7 @@ static void LoadBlock(unsigned char *dest,
 }
 
 //returns number of bytes
-static int ReadZF(void * buffer, size_t size, size_t nmemb, FILE *ucfp, gzFile *ifp) {
+static int rmdReadZF(void * buffer, size_t size, size_t nmemb, FILE *ucfp, gzFile *ifp) {
     if((ifp!=NULL && ucfp!=NULL)||
        (ifp==NULL && ucfp==NULL))
         return -1;
@@ -93,66 +93,66 @@ static int ReadZF(void * buffer, size_t size, size_t nmemb, FILE *ucfp, gzFile *
         return gzread(ifp,buffer,size*nmemb);
 }
 
-static int ReadFrame(CachedFrame *frame, FILE *ucfp, gzFile *ifp) {
+static int rmdReadFrame(CachedFrame *frame, FILE *ucfp, gzFile *ifp) {
     int index_entry_size=sizeof(u_int32_t);
     if(frame->header->Ynum>0){
-        if(ReadZF(frame->YBlocks,
-                index_entry_size,
-                frame->header->Ynum,
-                ucfp,
-                ifp)!=index_entry_size*frame->header->Ynum){
+        if(rmdReadZF(frame->YBlocks,
+                     index_entry_size,
+                     frame->header->Ynum,
+                     ucfp,
+                     ifp)!=index_entry_size*frame->header->Ynum){
             return -1;
         }
     }
     if(frame->header->Unum>0){
-        if(ReadZF(frame->UBlocks,
-                index_entry_size,
-                frame->header->Unum,
-                ucfp,
-                ifp)!=index_entry_size*frame->header->Unum){
+        if(rmdReadZF(frame->UBlocks,
+                     index_entry_size,
+                     frame->header->Unum,
+                     ucfp,
+                     ifp)!=index_entry_size*frame->header->Unum){
             return -1;
         }
     }
     if(frame->header->Vnum>0){
-        if(ReadZF(frame->VBlocks,
-                index_entry_size,
-                frame->header->Vnum,
-                ucfp,
-                ifp)!=index_entry_size*frame->header->Vnum){
+        if(rmdReadZF(frame->VBlocks,
+                     index_entry_size,
+                     frame->header->Vnum,
+                     ucfp,
+                     ifp)!=index_entry_size*frame->header->Vnum){
             return -1;
         }
     }
     if(frame->header->Ynum>0){
-        if(ReadZF(frame->YData,
-                  Y_UNIT_BYTES,
-                  frame->header->Ynum,
-                  ucfp,
-                  ifp)!=Y_UNIT_BYTES*frame->header->Ynum){
+        if(rmdReadZF(frame->YData,
+                     Y_UNIT_BYTES,
+                     frame->header->Ynum,
+                     ucfp,
+                     ifp)!=Y_UNIT_BYTES*frame->header->Ynum){
             return -2;
         }
     }
     if(frame->header->Unum>0){
-        if(ReadZF(frame->UData,
-                  UV_UNIT_BYTES,
-                  frame->header->Unum,
-                  ucfp,
-                  ifp)!=UV_UNIT_BYTES*frame->header->Unum){
+        if(rmdReadZF(frame->UData,
+                     UV_UNIT_BYTES,
+                     frame->header->Unum,
+                     ucfp,
+                     ifp)!=UV_UNIT_BYTES*frame->header->Unum){
             return -2;
         }
     }
     if(frame->header->Vnum>0){
-        if(ReadZF(frame->VData,
-                  UV_UNIT_BYTES,
-                  frame->header->Vnum,
-                  ucfp,
-                  ifp)!=UV_UNIT_BYTES*frame->header->Vnum){
+        if(rmdReadZF(frame->VData,
+                     UV_UNIT_BYTES,
+                     frame->header->Vnum,
+                     ucfp,
+                     ifp)!=UV_UNIT_BYTES*frame->header->Vnum){
             return -2;
         }
     }
     return 0;
 }
 
-void *LoadCache(ProgData *pdata){
+void *rmdLoadCache(ProgData *pdata){
 
     yuv_buffer *yuv=&pdata->enc_data->yuv;
     gzFile *ifp=NULL;
@@ -223,7 +223,7 @@ void *LoadCache(ProgData *pdata){
             if(missing_frames>0){
                 extra_frames++;
                 missing_frames--;
-                SyncEncodeImageBuffer(pdata);
+                rmdSyncEncodeImageBuffer(pdata);
             }
             else if(((!pdata->args.zerocompression)&&
                      (gzread(ifp,frame.header,sizeof(FrameHeader))==
@@ -245,40 +245,40 @@ void *LoadCache(ProgData *pdata){
                 if( (frame.header->Ynum<=blocknum_x*blocknum_y) &&
                     (frame.header->Unum<=blocknum_x*blocknum_y) &&
                     (frame.header->Vnum<=blocknum_x*blocknum_y) &&
-                    (!ReadFrame(&frame,
-                                ((pdata->args.zerocompression)?ucfp:NULL),
-                                ((pdata->args.zerocompression)?NULL:ifp)))
+                    (!rmdReadFrame(&frame,
+                                   ((pdata->args.zerocompression)?ucfp:NULL),
+                                   ((pdata->args.zerocompression)?NULL:ifp)))
                         ){
                         //load the blocks for each buffer
                         if(frame.header->Ynum)
                             for(j=0;j<frame.header->Ynum;j++)
-                                LoadBlock(  yuv->y,
-                                            &frame.YData[j*blockszy],
-                                            frame.YBlocks[j],
-                                            yuv->y_width,
-                                            yuv->y_height,
-                                            Y_UNIT_WIDTH);
+                                rmdLoadBlock(yuv->y,
+                                             &frame.YData[j*blockszy],
+                                             frame.YBlocks[j],
+                                             yuv->y_width,
+                                             yuv->y_height,
+                                             Y_UNIT_WIDTH);
                         if(frame.header->Unum)
                             for(j=0;j<frame.header->Unum;j++)
-                                LoadBlock(  yuv->u,
-                                            &frame.UData[j*blockszuv],
-                                            frame.UBlocks[j],
-                                            yuv->uv_width,
-                                            yuv->uv_height,
-                                            UV_UNIT_WIDTH);
+                                rmdLoadBlock(yuv->u,
+                                             &frame.UData[j*blockszuv],
+                                             frame.UBlocks[j],
+                                             yuv->uv_width,
+                                             yuv->uv_height,
+                                             UV_UNIT_WIDTH);
                         if(frame.header->Vnum)
                             for(j=0;j<frame.header->Vnum;j++)
-                                LoadBlock(  yuv->v,
-                                            &frame.VData[j*blockszuv],
-                                            frame.VBlocks[j],
-                                            yuv->uv_width,
-                                            yuv->uv_height,
-                                            UV_UNIT_WIDTH);
+                                rmdLoadBlock(yuv->v,
+                                             &frame.VData[j*blockszuv],
+                                             frame.VBlocks[j],
+                                             yuv->uv_width,
+                                             yuv->uv_height,
+                                             UV_UNIT_WIDTH);
                         //encode. This is not made in a thread since
                         //now blocking is not a problem
                         //and this way sync problems
                         //can be avoided more easily.
-                        SyncEncodeImageBuffer(pdata);
+                        rmdSyncEncodeImageBuffer(pdata);
                 }
                 else{
                     raise(SIGINT);
@@ -286,10 +286,10 @@ void *LoadCache(ProgData *pdata){
                 }
             }
             else{
-                if(SwapCacheFilesRead(pdata->cache_data->imgdata,
-                                      nth_cache,
-                                      &ifp,
-                                      &ucfp)){
+                if(rmdSwapCacheFilesRead(pdata->cache_data->imgdata,
+                                         nth_cache,
+                                         &ifp,
+                                         &ucfp)){
                     raise(SIGINT);
                 }
                 else{
@@ -307,7 +307,7 @@ void *LoadCache(ProgData *pdata){
                 if(nbytes<=0)
                     audio_end=1;
                 else
-                    SyncEncodeSoundBuffer(pdata,sound_data);
+                    rmdSyncEncodeSoundBuffer(pdata,sound_data);
             }
         }
     }

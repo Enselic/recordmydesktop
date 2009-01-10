@@ -38,7 +38,7 @@
 
 
 
-void *CacheSoundBuffer(ProgData *pdata){
+void *rmdCacheSoundBuffer(ProgData *pdata){
 //We are simply going to throw sound on the disk.
 //It's sound is tiny compared to that of image, so
 //compressing would reducethe overall size by only an

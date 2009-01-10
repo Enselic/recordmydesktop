@@ -374,7 +374,7 @@ extern u_int32_t *yblocks,
 /**
 * Fill Yr,Yg,Yb,Ur,Ug.Ub,Vr,Vg,Vb arrays(globals) with values.
 */
-void MakeMatrices(void);
+void rmdMakeMatrices(void);
 
 
 #endif

@@ -63,43 +63,43 @@ void rmdThreads(ProgData *pdata){
     /*start threads*/
     pthread_create(&image_capture_t,
                    NULL,
-                   (void *)GetFrame,
+                   (void *)rmdGetFrame,
                    (void *)pdata);
     if(pdata->args.encOnTheFly)
         pthread_create(&image_encode_t,
                        NULL,
-                       (void *)EncodeImageBuffer,
+                       (void *)rmdEncodeImageBuffer,
                        (void *)pdata);
     else
         pthread_create(&image_cache_t,
                        NULL,
-                       (void *)CacheImageBuffer,
+                       (void *)rmdCacheImageBuffer,
                        (void *)pdata);
 
     if(!pdata->args.nosound){
         if(!pdata->args.use_jack)
             pthread_create(&sound_capture_t,
                         NULL,
-                        (void *)CaptureSound,
+                        (void *)rmdCaptureSound,
                         (void *)pdata);
         if(pdata->args.encOnTheFly)
             pthread_create(&sound_encode_t,
                            NULL,
-                           (void *)EncodeSoundBuffer,
+                           (void *)rmdEncodeSoundBuffer,
                            (void *)pdata);
         else
             pthread_create(&sound_cache_t,
                            NULL,
-                           (void *)CacheSoundBuffer,
+                           (void *)rmdCacheSoundBuffer,
                            (void *)pdata);
     }
     if(pdata->args.encOnTheFly)
         pthread_create(&flush_to_ogg_t,
                        NULL,
-                       (void *)FlushToOgg,
+                       (void *)rmdFlushToOgg,
                        (void *)pdata);
 
-    RegisterCallbacks(pdata);
+    rmdRegisterCallbacks(pdata);
     pdata->timer_alive=1;
     pthread_create(&timer_t,
                    NULL,
@@ -133,7 +133,7 @@ void rmdThreads(ProgData *pdata){
     if(!pdata->args.nosound){
 #ifdef HAVE_LIBJACK
         if(pdata->args.use_jack)
-            StopJackClient(pdata->jdata);
+            rmdStopJackClient(pdata->jdata);
 #endif
         if(!pdata->args.use_jack)
             pthread_join(sound_capture_t,NULL);

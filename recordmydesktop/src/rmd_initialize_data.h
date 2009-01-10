@@ -42,21 +42,21 @@
 *
 * \returns 0 on success, other values must cause the program to exit
 */
-int InitializeData(ProgData *pdata,
-                   EncData *enc_data,
-                   CacheData *cache_data);
+int rmdInitializeData(ProgData *pdata,
+                      EncData *enc_data,
+                      CacheData *cache_data);
 
 /**
 * Sets up the ProgArgs structure to default values.
 */
-void SetupDefaultArgs(ProgArgs *args);
+void rmdSetupDefaultArgs(ProgArgs *args);
 
 /**
 *   Currently only frees some memory
 *   (y,u,v blocks)
 *
 */
-void CleanUp(void);
+void rmdCleanUp(void);
 
 
 #endif

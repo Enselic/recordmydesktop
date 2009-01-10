@@ -32,7 +32,7 @@
 #include <errno.h>
 
 
-void *EncodeImageBuffer(ProgData *pdata){
+void *rmdEncodeImageBuffer(ProgData *pdata){
     pdata->th_encoding_clean=0;
     while(pdata->running){
         pdata->th_enc_thread_waiting=1;
@@ -77,7 +77,7 @@ void *EncodeImageBuffer(ProgData *pdata){
 
 //this function is meant to be called normally
 //not through a thread of it's own
-void SyncEncodeImageBuffer(ProgData *pdata){
+void rmdSyncEncodeImageBuffer(ProgData *pdata){
     if(theora_encode_YUVin(&pdata->enc_data->m_th_st,
                             &pdata->enc_data->yuv)){
         fprintf(stderr,"Encoder not ready!\n");

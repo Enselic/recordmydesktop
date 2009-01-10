@@ -36,7 +36,7 @@
 * \param pdata ProgData struct containing all program data
 *
 */
-void *CacheSoundBuffer(ProgData *pdata);
+void *rmdCacheSoundBuffer(ProgData *pdata);
 
 
 #endif

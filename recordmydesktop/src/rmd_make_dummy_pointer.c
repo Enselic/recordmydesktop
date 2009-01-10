@@ -33,12 +33,12 @@
 #include <X11/Xlib.h>
 
 
-unsigned char *MakeDummyPointer(Display *display,
-                                DisplaySpecs *specs,
-                                int size,
-                                int color,
-                                int type,
-                                unsigned char *npxl){
+unsigned char *rmdMakeDummyPointer(Display *display,
+                                   DisplaySpecs *specs,
+                                   int size,
+                                   int color,
+                                   int type,
+                                   unsigned char *npxl){
     unsigned long bpixel = XBlackPixel(display, specs->screen);
     unsigned long wpixel = XWhitePixel(display, specs->screen);
     int i,k,o='.';

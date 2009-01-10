@@ -42,10 +42,10 @@
 #include <string.h>
 
 #ifdef HAVE_LIBASOUND
-static void FixBufferSize(snd_pcm_uframes_t *buffsize) {
+static void rmdFixBufferSize(snd_pcm_uframes_t *buffsize) {
     snd_pcm_uframes_t buffsize_t=*buffsize,
 #else
-static void FixBufferSize(u_int32_t *buffsize) {
+static void rmdFixBufferSize(u_int32_t *buffsize) {
     u_int32_t buffsize_t=*buffsize,
 #endif
                           buffsize_ret=1;
@@ -57,20 +57,20 @@ static void FixBufferSize(u_int32_t *buffsize) {
                    (int)buffsize_ret,(int)*buffsize);
 }
 
-int InitializeData(ProgData *pdata,
-                   EncData *enc_data,
-                   CacheData *cache_data){
+int rmdInitializeData(ProgData *pdata,
+                      EncData *enc_data,
+                      CacheData *cache_data){
     int i;
 
     fprintf(stderr,"Initializing...\n");
-    MakeMatrices();
+    rmdMakeMatrices();
     if(pdata->args.have_dummy_cursor){
-        pdata->dummy_pointer = MakeDummyPointer(pdata->dpy,
-                                                &pdata->specs,
-                                                16,
-                                                pdata->args.cursor_color,
-                                                0,
-                                                &pdata->npxl);
+        pdata->dummy_pointer = rmdMakeDummyPointer(pdata->dpy,
+                                                   &pdata->specs,
+                                                   16,
+                                                   pdata->args.cursor_color,
+                                                   0,
+                                                   &pdata->npxl);
         pdata->dummy_p_size=16;
     }
     else
@@ -107,24 +107,24 @@ int InitializeData(ProgData *pdata,
 
     if(!pdata->args.nosound){
         if(!pdata->args.use_jack){
-            FixBufferSize(&pdata->args.buffsize);
+            rmdFixBufferSize(&pdata->args.buffsize);
 #ifdef HAVE_LIBASOUND
-            pdata->sound_handle=OpenDev( pdata->args.device,
-                                        &pdata->args.channels,
-                                        &pdata->args.frequency,
-                                        &pdata->args.buffsize,
-                                        &pdata->periodsize,
-                                        &pdata->periodtime,
-                                        &pdata->hard_pause);
+            pdata->sound_handle=rmdOpenDev(pdata->args.device,
+                                           &pdata->args.channels,
+                                           &pdata->args.frequency,
+                                           &pdata->args.buffsize,
+                                           &pdata->periodsize,
+                                           &pdata->periodtime,
+                                           &pdata->hard_pause);
             pdata->sound_framesize=((snd_pcm_format_width(
                                      SND_PCM_FORMAT_S16_LE))/8)*
                                      pdata->args.channels;
 
             if(pdata->sound_handle==NULL){
 #else
-            pdata->sound_handle=OpenDev(pdata->args.device,
-                                        pdata->args.channels,
-                                        pdata->args.frequency);
+            pdata->sound_handle=rmdOpenDev(pdata->args.device,
+                                           pdata->args.channels,
+                                           pdata->args.frequency);
             pdata->periodtime=(1000000*pdata->args.buffsize)/
                             ((pdata->args.channels<<1)*pdata->args.frequency);
             //when using OSS periodsize serves as an alias of buffsize
@@ -149,7 +149,7 @@ int InitializeData(ProgData *pdata,
             pdata->jdata->sound_data_read=&pdata->sound_data_read;
             pdata->jdata->capture_started=0;
 
-            if((jack_error=StartJackClient(pdata->jdata))!=0)
+            if((jack_error=rmdStartJackClient(pdata->jdata))!=0)
                 return jack_error;
 
             pdata->args.buffsize=pdata->jdata->buffersize;
@@ -169,9 +169,9 @@ int InitializeData(ProgData *pdata,
     }
 
     if(pdata->args.encOnTheFly)
-        InitEncoder(pdata,enc_data,0);
+        rmdInitEncoder(pdata,enc_data,0);
     else
-        InitCacheData(pdata,enc_data,cache_data);
+        rmdInitCacheData(pdata,enc_data,cache_data);
 
     for(i=0;i<(pdata->enc_data->yuv.y_width*pdata->enc_data->yuv.y_height);i++)
         pdata->enc_data->yuv.y[i]=0;
@@ -193,7 +193,7 @@ int InitializeData(ProgData *pdata,
 
 }
 
-void SetupDefaultArgs(ProgArgs *args) {
+void rmdSetupDefaultArgs(ProgArgs *args) {
     
     args->delay                = 0;
     args->windowid             = 0;
@@ -253,7 +253,7 @@ void SetupDefaultArgs(ProgArgs *args) {
     strcpy(args->filename, "out.ogv");
 }
 
-void CleanUp(void){
+void rmdCleanUp(void){
 
     free(yblocks);
     free(ublocks);

@@ -38,10 +38,10 @@
 * \param enc_data_t Encoding options
 *
 * \param buffer_ready when 1, the yuv buffer must be preallocated
-*                     when 0 InitEncoder will alocate a new one
+*                     when 0 rmdInitEncoder will alocate a new one
 *
 */
-void InitEncoder(ProgData *pdata,EncData *enc_data_t,int buffer_ready);
+void rmdInitEncoder(ProgData *pdata,EncData *enc_data_t,int buffer_ready);
 
 
 #endif

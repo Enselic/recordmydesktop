@@ -42,7 +42,7 @@ u_int32_t *yblocks,
           *ublocks,
           *vblocks;
 
-void MakeMatrices (void) {
+void rmdMakeMatrices (void) {
     
     int i;
  

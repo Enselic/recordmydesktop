@@ -29,7 +29,7 @@
 
 
 
-static void SetPixel(boolean *state, int x, int y, boolean value) {
+static void rmdSetPixel(boolean *state, int x, int y, boolean value) {
     int index = y * STATE_WIDTH + x;
 
     // Guard against non-optimal implementations
@@ -40,7 +40,7 @@ static void SetPixel(boolean *state, int x, int y, boolean value) {
     state[y * STATE_WIDTH + x] = value;
 }
 
-static boolean GetPixel(boolean *state, int x, int y) {
+static boolean rmdGetPixel(boolean *state, int x, int y) {
     int index = y * STATE_WIDTH + x;
 
     // Guard against non-optimal implementations
@@ -51,34 +51,34 @@ static boolean GetPixel(boolean *state, int x, int y) {
     return state[y * STATE_WIDTH + x];
 }
 
-static void WriteGeomToState(XRectangle *rect, boolean *state) {
+static void rmdWriteGeomToState(XRectangle *rect, boolean *state) {
     int x, y;
 
     for (y = rect->y; y < rect->y + rect->height; y++) {
         for (x = rect->x; x < rect->x + rect->width; x++) {
-            SetPixel(state, x, y, TRUE);
+            rmdSetPixel(state, x, y, TRUE);
         }
     }
 }
 
-static void ClearState(boolean *state) {
+static void rmdClearState(boolean *state) {
     int x, y;
 
     for (y = 0; y < STATE_HEIGHT; y++) {
         for (x = 0; x < STATE_WIDTH; x++) {
-            SetPixel(state, x, y, FALSE);
+            rmdSetPixel(state, x, y, FALSE);
         }
     }
 }
 
-static void WarnIfNonOptimal(XRectangle *rect) {
+static void rmdWarnIfNonOptimal(XRectangle *rect) {
     if (rect->x      < 0 || rect->x      >= STATE_WIDTH  ||
         rect->y      < 0 || rect->y      >= STATE_HEIGHT ||
         rect->width  == 0 || rect->width  >  STATE_WIDTH  ||
         rect->height == 0 || rect->height >  STATE_HEIGHT)
     {
-        // The RectInsert() implementation is not optimal
-        printf("  Non-optimal rect (and RectInsert() implementation) encountered!\n"
+        // The rmdRectInsert() implementation is not optimal
+        printf("  Non-optimal rect (and rmdRectInsert() implementation) encountered!\n"
                "    rect x = %d, y = %d, width = %hu, height = %hu\n",
                rect->x,
                rect->y,
@@ -90,24 +90,24 @@ static void WarnIfNonOptimal(XRectangle *rect) {
 static void GetState(RectArea *root, boolean *state) {
     RectArea *current = root;
 
-    ClearState(state);
+    rmdClearState(state);
 
     while (current)
     {
-        WarnIfNonOptimal(&current->rect);
+        rmdWarnIfNonOptimal(&current->rect);
 
-        WriteGeomToState(&current->rect, state);
+        rmdWriteGeomToState(&current->rect, state);
 
         current = current->next;
     }
 }
  
-static boolean StatesEqual(boolean *a, boolean *b) {
+static boolean rmdStatesEqual(boolean *a, boolean *b) {
     int x, y;
 
     for (y = 0; y < STATE_HEIGHT; y++) {
         for (x = 0; x < STATE_WIDTH; x++) {
-            if (GetPixel(a, x, y) != GetPixel(b, x, y)) {
+            if (rmdGetPixel(a, x, y) != rmdGetPixel(b, x, y)) {
                 return FALSE;
             }
         }
@@ -116,14 +116,14 @@ static boolean StatesEqual(boolean *a, boolean *b) {
     return TRUE;
 }
 
-static void PrintState(boolean *state) {
+static void rmdPrintState(boolean *state) {
     int x, y;
     
     for (y = 0; y < STATE_HEIGHT; y++) {
         printf("    ");
 
         for (x = 0; x < STATE_WIDTH; x++) {
-            printf(GetPixel(state, x, y) ? "X" : "O");
+            printf(rmdGetPixel(state, x, y) ? "X" : "O");
             printf(x != STATE_WIDTH - 1 ? "," : "");
             printf((x + 1) % 5 == 0 ? " " : "");
         }
@@ -134,8 +134,8 @@ static void PrintState(boolean *state) {
 }
 
 /**
- * This program tests the RectInsert() functionality by calling
- * RectInsert() with various testdata and after each call comparing
+ * This program tests the rmdRectInsert() functionality by calling
+ * rmdRectInsert() with various testdata and after each call comparing
  * the current state with a predefied set of expected states.
  */
 int main(int argc, char **argv) {
@@ -144,22 +144,22 @@ int main(int argc, char **argv) {
     int i = 0;
     int result = 0;
 
-    printf("== Testing RectInsert() ==\n");
+    printf("== Testing rmdRectInsert() ==\n");
 
     // Run until there we find end of tests data
     while (rectinsert_test_data[i].description != NULL) {
 
         printf("Test #%d: %s\n", i + 1, rectinsert_test_data[i].description);
-        RectInsert(&root, &rectinsert_test_data[i].new_rect);
+        rmdRectInsert(&root, &rectinsert_test_data[i].new_rect);
         GetState(root, current_state);
 
-        if (!StatesEqual(current_state, rectinsert_test_data[i].expected_state)) {
+        if (!rmdStatesEqual(current_state, rectinsert_test_data[i].expected_state)) {
             printf("  FAILURE!\n");
             printf("  Current state:\n");
-            PrintState(current_state);
+            rmdPrintState(current_state);
                 
             printf("  Expected state:\n");
-            PrintState(rectinsert_test_data[i].expected_state);
+            rmdPrintState(rectinsert_test_data[i].expected_state);
 
             // Just set to failure and keep going...
             result = -1;

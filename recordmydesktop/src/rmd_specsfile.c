@@ -33,7 +33,7 @@
 #include <stdio.h>
 
 
-int WriteSpecsFile(ProgData *pdata){
+int rmdWriteSpecsFile(ProgData *pdata){
     
     FILE *fp;
 
@@ -68,7 +68,7 @@ int WriteSpecsFile(ProgData *pdata){
 
 }
 
-int ReadSpecsFile(ProgData *pdata){
+int rmdReadSpecsFile(ProgData *pdata){
 
 
     FILE *fp;

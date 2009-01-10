@@ -43,13 +43,13 @@
 * \note This function is reentrant and recursive. The number
 * of insertions takes this into account.
 */
-int RectInsert(RectArea **root, XRectangle *xrect);
+int rmdRectInsert(RectArea **root, XRectangle *xrect);
 
 /**
 * Clean up a list of areas marked for update.
 * \param root Root entry of the list
 */
-void ClearList(RectArea **root);
+void rmdClearList(RectArea **root);
 
 
 #endif

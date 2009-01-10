@@ -48,12 +48,12 @@
 *
 * \returns Pointer to pixel data of the cursor
 */
-unsigned char *MakeDummyPointer(Display *display,
-                                DisplaySpecs *specs,
-                                int size,
-                                int color,
-                                int type,
-                                unsigned char *npxl);
+unsigned char *rmdMakeDummyPointer(Display *display,
+                                   DisplaySpecs *specs,
+                                   int size,
+                                   int color,
+                                   int type,
+                                   unsigned char *npxl);
 
 
 #endif

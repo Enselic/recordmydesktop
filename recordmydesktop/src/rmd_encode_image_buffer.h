@@ -35,16 +35,16 @@
 * the ogg stream.
 * \param pdata ProgData struct containing all program data
 */
-void *EncodeImageBuffer(ProgData *pdata);
+void *rmdEncodeImageBuffer(ProgData *pdata);
 
 /**
-* As EncodeImageBuffer, only with the assumption that
+* As rmdEncodeImageBuffer, only with the assumption that
 * this is not a thread on it's own
 *
 * \param pdata ProgData struct containing all program data
 *
 */
-void SyncEncodeImageBuffer(ProgData *pdata);
+void rmdSyncEncodeImageBuffer(ProgData *pdata);
 
 
 #endif

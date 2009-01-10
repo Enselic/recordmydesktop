@@ -54,13 +54,13 @@
 *
 * \returns snd_pcm_t handle on success, NULL on failure
 */
-snd_pcm_t *OpenDev( const char *pcm_dev,
-                    unsigned int *channels,
-                    unsigned int *frequency,
-                    snd_pcm_uframes_t *buffsize,
-                    snd_pcm_uframes_t *periodsize,
-                    unsigned int *periodtime,
-                    int *hardpause);
+snd_pcm_t *rmdOpenDev(const char *pcm_dev,
+                      unsigned int *channels,
+                      unsigned int *frequency,
+                      snd_pcm_uframes_t *buffsize,
+                      snd_pcm_uframes_t *periodsize,
+                      unsigned int *periodtime,
+                      int *hardpause);
 #else
 /**
 * Try to open (OSS) sound device, with the desired parameters.
@@ -75,9 +75,9 @@ snd_pcm_t *OpenDev( const char *pcm_dev,
 *
 * \returns file descriptor of open device,-1 on failure
 */
-int OpenDev( const char *pcm_dev,
-             unsigned int channels,
-             unsigned int frequency);
+int rmdOpenDev(const char *pcm_dev,
+               unsigned int channels,
+               unsigned int frequency);
 #endif
 
 

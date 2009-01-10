@@ -35,6 +35,6 @@
 * flush them on the disk
 * \param pdata ProgData struct containing all program data
 */
-void *FlushToOgg(ProgData *pdata);
+void *rmdFlushToOgg(ProgData *pdata);
 
 #endif

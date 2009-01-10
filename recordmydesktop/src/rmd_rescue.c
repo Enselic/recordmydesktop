@@ -52,7 +52,7 @@ int rmdRescue(const char *path){
     EncData enc_data;
     CacheData cache_data;
 
-    SetupDefaultArgs(&pdata.args);
+    rmdSetupDefaultArgs(&pdata.args);
 
     pdata.enc_data=&enc_data;
     pdata.cache_data=&cache_data;
@@ -75,7 +75,7 @@ int rmdRescue(const char *path){
     strcat(cache_data.specsfile,"specs.txt");
     
 
-    if(ReadSpecsFile(&pdata))
+    if(rmdReadSpecsFile(&pdata))
         return 1;
 
         
@@ -124,14 +124,14 @@ int rmdRescue(const char *path){
     pdata.running = TRUE;
     pdata.aborted = FALSE;
 
-    RegisterCallbacks(&pdata);
+    rmdRegisterCallbacks(&pdata);
     fprintf(stderr,"Restoring %s!!!\n",path);
     
-    EncodeCache(&pdata);
+    rmdEncodeCache(&pdata);
 
     fprintf(stderr,"Done!!!\n");
     fprintf(stderr,"Goodbye!\n");
-    CleanUp();
+    rmdCleanUp();
     
     return 0;
 }

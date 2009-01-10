@@ -36,7 +36,7 @@
 * \param pdata ProgData struct containing all program data
 *
 */
-void *LoadCache(ProgData *pdata);
+void *rmdLoadCache(ProgData *pdata);
 
 
 #endif

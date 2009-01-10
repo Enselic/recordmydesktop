@@ -39,7 +39,7 @@
 
 
 
-void EncodeCache(ProgData *pdata){
+void rmdEncodeCache(ProgData *pdata){
     pthread_t   flush_to_ogg_t,
                 load_cache_t;
     fprintf(stderr,"STATE:ENCODING\n");fflush(stderr);
@@ -49,7 +49,7 @@ void EncodeCache(ProgData *pdata){
     "any portion of the video, which is already encoded won't be deleted).\n"
     "Please wait...\n");
     pdata->running = TRUE;
-    InitEncoder(pdata,pdata->enc_data,1);
+    rmdInitEncoder(pdata,pdata->enc_data,1);
     //load encoding and flushing threads
     if(!pdata->args.nosound){
         //before we start loading again
@@ -59,10 +59,10 @@ void EncodeCache(ProgData *pdata){
             pdata->sound_buffer=pdata->sound_buffer->next;
         }
     }
-    pthread_create(&flush_to_ogg_t,NULL,(void *)FlushToOgg,(void *)pdata);
+    pthread_create(&flush_to_ogg_t,NULL,(void *)rmdFlushToOgg,(void *)pdata);
 
     //start loading image and audio
-    pthread_create(&load_cache_t,NULL,(void *)LoadCache,(void *)pdata);
+    pthread_create(&load_cache_t,NULL,(void *)rmdLoadCache,(void *)pdata);
 
     //join and finish
     pthread_join(load_cache_t,NULL);

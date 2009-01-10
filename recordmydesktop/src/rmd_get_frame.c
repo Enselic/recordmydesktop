@@ -195,10 +195,10 @@
 
 //besides taking the first screenshot, this functions primary purpose is to 
 //initialize the structures and memory.
-static int FirstFrame(ProgData *pdata,
-                      XImage **image,
-                      XShmSegmentInfo *shminfo,
-                      char **pxl_data) {
+static int rmdFirstFrame(ProgData *pdata,
+                         XImage **image,
+                         XShmSegmentInfo *shminfo,
+                         char **pxl_data) {
 
     if((pdata->args.noshared)){
 
@@ -215,12 +215,12 @@ static int FirstFrame(ProgData *pdata,
                             8,
                             0);
         XInitImage((*image));
-        GetZPixmap(pdata->dpy,pdata->specs.root,
-                   (*image)->data,
-                   pdata->brwin.rrect.x,
-                   pdata->brwin.rrect.y,
-                   pdata->brwin.rrect.width,
-                   pdata->brwin.rrect.height);
+        rmdGetZPixmap(pdata->dpy,pdata->specs.root,
+                      (*image)->data,
+                      pdata->brwin.rrect.x,
+                      pdata->brwin.rrect.y,
+                      pdata->brwin.rrect.width,
+                      pdata->brwin.rrect.height);
     }
     else{
         (*image)=XShmCreateImage(pdata->dpy,
@@ -265,7 +265,7 @@ static int FirstFrame(ProgData *pdata,
 }
 
 //make a deep copy
-static void BRWinCpy(BRWindow *target, BRWindow *source) {
+static void rmdBRWinCpy(BRWindow *target, BRWindow *source) {
 
     target->rect.x=source->rect.x;
     target->rect.y=source->rect.y;
@@ -282,11 +282,11 @@ static void BRWinCpy(BRWindow *target, BRWindow *source) {
 
 //recenters the capture area to the mouse
 //without exiting the display bounding box
-static void MoveCaptureArea(BRWindow *brwin,
-                            int cursor_x,
-                            int cursor_y,
-                            int width,
-                            int height) {
+static void rmdMoveCaptureArea(BRWindow *brwin,
+                               int cursor_x,
+                               int cursor_y,
+                               int width,
+                               int height) {
     int t_x=0,t_y=0;
 
     t_x=cursor_x-brwin->rrect.width/2;
@@ -312,11 +312,11 @@ static void MoveCaptureArea(BRWindow *brwin,
 *
 * \param blocknum_y Height of image in blocks
 */
-static void BlocksFromList (RectArea   **root,
-                            unsigned int x_offset,
-                            unsigned int y_offset,
-                            unsigned int blocknum_x,
-                            unsigned int blocknum_y) {
+static void rmdBlocksFromList (RectArea   **root,
+                               unsigned int x_offset,
+                               unsigned int y_offset,
+                               unsigned int blocknum_x,
+                               unsigned int blocknum_y) {
 
   RectArea    *temp;
   unsigned int i,
@@ -353,7 +353,7 @@ static void BlocksFromList (RectArea   **root,
   }
 }
 
-void *GetFrame(ProgData *pdata){
+void *rmdGetFrame(ProgData *pdata){
     int i=0,
         blocknum_x=pdata->enc_data->yuv.y_width/Y_UNIT_WIDTH,
         blocknum_y=pdata->enc_data->yuv.y_height/Y_UNIT_WIDTH;
@@ -375,7 +375,7 @@ void *GetFrame(ProgData *pdata){
 
     img_sel=d_buff=pdata->args.full_shots;
 
-    if((init_img1=FirstFrame(pdata,&image,&shminfo,&pxl_data)!=0)){
+    if((init_img1=rmdFirstFrame(pdata,&image,&shminfo,&pxl_data)!=0)){
         if(pdata->args.encOnTheFly){
             if(remove(pdata->args.filename)){
                 perror("Error while removing file:\n");
@@ -386,13 +386,13 @@ void *GetFrame(ProgData *pdata){
             }
         }
         else{
-            PurgeCache(pdata->cache_data,!pdata->args.nosound);
+            rmdPurgeCache(pdata->cache_data,!pdata->args.nosound);
         }
         exit(init_img1);
     }
     if(d_buff){
-        if((init_img2=FirstFrame(pdata,&image_back,&shminfo_back,
-                                 &pxl_data_back)!=0)){
+        if((init_img2=rmdFirstFrame(pdata,&image_back,&shminfo_back,
+                                    &pxl_data_back)!=0)){
             if(pdata->args.encOnTheFly){
                 if(remove(pdata->args.filename)){
                     perror("Error while removing file:\n");
@@ -403,7 +403,7 @@ void *GetFrame(ProgData *pdata){
                 }
             }
             else{
-                PurgeCache(pdata->cache_data,!pdata->args.nosound);
+                rmdPurgeCache(pdata->cache_data,!pdata->args.nosound);
             }
             exit(init_img2);
         }
@@ -429,7 +429,7 @@ void *GetFrame(ProgData *pdata){
     //This is the the place where we call XSelectInput
     //and arrange so that we listen for damage on all 
     //windows
-    InitEventsPolling(pdata);
+    rmdInitEventsPolling(pdata);
 
     while(pdata->running){
 
@@ -443,20 +443,20 @@ void *GetFrame(ProgData *pdata){
             if (pdata->paused) {
                 //this is necessary since event loop processes
                 //the shortcuts which will unpause the program
-                EventLoop(pdata);
+                rmdEventLoop(pdata);
                 continue;
             }
         }
         //read all events and construct list with damage 
         //events (if not full_shots)
-        EventLoop(pdata);
+        rmdEventLoop(pdata);
 
         //switch back and front buffers (full_shots only)
         if(d_buff)
             img_sel=(img_sel)?0:1;
         pdata->capture_busy = TRUE;
 
-        BRWinCpy(&temp_brwin,&pdata->brwin);
+        rmdBRWinCpy(&temp_brwin,&pdata->brwin);
 
 
         if(pdata->args.xfixes_cursor ||
@@ -465,15 +465,15 @@ void *GetFrame(ProgData *pdata){
 
 
             // Pointer sequence:
-            // * Mark previous position as dirty with RectInsert()
+            // * Mark previous position as dirty with rmdRectInsert()
             // * Update to new position
-            // * Mark new position as dirty with RectInsert()
+            // * Mark new position as dirty with rmdRectInsert()
             if (!pdata->args.full_shots &&
                 mouse_pos_temp.x >=0 &&
                 mouse_pos_temp.y >=0 &&
                 mouse_pos_temp.width > 0 &&
                 mouse_pos_temp.height > 0) {
-                RectInsert(&pdata->rect_root,&mouse_pos_temp);
+                rmdRectInsert(&pdata->rect_root,&mouse_pos_temp);
             }
             if(pdata->args.xfixes_cursor){
                 xcim=XFixesGetCursorImage(pdata->dpy);
@@ -508,7 +508,7 @@ void *GetFrame(ProgData *pdata){
 
                 if (!pdata->args.full_shots) { 
 
-                    RectInsert(&pdata->rect_root,&mouse_pos_temp);
+                    rmdRectInsert(&pdata->rect_root,&mouse_pos_temp);
 
                 }
                 else if(d_buff){
@@ -531,13 +531,13 @@ void *GetFrame(ProgData *pdata){
             }
         }
         if(pdata->args.follow_mouse){
-            MoveCaptureArea(&pdata->brwin,
-                            mouse_pos_abs.x+
-                            ((pdata->args.xfixes_cursor)?xcim->xhot:0),
-                            mouse_pos_abs.y+
-                            ((pdata->args.xfixes_cursor)?xcim->yhot:0),
-                            pdata->specs.width,
-                            pdata->specs.height);
+            rmdMoveCaptureArea(&pdata->brwin,
+                               mouse_pos_abs.x+
+                               ((pdata->args.xfixes_cursor)?xcim->xhot:0),
+                               mouse_pos_abs.y+
+                               ((pdata->args.xfixes_cursor)?xcim->yhot:0),
+                               pdata->specs.width,
+                               pdata->specs.height);
             if(!pdata->args.noframe){
                 rmdMoveFrame(pdata->dpy,
                              pdata->shaped_w,
@@ -549,22 +549,22 @@ void *GetFrame(ProgData *pdata){
 
         if(!pdata->args.full_shots){
             pthread_mutex_lock(&pdata->yuv_mutex);
-            UpdateImage(pdata->dpy,
-                        &pdata->enc_data->yuv,
-                        &pdata->specs,
-                        &pdata->rect_root,
-                        &temp_brwin,
-                        pdata->enc_data,
-                        image->data,
-                        pdata->args.noshared,
-                        &shminfo,
-                        pdata->shm_opcode,
-                        pdata->args.no_quick_subsample);
-            BlocksFromList(&pdata->rect_root,
-                           temp_brwin.rrect.x,
-                           temp_brwin.rrect.y,
-                           pdata->enc_data->yuv.y_width/Y_UNIT_WIDTH,
-                           pdata->enc_data->yuv.y_height/Y_UNIT_WIDTH);
+            rmdUpdateImage(pdata->dpy,
+                           &pdata->enc_data->yuv,
+                           &pdata->specs,
+                           &pdata->rect_root,
+                           &temp_brwin,
+                           pdata->enc_data,
+                           image->data,
+                           pdata->args.noshared,
+                           &shminfo,
+                           pdata->shm_opcode,
+                           pdata->args.no_quick_subsample);
+            rmdBlocksFromList(&pdata->rect_root,
+                              temp_brwin.rrect.x,
+                              temp_brwin.rrect.y,
+                              pdata->enc_data->yuv.y_width/Y_UNIT_WIDTH,
+                              pdata->enc_data->yuv.y_height/Y_UNIT_WIDTH);
             pthread_mutex_unlock(&pdata->yuv_mutex);
         }
         else{
@@ -581,13 +581,13 @@ void *GetFrame(ProgData *pdata){
                             (temp_brwin.rrect.y),AllPlanes);
             }
             if(pdata->args.noshared){
-                GetZPixmap( pdata->dpy,
-                            pdata->specs.root,
-                            image->data,
-                            temp_brwin.rrect.x,
-                            temp_brwin.rrect.y,
-                            temp_brwin.rrect.width,
-                            temp_brwin.rrect.height);
+                rmdGetZPixmap( pdata->dpy,
+                               pdata->specs.root,
+                               image->data,
+                               temp_brwin.rrect.x,
+                               temp_brwin.rrect.y,
+                               temp_brwin.rrect.width,
+                               temp_brwin.rrect.height);
             }
             pthread_mutex_lock(&pdata->yuv_mutex);
             for(i=0;i<blocknum_x*blocknum_y;i++){
@@ -680,7 +680,7 @@ void *GetFrame(ProgData *pdata){
             }
         }
         if(!pdata->args.full_shots){
-            ClearList(&pdata->rect_root);
+            rmdClearList(&pdata->rect_root);
         }
         if (pdata->encoder_busy) {
             pdata->frames_lost++;

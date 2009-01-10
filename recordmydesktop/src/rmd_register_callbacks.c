@@ -40,12 +40,12 @@ static int *pdata_aborted             = NULL;
 static int *pdata_pause_state_changed = NULL;
 
 
-static void SetPaused(int signum) {
+static void rmdSetPaused(int signum) {
 
     *pdata_pause_state_changed = TRUE;
 }
 
-static void SetRunning(int signum) {
+static void rmdSetRunning(int signum) {
 
     if (!*pdata_paused) {
 
@@ -57,7 +57,7 @@ static void SetRunning(int signum) {
     }
 }
 
-void RegisterCallbacks(ProgData *pdata) {
+void rmdRegisterCallbacks(ProgData *pdata) {
 
     struct sigaction pause_act;
     struct sigaction end_act;
@@ -71,14 +71,14 @@ void RegisterCallbacks(ProgData *pdata) {
     // Setup pause_act
     sigfillset(&pause_act.sa_mask);
     pause_act.sa_flags   = SA_RESTART;
-    pause_act.sa_handler = SetPaused;
+    pause_act.sa_handler = rmdSetPaused;
 
     sigaction(SIGUSR1, &pause_act, NULL);
 
     // Setup end_act
     sigfillset(&end_act.sa_mask);
     end_act.sa_flags   = SA_RESTART;
-    end_act.sa_handler = SetRunning;
+    end_act.sa_handler = rmdSetRunning;
 
     sigaction(SIGINT,  &end_act, NULL);
     sigaction(SIGTERM, &end_act, NULL);

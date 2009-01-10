@@ -37,10 +37,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-int RegisterShortcut(Display *dpy,
-                     Window root,
-                     const char *shortcut,
-                     HotKey *hotkey){
+int rmdRegisterShortcut(Display *dpy,
+                        Window root,
+                        const char *shortcut,
+                        HotKey *hotkey){
 
     int keycode=0, 
         i, j ;
