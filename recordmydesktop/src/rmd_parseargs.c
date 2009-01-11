@@ -108,12 +108,12 @@ boolean rmdParseArgs(int argc, char **argv, ProgArgs *arg_return) {
           "Display to connect to.",
           "DISPLAY" },
 
-        { NULL, 'x',
+        { "x", 'x',
           POPT_ARG_INT, &arg_return->x, 0,
           "Offset in x direction.",
           "N>=0" },
 
-        { NULL, 'y',
+        { "x", 'y',
           POPT_ARG_INT, &arg_return->y, 0,
           "Offset in y direction.",
           "N>=0" },
@@ -277,7 +277,7 @@ boolean rmdParseArgs(int argc, char **argv, ProgArgs *arg_return) {
           "If there is already a file with the same name, delete it (default is to add a number postfix to the new one).",
           NULL },
 
-        { NULL, 'o',
+        { "output", 'o',
           POPT_ARG_STRING, &arg_return->filename, 0,
           "Name of recorded video(default out.ogv).",
           "filename" },
