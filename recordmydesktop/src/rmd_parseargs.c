@@ -64,8 +64,7 @@
 static void rmdPrintAndExit(poptContext con, enum poptCallbackReason reason, const struct poptOption *opt, const char *arg, const void *data);
 static boolean rmdValidateArguments(const ProgArgs *args);
 
-// Note: print-config only shown in Generic, in man tis also shown in
-// Misc (less complciate code that way)
+
 boolean rmdParseArgs(int argc, char **argv, ProgArgs *arg_return) {
     poptContext popt_context = NULL;
     boolean no_cursor = FALSE;
