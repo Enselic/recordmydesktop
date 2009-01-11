@@ -3,6 +3,7 @@
 *******************************************************************************
 *                                                                             *
 *            Copyright (C) 2006,2007,2008 John Varouhakis                     *
+*            Copyright (C) 2009           Martin Nordholts                    *
 *                                                                             *
 *                                                                             *
 *   This program is free software; you can redistribute it and/or modify      *
@@ -29,6 +30,8 @@
 
 #include "rmd_types.h"
 
+#include <popt.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -36,8 +39,10 @@
 
 #ifdef HAVE_LIBJACK
 #define RMD_LIBJACK_STATUS "Enabled"
+#define RMD_USE_JACK_EXTRA_FLAG 0
 #else
 #define RMD_LIBJACK_STATUS "Disabled"
+#define RMD_USE_JACK_EXTRA_FLAG POPT_ARGFLAG_DOC_HIDDEN
 #endif
 
 #ifdef HAVE_LIBASOUND
@@ -46,522 +51,446 @@
 #define RMD_LIBASOUND_STATUS "OSS"
 #endif
 
-static void rmdPrintConfig(void) {
-    fprintf(stderr,
-            "\n"
-            "recordMyDesktop was compiled with the following options:\n"
-            "\n"
-            "Jack:\t\t\t" RMD_LIBJACK_STATUS "\n"
-            "Default Audio Backend:\t" RMD_LIBASOUND_STATUS "\n"
-            "\n"
-            "\n");
-}
+#define RMD_ARG_DELAY 1
+#define RMD_ARG_DUMMY_CURSOR 2
+#define RMD_ARG_USE_JACK 3
 
+#define RMD_OPTION_TABLE(name, table) \
+        { NULL, '\0', \
+          POPT_ARG_INCLUDE_TABLE, (table), \
+          0, (name), NULL }
+
+
+static void rmdPrintAndExit(poptContext con, enum poptCallbackReason reason, const struct poptOption *opt, const char *arg, const void *data);
+static boolean rmdValidateArguments(const ProgArgs *args);
+
+// Note: print-config only shown in Generic, in man tis also shown in
+// Misc (less complciate code that way)
 boolean rmdParseArgs(int argc, char **argv, ProgArgs *arg_return) {
-    int i;
-    char *usage =
-        "\n"
-        "Usage:\n"
-        "\trecordmydesktop [OPTIONS]^filename\n"
-        "\n"
-        "\n"
-        "General Options:\n"
-        "\t-h or --help\t\tPrint this help and exit.\n"
-        "\t--version\t\tPrint program version and exit.\n"
-        "\t--print-config\t\tPrint info about options selected during compilation and exit.\n"
-        "\n"
-        "Image Options:\n"
-        "\t--windowid id_of_window\tid of window to be recorded.\n"
-        "\t--display DISPLAY\tDisplay to connect to.\n"
-        "\t-x X\t\t\tOffset in x direction.\n"
-        "\t-y Y\t\t\tOffset in y direction.\n"
-        "\t--width N\t\tWidth of recorded window.\n"
-        "\t--height N\t\tHeight of recorded window.\n"
-        "\n"
-        "\t--dummy-cursor color\tColor of the dummy cursor [black|white]\n"
-        "\t--no-cursor\t\tDisable drawing of the cursor.\n"
-        "\t--no-shared\t\tDisable usage of MIT-shared memory extension(Not Recommended!).\n"
-        "\t--full-shots\t\tTake full screenshot at every frame(Not recomended!).\n"
-        "\t--quick-subsampling\tDo subsampling of the chroma planes by discarding,not averaging.\n"
-        "\t--fps N(number>0.0)\tA positive number denoting desired framerate.\n"
-        "\n"
-        "Sound Options:\n"
-        "\t--channels N\t\t\tA positive number denoting desired sound channels in recording.\n"
-        "\t--freq N\t\t\tA positive number denoting desired sound frequency.\n"
-        "\t--buffer-size N\t\t\tA positive number denoting the desired sound buffer size (in frames,when using ALSA or OSS)\n"
-        "\t--ring-buffer-size N\t\tA float number denoting the desired ring buffer size (in seconds,when using JACK only).\n"
-        "\t--device SOUND_DEVICE\t\tSound device(default " DEFAULT_AUDIO_DEVICE ").\n"
-        "\t--use-jack port1 port2... portn\tRecord audio from the specified list of space-separated jack ports.\n"
-        "\t--no-sound\t\t\tDo not record sound.\n"
-        "\n"
-        "Encoding Options\n"
-        "\t--on-the-fly-encoding\tEncode the audio-video data, while recording.\n"
-        "\t--v_quality n\t\tA number from 0 to 63 for desired encoded video quality(default 63).\n"
-        "\t--v_bitrate n\t\tA number from 45000 to 2000000 for desired encoded video bitrate(default 45000).\n"
-        "\t--s_quality n\t\tDesired audio quality(-1 to 10).\n"
-        "\n"
-        "Misc Options:\n"
-        "\t--rescue path_to_data\t\tEncode data from a previous, crashed, session.\n"
-        "\t--no-wm-check\t\t\tDo not try to detect the window manager(and set options according to it)\n"
-        "\t--pause-shortcut MOD+KEY\tShortcut that will be used for (un)pausing (default Control+Mod1+p).\n"
-        "\t--stop-shortcut MOD+KEY\t\tShortcut that will be used to stop the recording (default Control+Mod1+s).\n"
-        "\t--compress-cache\t\tImage data are cached with light compression.\n"
-        "\t--workdir DIR\t\t\tLocation where a temporary directory will be created to hold project files(default $HOME).\n"
-        "\t--delay n[H|h|M|m]\t\tNumber of secs(default),minutes or hours before capture starts(number can be float)\n"
-        "\t--overwrite\t\t\tIf there is already a file with the same name, delete it (default is to add a number postfix to the new one).\n"
-        "\t-o filename\t\t\tName of recorded video(default out.ogv).\n"
-        "\n"
-        "\tIf no other options are specified, filename can be given without the -o switch.\n"
-        "\n"
-        "\n";
+    poptContext popt_context = NULL;
+    boolean no_cursor = FALSE;
+    boolean quick_subsampling = FALSE;
+    boolean compress_cache = FALSE;
+    boolean success = TRUE;
+    int arg_id = 0;
 
-    if(argc==2){
-        if(argv[1][0]!='-'){
-            free(arg_return->filename);
-            arg_return->filename=malloc(strlen(argv[1])+1);
-            strcpy(arg_return->filename,argv[1]);
-            return TRUE;
-        }
-    }
-    for(i=1;i<argc;i++){
-        if (strcmp(argv[i], "--delay") == 0) {
-            if(i+1<argc){
-                float num=atof(argv[i+1]);
-                if(num>0.0){
+    // Setup the option tables
+    struct poptOption generic_options[] = {
+        { NULL, '\0',
+          POPT_ARG_CALLBACK, (void *)rmdPrintAndExit, 0,
+          NULL, NULL },
+
+        { "help", 'h',
+          POPT_ARG_NONE, NULL, 0,
+          "Print this help and exit.",
+          NULL },
+
+        { "version", '\0',
+          POPT_ARG_NONE, NULL, 0,
+          "Print program version and exit.",
+          NULL },
+
+        { "print-config", '\0',
+          POPT_ARG_NONE, NULL, 0,
+          "Print info about options selected during compilation and exit.",
+          NULL },
+
+        POPT_TABLEEND };
+
+    struct poptOption image_options[] = {
+        { "windowid", '\0',
+          POPT_ARG_INT, &arg_return->windowid, 0,
+          "id of window to be recorded.",
+          "id_of_window" },
+
+        { "display", '\0',
+          POPT_ARG_STRING, &arg_return->display, 0,
+          "Display to connect to.",
+          "DISPLAY" },
+
+        { NULL, 'x',
+          POPT_ARG_INT, &arg_return->x, 0,
+          "Offset in x direction.",
+          "N>=0" },
+
+        { NULL, 'y',
+          POPT_ARG_INT, &arg_return->y, 0,
+          "Offset in y direction.",
+          "N>=0" },
+
+        { "width", '\0',
+          POPT_ARG_INT, &arg_return->width, 0,
+          "Width of recorded window.",
+          "N>0" },
+
+        { "height", '\0',
+          POPT_ARG_INT, &arg_return->height, 0,
+          "Height of recorded window.",
+          "N>0" },
+
+        { "dummy-cursor", '\0',
+          POPT_ARG_STRING, NULL, RMD_ARG_DUMMY_CURSOR,
+          "Color of the dummy cursor [black|white]",
+          "color" },
+
+        { "no-cursor", '\0',
+          POPT_ARG_NONE, &no_cursor, 0,
+          "Disable drawing of the cursor.",
+          NULL },
+
+        { "no-shared", '\0',
+          POPT_ARG_NONE, &arg_return->noshared, 0,
+          "Disable usage of MIT-shared memory extension(Not Recommended!).",
+          NULL },
+
+        { "full-shots", '\0',
+          POPT_ARG_NONE, &arg_return->full_shots, 0,
+          "Take full screenshot at every frame(Not recomended!).",
+          NULL },
+
+        { "follow-mouse", '\0',
+          POPT_ARG_NONE, &arg_return->follow_mouse, 0,
+          "Makes the capture area follow the mouse cursor. Autoenables --full-shots.",
+          NULL },
+
+        { "quick-subsampling", '\0',
+          POPT_ARG_NONE, &quick_subsampling, 0,
+          "Do subsampling of the chroma planes by discarding, not averaging.",
+          NULL },
+
+        { "fps", '\0',
+          POPT_ARG_FLOAT, &arg_return->fps, 0,
+          "A positive number denoting desired framerate.",
+          "N(number>0.0)" },
+
+        POPT_TABLEEND };
+
+    struct poptOption sound_options[] = {
+        { "channels", '\0',
+          POPT_ARG_INT, &arg_return->channels, 0,
+          "A positive number denoting desired sound channels in recording.",
+          "N" },
+
+        { "freq", '\0',
+          POPT_ARG_INT, &arg_return->frequency, 0,
+          "A positive number denoting desired sound frequency.",
+          "N" },
+
+        { "buffer-size", '\0',
+          POPT_ARG_INT, &arg_return->buffsize, 0,
+          "A positive number denoting the desired sound buffer size (in frames,when using ALSA or OSS)",
+          "N" },
+
+        { "ring-buffer-size", '\0',
+          POPT_ARG_FLOAT, &arg_return->jack_ringbuffer_secs, 0,
+          "A float number denoting the desired ring buffer size (in seconds,when using JACK only).",
+          "N" },
+
+        { "device", '\0',
+          POPT_ARG_STRING, &arg_return->device, 0,
+          "Sound device(default " DEFAULT_AUDIO_DEVICE ").",
+          "SOUND_DEVICE" },
+
+        { "use-jack", '\0',
+          POPT_ARG_STRING | RMD_USE_JACK_EXTRA_FLAG, &arg_return->x, RMD_ARG_USE_JACK,
+          "Record audio from the specified list of space-separated jack ports.",
+          "port1 port2... portn" },
+
+        { "no-sound", '\0',
+          POPT_ARG_NONE, &arg_return->nosound, 0,
+          "Do not record sound.",
+          NULL },
+
+        POPT_TABLEEND };
+
+    struct poptOption encoding_options[] = {
+        { "on-the-fly-encoding", '\0',
+          POPT_ARG_NONE, &arg_return->encOnTheFly, 0,
+          "Encode the audio-video data, while recording.",
+          NULL },
+
+        { "v_quality", '\0',
+          POPT_ARG_INT, &arg_return->v_quality, 0,
+          "A number from 0 to 63 for desired encoded video quality(default 63).",
+          "n" },
+
+        { "v_bitrate", '\0',
+          POPT_ARG_INT, &arg_return->v_bitrate, 0,
+          "A number from 45000 to 2000000 for desired encoded video bitrate(default 45000).",
+          "n" },
+
+        { "s_quality", '\0',
+          POPT_ARG_INT, &arg_return->s_quality, 0,
+          "Desired audio quality(-1 to 10).",
+          "n" },
+
+        POPT_TABLEEND };
+
+    struct poptOption misc_options[] = {
+        { "rescue", '\0',
+          POPT_ARG_STRING, &arg_return->rescue_path, 0,
+          "Encode data from a previous, crashed, session.",
+          "path_to_data" },
+
+        { "no-encode", '\0',
+          POPT_ARG_NONE | POPT_ARGFLAG_DOC_HIDDEN, &arg_return->no_encode, 0,
+          "Do not encode any data after recording is complete. This is instead done manually afterwards with --rescue.",
+          NULL },
+
+        { "no-wm-check", '\0',
+          POPT_ARG_NONE, &arg_return->nowmcheck, 0,
+          "Do not try to detect the window manager(and set options according to it)",
+          NULL },
+
+        { "no-frame", '\0',
+          POPT_ARG_NONE, &arg_return->noframe, 0,
+          "Don not show the frame that visualizes the recorded area.",
+          NULL },
+
+        { "pause-shortcut", '\0',
+          POPT_ARG_STRING, &arg_return->pause_shortcut, 0,
+          "Shortcut that will be used for (un)pausing (default Control+Mod1+p).",
+          "MOD+KEY" },
+
+        { "stop-shortcut", '\0',
+          POPT_ARG_STRING, &arg_return->stop_shortcut, 0,
+          "Shortcut that will be used to stop the recording (default Control+Mod1+s).",
+          "MOD+KEY" },
+
+        { "compress-cache", '\0',
+          POPT_ARG_NONE, &compress_cache, 0,
+          "Image data are cached with light compression.",
+          NULL },
+
+        { "workdir", '\0',
+          POPT_ARG_STRING, &arg_return->workdir, 0,
+          "Location where a temporary directory will be created to hold project files(default $HOME).",
+          "DIR" },
+
+        { "delay", '\0',
+          POPT_ARG_STRING, &arg_return->delay, RMD_ARG_DELAY,
+          "Number of secs(default),minutes or hours before capture starts(number can be float)",
+          "n[H|h|M|m]" },
+
+        { "overwrite", '\0',
+          POPT_ARG_NONE, &arg_return->overwrite, 0,
+          "If there is already a file with the same name, delete it (default is to add a number postfix to the new one).",
+          NULL },
+
+        { NULL, 'o',
+          POPT_ARG_STRING, &arg_return->filename, 0,
+          "Name of recorded video(default out.ogv).",
+          "filename" },
+
+        POPT_TABLEEND };
+
+    struct poptOption rmd_args[] = {
+        RMD_OPTION_TABLE("Generic Options", generic_options),
+        RMD_OPTION_TABLE("Image Options", image_options),
+        RMD_OPTION_TABLE("Sound Options", sound_options),
+        RMD_OPTION_TABLE("Encoding Options", encoding_options),
+        RMD_OPTION_TABLE("Misc Options", misc_options),
+        POPT_TABLEEND };
+
+
+    // Some trivial setup
+    popt_context = poptGetContext(NULL, argc, (const char **)argv, rmd_args, 0);
+    poptSetOtherOptionHelp(popt_context, "[OPTIONS]^filename");
+
+
+    // Parse the arguments
+    while ((arg_id = poptGetNextOpt(popt_context)) > 0) {
+        char *arg = poptGetOptArg(popt_context);
+
+        // Most arguments are handled completely by libpopt but we
+        // handle some by ourself, namely those in this switch case
+        switch (arg_id) {
+            case RMD_ARG_DELAY:
+            {
+                float num = atof(arg);
+
+                if (num > 0.0) {
                     int k;
-                    for(k=0;k<strlen(argv[i+1]);k++){
-                        if((argv[i+1][k]=='M')||(argv[i+1][k]=='m')){
-                            num*=60.0;
+                    for (k = 0; k < strlen(arg); k++) {
+                        if ((arg[k] == 'M') || (arg[k] == 'm')) {
+                            num *= 60.0;
                             break;
                         }
-                        else if((argv[i+1][k]=='H')||(argv[i+1][k]=='h')){
-                            num*=3600.0;
+                        else if ((arg[k] == 'H') || (arg[k] == 'h')) {
+                            num *= 3600.0;
                             break;
                         }
                     }
-                    arg_return->delay=(int)num;
+                    arg_return->delay = (int) num;
                 }
-                else{
-                    fprintf(stderr,"Argument Usage: --delay n[H|h|M|m]\n"
-                                   "where n is a float number\n");
-                    return FALSE;
-                }
-            }
-            else{
-                fprintf(stderr,"Argument Usage: --delay n[H|h|M|m]\n"
-                               "where n is a float number\n");
-                return FALSE;
-            }
-            i++;
-        }
-        else if (strcmp(argv[i], "--windowid") == 0) {
-            if(i+1<argc){
-                Window num=strtod(argv[i+1],NULL);
-                if(num>0)
-                    arg_return->windowid=num;
-                else{
-                    fprintf(stderr,"Argument Usage:"
-                                   " --windowid id_of_window(number)\n");
-                    return FALSE;
+                else {
+                    fprintf(stderr,
+                            "Argument Usage: --delay n[H|h|M|m]\n"
+                            "where n is a float number\n");
+                    success = FALSE;
                 }
             }
-            else{
-                fprintf(stderr,"Argument Usage:"
-                               " --windowid id_of_window(number)\n");
-                return FALSE;
-            }
-            i++;
-        }
-        else if (strcmp(argv[i], "--display") == 0) {
-            if(i+1<argc){
-                if(arg_return->display!=NULL)
-                    free(arg_return->display);
-                arg_return->display=malloc(strlen(argv[i+1])+1);
-                strcpy(arg_return->display,argv[i+1]);
-            }
-            else{
-                fprintf(stderr,"Argument Usage: --display DISPLAY\n");
-                return FALSE;
-            }
-            i++;
-        }
-        else if(!strcmp(argv[i],"-x")){
-            if(i+1<argc){
-                int num=atoi(argv[i+1]);
-                if(num>0)
-                    arg_return->x=num;
-                else{
-                    fprintf(stderr,"Argument Usage: -x X(number>0)\n");
-                    return FALSE;
+            break;
+
+            case RMD_ARG_DUMMY_CURSOR:
+            {
+                if (!strcmp(arg, "white"))
+                    arg_return->cursor_color = 0;
+                else if (!strcmp(arg, "black"))
+                    arg_return->cursor_color = 1;
+                else {
+                    fprintf(stderr,
+                            "Argument Usage:\n"
+                            " --dummy-cursor [black|white]\n");
+                    success = FALSE;
                 }
+                arg_return->have_dummy_cursor = TRUE;
+                arg_return->xfixes_cursor = FALSE;
             }
-            else{
-                fprintf(stderr,"Argument Usage: -x X(number>0)\n");
-                return FALSE;
-            }
-            i++;
-        }
-        else if(!strcmp(argv[i],"-y")){
-            if(i+1<argc){
-                int num=atoi(argv[i+1]);
-                if(num>0)
-                    arg_return->y=num;
-                else{
-                    fprintf(stderr,"Argument Usage: -y Y(number>0)\n");
-                    return FALSE;
-                }
-            }
-            else{
-                fprintf(stderr,"Argument Usage: -y Y(number>0)\n");
-                return FALSE;
-            }
-            i++;
-        }
-        else if (strcmp(argv[i], "--width") == 0) {
-            if(i+1<argc){
-                int num=atoi(argv[i+1]);
-                if(num>0)
-                    arg_return->width=num;
-                else{
-                    fprintf(stderr,"Argument Usage: --width N(number>0)\n");
-                    return FALSE;
-                }
-            }
-            else{
-                fprintf(stderr,"Argument Usage: --width N(number>0)\n");
-                return FALSE;
-            }
-            i++;
-        }
-        else if (strcmp(argv[i], "--height") == 0) {
-            if(i+1<argc){
-                int num=atoi(argv[i+1]);
-                if(num>0)
-                    arg_return->height=num;
-                else{
-                    fprintf(stderr,"Argument Usage: --height N(number>0)\n");
-                    return FALSE;
-                }
-            }
-            else{
-                fprintf(stderr,"Argument Usage: --height N(number>0)\n");
-                return FALSE;
-            }
-            i++;
-        }
-        else if(!strcmp(argv[i],"-o")){
-            if(i+1<argc){
-                free(arg_return->filename);
-                arg_return->filename=malloc(strlen(argv[i+1])+1);
-                strcpy(arg_return->filename,argv[i+1]);
-            }
-            else{
-                fprintf(stderr,"Argument Usage: -o filename\n");
-                return FALSE;
-            }
-            i++;
-        }
-        else if (strcmp(argv[i], "--fps") == 0) {
-            if(i+1<argc){
-                float num=atof(argv[i+1]);
-                if(num>0.0)
-                    arg_return->fps=num;
-                else{
-                    fprintf(stderr,"Argument Usage: --fps N(number>0)\n");
-                    return FALSE;
-                }
-            }
-            else{
-                fprintf(stderr,"Argument Usage: --fps N(number>0)\n");
-                return FALSE;
-            }
-            i++;
-        }
-        else if (strcmp(argv[i], "--v_quality") == 0) {
-            if(i+1<argc){
-                int num=atoi(argv[i+1]);
-                if((num>=0)&&(num<64))
-                    arg_return->v_quality=num;
-                else{
-                    fprintf(stderr,"Argument Usage:"
-                                   " --v_quality n(number 0-63)\n");
-                    return FALSE;
-                }
-            }
-            else{
-                fprintf(stderr,"Argument Usage:"
-                               " --v_quality n(number 0-63)\n");
-                return FALSE;
-            }
-            i++;
-        }
-        else if (strcmp(argv[i], "--v_bitrate") == 0) {
-            if(i+1<argc){
-                int num=atoi(argv[i+1]);
-                if((num>=45000)&&(num<=2000000))
-                    arg_return->v_bitrate=num;
-                else{
-                    fprintf(stderr,"Argument Usage:"
-                                   " --v_bitrate n(number 45000-2000000)\n");
-                    return FALSE;
-                }
-            }
-            else{
-                fprintf(stderr,"Argument Usage:"
-                               " --v_bitrate n(number 45000-2000000)\n");
-                return FALSE;
-            }
-            i++;
-        }
-        else if (strcmp(argv[i], "--dummy-cursor") == 0) {
-            if(i+1<argc){
-                if(!strcmp(argv[i+1],"white"))
-                    arg_return->cursor_color=0;
-                else if(!strcmp(argv[i+1],"black"))
-                    arg_return->cursor_color=1;
-                else{
-                    fprintf(stderr,"Argument Usage:"
-                                   " --dummy-cursor [black|white]\n");
-                    return FALSE;
-                }
-                arg_return->have_dummy_cursor=1;
-                arg_return->xfixes_cursor=0;
-            }
-            else{
-                fprintf(stderr,"Argument Usage:"
-                               " --dummy-cursor [black|white]\n");
-                return FALSE;
-            }
-            i++;
-        }
-        else if(!strcmp(argv[i],"--no-cursor"))
-            arg_return->xfixes_cursor=0;
-        else if (strcmp(argv[i], "--freq") == 0) {
-            if(i+1<argc){
-                int num=atoi(argv[i+1]);
-                if(num>0)
-                    arg_return->frequency=num;
-                else{
-                    fprintf(stderr,"Argument Usage: --freq N(number>0)\n");
-                    return FALSE;
-                }
-            }
-            else{
-                fprintf(stderr,"Argument Usage: --freq N(number>0)\n");
-                return FALSE;
-            }
-            i++;
-        }
-        else if (strcmp(argv[i], "--channels") == 0) {
-            if(i+1<argc){
-                int num=atoi(argv[i+1]);
-                if(num>0)
-                    arg_return->channels=num;
-                else{
-                    fprintf(stderr,"Argument Usage: --channels N(number>0)\n");
-                    return FALSE;
-                }
-            }
-            else{
-                fprintf(stderr,"Argument Usage: --channels N(number>0)\n");
-                return FALSE;
-            }
-            i++;
-        }
-        else if (strcmp(argv[i], "--s_quality") == 0) {
-            if(i+1<argc){
-                int num=atoi(argv[i+1]);
-                if((num>=-1)&&(num<=10))
-                    arg_return->s_quality=num;
-                else{
-                    fprintf(stderr,"Argument Usage:"
-                                   " --s_quality n(number -1 to 10)\n");
-                    return FALSE;
-                }
-            }
-            else{
-                fprintf(stderr,"Argument Usage:"
-                               " --s_quality n(number -1 to 10)\n");
-                return FALSE;
-            }
-            i++;
-        }
-        else if (strcmp(argv[i], "--device") == 0) {
-            if(i+1<argc){
-                free(arg_return->device);
-                arg_return->device=malloc(strlen(argv[i+1])+1);
-                strcpy(arg_return->device,argv[i+1]);
-            }
-            else{
-                fprintf(stderr,"Argument Usage: -device SOUND_DEVICE\n");
-                return FALSE;
-            }
-            i++;
-        }
-        else if (strcmp(argv[i], "--workdir") == 0) {
-            if(i+1<argc){
-                free(arg_return->workdir);
-                arg_return->workdir=malloc(strlen(argv[i+1])+1);
-                strcpy(arg_return->workdir,argv[i+1]);
-            }
-            else{
-                fprintf(stderr,"Argument Usage: --workdir DIR\n");
-                return FALSE;
-            }
-            i++;
-        }
-        else if (strcmp(argv[i], "--pause-shortcut") == 0) {
-            if(i+1<argc){
-                free(arg_return->pause_shortcut);
-                arg_return->pause_shortcut=malloc(strlen(argv[i+1])+1);
-                strcpy(arg_return->pause_shortcut,argv[i+1]);
-            }
-            else{
-                fprintf(stderr,"Argument Usage: --pause-shortcut MOD+KEY\n");
-                return FALSE;
-            }
-            i++;
-        }
-        else if (strcmp(argv[i], "--stop-shortcut") == 0) {
-            if(i+1<argc){
-                free(arg_return->stop_shortcut);
-                arg_return->stop_shortcut=malloc(strlen(argv[i+1])+1);
-                strcpy(arg_return->stop_shortcut,argv[i+1]);
-            }
-            else{
-                fprintf(stderr,"Argument Usage: --stop-shortcut MOD+KEY\n");
-                return FALSE;
-            }
-            i++;
-        }
-        else if (strcmp(argv[i], "--buffer-size") == 0) {
-            if(i+1<argc){
-                int num=atoi(argv[i+1]);
-                if(num>0)
-                    arg_return->buffsize=num;
-                else{
-                    fprintf(stderr,"Argument Usage:"
-                                   " --buffer-size N(number>0)\n");
-                    return FALSE;
-                }
-            }
-            else{
-                fprintf(stderr,"Argument Usage: --buffer-size N(number>0)\n");
-                return FALSE;
-            }
-            i++;
-        }
-        else if (strcmp(argv[i], "--use-jack") == 0) {
-            if(i+1<argc){
-#ifdef HAVE_LIBJACK
-                int k=i+1;
-                arg_return->jack_nports=0;
-                while((k<argc)&&(argv[k][0]!='-')&&k-i-1<RMD_MAX_JACK_PORTS){
+            break;
+
+            case RMD_ARG_USE_JACK:
+            {
+                arg_return->jack_nports = 0;
+
+                while (arg) {
+
                     arg_return->jack_nports++;
 
-                    arg_return->jack_port_names[k-i-1]=malloc(strlen(argv[k])+1);
-                    strcpy(arg_return->jack_port_names[k-i-1],argv[k]);
+                    arg_return->jack_port_names[arg_return->jack_nports - 1] = malloc(strlen(arg) + 1);
+                    strcpy(arg_return->jack_port_names[arg_return->jack_nports - 1], arg);
 
-                    arg_return->use_jack=1;
-
-                    k++;
+                    arg = poptGetOptArg(popt_context);
                 }
 
-                i+=arg_return->jack_nports;
-                
-                if (arg_return->jack_nports==0) {
-                    fprintf(stderr,"Argument Usage: --use-jack port1"
-                                   " port2... portn\n");
-                    return FALSE;
+                if (arg_return->jack_nports > 0)
+                {
+                    arg_return->use_jack = 1;
                 }
-#else
-                fprintf(stderr,"recordMyDesktop is not compiled"
-                               " with Jack support!\n");
-                return FALSE;
-#endif
-            }
-            else{
-                fprintf(stderr,"Argument Usage: --use-jack port1"
-                               " port2... portn\n");
-                return FALSE;
-            }
-        }
-        else if (strcmp(argv[i], "--ring-buffer-size") == 0) {
-            if(i+1<argc){
-                float num=atof(argv[i+1]);
-                if(num>0.0)
-                    arg_return->jack_ringbuffer_secs=num;
-                else{
-                    fprintf(stderr,"Argument Usage: --ring-buffer-size"
-                                   " N(floating point number>0.0)\n");
-                    return FALSE;
+                else
+                {
+                    fprintf(stderr,
+                            "Argument Usage: --use-jack port1 port2... portn\n");
+                    success = FALSE;
                 }
-            }
-            else{
-                fprintf(stderr,"Argument Usage: --ring-buffer-size"
-                                " N(floating point number>0.0)\n");
-                return FALSE;
-            }
-            i++;
-        }
-        else if (strcmp(argv[i], "--rescue") == 0) {
-            if(i+1<argc){
-                arg_return->rescue_path = argv[i + 1];
-            }
-            else{
-                fprintf(stderr,"Argument Usage: --rescue path_to_data\n");
-                return FALSE;
-            }
-            i++;
-        }
-        else if(!strcmp(argv[i],"--no-sound"))
-            arg_return->nosound=1;
-        else if(!strcmp(argv[i],"--no-shared")){
-            arg_return->noshared=1;
-        }
-        else if(!strcmp(argv[i],"--full-shots")){
-            arg_return->full_shots=1;
-        }
-        else if(!strcmp(argv[i],"--no-frame")){
-            arg_return->noframe=1;
-        }
-        else if(!strcmp(argv[i],"--follow-mouse")){
-            arg_return->full_shots=1;
-            arg_return->follow_mouse=1;
-        }
-        else if(!strcmp(argv[i],"--no-encode"))
-            arg_return->no_encode=1;
-        else if(!strcmp(argv[i],"--quick-subsampling")){
-            arg_return->no_quick_subsample=0;
-        }
-        else if(!strcmp(argv[i],"--on-the-fly-encoding")){
-            arg_return->encOnTheFly=1;
-        }
-        else if(!strcmp(argv[i],"--overwrite"))
-            arg_return->overwrite=1;
-        else if(!strcmp(argv[i],"--no-wm-check"))
-            arg_return->nowmcheck=1;
-        else if(!strcmp(argv[i],"--compress-cache")){
-            arg_return->zerocompression=0;
-        }
-        else if(!strcmp(argv[i],"--help")||!strcmp(argv[i],"-h")){
-            fprintf(stderr,"%s",usage);
-            exit(0);
-        }
-        else if(!strcmp(argv[i],"--version")){
-            fprintf(stderr,"recordMyDesktop v%s\n\n",VERSION);
-            exit(0);
-        }
-        else if(!strcmp(argv[i],"--print-config")){
-            rmdPrintConfig();
-            exit(0);
-        }
-        else{
-            fprintf(stderr,"\n\tError parsing arguments.\n\t"
-                           "Type --help or -h for usage.\n\n");
-            return FALSE;
+
+                if (RMD_USE_JACK_EXTRA_FLAG == POPT_ARGFLAG_DOC_HIDDEN)
+                {
+                    fprintf(stderr,
+                            "Warning, will ignore --use-jack flags, no libjack support in build.\n");
+                }
+            }                
+
+            default:
+                break;
         }
     }
+
+    // Parsing is complete, perform final adjustments
+    if (no_cursor)
+        arg_return->xfixes_cursor = FALSE;
+
+    if (quick_subsampling)
+        arg_return->no_quick_subsample = FALSE;
+
+    if (compress_cache)
+        arg_return->zerocompression = FALSE;
+
+    if (arg_return->follow_mouse)
+        arg_return->full_shots = TRUE;
+
+    if (!arg_return->filename)
+        arg_return->filename = strdup(poptGetArg(popt_context));
+
+    // Make sure argument ranges are valid
+    success = success && rmdValidateArguments(arg_return);
+
+    // Clean up
+    poptFreeContext(popt_context);
     
-    return TRUE;
+    return success;
+}
+
+static boolean rmdValidateArguments(const ProgArgs *args)
+{
+    static 
+    boolean success = TRUE;
+
+    if (args->x < 0) {
+        fprintf(stdout, "-x must not be less than 0.\n");
+        success = FALSE;
+    }
+    if (args->y < 0) {
+        fprintf(stdout, "-y must not be less than 0.\n");
+        success = FALSE;
+    }
+    if (args->width < 0) {
+        fprintf(stdout, "--width must be larger than 0.\n");
+        success = FALSE;
+    }
+    if (args->height < 0) {
+        fprintf(stdout, "--height must be larger than 0.\n");
+        success = FALSE;
+    }
+    if (args->fps <= 0) {
+        fprintf(stdout, "--fps must be larger than 0.\n");
+        success = FALSE;
+    }
+    if (args->v_quality < 0 || args->v_quality > 63) {
+        fprintf(stdout, "--v_quality must be within the inclusive range [0-63].\n");
+        success = FALSE;
+    }
+    if (args->v_bitrate < 45000 || args->v_quality > 2000000) {
+        fprintf(stdout, "--v_bitrate must be within the inclusive range [45000-2000000].\n");
+        success = FALSE;
+    }
+    if (args->frequency <= 0) {
+        fprintf(stdout, "--frequency must be larger than 0.\n");
+        success = FALSE;
+    }
+    if (args->channels <= 0) {
+        fprintf(stdout, "--channels must be larger than 0.\n");
+        success = FALSE;
+    }
+    if (args->buffsize <= 0) {
+        fprintf(stdout, "--buffer-size must be larger than 0.\n");
+        success = FALSE;
+    }
+    if (args->jack_ringbuffer_secs <= 0) {
+        fprintf(stdout, "--jack-buffer-size must be larger than 0.\n");
+        success = FALSE;
+    }
+
+    return success;
+}
+
+static void rmdPrintAndExit(poptContext con, 
+                            enum poptCallbackReason reason,
+                            const struct poptOption *opt,
+                            const char *arg,
+                            const void *data)
+{
+    if (strcmp(opt->longName, "version") == 0) {
+        fprintf(stderr,"recordMyDesktop v%s\n\n",VERSION);
+    }
+    else if (strcmp(opt->longName, "help") == 0) {
+        poptPrintHelp(con, stdout, 0);
+        fprintf(stdout,
+                "\n"
+                "\tIf no other options are specified, filename can be given without the -o switch.\n"
+                "\n"
+                "\n");
+    }
+    else if (strcmp(opt->longName, "print-config") == 0) {
+        fprintf(stdout,
+                "\n"
+                "recordMyDesktop was compiled with the following options:\n"
+                "\n"
+                "Jack:\t\t\t" RMD_LIBJACK_STATUS "\n"
+                "Default Audio Backend:\t" RMD_LIBASOUND_STATUS "\n"
+                "\n"
+                "\n");
+    }
+
+    exit(0);
 }

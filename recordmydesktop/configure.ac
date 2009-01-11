@@ -73,6 +73,7 @@ AC_CHECK_TYPES([u_int64_t],,)
 
 AC_CHECK_LIB([m],[isnan],,)
 AC_CHECK_LIB([z],[deflate],,AC_MSG_ERROR([Can't find zlib]))
+AC_CHECK_LIB([popt], poptSetOtherOptionHelp,,AC_MSG_ERROR([Can't find libpopt]))
 AC_CHECK_LIB([ICE],[IceOpenConnection],,AC_MSG_ERROR([Can't find libICE]),)
 AC_CHECK_LIB([SM],[SmcOpenConnection],,AC_MSG_ERROR([Can't find libSM]),)
 AC_CHECK_LIB([X11],[XOpenDisplay],,AC_MSG_ERROR([Can't find libX11]),
