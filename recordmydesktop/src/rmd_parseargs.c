@@ -383,22 +383,47 @@ boolean rmdParseArgs(int argc, char **argv, ProgArgs *arg_return) {
         }
     }
 
-    // Parsing is complete, perform final adjustments
-    if (no_cursor)
-        arg_return->xfixes_cursor = FALSE;
+    if (arg_id == -1) {
+        // Parsing is complete, perform final adjustments
+        if (no_cursor)
+            arg_return->xfixes_cursor = FALSE;
 
-    if (quick_subsampling)
-        arg_return->no_quick_subsample = FALSE;
+        if (quick_subsampling)
+            arg_return->no_quick_subsample = FALSE;
 
-    if (compress_cache)
-        arg_return->zerocompression = FALSE;
+        if (compress_cache)
+            arg_return->zerocompression = FALSE;
 
-    if (arg_return->follow_mouse)
-        arg_return->full_shots = TRUE;
+        if (arg_return->follow_mouse)
+            arg_return->full_shots = TRUE;
 
-    if (!arg_return->filename)
-        arg_return->filename = strdup(poptGetArg(popt_context));
+        if (!arg_return->filename)
+            arg_return->filename = strdup(poptGetArg(popt_context));
+    }
+    else {
+        // Parsing error, say what went wrong
+        const char *str = poptBadOption(popt_context, 0);
 
+        success = FALSE;
+
+        fprintf(stderr,
+                "Error when parsing `%s': ", str);
+
+        switch (arg_id) {
+            case POPT_ERROR_NOARG:
+                fprintf(stderr, "Missing argument\n");
+                break;
+                        
+            case POPT_ERROR_BADNUMBER:
+                fprintf(stderr, "Bad number\n");
+                break;
+                        
+            default:
+                fprintf(stderr, "libpopt error: %d\n", arg_id);
+                break;
+        }
+    }
+    
     // Make sure argument ranges are valid
     success = success && rmdValidateArguments(arg_return);
 
