@@ -363,19 +363,16 @@ boolean rmdParseArgs(int argc, char **argv, ProgArgs *arg_return) {
                     arg = poptGetOptArg(popt_context);
                 }
 
-                if (arg_return->jack_nports > 0)
-                {
+                if (arg_return->jack_nports > 0) {
                     arg_return->use_jack = 1;
                 }
-                else
-                {
+                else {
                     fprintf(stderr,
                             "Argument Usage: --use-jack port1 port2... portn\n");
                     success = FALSE;
                 }
 
-                if (RMD_USE_JACK_EXTRA_FLAG == POPT_ARGFLAG_DOC_HIDDEN)
-                {
+                if (RMD_USE_JACK_EXTRA_FLAG == POPT_ARGFLAG_DOC_HIDDEN) {
                     fprintf(stderr,
                             "Warning, will ignore --use-jack flags, no libjack support in build.\n");
                 }
