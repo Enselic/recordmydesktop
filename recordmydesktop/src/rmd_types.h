@@ -116,7 +116,7 @@ typedef struct _ProgArgs{
     Window windowid;    //window to record(default root)
     char *display;      //display to connect(default :0)
     int x,y;            //x,y offset(default 0,0)
-    unsigned int width,height;   //defaults to window width and height
+    int width,height;   //defaults to window width and height
     char *filename;     //output file(default out.[ogg|*])
     int cursor_color;   //black or white=>1 or 0
     int have_dummy_cursor;  //disable/enable drawing of the dummy cursor
