@@ -434,7 +434,6 @@ boolean rmdParseArgs(int argc, char **argv, ProgArgs *arg_return) {
 
 static boolean rmdValidateArguments(const ProgArgs *args)
 {
-    static 
     boolean success = TRUE;
 
     if (args->x < 0) {
