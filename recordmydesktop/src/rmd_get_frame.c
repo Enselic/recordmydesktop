@@ -319,13 +319,13 @@ static void rmdBlocksFromList (RectArea   **root,
                                unsigned int blocknum_y) {
 
   RectArea    *temp;
-  unsigned int i,
-               j,
-               blockno,
-               row_start,
-               row_end,
-               column_start,
-               column_end;
+  int i,
+      j,
+      blockno,
+      row_start,
+      row_end,
+      column_start,
+      column_end;
 
   temp = *root;
 
@@ -335,10 +335,10 @@ static void rmdBlocksFromList (RectArea   **root,
 
   while (temp != NULL) {
 
-    column_start = (temp->rect.x - x_offset) / Y_UNIT_WIDTH;
-    column_end   = (temp->rect.x + (temp->rect.width - 1) - x_offset) / Y_UNIT_WIDTH;
-    row_start    = (temp->rect.y - y_offset) / Y_UNIT_WIDTH;
-    row_end      = (temp->rect.y + (temp->rect.height - 1) - y_offset) / Y_UNIT_WIDTH;
+    column_start = ((int)(temp->rect.x - x_offset)) / Y_UNIT_WIDTH;
+    column_end   = ((int)(temp->rect.x + (temp->rect.width - 1) - x_offset)) / Y_UNIT_WIDTH;
+    row_start    = ((int)(temp->rect.y - y_offset)) / Y_UNIT_WIDTH;
+    row_end      = ((int)(temp->rect.y + (temp->rect.height - 1) - y_offset)) / Y_UNIT_WIDTH;
 
     for (i = row_start; i < row_end + 1; i++) {
       for (j = column_start; j < column_end + 1; j++) {
