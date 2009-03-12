@@ -34,6 +34,10 @@
 #include <pthread.h>
 #include <string.h>
 #include <errno.h>
+#include <sys/types.h>
+#include <sys/uio.h>
+#include <unistd.h>
+#include <stdlib.h>
 
 
 void *rmdCaptureSound(ProgData *pdata){

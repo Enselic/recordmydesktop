@@ -37,6 +37,7 @@
 #include <pthread.h>
 
 #include <string.h>
+#include <stdlib.h>
 
 
 int rmdRescue(const char *path){

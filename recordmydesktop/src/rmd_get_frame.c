@@ -43,6 +43,7 @@
 #include <pthread.h>
 #include <sys/shm.h>
 #include <errno.h>
+#include <stdlib.h>
 
 
 #define AVG_4_PIXELS(data_array,width_img,k_tm,i_tm,offset)\

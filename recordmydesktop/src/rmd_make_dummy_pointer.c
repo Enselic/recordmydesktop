@@ -31,7 +31,7 @@
 #include "rmd_types.h"
 
 #include <X11/Xlib.h>
-
+#include <stdlib.h>
 
 unsigned char *rmdMakeDummyPointer(Display *display,
                                    DisplaySpecs *specs,
