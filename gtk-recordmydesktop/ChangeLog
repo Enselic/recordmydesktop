@@ -1,3 +1,7 @@
+/*VERSION 0.3.9 unreleased*/
+* Fix selection of window (including frame) on compiz
+* ...
+
 /*VERSION 0.3.8*/
 * nl.po added Dutch translation by Jos Poortvliet
 * Applied patch by freedo, to Replace GtkFileSelection with

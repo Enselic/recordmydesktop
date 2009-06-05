@@ -39,7 +39,9 @@ from rmdTrayIcon import *
 import gtk.gdk
 import gobject
 import gc
+import sys
 import re
+from subprocess import Popen,PIPE
 import rmdPrefsWidget as pW
 import rmdSelectThumb as sT
 from rmdStrings import *
@@ -217,14 +219,39 @@ class simpleWidget(object):
         self.__fileSelQuit__()
 
     def __select_window__(self,button):
-        xwininfo_com=['xwininfo','-frame']
-        if self.values[21]==1:
-            xwininfo_com=['xwininfo']
-        (stdin,stdout,stderr)=os.popen3(xwininfo_com,'t')
-        wid=stdout.readlines()
-        stdin.close()
-        stdout.close()
-        stderr.close()
+        # check user has not disabled capture of window decoration
+        if self.values[21]!=1:
+            # else work out the size including decoration (also taking into account compiz)
+            p = Popen(['xwininfo','-frame'],stdout=PIPE)
+            pattern = re.compile('^xwininfo: Window id: (0x[0-9a-fA-F]+)')
+
+            while True:
+               o = p.stdout.readline()
+               if o == '' and p.poll() != None: break
+               match = pattern.search(o)
+               if match:
+                   fid = match.group(1)
+                   break
+
+            p = Popen(['xprop','-id',fid,'_NET_FRAME_WINDOW'],stdout=PIPE)
+            pattern = re.compile('^_NET_FRAME_WINDOW\(WINDOW\): window id # (0x[0-9a-fA-F]+)')
+
+            while True:
+               o = p.stdout.readline()
+               if o == '' and p.poll() != None: break
+               match = pattern.search(o)
+               if match:
+                   wid = match.group(1)
+                   break
+               else:
+                   print pattern
+                   print o
+
+        if wid: xwininfo_com = ['xwininfo','-id',wid]
+        else: xwininfo_com = ['xwininfo']
+        p = Popen(xwininfo_com,stdout=PIPE)
+        wid=p.stdout.readlines()
+
         x=y=width=height=None
         for i in wid:
             if i.lstrip().startswith('Absolute upper-left X:'):
