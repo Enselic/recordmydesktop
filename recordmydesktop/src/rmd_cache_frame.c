@@ -271,7 +271,7 @@ void *rmdCacheImageBuffer(ProgData *pdata){
       unsigned int bytes_per_pixel  = pdata->specs.depth >= 24 ? 4 : 2;
       unsigned int pixels_per_frame = pdata->brwin.rrect.width * pdata->brwin.rrect.height;
       
-      total_received_bytes = ((unsigned int)frameno) * bytes_per_pixel * pixels_per_frame;
+      total_received_bytes = ((unsigned long long int)frameno) * bytes_per_pixel * pixels_per_frame;
     }
 
     if(total_received_bytes){
