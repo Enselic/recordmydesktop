@@ -16,18 +16,18 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: sudo apt install build-dependencies
-        run: sudo apt install \
-          autotools-dev \
-          zlib1g-dev \
-          libice-dev \
-          libsm-dev \
-          libxext-dev \
-          libxdamage-dev \
-          libogg-dev \
-          libvorbis-dev \
-          libtheora-dev \
-          libjack-dev \
-          libasound2-dev \
+        run: sudo apt install
+          autotools-dev
+          zlib1g-dev
+          libice-dev
+          libsm-dev
+          libxext-dev
+          libxdamage-dev
+          libogg-dev
+          libvorbis-dev
+          libtheora-dev
+          libjack-dev
+          libasound2-dev
           libpopt-dev
 
       - name: sh autogen.sh
