@@ -1,0 +1,266 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>The official recordMyDesktop web page</title>
+
+    <style>
+        body {
+            margin: 1em;
+        }
+
+        #menu {
+            font-family: sans-serif;
+            background-color: #abc669;
+            border-radius: 25px;
+        }
+
+        #menu ul {
+            padding: 10px;
+            display: block;
+        }
+
+        #menu li {
+            display: inline;
+            background-color: #abc669;
+            padding: 0.25em;
+        }
+
+        #menu li a {
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        #menu li:hover {
+            background-color: #56924b;
+        }
+
+        #menu a:link {
+            color: white;
+        }
+
+        #menu a:visited {
+            color: white;
+        }
+
+        #menu a:hover {
+            color: white;
+        }
+
+        #menu a:active {
+            color: white;
+        }
+
+        section {
+            background-color: #fafffa;
+            clear: both;
+        }
+
+        section p {
+            max-width: 40em;
+        }
+
+        section h3 {
+            background-color: #6eba60;
+        }
+
+        #news h4 {
+            margin: 0;
+            font-size: 130%;
+        }
+
+        #news h5 {
+            margin: 0;
+        }
+
+    </style>
+
+</head>
+
+<body>
+    <div id="logo">
+        <img src="./web/images/recordMyDesktop-logo.png" />
+    </div>
+
+    <div id="menu">
+        <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#news">News</a></li>
+            <li><a href="#documentation">Documentation</a></li>
+            <li><a href="#downloads">Downloads</li></a>
+            <li><a href="#development">Development</li></a>
+            <li><a href="#contact">Contact</li></a>
+        </ul>
+        <p></p>
+    </div>
+
+    <section id="about">
+        <h3>About recordMyDesktop</h3>
+
+        <p>
+            <b>recordMyDesktop</b> is a <b>desktop session recorder</b> for
+            <b>GNU / linux</b> that attemps to be easy to use, yet also
+            effective at it's primary task.
+        </p>
+
+        <p>
+            As such, the program is separated in two parts; a simple command
+            line tool that performs the basic tasks of <b>capturing and
+                encoding</b> and an interface that exposes the program functionality
+            in a usable way.
+        </p>
+
+        <p>
+            The commandline tool (which essentially <b>is</b> recordMyDesktop),
+            is written in <b>C</b>, while there are two frontends, written in
+            python with <b>pyGtk</b> (gtk-recordMyDesktop) and <b>pyQt4</b>
+            (qt-recordMyDesktop).
+        </p>
+
+        <p>
+            recordMyDesktop <b>offers also the ability</b> to <b>record
+                audio</b> through ALSA, OSS or the <a href="http://jackaudio.org/"><b>JACK audio server</b></a>
+        </p>
+
+        <p> Also, <b>recordMyDesktop produces files using only open formats.</b>
+            <b>These are <a href="http://theora.org">theora for video</a> and <a
+            href="http://www.vorbis.com">vorbis for audio</a>,</b> <b>using the
+            <a href="http://xiph.org/ogg/">ogg container</a>.</b> (To learn more
+            about free formats visit  <a href="http://xiph.org">Xiph.org</a>,
+            the foundation responsible for the aformentioned formats).
+        </p>
+    </div>
+
+    <section id="news">
+        <h3>recordMyDesktop News</h3>
+
+        <h4>Project moved to GitHub</h4>
+        <h5>(Tue, 29 Dec 2020 21:19:40 -0000)</h5>
+        <p>After being an official but inactive maintainer for a decade, I
+        decided to officially migrate the project from SourceForge to GitHub,
+        since I recently was reminded that the software is still actively being
+        used. I believe I owe it to the original author iovar to keep the
+        project alive, since I promised him to take over formal maintainership a
+        long time ago. I will gather a handful of patches, then make a new
+        official release. Here is the GitHub project page: <a
+        href="https://github.com/Enselic/recordmydesktop">https://github.com/Enselic/recordmydesktop</a>.
+        </p>
+
+        <h4>Update on project state</h4>
+        <h5>(Sun, 17 May 2009 08:03:58 -0000)</h5>
+        <p>As you all can see there is not an
+        awful lot of activity here, basically what has happened since I took
+        over maintainership is that I have commited one or two contributed
+        patches.</p> <p>Since I am currently busy working on GIMP I expect
+        project management to remain in status quo for the foreseeable
+        feature.</p> <p>If you have patches for rMD, send them to the mail you
+        find here:<br /> <a href="http://www.chromecode.com/contact/"
+        rel="nofollow">http://www.chromecode.com/contact/</a></p> <p>/
+        Martin</p>
+
+        <h4>Change of guard .</h4>
+        <h5>(Wed, 14 Jan 2009 23:32:49 -0000)</h5>
+        <p>This message is addressed at
+        recordMyDesktop's users.</p> <p>I believe it is time for me to step down
+        completely<br /> from the project and let someone else take it to new<br
+        /> directions.<br /> Looking at some commit stats, it became clear that
+        I<br /> haven't made any real contributions to the project since<br />
+        December, 2007. After that, all I did was mostly push<br /> upstream any
+        translations or patches that I got.<br /> But I haven't had a vision for
+        the application for a very<br /> long time.</p> <p>It is with great joy,
+        though, that I announce<br /> the new maintainer of recordMyDesktop :<br
+        /> Martin Nordholts !</p> <p>Martin has approached the project a long
+        time ago<br /> and has recently brought new life to the code with his<br
+        /> deep re-factoring and tireless efforts to revitalise the<br /> code
+        base. His level of success at improving the quality<br /> of the project
+        has been astonishing and I was really happy<br /> to see that accepted
+        my invitation to be the new admin and<br /> maintainer for the
+        project.<br /> Whatever direction he might set for it from now on, it
+        is<br /> thanks to him alone, that this project is far from dead
+        yet.</p> <p>Anyway, I've learned a lot during the last (almost 3!)<br />
+        years and more importantly, I've met many interesting people.<br /> The
+        whole experience was really fun.</p> <p>I wish the project and its new
+        maintainer best of luck !</p> <p>Cheers,<br /> John Varouhakis<br />
+        (former maintainer of recordMyDesktop ;-) )</p>
+
+        <h4>recordMyDesktop 0.3.8.1</h4>
+        <h5>(Sat, 13 Dec 2008 18:07:01 -0000)</h5>
+        <p>As reported by users, v0.3.8 had a bug (some headers were missing),
+        that prevented<br /> recordMyDesktop to compile in some setups (RHEL4,
+        Slackware 12.1 and possibly others).</p> <p>Thanks to the thorough
+        feedback received, this problem should now be resolved, in v0.3.8.1.</p>
+
+        <h4>[qt/gtk]-recordMyDesktop 0.3.8</h4>
+        <h5>(Sun, 23 Nov 2008 16:00:51 -0000)</h5>
+        <p>recordMyDesktop 0.3.8 is mostly a bugfixing release, driven by the
+        contributions of Martin<br /> Nordholts, who is now a cotributing member
+        with an SVN account . Yay!</p> <p>Here are the ChangeLogs:</p>
+        <p>recordMyDesktop:<br /> * Extensive refactoring and cleanups of the
+        code from Martin Nordholts.<br /> * Cursor-flickering bug has been
+        fixed, by Martin.<br /> * Improved consistency on the format of the
+        commandline options <br /> and updated the manpage to reflect the
+        changes (also by Martin ;) ).<br /> * Applied patch by Luca Bonavita,
+        that corrects the rgb<br /> to yuv algorithm and provides near perfect
+        colorspace conversion<br /> (fixes bug #1961505)<br /> * Compositing
+        Window managers are now recognised through the _NET_WM_CM_Sn <br /> hint
+        instead of a simplistic namelist (which means that dual-mode wm's like
+        <br /> kwin or yet uknown ones will be handled correctly).<br /> *
+        Changed the way Jack support is offered, from dlopening at runtime to
+        normal<br /> linking at compilation.<br /> * other minor changes and
+        bugfixes.</p> <p>qt-recordMyDesktop:<br /> * Changed
+        qt-recordMyDesktop's license to GPLV3 .<br /> * nl.po added Dutch
+        translation by Jos Poortvliet<br /> * Oxygen icons are now used for
+        record/pause/stop actions.<br /> * Synced to recordMyDesktop 0.3.8 (new
+        format of options).</p> <p>gtk-recordMyDesktop:<br /> * nl.po added
+        Dutch translation by Jos Poortvliet<br /> * Applied patch by freedo, to
+        Replace GtkFileSelection with<br /> GtkFileChooserDialog.<br /> * Synced
+        to recordMyDesktop 0.3.8 (new format of options).</p>
+
+        <h4>For even older news ...</h4>
+        <h5>(Tue, 29 Dec 2020 21:16:58 -0000)</h5>
+        <p>... visit the old News archive over at SourceForge: <a
+        href="https://sourceforge.net/p/recordmydesktop/news/">https://sourceforge.net/p/recordmydesktop/news/</a>.</p>
+
+    </section>
+
+    <section id="documentation">
+        <h3>Documentation</h3>
+
+        <p>The documentation has not yet been ported to GitHub, so please refer
+        to the old <a
+        href="http://recordmydesktop.sourceforge.net/documentation.php">Documentation
+        on SourceForge</a> for now.</p>
+    </section>
+
+    <section id="downloads">
+        <h3>Downloads</h3>
+
+        <p>For source code, visit the official GitHub project: <a
+        href="https://github.com/Enselic/recordmydesktop">https://github.com/Enselic/recordmydesktop</a>.</p>
+
+        <p>If you want binaries, your distro package manager probably already
+        have packages available for installation.</p>
+    </section>
+
+    <section id="development">
+        <h3>Development</h3>
+
+        <p>To help improve recordMyDesktop, visit the official GitHub project:
+        <a
+        href="https://github.com/Enselic/recordmydesktop">https://github.com/Enselic/recordmydesktop</a>.</p>
+    </section>
+
+    <section id="contact">
+        <h3>Contact</h3>
+
+        <p>Visit the official GitHub project to get in touch:
+        <a
+        href="https://github.com/Enselic/recordmydesktop">https://github.com/Enselic/recordmydesktop</a>.</p>
+    </section>
+
+</body>
+
+</html>
