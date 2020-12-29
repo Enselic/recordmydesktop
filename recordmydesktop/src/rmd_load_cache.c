@@ -290,7 +290,7 @@ void *rmdLoadCache(ProgData *pdata){
                                          nth_cache,
                                          &ifp,
                                          &ucfp)){
-                    raise(SIGINT);
+                    pdata->running = FALSE; // no more files
                 }
                 else{
                     fprintf(stderr,"\t[Cache File %d]",nth_cache);
