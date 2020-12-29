@@ -53,6 +53,10 @@ int rmdRescue(const char *path){
     EncData enc_data;
     CacheData cache_data;
 
+    memset(&pdata,0,sizeof(pdata));
+    memset(&enc_data,0,sizeof(enc_data));
+    memset(&cache_data,0,sizeof(cache_data));
+
     rmdSetupDefaultArgs(&pdata.args);
 
     pdata.enc_data=&enc_data;
