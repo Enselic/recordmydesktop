@@ -1,0 +1,16 @@
+*.o
+config.*
+configure
+Makefile
+Makefile.in
+aclocal.m4
+autom4te.cache
+compile
+install-sh
+ltmain.sh
+missing
+test-driver
+stamp-h1
+depcomp
+.deps
+src/recordmydesktop
