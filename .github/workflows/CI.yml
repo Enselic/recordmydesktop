@@ -17,21 +17,18 @@ jobs:
 
       - name: sudo apt install build-dependencies
         run: sudo apt install \
-          autoconf \
-          automake \
-          libtool \
-          libz-dev \
-          libpopt-dev \
-          libpopt-dev \
+          autotools-dev \
+          zlib1g-dev \
           libice-dev \
           libsm-dev \
-          libx11-dev \
           libxext-dev \
-          libxfixes-dev \
           libxdamage-dev \
+          libogg-dev \
           libvorbis-dev \
           libtheora-dev \
-          libjack-dev
+          libjack-dev \
+          libasound2-dev \
+          libpopt-dev
 
       - name: sh autogen.sh
         run: cd recordmydesktop ; sh autogen.sh
