@@ -2,7 +2,7 @@ NOTICE:
 qt-recordMyDesktop is ONLY A FRONTEND to recordMyDesktop. You have to obtain and
 install that first.
 If you don't have it look here:
-http://recordmydesktop.sourceforge.net
+https://github.com/Enselic/recordmydesktop
 
 DEPENDENCIES:
 

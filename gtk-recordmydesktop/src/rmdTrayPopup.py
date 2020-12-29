@@ -77,7 +77,7 @@ class TrayPopupMenu:
         aboutdialog.set_comments(TpmStr['ProgDesc'])
         aboutdialog.set_copyright(TpmStr['Copyright'])
         aboutdialog.set_authors(['recordMyDesktop and gtk-recordMyDesktop\nis written by John Varouhakis','Portions of gtk-recordMyDesktop\nare taken from Istanbul\n(http://live.gnome.org/Istanbul)\nwritten by\nZaheer Abbas Merali and John N. Laliberte'])
-        aboutdialog.set_website('http://recordmydesktop.sourceforge.net')
+        aboutdialog.set_website('https://github.com/Enselic/recordmydesktop')
         aboutdialog.set_license('GPL-2')
         aboutdialog.set_translator_credits(TpmStr['TranslatorCredits'])
         aboutdialog.connect('response', lambda widget, response: widget.destroy())
