@@ -150,7 +150,13 @@ int rmdStartJackClient(JackData *jdata){
     snprintf( pidbuf, 8, "%d", pid );
     strcat(rmd_client_name,pidbuf);
 
-    if ((jdata->client=(*jack_client_new)(rmd_client_name))==0){
+    jack_options_t options = JackUseExactName;
+
+    if (getenv ("JACK_START_SERVER") == NULL) {
+        options |= JackNoStartServer;
+    }
+
+    if ((jdata->client=(*jack_client_open)(rmd_client_name, options, NULL))==0){
         fprintf(stderr,"Could not create new client!\n"
                        "Make sure that Jack server is running!\n");
         return 15;
