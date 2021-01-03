@@ -98,9 +98,9 @@ static int rmdSetupPorts(JackData *jdata) {
 
     for(i=0;i<jdata->nports;i++){
         char name[64];//recordMyDesktop:input_n<64 is enough for full name
-        char num[8];
+        char num[11];
         strcpy(name,"input_");
-        snprintf( num, 8, "%d", i+1 );
+        snprintf( num, 11, "%d", i+1 );
         strcat(name,num);
         if((jdata->ports[i]=jack_port_register(jdata->client,
                                                  name,

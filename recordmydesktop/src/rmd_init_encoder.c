@@ -56,12 +56,10 @@ static void m_add_fishead_packet(ogg_stream_state *m_ogg_state) {
 static int rmdIncrementalNaming(char **name) {
     struct stat buff;
     char *base_name__;
-    int i=0,
-        fname_length=strlen(*name)-4;
+    unsigned short i=0;
+    int fname_length=strlen(*name)-4;
 
-    base_name__=malloc(fname_length+1);
-    strncpy(base_name__,*name,fname_length);
-    base_name__[fname_length]='\0';
+    base_name__= strndup(*name,fname_length);
 
 
     //this will go on an endless loop if you have 65536?
