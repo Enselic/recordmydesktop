@@ -191,7 +191,7 @@ boolean rmdParseArgs(int argc, char **argv, ProgArgs *arg_return) {
           "SOUND_DEVICE" },
 
         { "use-jack", '\0',
-          POPT_ARG_STRING | RMD_USE_JACK_EXTRA_FLAG, &arg_return->x, RMD_ARG_USE_JACK,
+          POPT_ARG_STRING | RMD_USE_JACK_EXTRA_FLAG, NULL, RMD_ARG_USE_JACK,
           "Record audio from the specified list of space-separated jack ports.",
           "port1 port2... portn" },
 
