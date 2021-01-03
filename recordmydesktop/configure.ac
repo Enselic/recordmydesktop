@@ -3,6 +3,7 @@
 
 AC_PREREQ(2.59)
 AC_INIT( [recordmydesktop], [0.3.8.1], )
+AM_SILENT_RULES([yes])
 AM_INIT_AUTOMAKE
 
 AC_CONFIG_SRCDIR([src/rmd.c])
