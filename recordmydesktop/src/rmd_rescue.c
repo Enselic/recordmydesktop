@@ -49,9 +49,9 @@ int rmdRescue(const char *path){
     unsigned short  width,
                     height;
 
-    ProgData pdata;
-    EncData enc_data;
-    CacheData cache_data;
+    ProgData pdata={0};
+    EncData enc_data={0};
+    CacheData cache_data={0};
 
     rmdSetupDefaultArgs(&pdata.args);
 
