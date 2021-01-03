@@ -173,7 +173,7 @@ void *rmdCacheImageBuffer(ProgData *pdata){
                 gzsetparams (fp,0,Z_FILTERED);
         }
 
-        strncpy(fheader.frame_prefix,"FRAM",4);
+        memcpy(fheader.frame_prefix,"FRAM",4);
         fheader.frameno=++frameno;
         fheader.current_total = pdata->frames_total;
 
