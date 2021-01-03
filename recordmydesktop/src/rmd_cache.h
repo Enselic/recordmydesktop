@@ -49,7 +49,7 @@
 *
 * \returns 0 on Success 1 on Failure
 */
-int rmdSwapCacheFilesWrite(char *name,int n,gzFile **fp,FILE **ucfp);
+int rmdSwapCacheFilesWrite(char *name,int n,gzFile *fp,FILE **ucfp);
 
 /**
 * Change file pointer to a new file while reading
@@ -65,7 +65,7 @@ int rmdSwapCacheFilesWrite(char *name,int n,gzFile **fp,FILE **ucfp);
 *
 * \returns 0 on Success 1 on Failure
 */
-int rmdSwapCacheFilesRead(char *name,int n,gzFile **fp,FILE **ucfp);
+int rmdSwapCacheFilesRead(char *name,int n,gzFile *fp,FILE **ucfp);
 
 /**
 * Delete all cache files

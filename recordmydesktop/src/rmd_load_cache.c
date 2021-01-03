@@ -82,7 +82,7 @@ static void rmdLoadBlock(unsigned char *dest,
 }
 
 //returns number of bytes
-static int rmdReadZF(void * buffer, size_t size, size_t nmemb, FILE *ucfp, gzFile *ifp) {
+static int rmdReadZF(void * buffer, size_t size, size_t nmemb, FILE *ucfp, gzFile ifp) {
     if((ifp!=NULL && ucfp!=NULL)||
        (ifp==NULL && ucfp==NULL))
         return -1;
@@ -93,7 +93,7 @@ static int rmdReadZF(void * buffer, size_t size, size_t nmemb, FILE *ucfp, gzFil
         return gzread(ifp,buffer,size*nmemb);
 }
 
-static int rmdReadFrame(CachedFrame *frame, FILE *ucfp, gzFile *ifp) {
+static int rmdReadFrame(CachedFrame *frame, FILE *ucfp, gzFile ifp) {
     int index_entry_size=sizeof(u_int32_t);
     if(frame->header->Ynum>0){
         if(rmdReadZF(frame->YBlocks,
@@ -155,7 +155,7 @@ static int rmdReadFrame(CachedFrame *frame, FILE *ucfp, gzFile *ifp) {
 void *rmdLoadCache(ProgData *pdata){
 
     yuv_buffer *yuv=&pdata->enc_data->yuv;
-    gzFile *ifp=NULL;
+    gzFile ifp=NULL;
     FILE *ucfp=NULL;
     FILE *afp=pdata->cache_data->afp;
     FrameHeader fheader;

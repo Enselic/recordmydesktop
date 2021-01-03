@@ -202,7 +202,7 @@ typedef struct _CacheData{
             *imgdata,   //workdir+projname+img.out.gz
             *audiodata; //workdir+projname+audio.pcm
 
-    gzFile  *ifp;       //image data file pointer
+    gzFile  ifp;       //image data file pointer
     FILE    *uncifp;    //uncompressed image data file pointer
 
     FILE    *afp;       //audio data file pointer
