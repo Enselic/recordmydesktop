@@ -37,7 +37,7 @@ jobs:
         run: cd recordmydesktop ; ./configure --prefix /tmp/recordmydesktop-prefix
 
       - name: make
-        run: cd recordmydesktop ; make
+        run: cd recordmydesktop ; AM_CFLAGS=-Werror make
 
       - name: make install
         run: cd recordmydesktop ; make install
