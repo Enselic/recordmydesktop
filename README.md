@@ -25,10 +25,7 @@ First do
 ## GTK frontend
 ```
 % cd gtk-recordmydesktop
-% sudo apt install autotools-dev automake gettext libglib2.0-dev
-```
-you also need to install pygtk >=2.4 which can be tricky since it is ancient. (Help with migrating to GTK 4 would be greatly appreciated.) After that, you are maybe able to do:
-```
+% sudo apt install autotools-dev gettext python3-gi python3-gi-cairo gir1.2-gtk-3.0
 % sh autogen.sh
 % ./configure --prefix=/tmp/foo
 % make
@@ -38,7 +35,7 @@ you also need to install pygtk >=2.4 which can be tricky since it is ancient. (H
 ## Qt frontend:
 ```
 % cd qt-recordmydesktop
-% sudo apt install autotools-dev automake gettext libglib2.0-dev
+% sudo apt install autotools-dev gettext
 ```
 you also need to install libQt4 >=4.2 which can be tricky since it is ancient. (Help with migrating to Qt 5 would be greatly appreciated.) After that, you are maybe able to do:
 ```
