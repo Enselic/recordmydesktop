@@ -63,19 +63,19 @@ class simpleWidget(object):
 
 
         self.NBox.pack_start(self.NWBox,expand=False,fill=False,padding=0)
-        self.NBox.pack_start(self.NEBox,expand=True,fill=True)
-        self.NEBox.pack_start(self.NEVQBox,expand=False,fill=False)
-        self.NEBox.pack_start(self.NESQBox,expand=False,fill=False)
-        self.NEBox.pack_start(self.NETABox,expand=False,fill=False)
+        self.NBox.pack_start(self.NEBox,expand=True,fill=True,padding=0)
+        self.NEBox.pack_start(self.NEVQBox,expand=False,fill=False,padding=0)
+        self.NEBox.pack_start(self.NESQBox,expand=False,fill=False,padding=0)
+        self.NEBox.pack_start(self.NETABox,expand=False,fill=False,padding=0)
 
         self.SBox=Gtk.HBox(homogeneous=True, spacing=0)
         self.SEBox=Gtk.HBox(homogeneous=False, spacing=10)
         self.SWBox=Gtk.HBox(homogeneous=False, spacing=10)
-        self.SBox.pack_start(self.SWBox,expand=True,fill=True)
-        self.SBox.pack_start(self.SEBox,expand=True,fill=True)
+        self.SBox.pack_start(self.SWBox,expand=True,fill=True,padding=0)
+        self.SBox.pack_start(self.SEBox,expand=True,fill=True,padding=0)
 
-        self.labelbox.pack_start(self.NBox,expand=False,fill=False)
-        self.labelbox.pack_end(self.SBox,expand=False,fill=False)
+        self.labelbox.pack_start(self.NBox,expand=False,fill=False,padding=0)
+        self.labelbox.pack_end(self.SBox,expand=False,fill=False,padding=0)
 
         self.wroot = Gdk.get_default_root_window()
         (self.wwidth, self.wheight) = self.wroot.get_size()
@@ -105,13 +105,13 @@ class simpleWidget(object):
 
         self.advanced_button=Gtk.Button(smplButtonStrings[0])
         self.tipLabel=Gtk.Label(label=smplTipLabelStrings[0])
-        self.NEVQBox.pack_start(self.v_label,expand=False,fill=False)
-        self.NEVQBox.pack_start(self.v_quality,expand=True,fill=True)
-        self.NESQBox.pack_start(self.s_button,expand=False,fill=False)
-        self.NESQBox.pack_start(self.s_label,expand=False,fill=False)
-        self.NESQBox.pack_start(self.s_quality,expand=True,fill=True)
-        self.NETABox.pack_start(self.advanced_button,expand=False,fill=False)
-        self.NETABox.pack_start(self.tipLabel,expand=False,fill=False)
+        self.NEVQBox.pack_start(self.v_label,expand=False,fill=False,padding=0)
+        self.NEVQBox.pack_start(self.v_quality,expand=True,fill=True,padding=0)
+        self.NESQBox.pack_start(self.s_button,expand=False,fill=False,padding=0)
+        self.NESQBox.pack_start(self.s_label,expand=False,fill=False,padding=0)
+        self.NESQBox.pack_start(self.s_quality,expand=True,fill=True,padding=0)
+        self.NETABox.pack_start(self.advanced_button,expand=False,fill=False,padding=0)
+        self.NETABox.pack_start(self.tipLabel,expand=False,fill=False,padding=0)
 
         self.win_button=Gtk.Button(smplButtonStrings[1])
         self.start_button=Gtk.Button(None,Gtk.STOCK_MEDIA_RECORD)
