@@ -104,5 +104,5 @@ class TrayPopupMenu:
 
     def show(self):
         self.popupmenu.show_all()
-	    self.popupmenu.popup(None, None, None, 3, gtk.get_current_event_time())
+        self.popupmenu.popup(None, None, None, 3, gtk.get_current_event_time())
 

@@ -1,5 +1,7 @@
+__pycache__
 .deps
 .vscode
+*.bak
 *.o
 aclocal.m4
 autom4te.cache
