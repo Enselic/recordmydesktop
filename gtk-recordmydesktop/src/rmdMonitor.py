@@ -7,7 +7,6 @@ from . import rmdConfig
 _ = gettext.gettext
 gettext.textdomain('gtk-recordMyDesktop')
 gettext.bindtextdomain('gtk-recordMyDesktop',rmdConfig.locale_install_dir)
-import popen2
 import os,fcntl,signal
 from .rmdStrings import *
 

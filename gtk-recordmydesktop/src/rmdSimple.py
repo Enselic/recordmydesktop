@@ -36,7 +36,7 @@ gettext.bindtextdomain('gtk-recordMyDesktop',rmdConfig.locale_install_dir)
 import os
 from .rmdPrefsWidget import *
 from .rmdTrayIcon import *
-import Gtk.gdk
+from gi.repository import Gdk
 from gi.repository import GObject
 import gc
 import sys
@@ -62,7 +62,7 @@ class simpleWidget(object):
 
 
 
-        self.NBox.pack_start(self.NWBox,expand=False,fill=False)
+        self.NBox.pack_start(self.NWBox,expand=False,fill=False,padding=0)
         self.NBox.pack_start(self.NEBox,expand=True,fill=True)
         self.NEBox.pack_start(self.NEVQBox,expand=False,fill=False)
         self.NEBox.pack_start(self.NESQBox,expand=False,fill=False)

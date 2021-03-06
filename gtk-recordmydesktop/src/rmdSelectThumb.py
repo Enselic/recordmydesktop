@@ -32,7 +32,7 @@
 
 
 from gi.repository import Gtk
-import Gtk.gdk
+from gi.repository import Gdk
 from .rmdFrame import *
 from gi.repository import GObject
 import gc

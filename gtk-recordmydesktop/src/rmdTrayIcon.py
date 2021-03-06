@@ -45,7 +45,7 @@ USE_EGG=0
 from . import rmdSelect as isel
 from . import rmdTrayPopup as iTP
 from . import rmdMonitor as imon
-import os,signal,popen2,fcntl
+import os,signal,fcntl
 from .rmdStrings import *
 #values struct:
 
