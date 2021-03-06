@@ -2,6 +2,7 @@ __pycache__
 .deps
 .vscode
 *.bak
+*.gmo
 *.o
 aclocal.m4
 autom4te.cache
@@ -9,6 +10,8 @@ compile
 config.*
 configure
 depcomp
+gtk-recordmydesktop/src/gtk-recordMyDesktop
+gtk-recordmydesktop/src/rmdConfig.py
 install-sh
 ltmain.sh
 Makefile
@@ -16,6 +19,8 @@ Makefile.in
 missing
 POTFILES
 py-compile
+qt-recordmydesktop/src/qt-recordMyDesktop
+qt-recordmydesktop/src/rmdConfig.py
 src/recordmydesktop
 stamp-h1
 test-driver
