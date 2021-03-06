@@ -47,16 +47,15 @@ AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [The gettext package name])
 AM_GLIB_GNU_GETTEXT
 
-dnl check for pygtk
-PKG_CHECK_MODULES(PYGTK, pygtk-2.0 >= $PYGTK_REQ,,AC_MSG_ERROR(You need pygtk >=2.4 and the appropriate development headers to proceed))
-PYGTK_DIR="`$PKG_CONFIG --variable=pyexecdir pygtk-2.0`"
-AC_SUBST(PYGTK_DIR)
-AC_MSG_NOTICE(Using pygtk installed in $PYGTK_DIR)
-PYGTK_VERSION="`$PKG_CONFIG --modversion pygtk-2.0`"
+# TODO: Add proper check for Python GTK >= 3.24 bindings
+# dnl check for pygtk
+# PKG_CHECK_MODULES(PYGTK, pygtk-2.0 >= $PYGTK_REQ,,AC_MSG_ERROR(You need pygtk >=2.4 and the appropriate development headers to proceed))
+# PYGTK_DIR="`$PKG_CONFIG --variable=pyexecdir pygtk-2.0`"
+# AC_SUBST(PYGTK_DIR)
+# AC_MSG_NOTICE(Using pygtk installed in $PYGTK_DIR)
+# PYGTK_VERSION="`$PKG_CONFIG --modversion pygtk-2.0`"
 
 export PYTHONPATH=$PYGTK_DIR:$PYTHONPATH
-
-PKG_CHECK_MODULES(GTK, gtk+-2.0, HAVE_GTK=yes, HAVE_GTK=no)
 
 saved_PYTHONPATH=$PYTHONPATH
 export PYTHONPATH=$PYGST_DIR:$PYTHONPATH
