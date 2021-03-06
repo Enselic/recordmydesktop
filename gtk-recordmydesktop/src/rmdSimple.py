@@ -78,7 +78,8 @@ class simpleWidget(object):
         self.labelbox.pack_end(self.SBox,expand=False,fill=False,padding=0)
 
         self.wroot = Gdk.get_default_root_window()
-        (self.wwidth, self.wheight) = self.wroot.get_size()
+        self.wwidth = self.wroot.get_width()
+        self.wheight = self.wroot.get_height()
 
         self.factor=1;
         twidth=self.wwidth
