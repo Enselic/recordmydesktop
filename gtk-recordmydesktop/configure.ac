@@ -37,7 +37,7 @@ AS_AC_EXPAND(LOCALSTATEDIR, $localstatedir)
 AC_MSG_NOTICE(Using localstatedir $LOCALSTATEDIR)
 
 dnl check for python
-AM_PATH_PYTHON(2.3)
+AM_PATH_PYTHON(3.7)
 
 AS_AC_EXPAND(PYTHONDIR, $pythondir)
 AC_MSG_NOTICE(Using pythondir $PYTHONDIR)
