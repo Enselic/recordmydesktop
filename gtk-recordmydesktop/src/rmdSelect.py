@@ -18,13 +18,13 @@
 #by John Varouhakis
 #area_return list has been added to retrieve the values
 #original file name is select.py in Istanbul-0.2.1
-import gtk
-import gtk.gdk
+from gi.repository import Gtk
+import Gtk.gdk
 
-class GtkAreaSelector(gtk.Window):
+class GtkAreaSelector(Gtk.Window):
     def __init__(self,area_return):
         self.area_return=area_return
-        gtk.Window.__init__(self)
+        GObject.GObject.__init__(self)
         self.set_app_paintable(True)
         self.fullscreen()
         self.connect("expose-event", self.expose_cb)
@@ -33,7 +33,7 @@ class GtkAreaSelector(gtk.Window):
         self.connect("motion-notify-event", self.motion_notify_cb)
         self.connect("delete-event", self.delete_cb)
         self.connect("realize", self.realize_cb)
-        root = gtk.gdk.get_default_root_window()
+        root = Gdk.get_default_root_window()
         (width, height) = root.get_size()
         self.root = root.get_image(0, 0, width, height)
         self.x1 = self.y1 = -1
@@ -43,9 +43,9 @@ class GtkAreaSelector(gtk.Window):
     def realize_cb(self, widget):
         gdkwindow = self.window
         gdkwindow.set_events(gdkwindow.get_events() | 
-            gtk.gdk.BUTTON_PRESS_MASK | gtk.gdk.BUTTON_RELEASE_MASK | 
-            gtk.gdk.POINTER_MOTION_MASK);
-        cursor = gtk.gdk.Cursor(gtk.gdk.CROSSHAIR)
+            Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.BUTTON_RELEASE_MASK | 
+            Gdk.EventMask.POINTER_MOTION_MASK);
+        cursor = Gdk.Cursor.new(Gdk.CursorType.CROSSHAIR)
         gdkwindow.set_cursor(cursor)
         gdkwindow.set_back_pixmap(None, False)
         
@@ -85,7 +85,7 @@ class GtkAreaSelector(gtk.Window):
         self.queue_draw()
         
         if self.x1 >= 0:
-            rect = gtk.gdk.Rectangle()
+            rect = ()
             rect.x = min(self.x1, min(self.x2, event.x + 1))
             rect.width = max(self.x1, max(self.x2, event.x + 1)) - rect.x
             rect.y = min(self.y1, min(self.y2, event.y + 1))
@@ -134,6 +134,6 @@ class GtkAreaSelector(gtk.Window):
 if __name__ == "__main__":
     w = GtkAreaSelector()
     w.show()
-    gtk.main()
+    Gtk.main()
             
         
