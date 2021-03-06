@@ -74,7 +74,8 @@ class rmdFrame:
         self.window.set_resizable(False)
         self.disp=Gdk.Display.get_default()
         self.wroot = Gdk.get_default_root_window()
-        (self.wwidth, self.wheight) = self.wroot.get_size()
+        self.wwidth = self.wroot.get_width()
+        self.wheight = self.wroot.get_height()
         self.timed_id=GObject.timeout_add(100,self.moveFrame)
 
     def moveFrame(self):

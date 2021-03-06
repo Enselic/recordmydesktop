@@ -36,7 +36,7 @@ gettext.bindtextdomain('gtk-recordMyDesktop',rmdConfig.locale_install_dir)
 import os
 from .rmdPrefsWidget import *
 from .rmdTrayIcon import *
-import Gtk.gdk
+from gi.repository import Gdk
 from gi.repository import GObject
 import gc
 import sys
@@ -62,23 +62,24 @@ class simpleWidget(object):
 
 
 
-        self.NBox.pack_start(self.NWBox,expand=False,fill=False)
-        self.NBox.pack_start(self.NEBox,expand=True,fill=True)
-        self.NEBox.pack_start(self.NEVQBox,expand=False,fill=False)
-        self.NEBox.pack_start(self.NESQBox,expand=False,fill=False)
-        self.NEBox.pack_start(self.NETABox,expand=False,fill=False)
+        self.NBox.pack_start(self.NWBox,expand=False,fill=False,padding=0)
+        self.NBox.pack_start(self.NEBox,expand=True,fill=True,padding=0)
+        self.NEBox.pack_start(self.NEVQBox,expand=False,fill=False,padding=0)
+        self.NEBox.pack_start(self.NESQBox,expand=False,fill=False,padding=0)
+        self.NEBox.pack_start(self.NETABox,expand=False,fill=False,padding=0)
 
         self.SBox=Gtk.HBox(homogeneous=True, spacing=0)
         self.SEBox=Gtk.HBox(homogeneous=False, spacing=10)
         self.SWBox=Gtk.HBox(homogeneous=False, spacing=10)
-        self.SBox.pack_start(self.SWBox,expand=True,fill=True)
-        self.SBox.pack_start(self.SEBox,expand=True,fill=True)
+        self.SBox.pack_start(self.SWBox,expand=True,fill=True,padding=0)
+        self.SBox.pack_start(self.SEBox,expand=True,fill=True,padding=0)
 
-        self.labelbox.pack_start(self.NBox,expand=False,fill=False)
-        self.labelbox.pack_end(self.SBox,expand=False,fill=False)
+        self.labelbox.pack_start(self.NBox,expand=False,fill=False,padding=0)
+        self.labelbox.pack_end(self.SBox,expand=False,fill=False,padding=0)
 
         self.wroot = Gdk.get_default_root_window()
-        (self.wwidth, self.wheight) = self.wroot.get_size()
+        self.wwidth = self.wroot.get_width()
+        self.wheight = self.wroot.get_height()
 
         self.factor=1;
         twidth=self.wwidth
@@ -88,16 +89,16 @@ class simpleWidget(object):
         self.image=sT.GtkThumbSelector(self,self.values[5],self.hidden,2000)
         self.image.show()
 
-        self.NWBox.pack_start(self.image,False,False)
+        self.NWBox.pack_start(self.image,expand=False,fill=False,padding=0)
         #quality
         self.v_adj=Gtk.Adjustment(value=int(round((float(self.values[10])*100.0)/63.0)), lower=0, upper=100, step_incr=1, page_incr=10, page_size=0)
-        self.v_quality=Gtk.HScale(self.v_adj)
+        self.v_quality=Gtk.HScale.new(self.v_adj)
         self.v_quality.set_value_pos(Gtk.PositionType.LEFT)
         self.v_quality.set_digits(0)
         self.s_button= Gtk.CheckButton(label=None)
         self.s_adj=Gtk.Adjustment(value=int(round(float(self.values[11])*10.0)), lower=0, upper=100, step_incr=1, page_incr=10, page_size=0)
         #print (self.values[11]*10)
-        self.s_quality=Gtk.HScale(self.s_adj)
+        self.s_quality=Gtk.HScale.new(self.s_adj)
         self.s_quality.set_value_pos(Gtk.PositionType.LEFT)
         self.s_quality.set_digits(0)
         self.v_label=Gtk.Label(label="         "+smplLabelStrings[0])
@@ -105,22 +106,22 @@ class simpleWidget(object):
 
         self.advanced_button=Gtk.Button(smplButtonStrings[0])
         self.tipLabel=Gtk.Label(label=smplTipLabelStrings[0])
-        self.NEVQBox.pack_start(self.v_label,expand=False,fill=False)
-        self.NEVQBox.pack_start(self.v_quality,expand=True,fill=True)
-        self.NESQBox.pack_start(self.s_button,expand=False,fill=False)
-        self.NESQBox.pack_start(self.s_label,expand=False,fill=False)
-        self.NESQBox.pack_start(self.s_quality,expand=True,fill=True)
-        self.NETABox.pack_start(self.advanced_button,expand=False,fill=False)
-        self.NETABox.pack_start(self.tipLabel,expand=False,fill=False)
+        self.NEVQBox.pack_start(self.v_label,expand=False,fill=False,padding=0)
+        self.NEVQBox.pack_start(self.v_quality,expand=True,fill=True,padding=0)
+        self.NESQBox.pack_start(self.s_button,expand=False,fill=False,padding=0)
+        self.NESQBox.pack_start(self.s_label,expand=False,fill=False,padding=0)
+        self.NESQBox.pack_start(self.s_quality,expand=True,fill=True,padding=0)
+        self.NETABox.pack_start(self.advanced_button,expand=False,fill=False,padding=0)
+        self.NETABox.pack_start(self.tipLabel,expand=False,fill=False,padding=0)
 
         self.win_button=Gtk.Button(smplButtonStrings[1])
         self.start_button=Gtk.Button(None,Gtk.STOCK_MEDIA_RECORD)
         self.file_button=Gtk.Button(None,Gtk.STOCK_SAVE_AS)
         self.quit_button=Gtk.Button(None,Gtk.STOCK_QUIT)
-        self.SWBox.pack_start(self.win_button,False,False)
-        self.SWBox.pack_start(self.start_button,False,False)
-        self.SEBox.pack_end(self.quit_button,False,False)
-        self.SEBox.pack_end(self.file_button,False,False)
+        self.SWBox.pack_start(self.win_button,expand=False,fill=False,padding=0)
+        self.SWBox.pack_start(self.start_button,expand=False,fill=False,padding=0)
+        self.SEBox.pack_end(self.quit_button,expand=False,fill=False,padding=0)
+        self.SEBox.pack_end(self.file_button,expand=False,fill=False,padding=0)
 
         self.win_button.show()
         self.start_button.show()
@@ -147,17 +148,16 @@ class simpleWidget(object):
         self.labelbox.show()
         self.window.add(self.labelbox)
     def __tooltips__(self):
-        self.tooltips=Gtk.Tooltips()
-        self.tooltips.set_tip(self.win_button,smplTooltipLabels[0])
-        self.tooltips.set_tip(self.start_button,smplTooltipLabels[1])
-        self.tooltips.set_tip(self.file_button,smplTooltipLabels[2])
-        self.tooltips.set_tip(self.quit_button,smplTooltipLabels[3])
-        self.tooltips.set_tip(self.v_quality,smplTooltipLabels[4])
-        self.tooltips.set_tip(self.v_label,smplTooltipLabels[4])
-        self.tooltips.set_tip(self.s_button,smplTooltipLabels[5])
-        self.tooltips.set_tip(self.s_quality,smplTooltipLabels[6])
-        self.tooltips.set_tip(self.s_label,smplTooltipLabels[6])
-        self.tooltips.set_tip(self.advanced_button,smplTooltipLabels[7])
+        self.win_button.set_tooltip_text(smplTooltipLabels[0])
+        self.start_button.set_tooltip_text(smplTooltipLabels[1])
+        self.file_button.set_tooltip_text(smplTooltipLabels[2])
+        self.quit_button.set_tooltip_text(smplTooltipLabels[3])
+        self.v_quality.set_tooltip_text(smplTooltipLabels[4])
+        self.v_label.set_tooltip_text(smplTooltipLabels[4])
+        self.s_button.set_tooltip_text(smplTooltipLabels[5])
+        self.s_quality.set_tooltip_text(smplTooltipLabels[6])
+        self.s_label.set_tooltip_text(smplTooltipLabels[6])
+        self.advanced_button.set_tooltip_text(smplTooltipLabels[7])
 
     def __exit__(self,Event=None):
         if self.exited==0:

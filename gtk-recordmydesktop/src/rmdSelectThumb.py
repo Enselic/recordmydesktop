@@ -32,7 +32,7 @@
 
 
 from gi.repository import Gtk
-import Gtk.gdk
+from gi.repository import Gdk
 from .rmdFrame import *
 from gi.repository import GObject
 import gc
@@ -55,7 +55,8 @@ class GtkThumbSelector(Gtk.DrawingArea):
         self.connect("realize", self.realize_cb)
         #root = Gdk.get_default_root_window()
         self.wroot = Gdk.get_default_root_window()
-        (self.wwidth, self.wheight) = self.wroot.get_size()
+        self.wwidth = self.wroot.get_width()
+        self.wheight = self.wroot.get_height()
         ###############################################################
 
         self.factor=1;

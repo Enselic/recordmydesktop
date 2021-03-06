@@ -19,7 +19,7 @@
 #area_return list has been added to retrieve the values
 #original file name is select.py in Istanbul-0.2.1
 from gi.repository import Gtk
-import Gtk.gdk
+from gi.repository import Gdk
 
 class GtkAreaSelector(Gtk.Window):
     def __init__(self,area_return):

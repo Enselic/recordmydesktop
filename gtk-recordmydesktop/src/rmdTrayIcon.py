@@ -27,7 +27,8 @@
 
 import gi
 gi.require_version('Gtk', '3.0')
-import gtk,gobject
+from gi.repository import Gtk
+from gi.repository import GObject
 import locale, gettext
 from . import rmdConfig
 import re
@@ -43,7 +44,7 @@ if USE_EGG==1:
 from . import rmdSelect as isel
 from . import rmdTrayPopup as iTP
 from . import rmdMonitor as imon
-import os,signal,popen2,fcntl
+import os,signal,fcntl
 from .rmdStrings import *
 #values struct:
 
