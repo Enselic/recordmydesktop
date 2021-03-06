@@ -23,7 +23,7 @@
 
 #25/11/2006: picked aboutdialog close-button fix from upstream Istanbul
 
-import gtk
+from gi.repository import Gtk
 import locale, gettext
 from . import rmdConfig
 _ = gettext.gettext
@@ -44,7 +44,7 @@ class TrayPopupMenu:
         self.popupmenu.show_all()
 
     def _setup_popup_menu(self):
-        self.popupmenu = gtk.Menu()
+        self.popupmenu = Gtk.Menu()
         self._setup_about()
         self._setup_prefs_widget()
         self._setup_select_area()
@@ -60,18 +60,18 @@ class TrayPopupMenu:
             self.parent.hide()
             self.optionsOpen[0]=0
     def _setup_prefs_widget(self):
-        self.popupmenu_prefs_widget = gtk.ImageMenuItem(
+        self.popupmenu_prefs_widget = Gtk.ImageMenuItem(
                TpmStr['ShowHide'])
         self.popupmenu_prefs_widget.connect('activate', self._prefs_widget)
         self.popupmenu.add(self.popupmenu_prefs_widget)
 
     def _setup_about(self):
-        self.popupmenu_aboutitem = gtk.ImageMenuItem(gtk.STOCK_ABOUT)
+        self.popupmenu_aboutitem = Gtk.ImageMenuItem(Gtk.STOCK_ABOUT)
         self.popupmenu_aboutitem.connect('activate', self._about)
         self.popupmenu.add(self.popupmenu_aboutitem)
 
     def _about(self, button):
-        aboutdialog = gtk.AboutDialog()
+        aboutdialog = Gtk.AboutDialog()
         aboutdialog.set_name('gtk-recordMyDesktop')
         aboutdialog.set_version(rmdConfig.VERSION)
         aboutdialog.set_comments(TpmStr['ProgDesc'])
@@ -84,7 +84,7 @@ class TrayPopupMenu:
         aboutdialog.show_all()
 
     def _setup_select_area(self):
-        self.popupmenu_selectarea = gtk.ImageMenuItem(
+        self.popupmenu_selectarea = Gtk.ImageMenuItem(
             TpmStr['SelectOnScreen'])
         self.popupmenu.add(self.popupmenu_selectarea)
         self.popupmenu_selectarea.connect("activate", self._select_area_cb)
@@ -95,14 +95,14 @@ class TrayPopupMenu:
         self.selector.show()
 
     def _setup_quit(self):
-        self.popupmenu_quititem = gtk.ImageMenuItem(gtk.STOCK_QUIT)
+        self.popupmenu_quititem = Gtk.ImageMenuItem(Gtk.STOCK_QUIT)
         self.popupmenu_quititem.connect('activate', self._quit)
         self.popupmenu.add(self.popupmenu_quititem)
 
     def _quit(self, button):
-        gtk.main_quit()
+        Gtk.main_quit()
 
     def show(self):
         self.popupmenu.show_all()
-        self.popupmenu.popup(None, None, None, 3, gtk.get_current_event_time())
+        self.popupmenu.popup(None, None, None, 3, Gtk.get_current_event_time())
 
