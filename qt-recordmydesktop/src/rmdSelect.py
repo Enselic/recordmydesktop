@@ -78,6 +78,6 @@ if __name__ == "__main__":
     w = QtAreaSelector(p[0])
     w.showFullScreen()
     app.exec_()
-    print p[0]
+    print(p[0])
 
 

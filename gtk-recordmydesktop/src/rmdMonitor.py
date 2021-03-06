@@ -3,13 +3,13 @@ pygtk.require('2.0')
 import gtk
 import gobject
 import locale, gettext
-import rmdConfig
+from . import rmdConfig
 _ = gettext.gettext
 gettext.textdomain('gtk-recordMyDesktop')
 gettext.bindtextdomain('gtk-recordMyDesktop',rmdConfig.locale_install_dir)
 import popen2
 import os,fcntl,signal
-from rmdStrings import *
+from .rmdStrings import *
 
 class rmdMonitor(object):
     labeString=monStrings['PleaseWait']

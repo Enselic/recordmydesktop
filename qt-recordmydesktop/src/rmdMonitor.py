@@ -33,7 +33,7 @@ gettext.textdomain('qt-recordMyDesktop')
 gettext.bindtextdomain('qt-recordMyDesktop',rmdConfig.locale_install_dir)
 import popen2
 import os,fcntl,signal
-from rmdStrings import *
+from .rmdStrings import *
 
 class rmdMonitor(QtGui.QDialog):
     labeString=monStrings['PleaseWait']

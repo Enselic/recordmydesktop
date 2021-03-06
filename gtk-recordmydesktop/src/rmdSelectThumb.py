@@ -33,7 +33,7 @@
 
 import gtk
 import gtk.gdk
-from rmdFrame import *
+from .rmdFrame import *
 import gobject
 import gc
 
@@ -74,8 +74,8 @@ class GtkThumbSelector(gtk.DrawingArea):
         self.timed_id=gobject.timeout_add(update_interval,self.update_image)
 
     def __subsample__(self,im1,w,h,im2,stride,x=0,y=0):
-        for i in xrange(y,h,stride):
-            for k in xrange(x,w,stride):
+        for i in range(y,h,stride):
+            for k in range(x,w,stride):
                 im2.put_pixel(k/stride,i/stride,im1.get_pixel(k,i))
     def button_release_cb(self, widget, event):
         if event.button == 1 and self.x1 >= 0 and widget==self:
@@ -203,12 +203,12 @@ class GtkThumbSelector(gtk.DrawingArea):
 
         return True
     def __draw_lines__(self,img,vals,factor):
-        for i in xrange(vals[0]/factor,vals[0]/factor+vals[2]/factor):
+        for i in range(vals[0]/factor,vals[0]/factor+vals[2]/factor):
             for k in range(2):
                 img.put_pixel(i,vals[1]/factor+k,0xff0000)
                 img.put_pixel(i,(vals[1]+vals[3]/2-k)/factor,0xff0000)
                 img.put_pixel(i,(vals[1]+vals[3]-1-k)/factor,0xff0000)
-        for i in xrange(vals[1]/factor,vals[1]/factor+vals[3]/factor):
+        for i in range(vals[1]/factor,vals[1]/factor+vals[3]/factor):
             for k in range(2):
                 img.put_pixel(vals[0]/factor+k,i,0xff0000)
                 img.put_pixel((vals[0]+vals[2]/2-k)/factor,i,0xff0000)

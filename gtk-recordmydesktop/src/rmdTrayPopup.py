@@ -25,13 +25,13 @@
 
 import gtk
 import locale, gettext
-import rmdConfig
+from . import rmdConfig
 _ = gettext.gettext
 gettext.textdomain('gtk-recordMyDesktop')
 gettext.bindtextdomain('gtk-recordMyDesktop',rmdConfig.locale_install_dir)
-import rmdSelect as iSel
-import rmdPrefsWidget as pW
-from rmdStrings import *
+from . import rmdSelect as iSel
+from . import rmdPrefsWidget as pW
+from .rmdStrings import *
 
 class TrayPopupMenu:
     options=None

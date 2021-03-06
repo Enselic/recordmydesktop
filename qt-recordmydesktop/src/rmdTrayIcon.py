@@ -33,10 +33,10 @@ def _(s):
 gettext.textdomain('qt-recordMyDesktop')
 gettext.bindtextdomain('qt-recordMyDesktop',rmdConfig.locale_install_dir)
 
-import rmdTrayPopup as iTP
-import rmdMonitor as imon
+from . import rmdTrayPopup as iTP
+from . import rmdMonitor as imon
 import os,signal,popen2,fcntl
-from rmdStrings import *
+from .rmdStrings import *
 #values struct:
 
 #0   fps
@@ -223,7 +223,7 @@ class trayIcon(object):
                     error_log.write("Couldn't write stderror of recordMyDesktop!\n")
             self.childP.childerr.close()
         except:
-            print "Couldn't write error log.\n"
+            print("Couldn't write error log.\n")
         self.dialog = QtGui.QWidget()
         self.label1=None
         try:
@@ -297,19 +297,19 @@ class trayIcon(object):
                 if(self.ch_err.find("STATE:RECORDING")>=0):
                     rp=re.compile("STATE:RECORDING")
                     self.ch_err=rp.sub("",self.ch_err)
-                    print "EXTERNAL STATE CHANGE:RECORDING"
+                    print("EXTERNAL STATE CHANGE:RECORDING")
                     self.__set_icon__(self.trayIcon,"stop")
                     self.state=1
                 elif(self.ch_err.find("STATE:PAUSED")>=0):
                     rp=re.compile("STATE:PAUSED")
                     self.ch_err=rp.sub("",self.ch_err)
-                    print "EXTERNAL STATE CHANGE:PAUSED"
+                    print("EXTERNAL STATE CHANGE:PAUSED")
                     self.__set_icon__(self.trayIcon,"pause")
                     self.state=2
                 elif(self.ch_err.find("STATE:ENCODING")>=0):
                     rp=re.compile("STATE:ENCODING")
                     self.ch_err=rp.sub("",self.ch_err)
-                    print "EXTERNAL STATE CHANGE:ENCODING"
+                    print("EXTERNAL STATE CHANGE:ENCODING")
                     self.__stopRMD__(False)
 
                 return True

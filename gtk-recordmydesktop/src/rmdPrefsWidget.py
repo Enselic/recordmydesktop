@@ -29,12 +29,12 @@ import pygtk
 pygtk.require('2.0')
 import gtk
 import locale, gettext
-import rmdConfig
+from . import rmdConfig
 _ = gettext.gettext
 gettext.textdomain('gtk-recordMyDesktop')
 gettext.bindtextdomain('gtk-recordMyDesktop',rmdConfig.locale_install_dir)
 import os
-from rmdStrings import *
+from .rmdStrings import *
 
 
 
@@ -142,7 +142,7 @@ class prefsWidget(object):
 
 
 #Performance page
-        for i in xrange(2,7):
+        for i in range(2,7):
             self.labels[i]=gtk.Label(prefLabelStrings[i])
             self.labels[i].set_justify(gtk.JUSTIFY_LEFT)
             self.boxes[i]=gtk.HBox(homogeneous=False, spacing=40)
@@ -179,7 +179,7 @@ class prefsWidget(object):
 
 
 #sound page
-        for i in xrange(7,10):
+        for i in range(7,10):
             self.labels[i]=gtk.Label(prefLabelStrings[i])
             self.labels[i].set_justify(gtk.JUSTIFY_LEFT)
             self.boxes[i]=gtk.HBox(homogeneous=False, spacing=0)
@@ -253,7 +253,7 @@ class prefsWidget(object):
         self.boxes[9].pack_end(self.deviceEntry,expand=False,fill=False)
 
 #misc page
-        for i in xrange(10,19):
+        for i in range(10,19):
             self.labels[i]=gtk.Label(prefLabelStrings[i])
             self.labels[i].set_justify(gtk.JUSTIFY_LEFT)
             self.boxes[i]=gtk.HBox(homogeneous=False, spacing=0)
