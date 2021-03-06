@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: sudo apt install build-dependencies
+      - name: 'CLI: sudo apt install build-dependencies'
         run: sudo apt install
           autotools-dev
           zlib1g-dev
@@ -30,14 +30,33 @@ jobs:
           libasound2-dev
           libpopt-dev
 
-      - name: sh autogen.sh
+      - name: 'CLI: sh autogen.sh'
         run: cd recordmydesktop ; sh autogen.sh
 
-      - name: ./configure --prefix /tmp/recordmydesktop-prefix
+      - name: 'CLI: ./configure --prefix /tmp/recordmydesktop-prefix'
         run: cd recordmydesktop ; ./configure --prefix /tmp/recordmydesktop-prefix
 
-      - name: make
+      - name: 'CLI: make'
         run: cd recordmydesktop ; AM_CFLAGS=-Werror make
 
-      - name: make install
+      - name: 'CLI: make install'
         run: cd recordmydesktop ; make install
+
+      - name: 'GTK: sudo apt install build-dependencies'
+        run: sudo apt install
+          gettext
+          python3-gi
+          python3-gi-cairo
+          gir1.2-gtk-3.0
+
+      - name: 'GTK: sh autogen.sh'
+        run: cd gtk-recordmydesktop ; sh autogen.sh
+
+      - name: 'GTK: ./configure --prefix /tmp/recordmydesktop-prefix'
+        run: cd gtk-recordmydesktop ; ./configure --prefix /tmp/recordmydesktop-prefix
+
+      - name: 'GTK: make'
+        run: cd gtk-recordmydesktop ; AM_CFLAGS=-Werror make
+
+      - name: 'GTK: make install'
+        run: cd gtk-recordmydesktop ; make install
