@@ -29,7 +29,7 @@ import pygtk
 pygtk.require('2.0')
 import gtk,gobject
 import locale, gettext
-import rmdConfig
+from . import rmdConfig
 import re
 
 _ = gettext.gettext
@@ -40,11 +40,11 @@ if gtk.pygtk_version[0]==2 and gtk.pygtk_version[1]>=10:
     USE_EGG=0
 if USE_EGG==1:
     import egg.trayicon
-import rmdSelect as isel
-import rmdTrayPopup as iTP
-import rmdMonitor as imon
+from . import rmdSelect as isel
+from . import rmdTrayPopup as iTP
+from . import rmdMonitor as imon
 import os,signal,popen2,fcntl
-from rmdStrings import *
+from .rmdStrings import *
 #values struct:
 
 #0   fps
@@ -232,7 +232,7 @@ class trayIcon(object):
                     error_log.write("Couldn't write stderror of recordMyDesktop!\n")
             self.childP.childerr.close()
         except:
-            print "Couldn't write error log.\n"
+            print("Couldn't write error log.\n")
         dialog = gtk.Dialog(title=None, parent=None, flags=0, buttons=None)
         label1=None
         try:
@@ -307,19 +307,19 @@ class trayIcon(object):
                 if(self.ch_err.find("STATE:RECORDING")>=0):
                     rp=re.compile("STATE:RECORDING")
                     self.ch_err=rp.sub("",self.ch_err)
-                    print "EXTERNAL STATE CHANGE:RECORDING"
+                    print("EXTERNAL STATE CHANGE:RECORDING")
                     self.__set_icon__(self.trayIcon,gtk.STOCK_MEDIA_STOP)
                     self.state=1
                 elif(self.ch_err.find("STATE:PAUSED")>=0):
                     rp=re.compile("STATE:PAUSED")
                     self.ch_err=rp.sub("",self.ch_err)
-                    print "EXTERNAL STATE CHANGE:PAUSED"
+                    print("EXTERNAL STATE CHANGE:PAUSED")
                     self.__set_icon__(self.trayIcon,gtk.STOCK_MEDIA_PAUSE)
                     self.state=2
                 elif(self.ch_err.find("STATE:ENCODING")>=0):
                     rp=re.compile("STATE:ENCODING")
                     self.ch_err=rp.sub("",self.ch_err)
-                    print "EXTERNAL STATE CHANGE:ENCODING"
+                    print("EXTERNAL STATE CHANGE:ENCODING")
                     self.__stopRMD__(False)
                 return True
         else:

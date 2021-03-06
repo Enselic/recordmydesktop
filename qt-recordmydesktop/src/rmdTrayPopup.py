@@ -31,8 +31,8 @@ def _(s):
 gettext.textdomain('qt-recordMyDesktop')
 gettext.bindtextdomain('qt-recordMyDesktop',rmdConfig.locale_install_dir)
 
-import rmdSelect as iSel
-from rmdStrings import *
+from . import rmdSelect as iSel
+from .rmdStrings import *
 import sys
 #import rmdPrefsWidget as pW
 

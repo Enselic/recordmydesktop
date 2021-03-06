@@ -26,7 +26,7 @@
 from PyQt4 import QtGui,QtCore
 import sys
 import rmdConfig
-from rmdFrame import *
+from .rmdFrame import *
 
 class QtThumbSelector(QtGui.QLabel):
     def __init__(self,parent,caller,area_return,hidden,update_interval=500):
@@ -162,7 +162,7 @@ if __name__ == "__main__":
     w = QtThumbSelector(None,app,p[0],hidden)
     w.show()
     app.exec_()
-    print p[0]
+    print(p[0])
 
 
 

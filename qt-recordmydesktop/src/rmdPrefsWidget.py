@@ -33,7 +33,7 @@ def htmlize(s):
 gettext.textdomain('qt-recordMyDesktop')
 gettext.bindtextdomain('qt-recordMyDesktop',rmdConfig.locale_install_dir)
 import os
-from rmdStrings import *
+from .rmdStrings import *
 
 
 
@@ -155,7 +155,7 @@ class prefsWidget(object):
 
 
 #Performance page
-        for i in xrange(2,7):
+        for i in range(2,7):
             self.labels[i]=QtGui.QLabel(prefLabelStrings[i],self.tabWidgets[1])
             self.labels[i].setAlignment(QtCore.Qt.AlignLeft)
             self.boxes[i]=QtGui.QHBoxLayout()
@@ -188,7 +188,7 @@ class prefsWidget(object):
         self.boxes[6].insertWidget(-1,self.fullComboBox)
 
 #sound page
-        for i in xrange(7,10):
+        for i in range(7,10):
             self.labels[i]=QtGui.QLabel(prefLabelStrings[i],self.tabWidgets[2])
             self.labels[i].setAlignment(QtCore.Qt.AlignLeft)
             self.boxes[i]=QtGui.QHBoxLayout()
@@ -241,7 +241,7 @@ class prefsWidget(object):
         self.boxes[9].insertWidget(-1,self.deviceEntry)
 
 #misc page
-        for i in xrange(10,19):
+        for i in range(10,19):
             self.labels[i]=QtGui.QLabel(prefLabelStrings[i],self.tabWidgets[3])
             self.labels[i].setAlignment(QtCore.Qt.AlignLeft)
             self.boxes[i]=QtGui.QHBoxLayout()

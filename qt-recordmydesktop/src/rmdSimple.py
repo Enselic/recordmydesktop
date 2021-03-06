@@ -34,10 +34,10 @@ gettext.textdomain('qt-recordMyDesktop')
 gettext.bindtextdomain('qt-recordMyDesktop',rmdConfig.locale_install_dir)
 import os,sys
 
-from rmdTrayIcon import *
-import rmdPrefsWidget as pW
-import rmdSelectThumb as sT
-from rmdStrings import *
+from .rmdTrayIcon import *
+from . import rmdPrefsWidget as pW
+from . import rmdSelectThumb as sT
+from .rmdStrings import *
 
 class simpleWidget(object):
     hidden=[0]
@@ -158,7 +158,7 @@ class simpleWidget(object):
             self.exited=1
             self.optionsOpen[0]=0
             if self.save_prefs()==False:
-                print "Warning!!!Couldn't save preferences"
+                print("Warning!!!Couldn't save preferences")
             sys.exit()
     def hide(self,Event=None):
         if self.image.realFrame != None and self.values[25]==0:

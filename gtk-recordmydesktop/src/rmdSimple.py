@@ -29,22 +29,22 @@ import pygtk
 pygtk.require('2.0')
 import gtk
 import locale, gettext
-import rmdConfig
+from . import rmdConfig
 _ = gettext.gettext
 gettext.textdomain('gtk-recordMyDesktop')
 gettext.bindtextdomain('gtk-recordMyDesktop',rmdConfig.locale_install_dir)
 import os
-from rmdPrefsWidget import *
-from rmdTrayIcon import *
+from .rmdPrefsWidget import *
+from .rmdTrayIcon import *
 import gtk.gdk
 import gobject
 import gc
 import sys
 import re
 from subprocess import Popen,PIPE
-import rmdPrefsWidget as pW
-import rmdSelectThumb as sT
-from rmdStrings import *
+from . import rmdPrefsWidget as pW
+from . import rmdSelectThumb as sT
+from .rmdStrings import *
 
 class simpleWidget(object):
     hidden=[0]
@@ -168,7 +168,7 @@ class simpleWidget(object):
             self.optionsOpen[0]=0
             self.window.destroy()
             if self.save_prefs()==False:
-                print "Warning!!!Couldn't save preferences"
+                print("Warning!!!Couldn't save preferences")
     def hide(self,Event=None):
         if self.image.realFrame != None and self.values[25]==0:
             self.image.realFrame.window.hide()
@@ -244,8 +244,8 @@ class simpleWidget(object):
                    wid = match.group(1)
                    break
                else:
-                   print pattern
-                   print o
+                   print(pattern)
+                   print(o)
 
         if wid: xwininfo_com = ['xwininfo','-id',wid]
         else: xwininfo_com = ['xwininfo']

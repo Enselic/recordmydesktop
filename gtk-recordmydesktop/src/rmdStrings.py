@@ -1,5 +1,5 @@
 import locale, gettext
-import rmdConfig
+from . import rmdConfig
 _ = gettext.gettext
 
 
