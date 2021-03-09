@@ -1,13 +1,12 @@
-import pygtk
-pygtk.require('2.0')
-import gtk
-import gobject
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
+from gi.repository import GObject
 import locale, gettext
 from . import rmdConfig
 _ = gettext.gettext
 gettext.textdomain('gtk-recordMyDesktop')
 gettext.bindtextdomain('gtk-recordMyDesktop',rmdConfig.locale_install_dir)
-import popen2
 import os,fcntl,signal
 from .rmdStrings import *
 
@@ -19,9 +18,9 @@ class rmdMonitor(object):
         self.destroy()
         self.stop_encoding()
     def destroy(self,Event=None):
-        gobject.source_remove(self.timed_id)
+        GObject.source_remove(self.timed_id)
         self.window.destroy()
-        gtk.main_quit()
+        Gtk.main_quit()
     def update_counter(self):
         strstdout=""
         try:
@@ -48,20 +47,20 @@ class rmdMonitor(object):
         flags = fcntl.fcntl(out_stream, fcntl.F_GETFL)
         fcntl.fcntl(out_stream, fcntl.F_SETFL, flags | os.O_NONBLOCK)
         self.rmdPid=childPid
-        self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
+        self.window = Gtk.Window(Gtk.WindowType.TOPLEVEL)
         self.window.connect("destroy", self.destroy_and_kill)
         self.window.set_border_width(10)
         self.window.set_title("recordMyDesktop-encoder")
-        self.label=gtk.Label(self.labeString)
-        self.label.set_justify(gtk.JUSTIFY_CENTER)
+        self.label=Gtk.Label(label=self.labeString)
+        self.label.set_justify(Gtk.Justification.CENTER)
         self.label.show()
-        self.progressbar=gtk.ProgressBar(adjustment=None)
+        self.progressbar=Gtk.ProgressBar(adjustment=None)
         self.progressbar.set_fraction(self.counter_fraction)
         self.progressbar.set_text("0% "+monStrings['complete'])
         self.progressbar.show()
-        self.stopbutton=gtk.Button(None,gtk.STOCK_CANCEL)
+        self.stopbutton=Gtk.Button(None,Gtk.STOCK_CANCEL)
         self.stopbutton.connect("clicked",self.stop_encoding)
-        self.box=gtk.VBox(homogeneous=False, spacing=20)
+        self.box=Gtk.VBox(homogeneous=False, spacing=20)
         self.box.pack_start(self.label,True,True)
         self.box.pack_start(self.progressbar,True,True)
         self.box.pack_start(self.stopbutton,expand=False,fill=False)
@@ -70,5 +69,5 @@ class rmdMonitor(object):
         self.window.add(self.box)
         self.window.show()
         self.stdout=out_stream
-        self.timed_id=gobject.timeout_add(100,self.update_counter)
-        gtk.main()
+        self.timed_id=GObject.timeout_add(100,self.update_counter)
+        Gtk.main()

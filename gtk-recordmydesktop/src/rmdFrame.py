@@ -23,33 +23,33 @@
 #*                                                                                *
 #*    For further information contact me at johnvarouhakis@gmail.com              *
 #**********************************************************************************/
-import pygtk
-pygtk.require('2.0')
-import gtk
-import gobject
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
+from gi.repository import GObject
 
 class rmdFrame:
     borderwidth=6
     outlinewidth=1
 
     def __init__(self,x,y,w,h,parent):
-        self.window=gtk.Window(gtk.WINDOW_TOPLEVEL)
-        self.area=gtk.DrawingArea()
+        self.window=Gtk.Window(Gtk.WindowType.TOPLEVEL)
+        self.area=Gtk.DrawingArea()
         self.x=x
         self.y=y
         self.w=w
         self.h=h
         self.parent=parent
-        mask = gtk.gdk.Pixmap(None,
+        mask = Gdk.Pixmap(None,
                               self.w+self.borderwidth*2,
                               self.h+self.borderwidth*2,
                               1)
         gc = mask.new_gc()
-        gc.foreground = gtk.gdk.Color(0,0,0,1)
+        gc.foreground = Gdk.Color(0,0,0,1)
         mask.draw_rectangle(gc,True,0,0,
                             self.w+self.borderwidth*2,
                             self.h+self.borderwidth*2)
-        gc.foreground = gtk.gdk.Color(0, 0, 0, 0)
+        gc.foreground = Gdk.Color(0, 0, 0, 0)
         mask.draw_rectangle(gc,True,
                             self.borderwidth,
                             self.borderwidth,
@@ -58,9 +58,10 @@ class rmdFrame:
         self.area.show()
         self.window.stick()
         self.window.set_keep_above(True)
-        self.area.connect("expose-event", self.__expose_cb)
+        # TODO: Port to GTK 3
+        self.area.connect("draw", self.__expose_cb)
         self.window.shape_combine_mask(mask,0,0)
-        self.window.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DOCK)
+        self.set_type_hint(Gdk.WindowTypeHint.DOCK)
         self.window.set_title("gtk-recordMyDesktop frame")
         self.window.stick()
         self.window.set_keep_above(True)
@@ -72,14 +73,15 @@ class rmdFrame:
         self.window.move(self.x-self.borderwidth,
                          self.y-self.borderwidth)
         self.window.set_resizable(False)
-        self.disp=gtk.gdk.display_get_default()
-        self.wroot = gtk.gdk.get_default_root_window()
-        (self.wwidth, self.wheight) = self.wroot.get_size()
-        self.timed_id=gobject.timeout_add(100,self.moveFrame)
+        self.disp=Gdk.Display.get_default()
+        self.wroot = Gdk.get_default_root_window()
+        self.wwidth = self.wroot.get_width()
+        self.wheight = self.wroot.get_height()
+        self.timed_id=GObject.timeout_add(100,self.moveFrame)
 
     def moveFrame(self):
         if self.parent.values[15]==0 and self.parent.hidden[0]==0:
-            npos=gtk.gdk.Display.get_pointer(self.disp)
+            npos=Gdk.Display.get_pointer(self.disp)
             x=npos[1]-self.w/2
             y=npos[2]-self.h/2
             x=(x>>1)<<1

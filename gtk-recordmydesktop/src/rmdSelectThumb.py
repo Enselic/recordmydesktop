@@ -31,31 +31,33 @@
 #original file name is select.py in Istanbul-0.2.1
 
 
-import gtk
-import gtk.gdk
+from gi.repository import Gtk
+from gi.repository import Gdk
 from .rmdFrame import *
-import gobject
+from gi.repository import GObject
 import gc
 
-class GtkThumbSelector(gtk.DrawingArea):
+class GtkThumbSelector(Gtk.DrawingArea):
     def __init__(self,caller,area_return,hidden,update_interval=2000):
         self.hidden=hidden
         self.area_return=area_return
         self.selecting=0
         self.realFrame=None
         self.caller=caller
-        gtk.DrawingArea.__init__(self)
+        GObject.GObject.__init__(self)
         self.set_app_paintable(True)
         #self.fullscreen()
-        self.connect("expose-event", self.expose_cb)
+        # TODO: Port to GTK 3
+        self.connect("draw", self.expose_cb)
         self.connect("button-press-event", self.button_press_cb)
         self.connect("button-release-event", self.button_release_cb)
         self.connect("motion-notify-event", self.motion_notify_cb)
         #self.connect("delete-event", self.delete_cb)
         self.connect("realize", self.realize_cb)
-        #root = gtk.gdk.get_default_root_window()
-        self.wroot = gtk.gdk.get_default_root_window()
-        (self.wwidth, self.wheight) = self.wroot.get_size()
+        #root = Gdk.get_default_root_window()
+        self.wroot = Gdk.get_default_root_window()
+        self.wwidth = self.wroot.get_width()
+        self.wheight = self.wroot.get_height()
         ###############################################################
 
         self.factor=1;
@@ -63,15 +65,17 @@ class GtkThumbSelector(gtk.DrawingArea):
         while twidth>320 or self.factor<4:
           twidth/=2
           self.factor*=2
-        self.root=gtk.gdk.Image(gtk.gdk.IMAGE_NORMAL,self.wroot.get_visual(),self.wwidth/self.factor,self.wheight/self.factor)
+        # TODO: Port to GTK 3
+        # self.root=Gdk.Image(Gdk.IMAGE_NORMAL,self.wroot.get_visual(),self.wwidth/self.factor,self.wheight/self.factor)
         #(width, height) = root.get_size()
-        sroot = self.wroot.get_image(0, 0, self.wwidth, self.wheight)
-        self.__subsample__(sroot,self.wwidth,self.wheight,self.root,self.factor)
+        # TODO: Port to GTK 3
+        # sroot = self.wroot.get_image(0, 0, self.wwidth, self.wheight)
+        # self.__subsample__(sroot,self.wwidth,self.wheight,self.root,self.factor)
         #self.root = root.get_image(0, 0, width, height)
         self.x1 = self.y1 = -1
         self.x2 = self.y2 = -1
         self.set_size_request(self.wwidth/self.factor,self.wheight/self.factor)
-        self.timed_id=gobject.timeout_add(update_interval,self.update_image)
+        self.timed_id=GObject.timeout_add(update_interval,self.update_image)
 
     def __subsample__(self,im1,w,h,im2,stride,x=0,y=0):
         for i in range(y,h,stride):
@@ -119,9 +123,9 @@ class GtkThumbSelector(gtk.DrawingArea):
         if widget == self:
             gdkwindow = self.window
             gdkwindow.set_events(gdkwindow.get_events() |
-                gtk.gdk.BUTTON_PRESS_MASK | gtk.gdk.BUTTON_RELEASE_MASK |
-                gtk.gdk.POINTER_MOTION_MASK);
-            cursor = gtk.gdk.Cursor(gtk.gdk.CROSSHAIR)
+                Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.BUTTON_RELEASE_MASK |
+                Gdk.EventMask.POINTER_MOTION_MASK);
+            cursor = Gdk.Cursor.new(Gdk.CursorType.CROSSHAIR)
             gdkwindow.set_cursor(cursor)
             gdkwindow.set_back_pixmap(None, False)
 
@@ -163,7 +167,7 @@ class GtkThumbSelector(gtk.DrawingArea):
             self.queue_draw()
 
             if self.x1 >= 0 :
-                rect = gtk.gdk.Rectangle()
+                rect = ()
                 rect.x = min(self.x1, min(self.x2, event.x + 1))
                 rect.width = max(self.x1, max(self.x2, event.x + 1)) - rect.x
                 rect.y = min(self.y1, min(self.y2, event.y + 1))
@@ -242,7 +246,7 @@ class GtkThumbSelector(gtk.DrawingArea):
 
 #w=GtkThumbSelector(area_return,0)
 #w.show()
-#gtk.main()
+#Gtk.main()
 #print area_return
 
 

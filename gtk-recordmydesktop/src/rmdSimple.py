@@ -25,9 +25,9 @@
 #**********************************************************************************/
 
 
-import pygtk
-pygtk.require('2.0')
-import gtk
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
 import locale, gettext
 from . import rmdConfig
 _ = gettext.gettext
@@ -36,8 +36,8 @@ gettext.bindtextdomain('gtk-recordMyDesktop',rmdConfig.locale_install_dir)
 import os
 from .rmdPrefsWidget import *
 from .rmdTrayIcon import *
-import gtk.gdk
-import gobject
+from gi.repository import Gdk
+from gi.repository import GObject
 import gc
 import sys
 import re
@@ -51,34 +51,35 @@ class simpleWidget(object):
     options=None
     optionsOpen=[0]
     def __subWidgets__(self):
-        self.labelbox=gtk.VBox(homogeneous=False, spacing=20)
+        self.labelbox=Gtk.VBox(homogeneous=False, spacing=20)
         #self.labelbox.set_size_request(400,272)
-        self.NBox=gtk.HBox(homogeneous=False, spacing=20)
-        self.NEBox=gtk.VBox(homogeneous=False, spacing=0)
-        self.NEVQBox=gtk.HBox(homogeneous=False, spacing=10)
-        self.NESQBox=gtk.HBox(homogeneous=False, spacing=10)
-        self.NETABox=gtk.VBox(homogeneous=False, spacing=10)
-        self.NWBox=gtk.VBox(homogeneous=False, spacing=0)
+        self.NBox=Gtk.HBox(homogeneous=False, spacing=20)
+        self.NEBox=Gtk.VBox(homogeneous=False, spacing=0)
+        self.NEVQBox=Gtk.HBox(homogeneous=False, spacing=10)
+        self.NESQBox=Gtk.HBox(homogeneous=False, spacing=10)
+        self.NETABox=Gtk.VBox(homogeneous=False, spacing=10)
+        self.NWBox=Gtk.VBox(homogeneous=False, spacing=0)
 
 
 
-        self.NBox.pack_start(self.NWBox,expand=False,fill=False)
-        self.NBox.pack_start(self.NEBox,expand=True,fill=True)
-        self.NEBox.pack_start(self.NEVQBox,expand=False,fill=False)
-        self.NEBox.pack_start(self.NESQBox,expand=False,fill=False)
-        self.NEBox.pack_start(self.NETABox,expand=False,fill=False)
+        self.NBox.pack_start(self.NWBox,expand=False,fill=False,padding=0)
+        self.NBox.pack_start(self.NEBox,expand=True,fill=True,padding=0)
+        self.NEBox.pack_start(self.NEVQBox,expand=False,fill=False,padding=0)
+        self.NEBox.pack_start(self.NESQBox,expand=False,fill=False,padding=0)
+        self.NEBox.pack_start(self.NETABox,expand=False,fill=False,padding=0)
 
-        self.SBox=gtk.HBox(homogeneous=True, spacing=0)
-        self.SEBox=gtk.HBox(homogeneous=False, spacing=10)
-        self.SWBox=gtk.HBox(homogeneous=False, spacing=10)
-        self.SBox.pack_start(self.SWBox,expand=True,fill=True)
-        self.SBox.pack_start(self.SEBox,expand=True,fill=True)
+        self.SBox=Gtk.HBox(homogeneous=True, spacing=0)
+        self.SEBox=Gtk.HBox(homogeneous=False, spacing=10)
+        self.SWBox=Gtk.HBox(homogeneous=False, spacing=10)
+        self.SBox.pack_start(self.SWBox,expand=True,fill=True,padding=0)
+        self.SBox.pack_start(self.SEBox,expand=True,fill=True,padding=0)
 
-        self.labelbox.pack_start(self.NBox,expand=False,fill=False)
-        self.labelbox.pack_end(self.SBox,expand=False,fill=False)
+        self.labelbox.pack_start(self.NBox,expand=False,fill=False,padding=0)
+        self.labelbox.pack_end(self.SBox,expand=False,fill=False,padding=0)
 
-        self.wroot = gtk.gdk.get_default_root_window()
-        (self.wwidth, self.wheight) = self.wroot.get_size()
+        self.wroot = Gdk.get_default_root_window()
+        self.wwidth = self.wroot.get_width()
+        self.wheight = self.wroot.get_height()
 
         self.factor=1;
         twidth=self.wwidth
@@ -88,39 +89,39 @@ class simpleWidget(object):
         self.image=sT.GtkThumbSelector(self,self.values[5],self.hidden,2000)
         self.image.show()
 
-        self.NWBox.pack_start(self.image,False,False)
+        self.NWBox.pack_start(self.image,expand=False,fill=False,padding=0)
         #quality
-        self.v_adj=gtk.Adjustment(value=int(round((float(self.values[10])*100.0)/63.0)), lower=0, upper=100, step_incr=1, page_incr=10, page_size=0)
-        self.v_quality=gtk.HScale(self.v_adj)
-        self.v_quality.set_value_pos(gtk.POS_LEFT)
+        self.v_adj=Gtk.Adjustment(value=int(round((float(self.values[10])*100.0)/63.0)), lower=0, upper=100, step_incr=1, page_incr=10, page_size=0)
+        self.v_quality=Gtk.HScale.new(self.v_adj)
+        self.v_quality.set_value_pos(Gtk.PositionType.LEFT)
         self.v_quality.set_digits(0)
-        self.s_button= gtk.CheckButton(label=None)
-        self.s_adj=gtk.Adjustment(value=int(round(float(self.values[11])*10.0)), lower=0, upper=100, step_incr=1, page_incr=10, page_size=0)
+        self.s_button= Gtk.CheckButton(label=None)
+        self.s_adj=Gtk.Adjustment(value=int(round(float(self.values[11])*10.0)), lower=0, upper=100, step_incr=1, page_incr=10, page_size=0)
         #print (self.values[11]*10)
-        self.s_quality=gtk.HScale(self.s_adj)
-        self.s_quality.set_value_pos(gtk.POS_LEFT)
+        self.s_quality=Gtk.HScale.new(self.s_adj)
+        self.s_quality.set_value_pos(Gtk.PositionType.LEFT)
         self.s_quality.set_digits(0)
-        self.v_label=gtk.Label("         "+smplLabelStrings[0])
-        self.s_label=gtk.Label(smplLabelStrings[1])
+        self.v_label=Gtk.Label(label="         "+smplLabelStrings[0])
+        self.s_label=Gtk.Label(label=smplLabelStrings[1])
 
-        self.advanced_button=gtk.Button(smplButtonStrings[0])
-        self.tipLabel=gtk.Label(smplTipLabelStrings[0])
-        self.NEVQBox.pack_start(self.v_label,expand=False,fill=False)
-        self.NEVQBox.pack_start(self.v_quality,expand=True,fill=True)
-        self.NESQBox.pack_start(self.s_button,expand=False,fill=False)
-        self.NESQBox.pack_start(self.s_label,expand=False,fill=False)
-        self.NESQBox.pack_start(self.s_quality,expand=True,fill=True)
-        self.NETABox.pack_start(self.advanced_button,expand=False,fill=False)
-        self.NETABox.pack_start(self.tipLabel,expand=False,fill=False)
+        self.advanced_button=Gtk.Button(smplButtonStrings[0])
+        self.tipLabel=Gtk.Label(label=smplTipLabelStrings[0])
+        self.NEVQBox.pack_start(self.v_label,expand=False,fill=False,padding=0)
+        self.NEVQBox.pack_start(self.v_quality,expand=True,fill=True,padding=0)
+        self.NESQBox.pack_start(self.s_button,expand=False,fill=False,padding=0)
+        self.NESQBox.pack_start(self.s_label,expand=False,fill=False,padding=0)
+        self.NESQBox.pack_start(self.s_quality,expand=True,fill=True,padding=0)
+        self.NETABox.pack_start(self.advanced_button,expand=False,fill=False,padding=0)
+        self.NETABox.pack_start(self.tipLabel,expand=False,fill=False,padding=0)
 
-        self.win_button=gtk.Button(smplButtonStrings[1])
-        self.start_button=gtk.Button(None,gtk.STOCK_MEDIA_RECORD)
-        self.file_button=gtk.Button(None,gtk.STOCK_SAVE_AS)
-        self.quit_button=gtk.Button(None,gtk.STOCK_QUIT)
-        self.SWBox.pack_start(self.win_button,False,False)
-        self.SWBox.pack_start(self.start_button,False,False)
-        self.SEBox.pack_end(self.quit_button,False,False)
-        self.SEBox.pack_end(self.file_button,False,False)
+        self.win_button=Gtk.Button(smplButtonStrings[1])
+        self.start_button=Gtk.Button(None,Gtk.STOCK_MEDIA_RECORD)
+        self.file_button=Gtk.Button(None,Gtk.STOCK_SAVE_AS)
+        self.quit_button=Gtk.Button(None,Gtk.STOCK_QUIT)
+        self.SWBox.pack_start(self.win_button,expand=False,fill=False,padding=0)
+        self.SWBox.pack_start(self.start_button,expand=False,fill=False,padding=0)
+        self.SEBox.pack_end(self.quit_button,expand=False,fill=False,padding=0)
+        self.SEBox.pack_end(self.file_button,expand=False,fill=False,padding=0)
 
         self.win_button.show()
         self.start_button.show()
@@ -147,23 +148,22 @@ class simpleWidget(object):
         self.labelbox.show()
         self.window.add(self.labelbox)
     def __tooltips__(self):
-        self.tooltips=gtk.Tooltips()
-        self.tooltips.set_tip(self.win_button,smplTooltipLabels[0])
-        self.tooltips.set_tip(self.start_button,smplTooltipLabels[1])
-        self.tooltips.set_tip(self.file_button,smplTooltipLabels[2])
-        self.tooltips.set_tip(self.quit_button,smplTooltipLabels[3])
-        self.tooltips.set_tip(self.v_quality,smplTooltipLabels[4])
-        self.tooltips.set_tip(self.v_label,smplTooltipLabels[4])
-        self.tooltips.set_tip(self.s_button,smplTooltipLabels[5])
-        self.tooltips.set_tip(self.s_quality,smplTooltipLabels[6])
-        self.tooltips.set_tip(self.s_label,smplTooltipLabels[6])
-        self.tooltips.set_tip(self.advanced_button,smplTooltipLabels[7])
+        self.win_button.set_tooltip_text(smplTooltipLabels[0])
+        self.start_button.set_tooltip_text(smplTooltipLabels[1])
+        self.file_button.set_tooltip_text(smplTooltipLabels[2])
+        self.quit_button.set_tooltip_text(smplTooltipLabels[3])
+        self.v_quality.set_tooltip_text(smplTooltipLabels[4])
+        self.v_label.set_tooltip_text(smplTooltipLabels[4])
+        self.s_button.set_tooltip_text(smplTooltipLabels[5])
+        self.s_quality.set_tooltip_text(smplTooltipLabels[6])
+        self.s_label.set_tooltip_text(smplTooltipLabels[6])
+        self.advanced_button.set_tooltip_text(smplTooltipLabels[7])
 
     def __exit__(self,Event=None):
         if self.exited==0:
             self.update()
             self.exited=1
-            gtk.main_quit()
+            Gtk.main_quit()
             #self.values[0]=-1
             self.optionsOpen[0]=0
             self.window.destroy()
@@ -180,7 +180,7 @@ class simpleWidget(object):
         self.window.show()
         self.hidden[0]=0
     def __swap_visibility__(self,widget=None,event=None):
-        if event.changed_mask==gtk.gdk.WINDOW_STATE_ICONIFIED:
+        if event.changed_mask==Gdk.WindowState.ICONIFIED:
             if self.minimized==0:
                 self.hidden[0]=self.minimized=1
             else:
@@ -208,13 +208,13 @@ class simpleWidget(object):
         #self.pathEntry.set_text(self.fileSel.get_filename())
 
     def __fileSelect__(self,Event=None):
-        self.fileSel = gtk.FileChooserDialog(title=None,
-                       action=gtk.FILE_CHOOSER_ACTION_SAVE,
-                       buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,
-                                gtk.STOCK_SAVE,gtk.RESPONSE_OK))
+        self.fileSel = Gtk.FileChooserDialog(title=None,
+                       action=Gtk.FileChooserAction.SAVE,
+                       buttons=(Gtk.STOCK_CANCEL,Gtk.ResponseType.CANCEL,
+                                Gtk.STOCK_SAVE,Gtk.ResponseType.OK))
         self.fileSel.set_filename(self.values[4])
         self.fileSel.show()
-        if self.fileSel.run() == gtk.RESPONSE_OK:
+        if self.fileSel.run() == Gtk.ResponseType.OK:
             self.__fileSelOk__()
         self.__fileSelQuit__()
 
@@ -287,27 +287,27 @@ class simpleWidget(object):
 
     def __register_shortcuts__(self):
         self.advanced_button.add_accelerator("clicked",self.accel_group,
-                                             ord('P'), gtk.gdk.CONTROL_MASK,
-                                             gtk.ACCEL_VISIBLE)
+                                             ord('P'), Gdk.ModifierType.CONTROL_MASK,
+                                             Gtk.AccelFlags.VISIBLE)
         self.file_button.add_accelerator("clicked",self.accel_group,
-                                         ord('S'), gtk.gdk.CONTROL_MASK,
-                                         gtk.ACCEL_VISIBLE)
+                                         ord('S'), Gdk.ModifierType.CONTROL_MASK,
+                                         Gtk.AccelFlags.VISIBLE)
         self.quit_button.add_accelerator("clicked",self.accel_group,
-                                         ord('Q'), gtk.gdk.CONTROL_MASK,
-                                         gtk.ACCEL_VISIBLE)
+                                         ord('Q'), Gdk.ModifierType.CONTROL_MASK,
+                                         Gtk.AccelFlags.VISIBLE)
         self.start_button.add_accelerator("clicked",self.accel_group,
-                                          ord('R'), gtk.gdk.CONTROL_MASK,
-                                          gtk.ACCEL_VISIBLE)
+                                          ord('R'), Gdk.ModifierType.CONTROL_MASK,
+                                          Gtk.AccelFlags.VISIBLE)
 
         self.trayIcon.tray_popup.popupmenu_prefs_widget.add_accelerator(
             "activate",self.accel_group,
-            ord('H'), gtk.gdk.CONTROL_MASK,
-            gtk.ACCEL_VISIBLE
+            ord('H'), Gdk.ModifierType.CONTROL_MASK,
+            Gtk.AccelFlags.VISIBLE
         )
         self.trayIcon.tray_popup.popupmenu_prefs_widget.add_accelerator(
             "activate",self.accel_group,
-            gtk.gdk.keyval_from_name("Escape"),0,
-            gtk.ACCEL_VISIBLE
+            Gdk.keyval_from_name("Escape"),0,
+            Gtk.AccelFlags.VISIBLE
         )
 
     def __sound_check__(self,widget):
@@ -497,14 +497,14 @@ class simpleWidget(object):
         self.optionsOpen=[0]
         self.minimized=0
         self.exited=0
-        self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
+        self.window = Gtk.Window(Gtk.WindowType.TOPLEVEL)
         self.window.connect("destroy", self.__exit__)
         self.window.set_border_width(10)
         self.window.set_title("recordMyDesktop")
         self.__subWidgets__()
-        self.accel_group = gtk.AccelGroup()
+        self.accel_group = Gtk.AccelGroup()
         self.window.add_accel_group(self.accel_group)
-        #self.timed_id=gobject.timeout_add(2000,self.__update_image__)
+        #self.timed_id=GObject.timeout_add(2000,self.__update_image__)
         #if resolution is low let it decide size on it's own
 
         #if self.wwidth>640:
@@ -521,7 +521,7 @@ class simpleWidget(object):
         self.window.show()
 #        wh=self.window.size_request()
 #        self.window.set_size_request(wh[0],wh[1])
-        gtk.main()
+        Gtk.main()
 
 
 

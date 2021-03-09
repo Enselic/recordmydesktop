@@ -5,7 +5,6 @@ AM_INIT_AUTOMAKE
 
 AS_AC_EXPAND(LIBDIR, $libdir)
 AC_MSG_NOTICE(Storing library files in $LIBDIR)
-AC_SUBST(PYGTK_REQ, 2.4)
 
 #The following test is needed for the expansion bellow
 if test "x$prefix" == "xNONE"; then
@@ -47,16 +46,20 @@ AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [The gettext package name])
 AM_GLIB_GNU_GETTEXT
 
-dnl check for pygtk
-PKG_CHECK_MODULES(PYGTK, pygtk-2.0 >= $PYGTK_REQ,,AC_MSG_ERROR(You need pygtk >=2.4 and the appropriate development headers to proceed))
-PYGTK_DIR="`$PKG_CONFIG --variable=pyexecdir pygtk-2.0`"
-AC_SUBST(PYGTK_DIR)
-AC_MSG_NOTICE(Using pygtk installed in $PYGTK_DIR)
-PYGTK_VERSION="`$PKG_CONFIG --modversion pygtk-2.0`"
+dnl check for GTK 3 Python bindings
+AC_MSG_CHECKING(GTK 3 python bindings)
+gtk_prog="
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
+"
+if $PYTHON -c "$gtk_prog"; then
+    AC_MSG_RESULT(yes)
+else
+    AC_MSG_ERROR(Missing Gtk 3 Python bindings, try sudo apt install python3-gi python3-gi-cairo gir1.2-gtk-3.0)
+fi
 
 export PYTHONPATH=$PYGTK_DIR:$PYTHONPATH
-
-PKG_CHECK_MODULES(GTK, gtk+-2.0, HAVE_GTK=yes, HAVE_GTK=no)
 
 saved_PYTHONPATH=$PYTHONPATH
 export PYTHONPATH=$PYGST_DIR:$PYTHONPATH
