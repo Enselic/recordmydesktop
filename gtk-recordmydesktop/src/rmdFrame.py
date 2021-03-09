@@ -58,7 +58,8 @@ class rmdFrame:
         self.area.show()
         self.window.stick()
         self.window.set_keep_above(True)
-        self.area.connect("expose-event", self.__expose_cb)
+        # TODO: Port to GTK 3
+        self.area.connect("draw", self.__expose_cb)
         self.window.shape_combine_mask(mask,0,0)
         self.set_type_hint(Gdk.WindowTypeHint.DOCK)
         self.window.set_title("gtk-recordMyDesktop frame")

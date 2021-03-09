@@ -36,11 +36,12 @@ import re
 _ = gettext.gettext
 gettext.textdomain('gtk-recordMyDesktop')
 gettext.bindtextdomain('gtk-recordMyDesktop',rmdConfig.locale_install_dir)
-USE_EGG=1
-if Gtk.pygtk_version[0]==2 and Gtk.pygtk_version[1]>=10:
-    USE_EGG=0
-if USE_EGG==1:
-    import egg.trayicon
+USE_EGG=0
+# TODO: Port to GTK 3
+# if Gtk.pygtk_version[0]==2 and Gtk.pygtk_version[1]>=10:
+#     USE_EGG=0
+# if USE_EGG==1:
+#     import egg.trayicon
 from . import rmdSelect as isel
 from . import rmdTrayPopup as iTP
 from . import rmdMonitor as imon

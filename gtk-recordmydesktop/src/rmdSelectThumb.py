@@ -47,7 +47,8 @@ class GtkThumbSelector(Gtk.DrawingArea):
         GObject.GObject.__init__(self)
         self.set_app_paintable(True)
         #self.fullscreen()
-        self.connect("expose-event", self.expose_cb)
+        # TODO: Port to GTK 3
+        self.connect("draw", self.expose_cb)
         self.connect("button-press-event", self.button_press_cb)
         self.connect("button-release-event", self.button_release_cb)
         self.connect("motion-notify-event", self.motion_notify_cb)
@@ -64,10 +65,12 @@ class GtkThumbSelector(Gtk.DrawingArea):
         while twidth>320 or self.factor<4:
           twidth/=2
           self.factor*=2
-        self.root=Gdk.Image(Gdk.IMAGE_NORMAL,self.wroot.get_visual(),self.wwidth/self.factor,self.wheight/self.factor)
+        # TODO: Port to GTK 3
+        # self.root=Gdk.Image(Gdk.IMAGE_NORMAL,self.wroot.get_visual(),self.wwidth/self.factor,self.wheight/self.factor)
         #(width, height) = root.get_size()
-        sroot = self.wroot.get_image(0, 0, self.wwidth, self.wheight)
-        self.__subsample__(sroot,self.wwidth,self.wheight,self.root,self.factor)
+        # TODO: Port to GTK 3
+        # sroot = self.wroot.get_image(0, 0, self.wwidth, self.wheight)
+        # self.__subsample__(sroot,self.wwidth,self.wheight,self.root,self.factor)
         #self.root = root.get_image(0, 0, width, height)
         self.x1 = self.y1 = -1
         self.x2 = self.y2 = -1

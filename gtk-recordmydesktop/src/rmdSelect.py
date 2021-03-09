@@ -27,7 +27,8 @@ class GtkAreaSelector(Gtk.Window):
         GObject.GObject.__init__(self)
         self.set_app_paintable(True)
         self.fullscreen()
-        self.connect("expose-event", self.expose_cb)
+        # TODO: Port to GTK 3
+        self.connect("draw", self.expose_cb)
         self.connect("button-press-event", self.button_press_cb)
         self.connect("button-release-event", self.button_release_cb)
         self.connect("motion-notify-event", self.motion_notify_cb)
