@@ -23,6 +23,19 @@ First do
 ```
 
 ## GTK frontend
+Ported to Python 3 and mostly to GTK 3, but some things remain. Search
+in the code for
+```
+TODO: Port to GTK 3
+```
+which currently will give you the following list of things that needs to be
+done:
+* Port from "expose-event" to "draw" in three places.
+* Port from Gdk.Image to cairo
+* Port the USE_EGG code to GTK 3
+
+You can however already now get a window with some controls to show, by
+just doing
 ```
 % cd gtk-recordmydesktop
 % sudo apt install autotools-dev gettext python3-gi python3-gi-cairo gir1.2-gtk-3.0
@@ -30,15 +43,14 @@ First do
 % ./configure --prefix=/tmp/foo
 % make
 % make install
+% /tmp/foo/bin/gtk-recordMyDesktop
 ```
 
 ## Qt frontend:
+Ported to Python 3, but not from Qt4 to Qt5 yet. Help with migrating would be greatly appreciated.
 ```
 % cd qt-recordmydesktop
-% sudo apt install autotools-dev gettext
-```
-you also need to install libQt4 >=4.2 which can be tricky since it is ancient. (Help with migrating to Qt 5 would be greatly appreciated.) After that, you are maybe able to do:
-```
+% sudo apt install autotools-dev gettext # TODO: And some Qt5 libs
 % sh autogen.sh
 % ./configure --prefix=/tmp/foo
 % make
