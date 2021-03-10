@@ -1,6 +1,6 @@
 # translation of fr.po to
 # French translation of gfa
-# Copyright (C) 2006 John Varouhakis <johnvarouhakis@gmail.com>
+# Copyright (C) 2006 John Varouhakis <inactive-maintainer@email-redacted.com>
 # This file is distributed under the same license as the gfa package.
 #
 # David Valot <ptitdav69@gmail.com>, 2006.

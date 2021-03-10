@@ -21,7 +21,6 @@
 #*                                                                                *
 #*                                                                                *
 #*                                                                                *
-#*    For further information contact me at johnvarouhakis@gmail.com              *
 #**********************************************************************************/
 import gi
 gi.require_version('Gtk', '3.0')

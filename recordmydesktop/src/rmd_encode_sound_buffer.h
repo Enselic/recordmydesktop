@@ -21,7 +21,6 @@
 *                                                                             *
 *                                                                             *
 *                                                                             *
-*   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
 #ifndef ENCODE_SOUND_BUFFER_H

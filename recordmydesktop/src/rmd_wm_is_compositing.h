@@ -21,7 +21,6 @@
 *                                                                             *
 *                                                                             *
 *                                                                             *
-*   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
 #ifndef RMD_WM_IS_COMPOSITING_H

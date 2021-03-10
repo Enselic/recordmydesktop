@@ -21,7 +21,6 @@
 *                                                                             *
 *                                                                             *
 *                                                                             *
-*   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
 #ifndef FLUSH_TO_OGG_H

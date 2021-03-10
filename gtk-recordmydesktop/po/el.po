@@ -3,14 +3,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
-# John Varouhakis <johnvarouhakis@gmail.com>, 2006, 2007.
+# John Varouhakis <inactive-maintainer@email-redacted.com>, 2006, 2007.
 msgid ""
 msgstr ""
 "Project-Id-Version: el\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-08-15 01:56+0300\n"
 "PO-Revision-Date: 2007-08-16 23:27+0300\n"
-"Last-Translator: John Varouhakis <johnvarouhakis@gmail.com>\n"
+"Last-Translator: John Varouhakis <inactive-maintainer@email-redacted.com>\n"
 "Language-Team:  <el@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -46,7 +46,7 @@ msgstr ""
 
 #: src/rmdStrings.py:15
 msgid "Translator Credits And Information(Replace with your info)"
-msgstr "Γιάννης Βαρουχάκης \t<johnvarouhakis@gmail.com>"
+msgstr "Γιάννης Βαρουχάκης \t<inactive-maintainer@email-redacted.com>"
 
 #: src/rmdStrings.py:19
 msgid "Success"

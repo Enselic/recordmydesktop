@@ -21,7 +21,6 @@
 *                                                                             *
 *                                                                             *
 *                                                                             *
-*   For further information contact me at johnvarouhakis@gmail.com            *
 ******************************************************************************/
 
 #ifndef GET_FRAME_H
