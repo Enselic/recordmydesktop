@@ -222,7 +222,7 @@ void rmdSetupDefaultArgs(ProgArgs *args) {
     args->channels             = 1;
     args->frequency            = 22050;
     args->buffsize             = 4096;
-    args->v_bitrate            = 45000;
+    args->v_bitrate            = 0;
     args->v_quality            = 63;
     args->s_quality            = 10;
 
