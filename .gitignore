@@ -4,6 +4,7 @@ __pycache__
 *.bak
 *.gmo
 *.o
+*.ogv
 aclocal.m4
 autom4te.cache
 compile
