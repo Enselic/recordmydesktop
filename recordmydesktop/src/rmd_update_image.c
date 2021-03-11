@@ -31,7 +31,7 @@
 #include "rmd_types.h"
 
 #include <X11/Xlibint.h>
-#include <X11/extensions/shmstr.h>
+#include <X11/extensions/shmproto.h>
 #include <X11/extensions/XShm.h>
 
 
