@@ -111,7 +111,7 @@ boolean rmdParseArgs(int argc, char **argv, ProgArgs *arg_return) {
           "Offset in x direction.",
           "N>=0" },
 
-        { "x", 'y',
+        { "y", 'y',
           POPT_ARG_INT, &arg_return->y, 0,
           "Offset in y direction.",
           "N>=0" },
