@@ -227,8 +227,7 @@ void rmdSetupDefaultArgs(ProgArgs *args) {
     args->s_quality            = 10;
 
     if (getenv("DISPLAY") != NULL) {
-        args->display = (char *) malloc(strlen(getenv("DISPLAY")) + 1);
-        strcpy(args->display, getenv("DISPLAY"));
+        args->display = strdup(getenv("DISPLAY"));
     }
     else {
         args->display = NULL;
@@ -236,20 +235,19 @@ void rmdSetupDefaultArgs(ProgArgs *args) {
 
     memset(args->jack_port_names, 0, sizeof(args->jack_port_names));
 
-    args->device = (char *) malloc(strlen(DEFAULT_AUDIO_DEVICE) + 1);
-    strcpy(args->device, DEFAULT_AUDIO_DEVICE);
+    args->device = strdup(DEFAULT_AUDIO_DEVICE);
 
-    args->workdir = (char *) malloc(5);
-    strcpy(args->workdir, "/tmp");
+    char *tmpdir = getenv("TMPDIR");
+    if (tmpdir == NULL) {
+        tmpdir = "/tmp";
+    }
+    args->workdir = strdup(tmpdir);
 
-    args->pause_shortcut = (char *) malloc(15);
-    strcpy(args->pause_shortcut, "Control+Mod1+p");
+    args->pause_shortcut = strdup("Control+Mod1+p");
 
-    args->stop_shortcut = (char *) malloc(15);
-    strcpy(args->stop_shortcut, "Control+Mod1+s");
+    args->stop_shortcut = strdup("Control+Mod1+s");
 
-    args->filename = (char *) malloc(8);
-    strcpy(args->filename, "out.ogv");
+    args->filename = strdup("out.ogv");
 }
 
 void rmdCleanUp(void){
