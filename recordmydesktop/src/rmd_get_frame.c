@@ -477,10 +477,12 @@ void *rmdGetFrame(ProgData *pdata){
             }
             if(pdata->args.xfixes_cursor){
                 xcim=XFixesGetCursorImage(pdata->dpy);
-                mouse_pos_abs.x=xcim->x-xcim->xhot;
-                mouse_pos_abs.y=xcim->y-xcim->yhot;
-                mouse_pos_abs.width=xcim->width;
-                mouse_pos_abs.height=xcim->height;
+                if (xcim != NULL) {
+                    mouse_pos_abs.x=xcim->x-xcim->xhot;
+                    mouse_pos_abs.y=xcim->y-xcim->yhot;
+                    mouse_pos_abs.width=xcim->width;
+                    mouse_pos_abs.height=xcim->height;
+                }
             }
             else{
                 XQueryPointer(pdata->dpy,
@@ -530,7 +532,7 @@ void *rmdGetFrame(ProgData *pdata){
                 }
             }
         }
-        if(pdata->args.follow_mouse){
+        if(pdata->args.follow_mouse && xcim != NULL){
             rmdMoveCaptureArea(&pdata->brwin,
                                mouse_pos_abs.x+
                                ((pdata->args.xfixes_cursor)?xcim->xhot:0),
@@ -621,7 +623,7 @@ void *rmdGetFrame(ProgData *pdata){
                (mouse_pos_temp.y>=0)&&
                (mouse_pos_temp.width>0)&&
                (mouse_pos_temp.height>0)){
-                    if(pdata->args.xfixes_cursor){
+                    if(pdata->args.xfixes_cursor && xcim != NULL){
                         XFIXES_POINTER_TO_YUV((&pdata->enc_data->yuv),
                                             ((unsigned char*)xcim->pixels),
                                             (mouse_pos_temp.x-
@@ -636,7 +638,7 @@ void *rmdGetFrame(ProgData *pdata){
                                             mouse_yoffset,
                                             (xcim->width-mouse_pos_temp.width));
                     }
-                    else{
+                    else if (pdata->dummy_pointer != NULL){
                         DUMMY_POINTER_TO_YUV((&pdata->enc_data->yuv),
                                             pdata->dummy_pointer,
                                             (mouse_pos_temp.x-
@@ -674,7 +676,7 @@ void *rmdGetFrame(ProgData *pdata){
                 }
 
             }
-            if(pdata->args.xfixes_cursor){
+            if(pdata->args.xfixes_cursor && xcim != NULL){
                 XFree(xcim);
                 xcim=NULL;
             }
