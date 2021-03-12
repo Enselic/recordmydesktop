@@ -26,7 +26,7 @@ jobs:
           libogg-dev
           libvorbis-dev
           libtheora-dev
-          libjack-dev
+          libjack-jackd2-dev
           libasound2-dev
           libpopt-dev
 

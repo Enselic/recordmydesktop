@@ -14,7 +14,7 @@ First do
 
 ```
 % cd recordmydesktop
-% sudo apt install autotools-dev zlib1g-dev libice-dev libsm-dev libxext-dev libxdamage-dev libogg-dev libvorbis-dev libtheora-dev libjack-dev libasound2-dev libpopt-dev
+% sudo apt install autotools-dev zlib1g-dev libice-dev libsm-dev libxext-dev libxdamage-dev libogg-dev libvorbis-dev libtheora-dev libjack-jackd2-dev libasound2-dev libpopt-dev
 % cd recordmydesktop   # for CLI source code
 % sh autogen.sh
 % ./configure --prefix=/tmp/foo
