@@ -355,8 +355,7 @@ boolean rmdParseArgs(int argc, char **argv, ProgArgs *arg_return) {
 
                     arg_return->jack_nports++;
 
-                    arg_return->jack_port_names[arg_return->jack_nports - 1] = malloc(strlen(arg) + 1);
-                    strcpy(arg_return->jack_port_names[arg_return->jack_nports - 1], arg);
+                    arg_return->jack_port_names[arg_return->jack_nports - 1] = strdup(arg);
 
                     arg = poptGetOptArg(popt_context);
                 }

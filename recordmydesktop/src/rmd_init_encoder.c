@@ -78,8 +78,7 @@ static int rmdIncrementalNaming(char **name) {
         //save new name
 
         free(*name);
-        *name=malloc(strlen(tname)+1);
-        strcpy(*name,tname);
+        *name=strdup(tname);
         free(tname);
     }
 
