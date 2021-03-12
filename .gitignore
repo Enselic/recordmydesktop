@@ -5,6 +5,7 @@ __pycache__
 *.gmo
 *.o
 *.ogv
+/recordmydesktop/src/recordmydesktop
 aclocal.m4
 autom4te.cache
 compile
