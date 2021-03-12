@@ -237,7 +237,11 @@ void rmdSetupDefaultArgs(ProgArgs *args) {
 
     args->device = strdup(DEFAULT_AUDIO_DEVICE);
 
-    args->workdir = strdup("/tmp");
+    char *tmpdir = getenv("TMPDIR");
+    if (tmpdir == NULL) {
+        tmpdir = "/tmp";
+    }
+    args->workdir = strdup(tmpdir);
 
     args->pause_shortcut = strdup("Control+Mod1+p");
 
