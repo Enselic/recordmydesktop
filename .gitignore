@@ -26,3 +26,5 @@ qt-recordmydesktop/src/rmdConfig.py
 src/recordmydesktop
 stamp-h1
 test-driver
+test-rectinsert*
+test-suite.log
