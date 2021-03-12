@@ -222,6 +222,9 @@ void rmdInitCacheData(ProgData *pdata,
         exit(13);
     }
 
+    if(getenv("RMD_DEV_MODE") != NULL) {
+        fprintf(stderr,"projname=%s\n", cache_data_t->projname);
+    }
 }
 
 
