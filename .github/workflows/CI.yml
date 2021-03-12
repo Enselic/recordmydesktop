@@ -39,6 +39,9 @@ jobs:
       - name: 'CLI: make'
         run: cd recordmydesktop ; AM_CFLAGS=-Werror make
 
+      - name: 'CLI: make check'
+        run: cd recordmydesktop ; AM_CFLAGS=-Werror make check
+
       - name: 'CLI: make install'
         run: cd recordmydesktop ; make install
 
