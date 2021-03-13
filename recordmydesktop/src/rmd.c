@@ -162,7 +162,7 @@ int main(int argc,char **argv){
                 if (!pdata.aborted) {
                     rmdEncodeCache(&pdata);
                 }
-                fprintf(stderr,"Cleanning up cache...\n");
+                fprintf(stderr,"Cleaning up cache...\n");
                 if(rmdPurgeCache(pdata.cache_data,!pdata.args.nosound))
                     fprintf(stderr,"Some error occured "
                                 "while cleaning up cache!\n");
