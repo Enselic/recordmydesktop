@@ -218,6 +218,7 @@ class simpleWidget(object):
         self.__fileSelQuit__()
 
     def __select_window__(self,button):
+        wid = None
         # check user has not disabled capture of window decoration
         if self.values[21]!=1:
             # else work out the size including decoration (also taking into account compiz)
