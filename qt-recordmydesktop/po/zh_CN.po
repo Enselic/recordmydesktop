@@ -1,0 +1,567 @@
+# Chinese translations for gtk-ecordmydesktop package
+# gtk-recordmydesktop 软件包的简体中文翻译.
+# Copyright (C) 2009 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Aron Xu <aronmalache@163.com>, 2009.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: HEAD\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-08-15 01:56+0300\n"
+"PO-Revision-Date: 2009-05-03 20:16+0800\n"
+"Last-Translator: Aron Xu <aronmalache@163.com>\n"
+"Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf8\n"
+"Content-Transfer-Encoding: \n"
+
+#: src/rmdStrings.py:10
+msgid "Show/hide Main Window"
+msgstr "显示/隐藏主窗口"
+
+#: src/rmdStrings.py:11
+msgid "_Select Area On Screen"
+msgstr "在屏幕上选择一个区域(_S)"
+
+#: src/rmdStrings.py:12 src/rmdStrings.py:60
+msgid "Quit"
+msgstr "退出"
+
+#: src/rmdStrings.py:13
+msgid "a graphical frontend for recordMyDesktop"
+msgstr "recordMyDesktop 的一个图形化前端"
+
+#: src/rmdStrings.py:14
+msgid ""
+"Copyright (C) John Varouhakis\n"
+"Portions Copyright (C) 2005-6 Zaheer Abbas Merali, John N. Laliberte\n"
+"Portions Copyright (C) Fluendo S.L."
+msgstr ""
+"版权所有 (C) John Varouhakis\n"
+"部分版权 (C) 2005-6 Zaheer Abbas Merali, John N. Laliberte\n"
+"部分版权 (C) Fluendo S.L."
+
+#: src/rmdStrings.py:15
+msgid "Translator Credits And Information(Replace with your info)"
+msgstr "Aron Xu <aronmalache@163.com>, 2009."
+
+#: src/rmdStrings.py:19
+msgid "Success"
+msgstr "成功"
+
+#: src/rmdStrings.py:20
+msgid "Error while parsing the arguments."
+msgstr "解析参数出错"
+
+#: src/rmdStrings.py:21
+msgid "Initializing the encoder failed(either vorbis or theora)"
+msgstr "初始化编码器失败 (Vorbis 和 Theora 均失败)"
+
+#: src/rmdStrings.py:22
+msgid "Could not open/configure sound card."
+msgstr "无法打开/配置声卡。"
+
+#: src/rmdStrings.py:23
+msgid "Xdamage extension not present."
+msgstr "未安装 Xdamage 扩展。"
+
+#: src/rmdStrings.py:24
+msgid "Shared memory extension not present."
+msgstr "未安装 共享内存 扩展"
+
+#: src/rmdStrings.py:25
+msgid "Xfixes extension not present."
+msgstr "未安装 Xfixes 扩展"
+
+#: src/rmdStrings.py:26
+msgid "XInitThreads failed."
+msgstr "XInitThreads 失败。"
+
+#: src/rmdStrings.py:27
+msgid "No $DISPLAY environment variable and none specified as argument."
+msgstr "没有 $DISPLAY 环境变量也没有在参数中声明该项。"
+
+#: src/rmdStrings.py:28
+msgid "Cannot connect to Xserver."
+msgstr "无法连接到 Xserver。"
+
+#: src/rmdStrings.py:29
+msgid "Color depth is not 24bpp."
+msgstr "色深不是 24 位。"
+
+#: src/rmdStrings.py:30
+msgid "Improper window specification."
+msgstr "窗口规格不合法。"
+
+#: src/rmdStrings.py:31
+msgid "Cannot attach shared memory to proccess."
+msgstr "无法向进程附加共享内存。"
+
+#: src/rmdStrings.py:32
+msgid "Cannot open file for writting."
+msgstr "无法打开文件以写入。"
+
+#: src/rmdStrings.py:33
+msgid "Cannot load the Jack library (dlopen/dlsym error on libjack.so)."
+msgstr "无法加载 Jack 库 (在 libjack.so 上执行 dlopen/dlsym 出错)。"
+
+#: src/rmdStrings.py:34
+msgid "Cannot create new client."
+msgstr "无法创建新的客户端。"
+
+#: src/rmdStrings.py:35
+msgid "Cannot activate client."
+msgstr "无法激活客户端。"
+
+#: src/rmdStrings.py:36
+msgid "Port registration/connection failure."
+msgstr "端口注册/连接失败。"
+
+#: src/rmdStrings.py:37
+msgid "Segmentation Fault"
+msgstr "断错误"
+
+#: src/rmdStrings.py:40
+msgid ""
+"Recording is finished.\n"
+"recordMyDesktop has exited with status"
+msgstr ""
+"记录结束。\n"
+"recordMyDesktop 以如下状态退出"
+
+#: src/rmdStrings.py:41
+msgid "Description"
+msgstr "描述"
+
+#: src/rmdStrings.py:42
+msgid ""
+"Recording is finished.\n"
+"recordMyDesktop has exited with uknown\n"
+"error code"
+msgstr ""
+"记录结束。\n"
+"recordMyDesktop 以未知错误代码退出。"
+
+#: src/rmdStrings.py:46 src/rmdStrings.py:76
+msgid "Video Quality"
+msgstr "视频质量"
+
+#: src/rmdStrings.py:46 src/rmdStrings.py:76
+msgid "Sound Quality"
+msgstr "音频质量"
+
+#: src/rmdStrings.py:47
+msgid "Advanced"
+msgstr "高级"
+
+#: src/rmdStrings.py:47
+msgid "Select Window"
+msgstr "选择窗口"
+
+#: src/rmdStrings.py:48
+msgid "Click here to select a window to record"
+msgstr "点击此处以选择一个窗口进行记录"
+
+#: src/rmdStrings.py:49
+msgid ""
+"Click to start the recording.\n"
+"This window will hide itself."
+msgstr ""
+"点击此处以开始记录。\n"
+"此窗口将自动隐藏。"
+
+#: src/rmdStrings.py:50
+msgid ""
+"Click to choose a filename and location.\n"
+"Default is out.ogv in your home folder.\n"
+"If the file already exists, the new one\n"
+"will have a number attached on its name\n"
+"(this behavior can be changed )"
+msgstr ""
+"点击以选择一个文件名和位置。\n"
+"默认为在您的用户主目录中的 out.ogv 。\n"
+"如果文件已存在，新文件名将会被添加编号\n"
+"(此项可被更改)。"
+
+#: src/rmdStrings.py:51
+msgid "Click to exit the program."
+msgstr "点击以退出程序。"
+
+#: src/rmdStrings.py:52
+msgid ""
+"Select the video quality of your recording.\n"
+"(Lower quality will require more proccessing power,\n"
+"so it's recommended, when encoding on the fly,\n"
+"to leave at 100)"
+msgstr ""
+"为您的记录选择视频质量。\n"
+"(越低的质量将需要越多的处理，所以我们推荐在记录时将此项保持为100)"
+
+#: src/rmdStrings.py:53
+msgid "Enable/Disable sound recording."
+msgstr "启用/禁用声音记录。"
+
+#: src/rmdStrings.py:54
+msgid "Select the audio quality of your recording."
+msgstr "为您的记录选择音频质量。"
+
+#: src/rmdStrings.py:55
+msgid "Click here to access more options."
+msgstr "点击此处以访问更多选项。"
+
+#: src/rmdStrings.py:56
+msgid ""
+"\n"
+"Left click and drag, on the preview image,\n"
+"to select an area for recording.\n"
+"Right click on it, to reset the area."
+msgstr ""
+"\n"
+"在预览图像上左键点击并拖拽以选择记录区域。\n"
+"右键点击以重设此区域。"
+
+#: src/rmdStrings.py:58
+msgid "Record"
+msgstr "记录"
+
+#: src/rmdStrings.py:59
+msgid "Save As"
+msgstr "另存为"
+
+#: src/rmdStrings.py:63
+msgid "Cancel"
+msgstr "取消"
+
+#: src/rmdStrings.py:64
+msgid ""
+"Please wait while your recording is being encoded\n"
+"WARNING!!!\n"
+"If you press Cancel or close this window,\n"
+"this proccess cannot be resumed!"
+msgstr ""
+"当记录进行时请稍等\n"
+"警告！！！\n"
+"如果您点击取消或者关闭此窗口，进程将无法恢复！"
+
+#: src/rmdStrings.py:65
+msgid "complete"
+msgstr "完成"
+
+#: src/rmdStrings.py:68
+msgid "Overwite Existing Files"
+msgstr "覆盖已存在文件"
+
+#: src/rmdStrings.py:68
+msgid "Working Directory"
+msgstr "工作目录"
+
+#: src/rmdStrings.py:69 src/rmdStrings.py:83
+msgid "Frames Per Second"
+msgstr "帧速率 (FPS)"
+
+#: src/rmdStrings.py:69
+msgid "Encode On the Fly"
+msgstr "记录同时进行编码"
+
+#: src/rmdStrings.py:69
+msgid "Zero Compression"
+msgstr "不压缩"
+
+#: src/rmdStrings.py:70
+msgid "Quick Subsampling"
+msgstr "快速取样"
+
+#: src/rmdStrings.py:70
+msgid "Full shots at every frame"
+msgstr "每帧取全景"
+
+#: src/rmdStrings.py:71
+msgid "Channels"
+msgstr "声道"
+
+#: src/rmdStrings.py:71
+msgid "Frequency"
+msgstr "频率"
+
+#: src/rmdStrings.py:71
+msgid "Device"
+msgstr "设备"
+
+#: src/rmdStrings.py:71
+msgid "Display"
+msgstr "显示"
+
+#: src/rmdStrings.py:71
+msgid "Mouse Cursor"
+msgstr "鼠标指针"
+
+#: src/rmdStrings.py:72
+msgid "Follow Mouse"
+msgstr "跟踪鼠标"
+
+#: src/rmdStrings.py:72
+msgid "MIT-Shm extension"
+msgstr "MIT-Shm 扩展"
+
+#: src/rmdStrings.py:72
+msgid "Include Window Decorations"
+msgstr "包括窗口装饰"
+
+#: src/rmdStrings.py:73
+msgid "Tooltips"
+msgstr "工具提示"
+
+#: src/rmdStrings.py:73
+msgid "Outline Capture Area On Screen"
+msgstr "屏幕轮廓抓取区域"
+
+#: src/rmdStrings.py:74
+msgid "Reset Capture Area"
+msgstr "重设抓取区域"
+
+#: src/rmdStrings.py:75
+msgid "Extra Options"
+msgstr "额外选项"
+
+#: src/rmdStrings.py:77
+msgid "Drop Frames(encoder)"
+msgstr "丢弃帧(编码器)"
+
+#: src/rmdStrings.py:77
+msgid "Startup Delay(secs)"
+msgstr "启动延迟(秒)"
+
+#: src/rmdStrings.py:78
+msgid "Normal"
+msgstr "正常"
+
+#: src/rmdStrings.py:78
+msgid "White"
+msgstr "白"
+
+#: src/rmdStrings.py:78
+msgid "Black"
+msgstr "黑"
+
+#: src/rmdStrings.py:78
+msgid "None"
+msgstr "无"
+
+#: src/rmdStrings.py:79
+msgid "Enabled"
+msgstr "已启用"
+
+#: src/rmdStrings.py:79
+msgid "Disabled"
+msgstr "已禁用"
+
+#: src/rmdStrings.py:80
+msgid "Files"
+msgstr "文件"
+
+#: src/rmdStrings.py:80
+msgid "Performance"
+msgstr "性能"
+
+#: src/rmdStrings.py:80
+msgid "Sound"
+msgstr "声音"
+
+#: src/rmdStrings.py:80
+msgid "Misc"
+msgstr "杂项"
+
+#: src/rmdStrings.py:81
+msgid ""
+"By default, if you try to save under a filename that already\n"
+"exists, the new file will be renamed\n"
+"(for example if you try to save as out.ogv and that file exists, your file "
+"will be named out.ogv.1).\n"
+"By checking this box, this behavior is disabled and the old file is "
+"overwritten.\n"
+msgstr ""
+"默认情况下如果您要保存到一个已存在的文件名，新文件将会被重命名\n"
+"(例如您在已存在 out.ogv 的情况下要保存到此文件名，您的新文件将被命名为 out.ogv.1 )\n"
+"选中此框后此项功能将会被禁用，旧文件将被覆盖。\n"
+
+#: src/rmdStrings.py:82
+msgid "Directory where temporary files will be saved."
+msgstr "临时文件将被保存到此目录。"
+
+#: src/rmdStrings.py:84
+msgid ""
+"Encode simultaneously with the recording.\n"
+"This will require a lot more processing power.\n"
+msgstr ""
+"记录与编码同时进行。\n"
+"这需要更强大的计算能力。\n"
+
+#: src/rmdStrings.py:85
+msgid ""
+"Do not apply compression on the temporary files.\n"
+"If enabled, the program will need less processing power,\n"
+"in the expense of hard disk space.\n"
+"This option is valid only when encoding on the fly is disabled."
+msgstr ""
+"不要在临时文件上应用任何压缩。\n"
+"如果启用此项，程序将使用更少的计算时间，但需要以更多的磁盘占用为代价。\n"
+"此项仅在记录同时编码功能被禁用时有效。"
+
+#: src/rmdStrings.py:86
+msgid ""
+"This option, if enabled, will cause the program to require less\n"
+"processing power, but it might make the colors look a bit more blurry."
+msgstr "若启用此选项，程序将使用更少的计算能力，但是可能导致画面色彩失真。"
+
+#: src/rmdStrings.py:87
+msgid ""
+"This option should be enabled when recording 3d windows.\n"
+"It is also auto-enabled when recording a\n"
+"known 3d compositing window manager.\n"
+" "
+msgstr ""
+"记录 3D 窗口时此选项应当被启用。\n"
+"当记录一个已知的 3D 整合窗口管理器时此项将被自动启用。\n"
+" "
+
+#: src/rmdStrings.py:88
+msgid "Number of audio channels."
+msgstr "声道数"
+
+#: src/rmdStrings.py:89
+msgid "Sound frequency."
+msgstr "声音频率"
+
+#: src/rmdStrings.py:90
+msgid "ALSA sound device, that is used for sound recording."
+msgstr "ALSA 声音设备，用于声音记录。"
+
+#: src/rmdStrings.py:91
+msgid "Connection to the Xserver."
+msgstr "连接到 Xserver。"
+
+#: src/rmdStrings.py:92
+msgid ""
+"The mouse cursor that will be drawn.\n"
+"Normal is for the real cursor that you see while recording,\n"
+"while black and white are fake cursors, drawn by the program.\n"
+"You can also disable cursor drawing."
+msgstr ""
+"鼠标指针将被绘制。\n"
+"正常以记录实际您看到的指针，\n"
+"黑白则为虚拟的鼠标指针，由程序绘制。\n"
+"您也可以禁用指针绘制。"
+
+#: src/rmdStrings.py:93
+msgid ""
+"When This option is enabled, the capture\n"
+"area will follow your mouse cursor.\n"
+"Enabling this option will also enable full shots at\n"
+"every frame, so it's not recommended\n"
+"for large capture areas."
+msgstr ""
+"当此选项被启用，抓取区域将跟随您的鼠标指针。\n"
+"启用此选项将同时启用每帧取全景，所以不推荐在抓取大区域时启用此选项。"
+
+#: src/rmdStrings.py:94
+msgid ""
+"Use the MIT-Shared memory extension, whenever appropriate,\n"
+" depending on the rest of the program settings.\n"
+"Disabling this option is not recommended,\n"
+"as it may severely slow down the program."
+msgstr ""
+"使用 MIT-共享内存 扩展，将会根据程序的其他设置自动设置合适。\n"
+"不推荐禁用此选项，那样将可能是程序变慢。"
+
+#: src/rmdStrings.py:95
+msgid ""
+"When selecting a window via the \"Select Window\" button,\n"
+"include that window's decorations in the recording area."
+msgstr "当使用“选择窗口”按钮选择一个窗口时，将一并选中窗口装饰进入记录区域。"
+
+#: src/rmdStrings.py:96
+msgid ""
+"Enable or disable tooltips, like this one.\n"
+"(Requires restart)"
+msgstr ""
+"启用或禁用工具提示，相这样。\n"
+"(需要重新启动程序)"
+
+#: src/rmdStrings.py:97
+msgid ""
+"Draw a frame on the screen, around the area\n"
+"that will get captured.\n"
+"(This frame will remain throughout the recording.)"
+msgstr ""
+"在记录区域周围绘制帧。\n"
+"(此帧将在记录过程中保持。)"
+
+#: src/rmdStrings.py:98
+msgid ""
+"Reset capture area after every recording\n"
+"and at program shutdown."
+msgstr "在每次记录完成或程序关闭时重设抓取区域。"
+
+#: src/rmdStrings.py:99
+msgid ""
+"Extra commandline options that will get\n"
+"passed to recordMyDesktop during initialization.\n"
+"These options must be entered the same way\n"
+"they would in the commandline (i.e. separated with spaces).\n"
+"Consult the manpage for more information on using them."
+msgstr ""
+"在 recordMyDesktop 初始化过程中传递给它的额外命令行选项。\n"
+"这些选项必须以把他们输入到命令行时相同的方式输入。\n"
+"请查阅 Man 手册以获取更多关于使用他们的信息。"
+
+#: src/rmdStrings.py:100
+msgid ""
+"Enable this option to record audio through\n"
+"JACK. The Jack server must be running in order to\n"
+"obtain the ports that will be recorded.\n"
+"The audio recorded from each one\n"
+"will be written on a channel of its own.\n"
+"recordMyDesktop must be compiled with JACK\n"
+"support for this option to work."
+msgstr ""
+"启用此选项以使用 JACK 记录音频。\n"
+"Jack 服务必须运行以保证端口被记录。\n"
+"每一个记录的声音都将被写入到独立的声道。\n"
+"recordMyDesktop 必须和 JACK 一起编译以启用此选项。"
+
+#: src/rmdStrings.py:102
+msgid "Use Jack for audio capture."
+msgstr "使用 Jack 进行音频抓取。"
+
+#: src/rmdStrings.py:103
+msgid ""
+"Select the ports you want to record from\n"
+"(hold Ctrl to select multiple entries):"
+msgstr ""
+"选择您要记录的端口\n"
+"(按住 Ctrl 以选择多个路径)："
+
+#: src/rmdStrings.py:105
+msgid "Available Ports"
+msgstr "可用端口"
+
+#: src/rmdStrings.py:106
+msgid "jack_lsp returned no ports."
+msgstr "jack_lsp 没有返回端口。"
+
+#: src/rmdStrings.py:107
+msgid "Make sure that jackd is running."
+msgstr "请确认 jackd 正在运行。"
+
+#: src/rmdStrings.py:108
+msgid "Available ports (double click to add):"
+msgstr "可用端口 (双击以添加)："
+
+#: src/rmdStrings.py:109
+msgid "Selected ports (double click to remove):"
+msgstr "已选择端口 (双击以移除)："
+
+#: src/rmdStrings.py:110
+msgid "Refresh"
+msgstr "刷新"
