@@ -1,3 +1,15 @@
+/*Version 0.4.0*/
+* Respect TMPDIR if set instead of always using /tmp
+* Fix crash when XFixesGetCursorImage() returns NULL
+* Fix video encoding with newer versions of libtheora by defaulting v_bitrate to 0
+* Change default ALSA device to "default"
+* Make --rescue work again, thanks to Justin Frankel
+* Completey reformat man page, thanks to G. Branden Robinson
+* Typo fix: Cleanning -> Cleaning
+* Use libpopt for option parsing
+* configure: Fix check for libjack
+
+
 /*Version 0.3.8.1*/
 * Fixed a bug that caused compilation to fail on some platforms, due 
 to missing headers.
