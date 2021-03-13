@@ -18,7 +18,7 @@ msgstr ""
 
 #: src/rmdStrings.py:10
 msgid "Show/hide Main Window"
-msgstr ""
+msgstr "Показать/скрыть главное окно"
 
 #: src/rmdStrings.py:11
 msgid "_Select Area On Screen"
@@ -26,7 +26,7 @@ msgstr "_Выбрать область экрана"
 
 #: src/rmdStrings.py:12 src/rmdStrings.py:60
 msgid "Quit"
-msgstr ""
+msgstr "Выход"
 
 #: src/rmdStrings.py:13
 msgid "a graphical frontend for recordMyDesktop"
@@ -223,21 +223,21 @@ msgid ""
 "Right click on it, to reset the area."
 msgstr ""
 "\n"
-"Зажмите левую кнопку мыши, и ведите по изображению,\n"
+"Нажмите левую кнопку мыши, и ведите по изображению,\n"
 "чтобы выбрать область для записи.\n"
 "Нажмите правой кнопкой, чтобы начать снова."
 
 #: src/rmdStrings.py:58
 msgid "Record"
-msgstr ""
+msgstr "Запись"
 
 #: src/rmdStrings.py:59
 msgid "Save As"
-msgstr ""
+msgstr "Сохранить как"
 
 #: src/rmdStrings.py:63
 msgid "Cancel"
-msgstr ""
+msgstr "Отмена"
 
 #: src/rmdStrings.py:64
 msgid ""
@@ -246,7 +246,7 @@ msgid ""
 "If you press Cancel or close this window,\n"
 "this proccess cannot be resumed!"
 msgstr ""
-"Please wait while your recording is being encoded\n"
+"Пожалуйста, подождите пока ваша запись кодируется\n"
 "ВНИМАНИЕ!!!\n"
 "Если Вы нажмёте кнопку ОТМЕНА, или закроете окно,\n"
 "данные будут утеряны безвозвратно!"
@@ -269,7 +269,7 @@ msgstr "Кадров в секунду"
 
 #: src/rmdStrings.py:69
 msgid "Encode On the Fly"
-msgstr "Кодитовать на лету"
+msgstr "Кодировать на лету"
 
 #: src/rmdStrings.py:69
 msgid "Zero Compression"
@@ -281,7 +281,7 @@ msgstr "Быстрое масштабирование"
 
 #: src/rmdStrings.py:70
 msgid "Full shots at every frame"
-msgstr "Полные снимкм каждый кадр"
+msgstr "Полные снимки каждый кадр"
 
 #: src/rmdStrings.py:71
 msgid "Channels"
@@ -305,11 +305,11 @@ msgstr "Указатель мыши"
 
 #: src/rmdStrings.py:72
 msgid "Follow Mouse"
-msgstr ""
+msgstr "Следовать за мышью"
 
 #: src/rmdStrings.py:72
 msgid "MIT-Shm extension"
-msgstr "расширение MIT-Shm"
+msgstr "Расширение MIT-Shm"
 
 #: src/rmdStrings.py:72
 msgid "Include Window Decorations"
@@ -325,11 +325,11 @@ msgstr "Обвести область захвата на экране"
 
 #: src/rmdStrings.py:74
 msgid "Reset Capture Area"
-msgstr ""
+msgstr "Сбросить область захвата"
 
 #: src/rmdStrings.py:75
 msgid "Extra Options"
-msgstr ""
+msgstr "Дополнительные опции"
 
 #: src/rmdStrings.py:77
 msgid "Drop Frames(encoder)"
@@ -392,7 +392,7 @@ msgstr ""
 "новый файл будет переименован\n"
 "(к примеру, если назвать выходной файл out.ogv а такой файл уже существует,"
 "то файл будет создан под названием out.ogv.1).\n"
-"При включении опции, новый файл будет записан поверхсуществующего.\n"
+"При включении опции, новый файл будет записан поверх существующего.\n"
 
 #: src/rmdStrings.py:82
 msgid "Directory where temporary files will be saved."
@@ -474,6 +474,11 @@ msgid ""
 "every frame, so it's not recommended\n"
 "for large capture areas."
 msgstr ""
+"Когда эта опция выбрана, то, область захвата\n"
+"будет следовать за вашим курсором мыши.\n"
+"Включение этой опции также включит полные снимки для\n"
+"каждого кадра, таким образом, это не рекомендуется\n"
+"для больших областей захвата."
 
 #: src/rmdStrings.py:94
 msgid ""
@@ -518,6 +523,8 @@ msgid ""
 "Reset capture area after every recording\n"
 "and at program shutdown."
 msgstr ""
+"Очищать область захвата после каждой записи\n"
+"и при завершении программы."
 
 #: src/rmdStrings.py:99
 msgid ""
@@ -527,6 +534,11 @@ msgid ""
 "they would in the commandline (i.e. separated with spaces).\n"
 "Consult the manpage for more information on using them."
 msgstr ""
+"Дополнительные опции командной строки, которые будут переданы\n"
+"в recordMyDesktop при инициализации.\n"
+"Эти опции должны быть введены точно также, как\n"
+"они были бы введены в командной строке (т.е. разделены пробелами).\n"
+"Обратитесь к man для дополнительной информации на их использование."
 
 #: src/rmdStrings.py:100
 msgid ""
@@ -543,7 +555,7 @@ msgstr ""
 "получить порты, которые будут записаны.\n"
 "Звук, захваченный с каждого из них,\n"
 "будет записан в отдельный звуковой канал.\n"
-"recordMyDesktop должен быть скмпиллирован\n"
+"recordMyDesktop должен быть скомпилирован\n"
 "с поддержкой JACK для работы этой опции."
 
 #: src/rmdStrings.py:102
@@ -572,15 +584,15 @@ msgstr "Убедитесь, что запущен jackd."
 
 #: src/rmdStrings.py:108
 msgid "Available ports (double click to add):"
-msgstr ""
+msgstr "Доступные порты (двойной щелчок добавляет):"
 
 #: src/rmdStrings.py:109
 msgid "Selected ports (double click to remove):"
-msgstr ""
+msgstr "Выбранные порты (двойной щелчок удаляет):"
 
 #: src/rmdStrings.py:110
 msgid "Refresh"
-msgstr ""
+msgstr "Освежить"
 
 #~ msgid "gtk-recordMyDesktop"
 #~ msgstr "gtk-recordMyDesktop"
