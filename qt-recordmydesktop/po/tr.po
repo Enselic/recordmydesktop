@@ -1,23 +1,24 @@
-# SOME DESCRIPTIVE TITLE.
+# translation of tr.po to Turkish
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+# Caner Güral <cgural@gmail.com>, 2009.
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: tr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-08-15 01:56+0300\n"
-"PO-Revision-Date: 2006-12-12 17:50+0200\n"
-"Last-Translator: Eren İnan Canpolat <ereninan@yahoo.com>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2009-08-09 12:26+0300\n"
+"Last-Translator: Caner Güral <cgural@gmail.com>\n"
+"Language-Team: Turkish <yerellestirme@kde.org.tr>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
 
 #: src/rmdStrings.py:10
 msgid "Show/hide Main Window"
-msgstr ""
+msgstr "Ana pencereyi göster/gizle"
 
 #: src/rmdStrings.py:11
 msgid "_Select Area On Screen"
@@ -25,7 +26,7 @@ msgstr "_Ekranda Alan Seçin"
 
 #: src/rmdStrings.py:12 src/rmdStrings.py:60
 msgid "Quit"
-msgstr ""
+msgstr "Çıkış"
 
 #: src/rmdStrings.py:13
 msgid "a graphical frontend for recordMyDesktop"
@@ -44,8 +45,8 @@ msgstr ""
 #: src/rmdStrings.py:15
 msgid "Translator Credits And Information(Replace with your info)"
 msgstr ""
-"Türkçe çeviri: Eren İnan Canpolat\n"
-"İletişim: ereninan@yahoo.com"
+"Türkçe çeviri: Eren İnan Canpolat (ereninan@yahoo.com)\n"
+"Caner Güral (cgural@gmail.com)"
 
 #: src/rmdStrings.py:19
 msgid "Success"
@@ -107,19 +108,19 @@ msgstr "Dosyayı yazmak için açamadı."
 
 #: src/rmdStrings.py:33
 msgid "Cannot load the Jack library (dlopen/dlsym error on libjack.so)."
-msgstr ""
+msgstr "Jack kitaplığı yüklenemedi (libjack.so da dlopen/dlsym hatası)"
 
 #: src/rmdStrings.py:34
 msgid "Cannot create new client."
-msgstr ""
+msgstr "Yeni istemci oluşturulamadı"
 
 #: src/rmdStrings.py:35
 msgid "Cannot activate client."
-msgstr ""
+msgstr "Aktif istemci yok"
 
 #: src/rmdStrings.py:36
 msgid "Port registration/connection failure."
-msgstr ""
+msgstr "Port kaydı/bağlantısı başarısız"
 
 #: src/rmdStrings.py:37
 msgid "Segmentation Fault"
@@ -231,15 +232,15 @@ msgstr ""
 
 #: src/rmdStrings.py:58
 msgid "Record"
-msgstr ""
+msgstr "Kayıt"
 
 #: src/rmdStrings.py:59
 msgid "Save As"
-msgstr ""
+msgstr "Farklı Kaydet"
 
 #: src/rmdStrings.py:63
 msgid "Cancel"
-msgstr ""
+msgstr "İptal"
 
 #: src/rmdStrings.py:64
 msgid ""
@@ -307,7 +308,7 @@ msgstr "Fare İmleci"
 
 #: src/rmdStrings.py:72
 msgid "Follow Mouse"
-msgstr ""
+msgstr "İmleci takip et"
 
 #: src/rmdStrings.py:72
 msgid "MIT-Shm extension"
@@ -315,23 +316,23 @@ msgstr "MIT-Shm eklentisi"
 
 #: src/rmdStrings.py:72
 msgid "Include Window Decorations"
-msgstr ""
+msgstr "Pencere süsünü dahil et"
 
 #: src/rmdStrings.py:73
 msgid "Tooltips"
-msgstr ""
+msgstr "İpuçları"
 
 #: src/rmdStrings.py:73
 msgid "Outline Capture Area On Screen"
-msgstr ""
+msgstr "Kayıt alanının dışına çizgi"
 
 #: src/rmdStrings.py:74
 msgid "Reset Capture Area"
-msgstr ""
+msgstr "Kayıt alanını sıfırla"
 
 #: src/rmdStrings.py:75
 msgid "Extra Options"
-msgstr ""
+msgstr "Diğer ayarlar"
 
 #: src/rmdStrings.py:77
 msgid "Drop Frames(encoder)"
@@ -480,6 +481,8 @@ msgid ""
 "every frame, so it's not recommended\n"
 "for large capture areas."
 msgstr ""
+"Bu değer etkinse kayıt sırasında\n"
+"imleç takip edilir. Etkinleştirilirse her karenin tamamı kopyalanır. Bu yüzden geniş kayıt alanlarında önerilmez."
 
 #: src/rmdStrings.py:94
 msgid ""
@@ -498,12 +501,16 @@ msgid ""
 "When selecting a window via the \"Select Window\" button,\n"
 "include that window's decorations in the recording area."
 msgstr ""
+"Bir pencere \"Pencere seç\" ile seçildiğinde\n"
+"pencerenin süsü kayıt alanına dahil edilir."
 
 #: src/rmdStrings.py:96
 msgid ""
 "Enable or disable tooltips, like this one.\n"
 "(Requires restart)"
 msgstr ""
+"İpuçlarını kaydedin veya etmeyin\n"
+"(Kapat-aç gerektirir)"
 
 #: src/rmdStrings.py:97
 msgid ""
@@ -511,12 +518,16 @@ msgid ""
 "that will get captured.\n"
 "(This frame will remain throughout the recording.)"
 msgstr ""
+"Ekranınızda bir alan çizerek kaydedilmesini sağlayabilirsiniz.\n"
+"Bu alan kayıt boyunca aynen kalacaktır."
 
 #: src/rmdStrings.py:98
 msgid ""
 "Reset capture area after every recording\n"
 "and at program shutdown."
 msgstr ""
+"Her kaydın ardından ve uygulamanın\n"
+"kapatılmasının ardından kayıt alanını sıfırlayın."
 
 #: src/rmdStrings.py:99
 msgid ""
@@ -526,6 +537,9 @@ msgid ""
 "they would in the commandline (i.e. separated with spaces).\n"
 "Consult the manpage for more information on using them."
 msgstr ""
+"Harici komut satırı ayarları recordMyDesktop başladığında ona iletilecektir.\n"
+"Bu ayarlar komut satırında tek seferde girilmelidir.(aralarında boşluklarla)\n"
+"Daha fazla bilgi için MAN sayfasında bakınız."
 
 #: src/rmdStrings.py:100
 msgid ""
@@ -537,53 +551,45 @@ msgid ""
 "recordMyDesktop must be compiled with JACK\n"
 "support for this option to work."
 msgstr ""
+"Bu seçenek sesin JACK aracılığıyla kaydını sağlar.\n"
+"Jack sunucusu kayıt edilecek portları almak\n"
+"için çalışıyor olmalıdır.\n"
+"Ses her bir kanaldan ayrı kaydedilir.\n"
+"Bu seçeneğin çalışabilmesi için recordMyDesktop'ın JACK desteğiyle derlenmesi gerekir."
 
 #: src/rmdStrings.py:102
 msgid "Use Jack for audio capture."
-msgstr ""
+msgstr "Ses kaydı için Jack kullan."
 
 #: src/rmdStrings.py:103
 msgid ""
 "Select the ports you want to record from\n"
 "(hold Ctrl to select multiple entries):"
 msgstr ""
+"Kaydetmek istediğininiz portları seçiniz.\n"
+"(Ctrl ile çoklu seçim yapabilirsiniz)"
 
 #: src/rmdStrings.py:105
 msgid "Available Ports"
-msgstr ""
+msgstr "Kullanılabilir portlar"
 
 #: src/rmdStrings.py:106
 msgid "jack_lsp returned no ports."
-msgstr ""
+msgstr "jack_lsp hiç port bulamadı."
 
 #: src/rmdStrings.py:107
 msgid "Make sure that jackd is running."
-msgstr ""
+msgstr "Jjackd'in çalıştığından emin olunuz."
 
 #: src/rmdStrings.py:108
 msgid "Available ports (double click to add):"
-msgstr ""
+msgstr "Kullanılabilir portlar (eklemek için çift tıklayınız)"
 
 #: src/rmdStrings.py:109
 msgid "Selected ports (double click to remove):"
-msgstr ""
+msgstr "Seçilen portlar (kaldırmak için çift tıklayınız)"
 
 #: src/rmdStrings.py:110
 msgid "Refresh"
-msgstr ""
+msgstr "Yenile"
 
-#~ msgid "gtk-recordMyDesktop"
-#~ msgstr "gtk-recordMyDesktop"
-
-#~ msgid "Shared Threshold"
-#~ msgstr "Ortak Bellek Eşiği"
-
-#~ msgid ""
-#~ "Amount of screen change, within a frame that triggers retrieval\n"
-#~ "of the screenshot through the MIT-Shared memory extension.\n"
-#~ "This option has no effect when using the full shots option.\n"
-#~ msgstr ""
-#~ "Bir karede, ekran görüntüsü yakalamanın MIT-Ortak bellek eklentisi "
-#~ "dolayısıyla\n"
-#~ "yapılmasını tetikleyecek eşik değişim niceliği.\n"
-#~ "Tamamını kopyalama seçeneği kullanılırsa bu seçenek kapanır.\n"
