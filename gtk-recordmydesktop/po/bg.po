@@ -1,0 +1,597 @@
+# translation of it.po to Italian
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Giovanni 'voidnull' Scafora <linuxmania@gmail.com>, 2007.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gtk-recordmydesktop-0.3.7.2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-08-15 01:56+0300\n"
+"PO-Revision-Date: 2009-05-28 09:43+0200\n"
+"Last-Translator: Svetoslav Stefanov <lfu.project@gmail.com>\n"
+"Language-Team: Svetoslav Stefanov <lfu.project@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"X-Poedit-Language: Bulgarian\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-Country: BULGARIA\n"
+
+#: src/rmdStrings.py:10
+msgid "Show/hide Main Window"
+msgstr "Показване/скриване на основния прозорец"
+
+#: src/rmdStrings.py:11
+msgid "_Select Area On Screen"
+msgstr "_Изберете област от екрана"
+
+#: src/rmdStrings.py:12
+#: src/rmdStrings.py:60
+msgid "Quit"
+msgstr "Изход"
+
+#: src/rmdStrings.py:13
+msgid "a graphical frontend for recordMyDesktop"
+msgstr "Графична обвивка за recordmydesktop"
+
+#: src/rmdStrings.py:14
+msgid ""
+"Copyright (C) John Varouhakis\n"
+"Portions Copyright (C) 2005-6 Zaheer Abbas Merali, John N. Laliberte\n"
+"Portions Copyright (C) Fluendo S.L."
+msgstr ""
+
+#: src/rmdStrings.py:15
+msgid "Translator Credits And Information(Replace with your info)"
+msgstr "Светослав Стефанов, <lfu.project@gmail.com>"
+
+#: src/rmdStrings.py:19
+msgid "Success"
+msgstr "Успешно приключване на операцията"
+
+#: src/rmdStrings.py:20
+msgid "Error while parsing the arguments."
+msgstr "Грешка при синтактическия разбор на аргументите."
+
+#: src/rmdStrings.py:21
+msgid "Initializing the encoder failed(either vorbis or theora)"
+msgstr "Инициализирането на енкодера се провали (vorbis или theora)"
+
+#: src/rmdStrings.py:22
+msgid "Could not open/configure sound card."
+msgstr "Звуковата карта не може да бъде отворена/настроена."
+
+#: src/rmdStrings.py:23
+msgid "Xdamage extension not present."
+msgstr "Разширението Xdamage не е налично."
+
+#: src/rmdStrings.py:24
+msgid "Shared memory extension not present."
+msgstr ""
+
+#: src/rmdStrings.py:25
+msgid "Xfixes extension not present."
+msgstr "Разширението Xfixes не е налично."
+
+#: src/rmdStrings.py:26
+msgid "XInitThreads failed."
+msgstr "XInitThreads се провали."
+
+#: src/rmdStrings.py:27
+msgid "No $DISPLAY environment variable and none specified as argument."
+msgstr ""
+
+#: src/rmdStrings.py:28
+msgid "Cannot connect to Xserver."
+msgstr "Не може да се осъществи връзка с сървъра X."
+
+#: src/rmdStrings.py:29
+msgid "Color depth is not 24bpp."
+msgstr "Дълбочината на цвета не е 24 битова"
+
+#: src/rmdStrings.py:30
+msgid "Improper window specification."
+msgstr "Неправилна спецификация на прозореца."
+
+#: src/rmdStrings.py:31
+msgid "Cannot attach shared memory to proccess."
+msgstr ""
+
+#: src/rmdStrings.py:32
+msgid "Cannot open file for writting."
+msgstr "Файлът не може да бъде отворен за запис"
+
+#: src/rmdStrings.py:33
+msgid "Cannot load the Jack library (dlopen/dlsym error on libjack.so)."
+msgstr ""
+
+#: src/rmdStrings.py:34
+msgid "Cannot create new client."
+msgstr "Не може да бъде създаден нов клиент."
+
+#: src/rmdStrings.py:35
+msgid "Cannot activate client."
+msgstr "Клиента не може да бъде активиран."
+
+#: src/rmdStrings.py:36
+msgid "Port registration/connection failure."
+msgstr "Неуспех при регистрирането/свързването на порт."
+
+#: src/rmdStrings.py:37
+msgid "Segmentation Fault"
+msgstr "Вътрешна грешка"
+
+#: src/rmdStrings.py:40
+msgid ""
+"Recording is finished.\n"
+"recordMyDesktop has exited with status"
+msgstr ""
+"Записът завърши.\n"
+"recordMyDesktop излезе със статус"
+
+#: src/rmdStrings.py:41
+msgid "Description"
+msgstr "Описание"
+
+#: src/rmdStrings.py:42
+msgid ""
+"Recording is finished.\n"
+"recordMyDesktop has exited with uknown\n"
+"error code"
+msgstr ""
+"Записът завърши.\n"
+"recordMyDesktop излезе с непознат\n"
+"код за грешка"
+
+#: src/rmdStrings.py:46
+#: src/rmdStrings.py:76
+msgid "Video Quality"
+msgstr "Видео качество"
+
+#: src/rmdStrings.py:46
+#: src/rmdStrings.py:76
+msgid "Sound Quality"
+msgstr "Качество на звука"
+
+#: src/rmdStrings.py:47
+msgid "Advanced"
+msgstr "Разширени настройки"
+
+#: src/rmdStrings.py:47
+msgid "Select Window"
+msgstr "Избиране на прозорец"
+
+#: src/rmdStrings.py:48
+msgid "Click here to select a window to record"
+msgstr "Цъкнете тук, за да изберете прозорец за запис"
+
+#: src/rmdStrings.py:49
+msgid ""
+"Click to start the recording.\n"
+"This window will hide itself."
+msgstr ""
+"Цъкнете за да започнете записването.\n"
+"Този прозорец ще се скрие автоматично."
+
+#: src/rmdStrings.py:50
+msgid ""
+"Click to choose a filename and location.\n"
+"Default is out.ogv in your home folder.\n"
+"If the file already exists, the new one\n"
+"will have a number attached on its name\n"
+"(this behavior can be changed )"
+msgstr ""
+"Цъкнете за да изберете име и местоположение на файла.\n"
+"Стандартно то е out.ogv в домашната ви папка.\n"
+"Ако този файл вече съществува, новият ще\n"
+"има номер, прикачен след името си\n"
+"(това може да бъде променено)"
+
+#: src/rmdStrings.py:51
+msgid "Click to exit the program."
+msgstr "Цъкнете за да излезете от програмата."
+
+#: src/rmdStrings.py:52
+msgid ""
+"Select the video quality of your recording.\n"
+"(Lower quality will require more proccessing power,\n"
+"so it's recommended, when encoding on the fly,\n"
+"to leave at 100)"
+msgstr ""
+"Изберете видео качество за вашия запис.\n"
+"(По-ниското качество ще изисква повече процесорна мощ,\n"
+"затова е препоръчително при кодиране по време на запис,\n"
+"да го оставите на 100)"
+
+#: src/rmdStrings.py:53
+msgid "Enable/Disable sound recording."
+msgstr "Включване/Изключване на запис на звук."
+
+#: src/rmdStrings.py:54
+msgid "Select the audio quality of your recording."
+msgstr "Изберете качество на звука за вашия запис."
+
+#: src/rmdStrings.py:55
+msgid "Click here to access more options."
+msgstr "Цъкнете тук за повече настройки."
+
+#: src/rmdStrings.py:56
+msgid ""
+"\n"
+"Left click and drag, on the preview image,\n"
+"to select an area for recording.\n"
+"Right click on it, to reset the area."
+msgstr ""
+"\n"
+"Цъкнете с ляв бутон и влачете върху изображението за преглед,\n"
+"за да изберете област за запис.\n"
+"За да отмените избраното, цъкнете върху него с десен бутон."
+
+#: src/rmdStrings.py:58
+msgid "Record"
+msgstr "Запис"
+
+#: src/rmdStrings.py:59
+msgid "Save As"
+msgstr "Запазване като"
+
+#: src/rmdStrings.py:63
+msgid "Cancel"
+msgstr "Отказ"
+
+#: src/rmdStrings.py:64
+msgid ""
+"Please wait while your recording is being encoded\n"
+"WARNING!!!\n"
+"If you press Cancel or close this window,\n"
+"this proccess cannot be resumed!"
+msgstr ""
+"Моля изчакайте, докато вашия запис се кодира\n"
+"ВНИМАНИЕ!!!\n"
+"Ако натиснете Отказ или затворите прозореца,\n"
+"този процес не може да бъде продължен!"
+
+#: src/rmdStrings.py:65
+msgid "complete"
+msgstr "завършено"
+
+#: src/rmdStrings.py:68
+msgid "Overwite Existing Files"
+msgstr "Презаписване на съществуващи файлове"
+
+#: src/rmdStrings.py:68
+msgid "Working Directory"
+msgstr "Работна папка"
+
+#: src/rmdStrings.py:69
+#: src/rmdStrings.py:83
+msgid "Frames Per Second"
+msgstr "Кадри в секунда"
+
+#: src/rmdStrings.py:69
+msgid "Encode On the Fly"
+msgstr "Кодиране по време на запис"
+
+#: src/rmdStrings.py:69
+msgid "Zero Compression"
+msgstr "Нулево компресиране"
+
+#: src/rmdStrings.py:70
+msgid "Quick Subsampling"
+msgstr "Бързо субсемплиране"
+
+#: src/rmdStrings.py:70
+msgid "Full shots at every frame"
+msgstr "Пълно прихващане на всеки кадър"
+
+#: src/rmdStrings.py:71
+msgid "Channels"
+msgstr "Канали"
+
+#: src/rmdStrings.py:71
+msgid "Frequency"
+msgstr "Честота"
+
+#: src/rmdStrings.py:71
+msgid "Device"
+msgstr "Устройство"
+
+#: src/rmdStrings.py:71
+msgid "Display"
+msgstr "Екран"
+
+#: src/rmdStrings.py:71
+msgid "Mouse Cursor"
+msgstr "Показалец на мишката"
+
+#: src/rmdStrings.py:72
+msgid "Follow Mouse"
+msgstr "Следване на мишката"
+
+#: src/rmdStrings.py:72
+msgid "MIT-Shm extension"
+msgstr "Разширение MIT-Shm"
+
+#: src/rmdStrings.py:72
+msgid "Include Window Decorations"
+msgstr "Включване декорацията на прозореца"
+
+#: src/rmdStrings.py:73
+msgid "Tooltips"
+msgstr "Подсказки"
+
+#: src/rmdStrings.py:73
+msgid "Outline Capture Area On Screen"
+msgstr "Очертаване на областта за запис на екрана."
+
+#: src/rmdStrings.py:74
+msgid "Reset Capture Area"
+msgstr "Изчистване на областта за прихващане"
+
+#: src/rmdStrings.py:75
+msgid "Extra Options"
+msgstr "Допълнителни настройки"
+
+#: src/rmdStrings.py:77
+msgid "Drop Frames(encoder)"
+msgstr "Пропускане на кадри (по време на кодиране)"
+
+#: src/rmdStrings.py:77
+msgid "Startup Delay(secs)"
+msgstr "Закъснение (в секунди)"
+
+#: src/rmdStrings.py:78
+msgid "Normal"
+msgstr "Нормален"
+
+#: src/rmdStrings.py:78
+msgid "White"
+msgstr "Бял"
+
+#: src/rmdStrings.py:78
+msgid "Black"
+msgstr "Черен"
+
+#: src/rmdStrings.py:78
+msgid "None"
+msgstr "Без"
+
+#: src/rmdStrings.py:79
+msgid "Enabled"
+msgstr "Включено"
+
+#: src/rmdStrings.py:79
+msgid "Disabled"
+msgstr "Изключено"
+
+#: src/rmdStrings.py:80
+msgid "Files"
+msgstr "Файлове"
+
+#: src/rmdStrings.py:80
+msgid "Performance"
+msgstr "Производителност"
+
+#: src/rmdStrings.py:80
+msgid "Sound"
+msgstr "Звук"
+
+#: src/rmdStrings.py:80
+msgid "Misc"
+msgstr "Разни"
+
+#: src/rmdStrings.py:81
+msgid ""
+"By default, if you try to save under a filename that already\n"
+"exists, the new file will be renamed\n"
+"(for example if you try to save as out.ogv and that file exists, your file will be named out.ogv.1).\n"
+"By checking this box, this behavior is disabled and the old file is overwritten.\n"
+msgstr ""
+"По подразбиране, ако се опитате да запишете под име, което вече\n"
+"съществува, новият файл ще бъде преименуван\n"
+"(например, ако се опитате да запишете файла като out.ogv и този файл вече същуствува, вашия файл ще се казва out.ogv.1.\n"
+"С отмятането на тази настройка този начин на действие се отменя и стария файл се презаписва.\n"
+
+#: src/rmdStrings.py:82
+msgid "Directory where temporary files will be saved."
+msgstr "Папка, в която да се запазват временните файлове."
+
+#: src/rmdStrings.py:84
+msgid ""
+"Encode simultaneously with the recording.\n"
+"This will require a lot more processing power.\n"
+msgstr ""
+"Кодиране по време на запис.\n"
+"Това ще изисква много повече процесорна мощ.\n"
+
+#: src/rmdStrings.py:85
+msgid ""
+"Do not apply compression on the temporary files.\n"
+"If enabled, the program will need less processing power,\n"
+"in the expense of hard disk space.\n"
+"This option is valid only when encoding on the fly is disabled."
+msgstr ""
+"Да не се прилага компресия на временните файлове.\n"
+"Ако е включена, програмата ще се нуждане от много по-малко процесорна мощ,\n"
+"за сметка на повече място на твърдия диск.\n"
+"Тази настройка е валидна, само когато кодирането по време на запис е изключено."
+
+#: src/rmdStrings.py:86
+msgid ""
+"This option, if enabled, will cause the program to require less\n"
+"processing power, but it might make the colors look a bit more blurry."
+msgstr ""
+"Ако тази настройка е вкючена, програмата ще изисква по-малка\n"
+"процесорна мощ, но може да доведе до по-размазани цветове."
+
+#: src/rmdStrings.py:87
+msgid ""
+"This option should be enabled when recording 3d windows.\n"
+"It is also auto-enabled when recording a\n"
+"known 3d compositing window manager.\n"
+" "
+msgstr ""
+"Тази настройка трябва да е включена, когато се записват 3D прозорци.\n"
+"Тя се включва автоматично, когато се записва познат\n"
+"мениджър на 3D наслагване.\n"
+" "
+
+#: src/rmdStrings.py:88
+msgid "Number of audio channels."
+msgstr "Брой на аудио каналите."
+
+#: src/rmdStrings.py:89
+msgid "Sound frequency."
+msgstr "Честота на звука."
+
+#: src/rmdStrings.py:90
+msgid "ALSA sound device, that is used for sound recording."
+msgstr "Звуково устройство на ALSA, което се изпозва за запис."
+
+#: src/rmdStrings.py:91
+msgid "Connection to the Xserver."
+msgstr "Връзка към сървъра Х."
+
+#: src/rmdStrings.py:92
+msgid ""
+"The mouse cursor that will be drawn.\n"
+"Normal is for the real cursor that you see while recording,\n"
+"while black and white are fake cursors, drawn by the program.\n"
+"You can also disable cursor drawing."
+msgstr ""
+"Показалецът на мишката, който ще се показва.\n"
+"Нормален е за истинския показалец, който виждате по време на запис,\n"
+"а черен и бял са фалшиви показалци, показвани от програмата.\n"
+"Можете и да изключите показването му."
+
+#: src/rmdStrings.py:93
+msgid ""
+"When This option is enabled, the capture\n"
+"area will follow your mouse cursor.\n"
+"Enabling this option will also enable full shots at\n"
+"every frame, so it's not recommended\n"
+"for large capture areas."
+msgstr ""
+"Когато тази настройка е включена, зоната на\n"
+"прихващане ще следва показалеца на мишката.\n"
+"Тя също ще включи и пълното прихващане на всеки кадър,\n"
+"заради което не е препоръчително използването и за\n"
+"големи зони за прихващане."
+
+#: src/rmdStrings.py:94
+msgid ""
+"Use the MIT-Shared memory extension, whenever appropriate,\n"
+" depending on the rest of the program settings.\n"
+"Disabling this option is not recommended,\n"
+"as it may severely slow down the program."
+msgstr ""
+"Използване на разширението на паметта MIT-Shared, когато е подходящо,\n"
+"в зависимост от останалите програмни настройки.\n"
+"Изключването на тази настройка не е препоръчително,\n"
+"тъй като може да доведе до голямо забавяне на програмата."
+
+#: src/rmdStrings.py:95
+msgid ""
+"When selecting a window via the \"Select Window\" button,\n"
+"include that window's decorations in the recording area."
+msgstr ""
+"При избиране на прозорeц чрез бутона \"Избиране на прозрец\",\n"
+"в зоната за запис да се включва декорацията му."
+
+#: src/rmdStrings.py:96
+msgid ""
+"Enable or disable tooltips, like this one.\n"
+"(Requires restart)"
+msgstr ""
+"Включване или изключване на подсказките, като тази.\n"
+"(Изисква рестартиране)"
+
+#: src/rmdStrings.py:97
+msgid ""
+"Draw a frame on the screen, around the area\n"
+"that will get captured.\n"
+"(This frame will remain throughout the recording.)"
+msgstr ""
+"Изчертаване на рамка на екрана около областта\n"
+"за запис.\n"
+"(Тази рамка ще остане по време на записа.)"
+
+#: src/rmdStrings.py:98
+msgid ""
+"Reset capture area after every recording\n"
+"and at program shutdown."
+msgstr ""
+"Зануляване зоната за прихващане след всеки запис\n"
+"и при изход от програмата."
+
+#: src/rmdStrings.py:99
+msgid ""
+"Extra commandline options that will get\n"
+"passed to recordMyDesktop during initialization.\n"
+"These options must be entered the same way\n"
+"they would in the commandline (i.e. separated with spaces).\n"
+"Consult the manpage for more information on using them."
+msgstr ""
+"Допълнителни конзолни команди, които ще се\n"
+"обработят от recordMyDesktop по време на инициализирането.\n"
+"Те трябва да бъдат въведени по същия начин\n"
+"както от конзолата (напр. разделени с интервал).\n"
+"Консултирайте се с man страниците за повече информация."
+
+#: src/rmdStrings.py:100
+msgid ""
+"Enable this option to record audio through\n"
+"JACK. The Jack server must be running in order to\n"
+"obtain the ports that will be recorded.\n"
+"The audio recorded from each one\n"
+"will be written on a channel of its own.\n"
+"recordMyDesktop must be compiled with JACK\n"
+"support for this option to work."
+msgstr ""
+"Включете тази настройка за да записвате звук през\n"
+"JACK. Сървърът JACK трябва да е пуснат за да\n"
+"използвате портовете, който ще бъдат записвани.\n"
+"Звукът от всеки един от тях, ще се записва\n"
+"на отделен канал.\n"
+"recordMyDesktop трябва да е компилиран\n"
+"с поддръжка на JACK, за да работи тази настройка."
+
+#: src/rmdStrings.py:102
+msgid "Use Jack for audio capture."
+msgstr "Използване на Jack за прихващане на звук."
+
+#: src/rmdStrings.py:103
+msgid ""
+"Select the ports you want to record from\n"
+"(hold Ctrl to select multiple entries):"
+msgstr ""
+"Изберете портовете, от които искате да записвате\n"
+"(задръжте Ctrl за да изберете повече от един):"
+
+#: src/rmdStrings.py:105
+msgid "Available Ports"
+msgstr "Налични портове"
+
+#: src/rmdStrings.py:106
+msgid "jack_lsp returned no ports."
+msgstr ""
+
+#: src/rmdStrings.py:107
+msgid "Make sure that jackd is running."
+msgstr ""
+
+#: src/rmdStrings.py:108
+msgid "Available ports (double click to add):"
+msgstr "Налични портове (двойно цъкане за добавяне):"
+
+#: src/rmdStrings.py:109
+msgid "Selected ports (double click to remove):"
+msgstr "Избрани портове (двойно цъкане за премахване):"
+
+#: src/rmdStrings.py:110
+msgid "Refresh"
+msgstr "Опресняване"
+
