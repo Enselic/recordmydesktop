@@ -9,11 +9,13 @@ on:
   workflow_dispatch:
 
 jobs:
-  configure-make-install:
-    runs-on: ubuntu-latest
+  make-distcheck:
+    runs-on: ubuntu-20.04
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - name: 'CLI: sudo apt install build-dependencies'
         run: sudo apt install
@@ -36,14 +38,22 @@ jobs:
       - name: 'CLI: ./configure --prefix /tmp/recordmydesktop-prefix'
         run: cd recordmydesktop ; ./configure --prefix /tmp/recordmydesktop-prefix
 
-      - name: 'CLI: make'
-        run: cd recordmydesktop ; AM_CFLAGS=-Werror make
+      - name: 'CLI: make distcheck'
+        run: cd recordmydesktop ; AM_CFLAGS=-Werror make distcheck
 
-      - name: 'CLI: make check'
-        run: cd recordmydesktop ; AM_CFLAGS=-Werror make check
+      - name: 'CLI: git describe tarball'
+        id: git-describe-tarball
+        run: |
+          cd recordmydesktop
+          mv recordmydesktop-*.tar.gz recordmydesktop-$(git describe).tar.gz
+          TARBALL_NAME=$(echo recordmydesktop-*.tar.gz)
+          echo ::set-output name=TARBALL_NAME::${TARBALL_NAME}
 
-      - name: 'CLI: make install'
-        run: cd recordmydesktop ; make install
+      - name: 'CLI: publish tarball artifact'
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ steps.git-describe-tarball.outputs.TARBALL_NAME }}
+          path: recordmydesktop/${{ steps.git-describe-tarball.outputs.TARBALL_NAME }}
 
       - name: 'GTK: sudo apt install build-dependencies'
         run: sudo apt install

@@ -23,6 +23,7 @@ POTFILES
 py-compile
 qt-recordmydesktop/src/qt-recordMyDesktop
 qt-recordmydesktop/src/rmdConfig.py
+recordmydesktop-*.tar.gz
 src/recordmydesktop
 stamp-h1
 test-driver
