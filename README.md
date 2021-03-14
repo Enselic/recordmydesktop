@@ -1,5 +1,5 @@
 # recordMyDesktop
-Official repository for recordMyDesktop. Migrated from https://sourceforge.net/projects/recordmydesktop/ for which I am the official and long-time maintainer.
+Official repository for recordMyDesktop. Migrated from https://sourceforge.net/projects/recordmydesktop/ for which I am the official and long-time (but for a decade inactive) maintainer.
 
 For the new web page with news, visit https://enselic.github.io/recordmydesktop/
 
