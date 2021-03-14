@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT( [recordmydesktop], [0.3.8.2], )
+AC_INIT( [recordmydesktop], [0.4.0], )
 AM_SILENT_RULES([yes])
 AM_INIT_AUTOMAKE
 
