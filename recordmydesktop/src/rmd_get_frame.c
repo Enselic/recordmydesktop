@@ -533,55 +533,61 @@ void *rmdGetFrame(ProgData *pdata){
             }
         }
         if(pdata->args.follow_mouse && xcim != NULL){
-        	int mouse_pos_abs_x = mouse_pos_abs.x + ((pdata->args.xfixes_cursor)?xcim->xhot:0);
-        	int mouse_pos_abs_y = mouse_pos_abs.y + ((pdata->args.xfixes_cursor)?xcim->yhot:0);
-        	int x = pdata->brwin.rrect.x;
-        	int y = pdata->brwin.rrect.y;
-        	int w = pdata->brwin.rrect.width;
-        	int h = pdata->brwin.rrect.height;
-        	int x2 = x + w;
-        	int y2 = y + h;
-        	fprintf(stderr,"mouse_pos_abs_x: %u, mouse_pos_abs_y: %u, x: %u, x2: %u, y: %u, y2: %u\n",
-        			mouse_pos_abs_x, mouse_pos_abs_y, x, x2, y, y2);
-        	int do_move = 0;
-        	int new_rect_x = x;
-        	int new_rect_y = y;
-        	if (mouse_pos_abs.x < x)
-        	{
-        		do_move = 1;
-        		new_rect_x = x - (x - mouse_pos_abs.x);
-        	}
-        	if (mouse_pos_abs.y < y)
-        	{
-        		do_move = 1;
-        		new_rect_y = y - (y - mouse_pos_abs.y);
-        	}
-        	if (mouse_pos_abs.x + mouse_pos_abs.width > x2)
-        	{
-        		do_move = 1;
-        		new_rect_x = x + ((mouse_pos_abs.x + mouse_pos_abs.width) - (x + w));
-        	}
-        	if (mouse_pos_abs.y + mouse_pos_abs.height > y2)
-        	{
-        		do_move = 1;
-        		new_rect_y = y + ((mouse_pos_abs.y + mouse_pos_abs.height) - (y + h));
-        	}
-        	if (do_move)
-        	{
-        		fprintf(stderr,"do_move: %i\n", do_move);
-				rmdMoveCaptureArea(&pdata->brwin,
-								   new_rect_x + w/2,
-								   new_rect_y + h/2,
-								   pdata->specs.width,
-								   pdata->specs.height);
-				if(!pdata->args.noframe){
-					rmdMoveFrame(pdata->dpy,
-								 pdata->shaped_w,
-								 temp_brwin.rrect.x,
-								 temp_brwin.rrect.y);
+            int mouse_pos_abs_x = mouse_pos_abs.x + ((pdata->args.xfixes_cursor)?xcim->xhot:0);
+            int mouse_pos_abs_y = mouse_pos_abs.y + ((pdata->args.xfixes_cursor)?xcim->yhot:0);
+            /* frame left edge */
+            int x = pdata->brwin.rrect.x;
+            /* frame top edge */
+            int y = pdata->brwin.rrect.y;
+            /* frame width */
+            int w = pdata->brwin.rrect.width;
+            /* frame height */
+            int h = pdata->brwin.rrect.height;
+            /* frame right edge */
+            int x2 = x + w;
+            /* frame bottom edge */
+            int y2 = y + h;
+            fprintf(stderr,"mouse_pos_abs_x: %u, mouse_pos_abs_y: %u, x: %u, x2: %u, y: %u, y2: %u\n",
+                    mouse_pos_abs_x, mouse_pos_abs_y, x, x2, y, y2);
+            int do_move = 0;
+            int new_rect_x = x;
+            int new_rect_y = y;
+            if (mouse_pos_abs.x < x)
+            {
+                do_move = 1;
+                new_rect_x = x - (x - mouse_pos_abs.x);
+            }
+            if (mouse_pos_abs.y < y)
+            {
+                do_move = 1;
+                new_rect_y = y - (y - mouse_pos_abs.y);
+            }
+            if (mouse_pos_abs.x + mouse_pos_abs.width > x2)
+            {
+                do_move = 1;
+                new_rect_x = x + ((mouse_pos_abs.x + mouse_pos_abs.width) - (x + w));
+            }
+            if (mouse_pos_abs.y + mouse_pos_abs.height > y2)
+            {
+                do_move = 1;
+                new_rect_y = y + ((mouse_pos_abs.y + mouse_pos_abs.height) - (y + h));
+            }
+            if (do_move)
+            {
+                fprintf(stderr,"do_move: %i\n", do_move);
+                rmdMoveCaptureArea(&pdata->brwin,
+                                   new_rect_x + w/2,
+                                   new_rect_y + h/2,
+                                   pdata->specs.width,
+                                   pdata->specs.height);
+                if(!pdata->args.noframe){
+                    rmdMoveFrame(pdata->dpy,
+                                 pdata->shaped_w,
+                                 temp_brwin.rrect.x,
+                                 temp_brwin.rrect.y);
 
-				}
-        	}
+                }
+            }
         }
 
         if(!pdata->args.full_shots){
