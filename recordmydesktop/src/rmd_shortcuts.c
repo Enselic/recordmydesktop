@@ -66,7 +66,7 @@ int rmdRegisterShortcut(Display *dpy,
     
     //we register the shortcut on the root
     //window, which means on every keypress event,
-    //so I think it's neccessary to have at least one 
+    //so I think it's necessary to have at least one
     //modifier.
     if(modifier_mask == 0)
         return 1;

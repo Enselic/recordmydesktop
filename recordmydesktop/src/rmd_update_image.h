@@ -42,7 +42,7 @@
 *
 * \param root Root entry of the list with damaged areas
 *
-* \param brwin BRWindow struct contaning the recording window specs
+* \param brwin BRWindow struct containing the recording window specs
 *
 * \param enc Encoding options
 *

@@ -126,7 +126,7 @@ void rmdInitEncoder(ProgData *pdata,EncData *enc_data_t,int buffer_ready){
         
     enc_data_t->fp=fopen((pdata)->args.filename,"w");
     if(enc_data_t->fp==NULL){
-        fprintf(stderr,"Cannot open file %s for writting!\n",
+        fprintf(stderr,"Cannot open file %s for writing!\n",
                        (pdata)->args.filename);
         exit(13);
     }

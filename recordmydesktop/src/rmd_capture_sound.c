@@ -121,7 +121,7 @@ void *rmdCaptureSound(ProgData *pdata){
                 snd_pcm_prepare(pdata->sound_handle);
             }
             else if (temp_sret<0){
-                fprintf(stderr,"An error occured while reading sound data:\n"
+                fprintf(stderr,"An error occurred while reading sound data:\n"
                                " %s\n",
                                snd_strerror(temp_sret));
                 snd_pcm_prepare(pdata->sound_handle);
@@ -138,7 +138,7 @@ void *rmdCaptureSound(ProgData *pdata){
                                ((pdata->args.buffsize<<1)*
                                 pdata->args.channels)-sret);
             if(temp_sret<0){
-                fprintf(stderr,"An error occured while reading from soundcard"
+                fprintf(stderr,"An error occurred while reading from soundcard"
                                "%s\n"
                                "Error description:\n"
                                "%s\n",pdata->args.device,strerror(errno));
@@ -161,7 +161,7 @@ void *rmdCaptureSound(ProgData *pdata){
         pthread_mutex_unlock(&pdata->sound_buffer_mutex);
 
 
-        //signal that there are data to be proccessed
+        //signal that there are data to be processed
         pthread_mutex_lock(&pdata->snd_buff_ready_mutex);
         pthread_cond_signal(&pdata->sound_data_read);
         pthread_mutex_unlock(&pdata->snd_buff_ready_mutex);

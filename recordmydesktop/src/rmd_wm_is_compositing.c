@@ -44,7 +44,7 @@ boolean rmdWMIsCompositing( Display *dpy, int screen ) {
     
     //If the wm name is queried successfully the wm is compliant (source  
     //http://standards.freedesktop.org/wm-spec/1.4/ar01s03.html#id2568282 )
-    //in which case we will also free() the allcoated string.
+    //in which case we will also free() the allocated string.
     
     if( window_manager == NULL )
         return FALSE;

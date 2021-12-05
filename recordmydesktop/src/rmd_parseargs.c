@@ -143,7 +143,7 @@ boolean rmdParseArgs(int argc, char **argv, ProgArgs *arg_return) {
 
         { "full-shots", '\0',
           POPT_ARG_NONE, &arg_return->full_shots, 0,
-          "Take full screenshot at every frame(Not recomended!).",
+          "Take full screenshot at every frame(Not recommended!).",
           NULL },
 
         { "follow-mouse", '\0',

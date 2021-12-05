@@ -35,7 +35,7 @@
 
 
 /**
-* Change file pointer to a new file while writting
+* Change file pointer to a new file while writing
 * (file name is incremented with CacheFileN)
 *
 * \param name base file name

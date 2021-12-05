@@ -39,7 +39,7 @@
 * \returns TRUE if compositing, false otherwise or when 
 *          the window manager doesn't support the required
 *          freedesktop.org hints for the test to be done 
-*          succesfully.
+*          successfully.
 */
 
 boolean rmdWMIsCompositing( Display *dpy, int screen) ; 

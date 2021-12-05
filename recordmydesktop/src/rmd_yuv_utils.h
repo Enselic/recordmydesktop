@@ -51,7 +51,7 @@ extern u_int32_t *yblocks,
 //32 bit arithmetics, so there's no problem.
 //(This note is useless, I'm just adding because
 //the addition of the A components in CALC_TVAL_AVG_32,
-//now removed as uneeded, produced an overflow which would have caused
+//now removed as unneeded, produced an overflow which would have caused
 //color distrtion, where it one of the R,G or B components)
 #define CALC_TVAL_AVG_16(t_val,datapi,datapi_next){\
     register u_int16_t t1,t2,t3,t4;\

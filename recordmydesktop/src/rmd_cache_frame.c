@@ -257,7 +257,7 @@ void *rmdCacheImageBuffer(ProgData *pdata){
                                 //clean exit.
                                 //In either case data will be preserved so if
                                 //space is freed the recording
-                                //can be proccessed later.
+                                //can be processed later.
             }
             total_bytes += nbytes;
             nth_cache++;

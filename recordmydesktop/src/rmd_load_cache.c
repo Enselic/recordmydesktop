@@ -164,7 +164,7 @@ void *rmdLoadCache(ProgData *pdata){
         audio_end=0,
         extra_frames=0,//total number of duplicated frames
         missing_frames=0,//if this is found >0 current run will not load
-                        //a frame but it will proccess the previous
+                        //a frame but it will process the previous
         thread_exit=0,//0 success, -1 couldn't find files,1 couldn't remove
         blocknum_x=pdata->enc_data->yuv.y_width/Y_UNIT_WIDTH,
         blocknum_y=pdata->enc_data->yuv.y_height/Y_UNIT_WIDTH,
@@ -211,7 +211,7 @@ void *rmdLoadCache(ProgData *pdata){
         }
     }
 
-    //this will be used now to define if we proccess audio or video
+    //this will be used now to define if we process audio or video
     //on any given loop.
     pdata->avd=0;
     //If sound finishes first,we go on with the video.

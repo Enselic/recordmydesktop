@@ -38,7 +38,7 @@ void rmdInitEventsPolling(ProgData *pdata);
 
 /**
 * Loop calling XNextEvent.Retrieve and place on
-* list damage events that arive, create damage for new windows
+* list damage events that arrive, create damage for new windows
 * and pickup key events for shortcuts.
 * \param pdata ProgData struct containing all program data
 */

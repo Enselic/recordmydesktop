@@ -45,7 +45,7 @@ export PYTHONPATH=$PYTHONPATH
 
 export PYQT4_VERSION=`python -c 'import PyQt4; from PyQt4 import QtCore; print QtCore.PYQT_VERSION_STR'  2>>/dev/null `
 if test x$PYQT4_VERSION == x; then
-    AC_MSG_ERROR(You need PyQt4>=4.1 installed to procceed);
+    AC_MSG_ERROR(You need PyQt4>=4.1 installed to proceed);
 fi
 b=$(echo "$PYQT4_VERSION" | awk 'BEGIN{ FS="." } { print $1 "\n" $2 "\n" $3 }')
 c=($b)
@@ -59,7 +59,7 @@ if test $PYQT4_MAJOR != 4; then
 fi
 
 if test $PYQT4_MINOR -lt 1; then
-    AC_MSG_ERROR(You need PyQt4>=4.1 installed to procceed
+    AC_MSG_ERROR(You need PyQt4>=4.1 installed to proceed
     (earlier version found installed));
 fi
 

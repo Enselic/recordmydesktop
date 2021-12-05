@@ -47,7 +47,7 @@ static void rmdSizePack2_8_16(short *start, unsigned short *size, unsigned short
     //align in two
     //an odd x can always go down and still be in recording area.
     //Resolutions come in even numbers
-    //so if x is an odd numer, width max is an odd number, too
+    //so if x is an odd number, width max is an odd number, too
     //thus since x will go down one then width can go up one too and still
     //be inbounds
     (*size)+=((*size)%2)|((*start)%2);

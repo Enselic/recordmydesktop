@@ -95,11 +95,11 @@ msgid "Improper window specification."
 msgstr "Felaktig fönsterspecifikation."
 
 #: ../src/rmdStrings.py:31
-msgid "Cannot attach shared memory to proccess."
+msgid "Cannot attach shared memory to process."
 msgstr "Kan inte fästa delat minne till process."
 
 #: ../src/rmdStrings.py:32
-msgid "Cannot open file for writting."
+msgid "Cannot open file for writing."
 msgstr "Kan inte öppna fil för skrivning."
 
 #: ../src/rmdStrings.py:33
@@ -137,7 +137,7 @@ msgstr "Beskrivning"
 #: ../src/rmdStrings.py:42
 msgid ""
 "Recording is finished.\n"
-"recordMyDesktop has exited with uknown\n"
+"recordMyDesktop has exited with unknown\n"
 "error code"
 msgstr ""
 "Inspelningen är färdig.\n"
@@ -195,7 +195,7 @@ msgstr "Klicka för att avsluta programmet."
 #: ../src/rmdStrings.py:52
 msgid ""
 "Select the video quality of your recording.\n"
-"(Lower quality will require more proccessing power,\n"
+"(Lower quality will require more processing power,\n"
 "so it's recommended, when encoding on the fly,\n"
 "to leave at 100)"
 msgstr ""
@@ -245,7 +245,7 @@ msgid ""
 "Please wait while your recording is being encoded\n"
 "WARNING!!!\n"
 "If you press Cancel or close this window,\n"
-"this proccess cannot be resumed!"
+"this process cannot be resumed!"
 msgstr ""
 "Vänta under tiden din inspelning kodas\n"
 "VARNING!!!\n"
@@ -257,7 +257,7 @@ msgid "complete"
 msgstr "färdig"
 
 #: ../src/rmdStrings.py:68
-msgid "Overwite Existing Files"
+msgid "Overwrite Existing Files"
 msgstr "Skriv över befintliga filer"
 
 #: ../src/rmdStrings.py:68

@@ -164,7 +164,7 @@ int main(int argc,char **argv){
                 }
                 fprintf(stderr,"Cleaning up cache...\n");
                 if(rmdPurgeCache(pdata.cache_data,!pdata.args.nosound))
-                    fprintf(stderr,"Some error occured "
+                    fprintf(stderr,"Some error occurred "
                                 "while cleaning up cache!\n");
                 fprintf(stderr,"Done!!!\n");
             }

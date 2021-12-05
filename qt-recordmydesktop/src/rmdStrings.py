@@ -52,8 +52,8 @@ rmdErrStr={
         9*256:_('Cannot connect to Xserver.'),
         10*256:_('Color depth is not 24bpp.'),
         11*256:_('Improper window specification.'),
-        12*256:_('Cannot attach shared memory to proccess.'),
-        13*256:_('Cannot open file for writting.'),
+        12*256:_('Cannot attach shared memory to process.'),
+        13*256:_('Cannot open file for writing.'),
         14*256:_('Cannot load the Jack library (dlopen/dlsym error on libjack.so).'),
         15*256:_('Cannot create new client.'),
         16*256:_('Cannot activate client.'),
@@ -63,7 +63,7 @@ rmdErrStr={
 TrayIconStr={
         'RecFinishedKnown':_("Recording is finished.\nrecordMyDesktop has exited with status"),
         'ErrDesc':_("Description"),
-        'RecFinishedUnknown':_("Recording is finished.\nrecordMyDesktop has exited with uknown\nerror code")
+        'RecFinishedUnknown':_("Recording is finished.\nrecordMyDesktop has exited with unknown\nerror code")
    }
 
 
@@ -73,7 +73,7 @@ smplTooltipLabels=[_('Click here to select a window to record'),
                 _('Click to start the recording.\nThis window will hide itself.'),
                 _('Click to choose a filename and location.\nDefault is out.ogv in your home folder.\nIf the file already exists, the new one\nwill have a number attached on its name\n(this behavior can be changed )'),
                 _('Click to exit the program.'),
-                _('Select the video quality of your recording.\n(Lower quality will require more proccessing power,\nso it\'s recommended, when encoding on the fly,\nto leave at 100)'),
+                _('Select the video quality of your recording.\n(Lower quality will require more processing power,\nso it\'s recommended, when encoding on the fly,\nto leave at 100)'),
                 _('Enable/Disable sound recording.'),
                 _('Select the audio quality of your recording.'),
                 _('Click here to access more options.')]
@@ -85,11 +85,11 @@ smplStrings={   'Record':_("Record"),
     }
 
 monStrings={'Cancel':_("Cancel"),
-            'PleaseWait':_("Please wait while your recording is being encoded\nWARNING!!!\nIf you press Cancel or close this window,\nthis proccess cannot be resumed!"),
+            'PleaseWait':_("Please wait while your recording is being encoded\nWARNING!!!\nIf you press Cancel or close this window,\nthis process cannot be resumed!"),
             'complete':_("complete")
     }
 
-prefLabelStrings=[_('Overwite Existing Files'),_('Working Directory'),
+prefLabelStrings=[_('Overwrite Existing Files'),_('Working Directory'),
                 _('Frames Per Second'),_('Encode On the Fly'),_('Zero Compression'),
                 _('Quick Subsampling'),_('Full shots at every frame'),
                 _('Channels'),_('Frequency'),_('Device'),_('Display'),_('Mouse Cursor'),

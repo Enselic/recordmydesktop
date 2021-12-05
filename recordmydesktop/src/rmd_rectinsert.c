@@ -320,7 +320,7 @@ int rmdRectInsert(RectArea **root,XRectangle *xrect){
 
         int nrects=0,insert_ok=1,i=0;
         temp=*root;
-        while(insert_ok){   //if something is broken list does not procceed
+        while(insert_ok){   //if something is broken list does not proceed
                             //(except on -1 collres case)
             int collres = rmdCollideRects(&temp->rect, xrect, &xrect_return[0], &nrects);
             if((!collres))

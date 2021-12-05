@@ -37,7 +37,7 @@
  *
  * \param root Root window id
  *
- * \param shortcut String represantation of the shortcut
+ * \param shortcut String representation of the shortcut
  *
  * \param HotKey Pre-allocated struct that is filled with the 
  *               modifiers and the keycode, for checks on incoming 

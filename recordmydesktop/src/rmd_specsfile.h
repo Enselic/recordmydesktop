@@ -43,11 +43,11 @@ int rmdWriteSpecsFile(ProgData *pdata);
 
 
 /*
- * Read the  text file that holds the required
+ * Read the text file that holds the required
  * capture attributes, in the cache directory.
  *
- * \param pdata ProgData struct that will be fille 
- *        with  all program data
+ * \param pdata ProgData struct that will be filled
+ *        with all program data
  *
  * \returns 0 on Success, 1 on failure
  *
