@@ -38,7 +38,7 @@
 *                   and client information
 *
 *   \returns 0 on Success, error code on failure
-*            (depending on where the error occured)
+*            (depending on where the error occurred)
 */
 int rmdStartJackClient(JackData *jdata);
 

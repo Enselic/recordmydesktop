@@ -66,7 +66,7 @@ static int rmdJackCapture(jack_nframes_t nframes,void *jdata_t) {
 /*FIXME */
 //This is not safe.
 //cond_var signaling must move away from signal handlers
-//alltogether (rmdJackCapture, SetExpired, SetPaused).
+//altogether (rmdJackCapture, SetExpired, SetPaused).
 //Better would be a set of pipes for each of these.
 //The callback should write on the pipe and the main thread
 //should perform a select over the fd's, signaling afterwards the

@@ -1,6 +1,6 @@
-If you got this from cvs you need to have automake installed and run:
+If you got this from git you need to have automake installed and run:
 
-~$ cd recordmydesktop           #remeber to cd in the directory of the module
+~$ cd recordmydesktop           #remember to cd in the directory of the module
                                 #you checked out
 ~$ sh autogen.sh
 ~$ ./configure

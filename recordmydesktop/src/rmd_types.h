@@ -66,7 +66,7 @@ typedef u_int64_t cmp_int_t;
 typedef u_int32_t cmp_int_t;
 #endif
 
-//type of pixel proccessing for the Cb,Cr planes
+//type of pixel processing for the Cb,Cr planes
 //when converting from full rgb to 4:2:2 Ycbcr
 enum{
     __PXL_DISCARD,  //only select 1 pixel in every block of four
@@ -146,7 +146,7 @@ typedef struct _ProgArgs{
     char *stop_shortcut;    //stop shortcut sequence(Control+Alt+s)
     int noframe;            //don't draw a frame around the recording area
     int zerocompression;    //image data are always flushed uncompressed
-    int overwrite;          //overwite a previously existing file
+    int overwrite;          //overwrite a previously existing file
                             //(do not add a .number postfix)
     int use_jack;           //record audio with jack
     unsigned int jack_nports;
@@ -155,7 +155,7 @@ typedef struct _ProgArgs{
 }ProgArgs;
 
 //this struct holds anything related to encoding AND
-//writting out to file.
+//writing out to file.
 typedef struct _EncData{
     ogg_stream_state m_ogg_ts;  //theora
     ogg_stream_state m_ogg_vs;  //vorbis
@@ -191,7 +191,7 @@ typedef struct _CacheData{
             *projname,  //This is the name of the folder that
                         //will hold the project.
                         //It is rMD-session-%d where %d is the pid
-                        //of the current proccess.
+                        //of the current process.
                         //This way, running two instances
                         //will not create problems
                         //and also, a frontend can identify
@@ -225,7 +225,7 @@ typedef struct _JackData{
                     nports;     //number of ports.
     float           ringbuffer_secs;
     char **port_names;          //names of ports(as specified in args).
-    jack_port_t **ports;        //connections to thes ports.
+    jack_port_t **ports;        //connections to the ports.
     jack_default_audio_sample_t **portbuf;  //retrieval of audio buffers.
     pthread_mutex_t *snd_buff_ready_mutex;  //mutex and cond_var
     pthread_cond_t *sound_data_read;        //in the pdata struct
@@ -281,10 +281,10 @@ struct _ProgData {
                                 //whenever it's time to get a screenshot
                     pause_cond, //this is blocks execution,
                                 //when program is paused
-                    sound_data_read,    //a buffer is ready for proccessing
+                    sound_data_read,    //a buffer is ready for processing
                     image_buffer_ready, //image encoding finished
                     theora_lib_clean,   //the flush_ogg thread cannot
-                                        //procceed to creating last
+                                        //proceed to creating last
                     vorbis_lib_clean;   //packages until these two libs
                                         //are no longer used, by other threads
 /**Buffers,Flags and other vars*/
@@ -308,10 +308,10 @@ struct _ProgData {
         timer_alive,        //determines loop of timer thread
         hard_pause,         //if sound device doesn't support pause
                             //we have to close and reopen
-        avd,                //syncronization among audio and video
+        avd,                //synchronization among audio and video
         sound_framesize;    //size of each sound frame
 
-    /** Progam state vars */
+    /** Program state vars */
     boolean running;             //1 while the program is capturing/paused/encoding
     boolean paused;              //1 while the program is paused 
     boolean aborted;             //1 if we should abort

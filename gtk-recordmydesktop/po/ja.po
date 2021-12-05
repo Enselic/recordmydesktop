@@ -92,11 +92,11 @@ msgid "Improper window specification."
 msgstr "不適切ウインドー選択"
 
 #: src/rmdStrings.py:31
-msgid "Cannot attach shared memory to proccess."
+msgid "Cannot attach shared memory to process."
 msgstr "プルセスにシェアードメモリ繋がれなかった"
 
 #: src/rmdStrings.py:32
-msgid "Cannot open file for writting."
+msgid "Cannot open file for writing."
 msgstr "ファイル書き込みする為に開けなかった"
 
 #: src/rmdStrings.py:33
@@ -134,7 +134,7 @@ msgstr "詳細"
 #: src/rmdStrings.py:42
 msgid ""
 "Recording is finished.\n"
-"recordMyDesktop has exited with uknown\n"
+"recordMyDesktop has exited with unknown\n"
 "error code"
 msgstr ""
 "登録完了\n"
@@ -185,7 +185,7 @@ msgstr "クリックして終了"
 #: src/rmdStrings.py:52
 msgid ""
 "Select the video quality of your recording.\n"
-"(Lower quality will require more proccessing power,\n"
+"(Lower quality will require more processing power,\n"
 "so it's recommended, when encoding on the fly,\n"
 "to leave at 100)"
 msgstr ""
@@ -234,7 +234,7 @@ msgid ""
 "Please wait while your recording is being encoded\n"
 "WARNING!!!\n"
 "If you press Cancel or close this window,\n"
-"this proccess cannot be resumed!"
+"this process cannot be resumed!"
 msgstr ""
 "エンコードしている間、お待ちください。\n"
 "ご注意！\n"
@@ -245,7 +245,7 @@ msgid "complete"
 msgstr "完了"
 
 #: src/rmdStrings.py:68
-msgid "Overwite Existing Files"
+msgid "Overwrite Existing Files"
 msgstr "ファイルを上書きする"
 
 #: src/rmdStrings.py:68

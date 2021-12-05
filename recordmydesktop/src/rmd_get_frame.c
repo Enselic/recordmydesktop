@@ -243,7 +243,7 @@ static int rmdFirstFrame(ProgData *pdata,
                                                         NULL,0);
         (*shminfo).readOnly = False;
         if(!XShmAttach(pdata->dpy,shminfo)){
-            fprintf(stderr,"Failed to attach shared memory to proccess.\n");
+            fprintf(stderr,"Failed to attach shared memory to process.\n");
             return 12;
         }
         XShmGetImage(pdata->dpy,

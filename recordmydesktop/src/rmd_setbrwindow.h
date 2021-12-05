@@ -34,7 +34,7 @@
 *
 * \param dpy Connection to the server
 *
-* \param brwin BRWindow struct contaning the initial and final window
+* \param brwin BRWindow struct containing the initial and final window
 *
 * \param specs DisplaySpecs struct with
 *              information about the display to be recorded

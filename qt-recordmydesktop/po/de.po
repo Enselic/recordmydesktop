@@ -105,11 +105,11 @@ msgid "Improper window specification."
 msgstr "Ungeeignete Fenstereinstellung."
 
 #: src/rmdStrings.py:31
-msgid "Cannot attach shared memory to proccess."
+msgid "Cannot attach shared memory to process."
 msgstr "Shared-memory-Erweiterung konnte nicht gestartet werden."
 
 #: src/rmdStrings.py:32
-msgid "Cannot open file for writting."
+msgid "Cannot open file for writing."
 msgstr "Konnte Datei zum Schreiben nicht öffnen."
 
 #: src/rmdStrings.py:33
@@ -148,7 +148,7 @@ msgstr "Beschreibung"
 #: src/rmdStrings.py:42
 msgid ""
 "Recording is finished.\n"
-"recordMyDesktop has exited with uknown\n"
+"recordMyDesktop has exited with unknown\n"
 "error code"
 msgstr ""
 "Aufnahme wurde beendet.\n"
@@ -206,7 +206,7 @@ msgstr "Hier klicken, um das Programm zu beenden."
 #: src/rmdStrings.py:52
 msgid ""
 "Select the video quality of your recording.\n"
-"(Lower quality will require more proccessing power,\n"
+"(Lower quality will require more processing power,\n"
 "so it's recommended, when encoding on the fly,\n"
 "to leave at 100)"
 msgstr ""
@@ -256,7 +256,7 @@ msgid ""
 "Please wait while your recording is being encoded\n"
 "WARNING!!!\n"
 "If you press Cancel or close this window,\n"
-"this proccess cannot be resumed!"
+"this process cannot be resumed!"
 msgstr ""
 "Bitte warten, während Ihre Aufnahme encodiert wird.\n"
 "Achtung!\n"
@@ -268,7 +268,7 @@ msgid "complete"
 msgstr "vollständig"
 
 #: src/rmdStrings.py:68
-msgid "Overwite Existing Files"
+msgid "Overwrite Existing Files"
 msgstr "Vorhandene Dateien überschreiben"
 
 #: src/rmdStrings.py:68

@@ -100,11 +100,11 @@ msgid "Improper window specification."
 msgstr "Especificació de finestra impròpia."
 
 #: src/rmdStrings.py:31
-msgid "Cannot attach shared memory to proccess."
+msgid "Cannot attach shared memory to process."
 msgstr " ﻿No es pot adjuntar memòria compartida al procés."
 
 #: src/rmdStrings.py:32
-msgid "Cannot open file for writting."
+msgid "Cannot open file for writing."
 msgstr "No es pot obrir el fitxer per escriure-hi."
 
 #: src/rmdStrings.py:33
@@ -143,7 +143,7 @@ msgstr "Descripció"
 #: src/rmdStrings.py:42
 msgid ""
 "Recording is finished.\n"
-"recordMyDesktop has exited with uknown\n"
+"recordMyDesktop has exited with unknown\n"
 "error code"
 msgstr ""
 "La gravació ha acabat.\n"
@@ -199,7 +199,7 @@ msgstr "Feu clic per sortir del programa."
 #: src/rmdStrings.py:52
 msgid ""
 "Select the video quality of your recording.\n"
-"(Lower quality will require more proccessing power,\n"
+"(Lower quality will require more processing power,\n"
 "so it's recommended, when encoding on the fly,\n"
 "to leave at 100)"
 msgstr ""
@@ -251,7 +251,7 @@ msgid ""
 "Please wait while your recording is being encoded\n"
 "WARNING!!!\n"
 "If you press Cancel or close this window,\n"
-"this proccess cannot be resumed!"
+"this process cannot be resumed!"
 msgstr ""
 "Si us plau espereu mentre es codifica la vostra gravació\n"
 "¡¡¡AVIS!!!\n"
@@ -263,7 +263,7 @@ msgid "complete"
 msgstr "complet"
 
 #: src/rmdStrings.py:68
-msgid "Overwite Existing Files"
+msgid "Overwrite Existing Files"
 msgstr "Sobrescriu els fitxers existents"
 
 #: src/rmdStrings.py:68

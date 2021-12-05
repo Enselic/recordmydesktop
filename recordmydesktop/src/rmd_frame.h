@@ -83,7 +83,7 @@ void rmdMoveFrame(Display *dpy,
  *
  * \param screen Recorded screen
  *
- * \param win WindoID of the frame
+ * \param win WindowID of the frame
  *
  * \param width Width of the recorded area
  *

@@ -285,7 +285,7 @@ class simpleWidget(object):
             #the header
             savefile.readline()
             savefile.readline()
-            #the options,each has a coment above
+            #the options,each has a comment above
             for i in range(2):
                 savefile.readline()
                 self.values.append(int(savefile.readline()))
