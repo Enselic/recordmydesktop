@@ -3,6 +3,13 @@ Official repository for recordMyDesktop. Migrated from https://sourceforge.net/p
 
 For the new web page with news, visit https://enselic.github.io/recordmydesktop/
 
+# Project status
+
+The 0.4.0 release has made its way into both [Ubuntu](https://packages.ubuntu.com/hirsute/recordmydesktop) and [Debian testing](https://packages.debian.org/testing/video/recordmydesktop).
+
+Before the next release, the Debian maintainer has requested that the code bases of this repo and https://github.com/recordmydesktop/recordmydesktop is combined into one. Any help with that would be appreciated.
+
+
 # Development
 
 First do
