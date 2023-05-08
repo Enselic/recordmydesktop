@@ -24,9 +24,10 @@
 
 from PyQt4 import QtGui,QtCore
 import locale, gettext
+import subprocess
 import rmdConfig
 def _(s):
-    return QtCore.QString.fromUtf8(gettext.gettext(s))
+    return gettext.gettext(s)
 def htmlize(s):
     return "<html><body>"+s.replace("\n","<br>")+"</html></body>"
 gettext.textdomain('qt-recordMyDesktop')
@@ -198,7 +199,9 @@ class simpleWidget(object):
         xwininfo_com=['xwininfo','-frame']
         if self.values[21]==1:
             xwininfo_com=['xwininfo']
-        (stdin,stdout,stderr)=os.popen3(xwininfo_com,'t')
+        p=subprocess.Popen(xwininfo_com,shell=False,
+          stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True,text=True)
+        stdin,stdout,stderr = p.stdin,p.stdout,p.stderr
         wid=stdout.readlines()
         stdin.close()
         stdout.close()

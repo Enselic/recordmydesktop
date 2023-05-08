@@ -24,9 +24,10 @@
 
 from PyQt4 import QtGui,QtCore
 import locale, gettext
+import subprocess
 import rmdConfig
 def _(s):
-    return QtCore.QString.fromUtf8(gettext.gettext(s))
+    return gettext.gettext(s)
 def htmlize(s):
     return "<html><body>"+s.replace("\n","<br>")+"</html></body>"
 gettext.textdomain('qt-recordMyDesktop')
@@ -86,7 +87,7 @@ class prefsWidget(object):
         self.__getSelectedPorts__()
         self.values[24]=self.__tButToBox__(self.tooltipsComboBox)
         self.values[25]=self.__tButToBox__(self.rFrameComboBox)
-        self.values[26]=str(self.extraOptsEntry.text().trimmed())
+        self.values[26]=str(self.extraOptsEntry.text().strip())
         self.optionsOpen[0]=0
 
 
@@ -304,7 +305,9 @@ class prefsWidget(object):
     def __runJackLSP__(self,button=None):
         self.ports=[]
         failed=0
-        (stdin,stdout,stderr)=os.popen3(['jack_lsp'],'t')
+        p=subprocess.Popen(['jack_lsp'],shell=False,
+          stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True,text=True)
+        stdin,stdout,stderr = p.stdin,p.stdout,p.stderr
         ports=stdout.readlines()
         stdin.close()
         stdout.close()

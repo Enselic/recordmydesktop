@@ -43,7 +43,7 @@ PKG_CHECK_MODULES(QtGui, [QtGui >= $QT4_REQ],,AC_MSG_ERROR(You need libQt4 >=4.2
 
 export PYTHONPATH=$PYTHONPATH
 
-export PYQT4_VERSION=`python -c 'import PyQt4; from PyQt4 import QtCore; print QtCore.PYQT_VERSION_STR'  2>>/dev/null `
+export PYQT4_VERSION=`python3 -c 'import PyQt4; from PyQt4 import QtCore; print(QtCore.PYQT_VERSION_STR)'  2>>/dev/null `
 if test x$PYQT4_VERSION == x; then
     AC_MSG_ERROR(You need PyQt4>=4.1 installed to proceed);
 fi
