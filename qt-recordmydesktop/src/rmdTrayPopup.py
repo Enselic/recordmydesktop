@@ -26,7 +26,7 @@ from PyQt4 import QtGui,QtCore
 import locale, gettext
 import rmdConfig
 def _(s):
-    return QtCore.QString.fromUtf8(gettext.gettext(s))
+    return gettext.gettext(s)
 gettext.textdomain('qt-recordMyDesktop')
 gettext.bindtextdomain('qt-recordMyDesktop',rmdConfig.locale_install_dir)
 

@@ -28,13 +28,13 @@ import rmdConfig
 import re
 
 def _(s):
-    return QtCore.QString.fromUtf8(gettext.gettext(s))
+    return gettext.gettext(s)
 gettext.textdomain('qt-recordMyDesktop')
 gettext.bindtextdomain('qt-recordMyDesktop',rmdConfig.locale_install_dir)
 
 from . import rmdTrayPopup as iTP
 from . import rmdMonitor as imon
-import os,signal,popen2,fcntl
+import os,signal,subprocess,fcntl
 from .rmdStrings import *
 #values struct:
 
@@ -197,9 +197,9 @@ class trayIcon(object):
 
 
 
-        self.childP=popen2.Popen3(self.execargs,"t",0)
-        flags = fcntl.fcntl(self.childP.childerr, fcntl.F_GETFL)
-        fcntl.fcntl(self.childP.childerr, fcntl.F_SETFL, flags | os.O_NONBLOCK)
+        self.childP=subprocess.Popen(self.execargs,shell=False,bufsize=0,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,close_fds=True,text=True)
+        flags = fcntl.fcntl(self.childP.stderr, fcntl.F_GETFL)
+        fcntl.fcntl(self.childP.stderr, fcntl.F_SETFL, flags | os.O_NONBLOCK)
         self.rmdPid=self.childP.pid
         self.timed_id=QtCore.QTimer(None)
         self.timed_id.connect(self.timed_id,QtCore.SIGNAL("timeout()"),
@@ -216,11 +216,11 @@ class trayIcon(object):
             error_log.write("\n\n\n#recordMyDesktop stderror output:\n")
             error_log.write(self.ch_err)
             try:
-                for err_line in self.childP.childerr.readlines():
+                for err_line in self.childP.stderr.readlines():
                     error_log.write(err_line)
             except:
                     error_log.write("Couldn't write stderror of recordMyDesktop!\n")
-            self.childP.childerr.close()
+            self.childP.stderr.close()
         except:
             print("Couldn't write error log.\n")
         self.dialog = QtGui.QWidget()
@@ -256,7 +256,7 @@ class trayIcon(object):
             if need_kill:
                 os.kill(self.rmdPid,signal.SIGTERM)
             self.state=-1
-            monitor=imon.rmdMonitor(self.childP.fromchild,self.rmdPid,self.parent)
+            monitor=imon.rmdMonitor(self.childP.stdout,self.rmdPid,self.parent)
             monitor.exec_()
             self.state=0
         else:
@@ -287,7 +287,7 @@ class trayIcon(object):
                 #try:
                 while True:
                     try:
-                        err_line=self.childP.childerr.readline()
+                        err_line=self.childP.stderr.readline()
                         new_stderr+=err_line
                     except:
                         break
